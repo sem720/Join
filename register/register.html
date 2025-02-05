@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./register.css" />
+    <title>Join - Sign up</title>
+  </head>
+  <body>
+    <form onsubmit="addUser(); return false;" class="form">
+      <div class="form-head">
+        <h1>Sign up</h1>
+        <div class="line"></div>
+      </div>
+
+      <input type="text" id="idName" required placeholder="Name" />
+      <input type="text" id="idEmail" required placeholder="Email" />
+      <input type="password" id="idPassword" required placeholder="Password" />
+      <input
+        type="password"
+        id="idPasswordCon"
+        required
+        placeholder="Confirm Password"
+      />
+      <div class="checkbox-privacy">
+        <input id="idPolicy" type="checkbox" />
+        I accept the <a href="#">Privacy policy</a>
+      </div>
+
+      <button>Submit</button>
+    </form>
+    <div id="massage"></div>
+  </body>
+  <script src="./register.js"></script>
+</html>

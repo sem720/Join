@@ -1,0 +1,36 @@
+body {
+  background: #f6f7f8;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 56px;
+  background: white;
+  border-radius: 25px;
+  width: 550px;
+  height: 400px;
+}
+
+.line {
+  height: 2px;
+  width: 100px;
+  background: #29abe2;
+}
+
+.checkbox-privacy {
+  display: flex;
+  gap: 5px;
+}
+
+.input {
+  width: 100%;
+}
