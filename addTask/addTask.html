@@ -56,16 +56,16 @@
     <section class="footer">
         <span class="text"><span class="required">*</span>This field is required.</span>
         <div class="btn-div-footer">
-            <button class="btn-bright clear-btn">
+            <button class="btn-bright clear-btn" onclick="clearTask()">
                 Clear
                 <span class="clear-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 30 30">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 30 30">
                         <line x1="0" y1="0" x2="30" y2="30" stroke-width="3"/>
                         <line x1="30" y1="0" x2="0" y2="30" stroke-width="3"/>
                     </svg>
                 </span>
             </button>
-            <button class="btn-dark create-btn">Create Task </button>
+            <button class="btn-dark create-btn" onclick="createTask()">Create Task <img src="/assets/imgs/check-white.png" alt="check-icon"></button>
         </div>
     </section>
     <script src="/addTask/addTask.js"></script>
