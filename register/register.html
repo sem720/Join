@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./register.css" />
     <link rel="stylesheet" href="../root.css" />
+    <link rel="stylesheet" href="../comp/components.css" />
     <link
       id="favicon-light"
       rel="icon"
@@ -33,21 +34,37 @@
         <div class="line"></div>
       </div>
 
-      <input type="text" id="idName" placeholder="Name" />
-      <input type="text" id="idEmail" placeholder="Email" />
-      <input type="password" id="idPassword" placeholder="Password" />
+      <input
+        class="input-standard"
+        type="text"
+        id="idName"
+        placeholder="Name"
+      />
+      <input
+        class="input-standard"
+        type="text"
+        id="idEmail"
+        placeholder="Email"
+      />
+      <input
+        class="input-standard"
+        type="password"
+        id="idPassword"
+        placeholder="Password"
+      />
       <input
         type="password"
         id="idPasswordCon"
         placeholder="Confirm Password"
+        class="input-standard"
       />
       <div id="render-alert" class="div-alert"></div>
       <div class="checkbox-privacy">
-        <input id="idPolicy" type="checkbox" />
+        <input class="checkbox-standard" id="idPolicy" type="checkbox" />
         <span class="grey">I accept the</span><a href="#">Privacy policy</a>
       </div>
 
-      <button>Submit</button>
+      <button class="btn-dark">Sign up</button>
     </form>
 
     <div class="div-privacy-links">
