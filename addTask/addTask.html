@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding a Task</title>
+    <link rel="stylesheet" href="/addTask/addTask.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/root.css">
+</head>
+<body>
+    <h1>Add Task</h1>
+    <main class="main-addTask">
+        <div class="left-container">
+            <form>
+                <label for="task-name">Title <span class="required">*</span></label>
+                <input id="task-name" type="text" name="task-name" placeholder="Enter a title" required>
+
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Enter a Description"></textarea>
+            
+                <label for="assignment">Assigned to</label>
+                <select id="assignment" name="assignment">
+                    /*dynamisches dropdown*/
+                </select>
+            </form>
+        </div>
+
+        <div class="right-container">
+            <label for="due-date">Due Date <span class="required">*</span></label>
+            <input type="date" id="due-date" name="due-date" placeholder="dd/mm/yyyy">
+
+            <label for="priority">Prio</label>
+            
+            <label for="category">Category <span class="required">*</span></label>
+            <select id="category" name="category" required>
+                /*options */
+            </select>
+
+            <label for="subtasks">Subtasks</label>
+            <input type="text" id="subtasks" name="subtasks" placeholder="Add new subtask">
+        </div>
+    </main>
+   
+</body>
+</html>
