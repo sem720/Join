@@ -11,7 +11,15 @@ function addUser() {
   let email = document.getElementById("idEmail").value.trim().toLowerCase();
   let password = document.getElementById("idPassword").value;
   let name = document.getElementById("idName").value.toLowerCase();
-  let userData = { name, email, password };
+
+  const randomColor = getRandomColor();
+
+  let userData = {
+    name,
+    email,
+    password,
+    color: randomColor,
+  };
 
   const firebaseKey = email.replace(/\./g, "_").replace(/@/g, "-");
 
@@ -22,16 +30,29 @@ function addUser() {
   })
     .then(() => {
       alert("Registrierung erfolgreich!");
-      document.getElementById("idName").value = "";
-      document.getElementById("idEmail").value = "";
-      document.getElementById("idPassword").value = "";
-      document.getElementById("idPasswordCon").value = "";
-      document.getElementById("idPolicy").checked = false;
-      setTimeout(function () {
+      resetForm();
+      setTimeout(() => {
         window.location.href = "../index.html";
       }, 500);
     })
     .catch((error) => console.error("Fehler:", error));
+}
+
+function resetForm() {
+  document.getElementById("idName").value = "";
+  document.getElementById("idEmail").value = "";
+  document.getElementById("idPassword").value = "";
+  document.getElementById("idPasswordCon").value = "";
+  document.getElementById("idPolicy").checked = false;
+}
+
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }
 
 // form validation
@@ -47,30 +68,30 @@ function validateForm() {
 
   switch (true) {
     case !name:
-      error = "Bitte geben Sie einen Namen ein.";
+      error = "Please enter your name";
       break;
     case !email:
-      error = "Bitte geben Sie eine E-Mail-Adresse ein.";
+      error = "Please enter your email address";
       break;
     case !validateEmail(email):
-      error = "Bitte geben Sie eine gültige E-Mail-Adresse ein.";
+      error = "Please enter a valid email address";
       break;
     case !password:
-      error = "Bitte geben Sie ein Passwort ein.";
+      error = "Please enter a password";
       break;
     case !confirmPassword:
-      error = "Bitte bestätigen Sie Ihr Passwort.";
+      error = "Please confirm your password";
       break;
     case password !== confirmPassword:
-      error = "Die Passwörter stimmen nicht überein.";
+      error = "The passwords do not match.";
       break;
     case !checkPolicy:
-      error = "Du musst die Datenschutzrichtlinien akzeptieren";
+      error = "Please accept the Privacy policy";
       break;
   }
 
   if (error) {
-    alert(error);
+    document.getElementById("render-alert").innerHTML = error;
     return false;
   }
 

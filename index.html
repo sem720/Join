@@ -1,17 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="../root.css" />
+    <link
+      id="favicon-light"
+      rel="icon"
+      href="../assets/imgs/logo-black.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      id="favicon-dark"
+      rel="icon"
+      href="../assets/imgs/logo-white-blue.png"
+      media="(prefers-color-scheme: dark)"
+    />
+    <title>Join - Log in</title>
+  </head>
+  <body>
+    <img id="join-logo" src="../assets/imgs/logo-black.png" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <form class="form">
+      <div class="form-head">
+        <h1>Log in</h1>
+        <div class="line"></div>
+      </div>
+      <input type="text" id="Email" placeholder="Email" />
+      <input type="password" id="Password" placeholder="Password" />
+      <div id="render-alert" class="div-alert"></div>
+      <div class="login-buttons">
+        <button type="button" onclick="login()">Submit</button>
+        <button type="button" onclick="guestLogin()">Guest Log in</button>
+      </div>
+    </form>
 
-  <title>Join</title>
-</head>
-
-<body>
-  test
-  test 2
-  <script src="script.js"></script>
-</body>
-
+    <div class="div-privacy-links">
+      <a class="privacy-link grey" href="#">Privacy Policy</a>
+      <a class="privacy-link grey" href="#">Legal notice</a>
+    </div>
+  </body>
+  <script src="/script.js"></script>
 </html>
