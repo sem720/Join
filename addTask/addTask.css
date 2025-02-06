@@ -52,13 +52,14 @@ label {
 
 input, textarea{
     box-sizing: border-box;
-    margin-bottom: 24px;
+    margin-bottom: 34px;
     width: 90%;
     border: 1px solid #D7D7D7;
     font-family: inherit;
     border-radius: 8px;
     font-size: 16px;
     font-weight: 300;
+    cursor: pointer;
 }
 
 input::placeholder, 
@@ -74,7 +75,7 @@ textarea:focus {
 }
 
 input {
-    padding: 8px;
+    padding: 7px;
     padding-left: 10px;
     border-width: 0.6px;
 }
@@ -102,13 +103,14 @@ select {
     border-radius: 4px;
     font-size: 16px;
     font-weight: 300;
+    cursor: pointer;
 }
 
 #urgent, 
 #medium,
 #low {
-    width: 112px;
-    height: 46px;
+    width: 108px;
+    height: 44px;
     box-sizing: border-box;
     margin-bottom: 24px;
     border: 1px solid #D7D7D7;
@@ -117,9 +119,26 @@ select {
     font-size: 16px;
     font-weight: 300;
     background-color: white;
+    cursor: pointer;
+}
+
+.button-container {
+    display: flex;
+    gap: 12px;
 }
 
 button > img {
-    width: 12px;
-    height: auto;
+    width: 16px;
+    height: 12px;
+    margin-left: 3px;
+}
+
+button:hover {
+   box-shadow: -1px 2px 0 rgba(0, 0, 0, 0.1),  /* Slight shadow on the left */
+                1px 2px 0 rgba(0, 0, 0, 0.1),   /* Slight shadow on the right */
+                0px 4px 2px rgba(0, 0, 0, 0.1);   /* Subtle bottom shadow */
+}
+
+button.active:hover {
+    box-shadow: none;
 }

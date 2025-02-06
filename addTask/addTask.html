@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/addTask/addTask.css">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/root.css">
+    
 </head>
 <body>
     <h1>Add Task</h1>
@@ -31,10 +32,18 @@
             <input type="date" id="due-date" name="due-date" placeholder="dd/mm/yyyy">
 
             <label for="priority">Prio</label>
-            <button id="urgent" name="urgent" type="button">Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon"></button>
-            <button id="medium" name="medium" type="button">Medium <img src="/assets/imgs/medium.png" alt="medium-icon"></button>
-            <button id="low" name="low" type="button">Low <img src="/assets/imgs/low.png" alt="low-icon"></button>
-            
+            <div class="button-container">
+                <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
+                    Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon">
+                </button>
+                <button class="btn-switch" id="medium" name="medium" type="button" onclick="toggleButtons(this)">
+                    Medium <img src="/assets/imgs/medium.png" alt="medium-icon">
+                </button>
+                <button class="btn-switch" id="low" name="low" type="button" onclick="toggleButtons(this)">
+                    Low <img src="/assets/imgs/low.png" alt="low-icon">
+                </button>
+            </div>
+           
             <label for="category">Category <span class="required">*</span></label>
             <select id="category" name="category" required>
                 /*options */
@@ -44,6 +53,6 @@
             <input type="text" id="subtasks" name="subtasks" placeholder="Add new subtask">
         </div>
     </main>
-   
+    <script src="/addTask/addTask.js"></script>
 </body>
 </html>
