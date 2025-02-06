@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adding a Task</title>
     <link rel="stylesheet" href="/addTask/addTask.css">
-    <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/root.css">
+    <link rel="stylesheet" href="/comp/components.css">
     
 </head>
 <body>
@@ -53,6 +53,18 @@
             <input type="text" id="subtasks" name="subtasks" placeholder="Add new subtask">
         </div>
     </main>
+    <section class="footer">
+        <span class="text"><span class="required">*</span>This field is required.</span>
+        <div class="btn-div-footer">
+            <button class="btn-bright clear-btn">
+                Clear
+                <span class="clear-icon">
+                    <img src="/assets/imgs/clear.png" alt="An X to close-Logo">
+                </span>
+            </button>
+            <button class="btn-dark create-btn">Create Task </button>
+        </div>
+    </section>
     <script src="/addTask/addTask.js"></script>
 </body>
 </html>
