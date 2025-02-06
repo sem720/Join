@@ -13,7 +13,10 @@
 }
 
 body {
-    font-family: "Inter", sans-serif;
+    display: flex;
+    flex-direction: column;
+    background-color: #F6F7F8;
+    height: 90vh;
 }
 
 .required {
@@ -23,17 +26,12 @@ body {
     font-size: 20px;
 }
 
-body {
-    background-color: #F6F7F8;
-    height: 90vh;
-}
-
 main {
     display: flex;
     flex-direction: row;  
     height: 50vh;
     width: 800px;
-    margin-left: 200px;
+    margin-left: 250px;
 }
 
 .left-container {
@@ -49,13 +47,13 @@ main {
 
 .separator {
     width: 1px;
-    height: 30px;
+    height: 350px;
     background-color: #d1d1d1;
 }
 
 h1 {
-    margin-left: 200px !important;
-    margin-top: 100px !important;
+    margin-left: 250px !important;
+    margin-top: 150px !important;
     font-weight: 700;
     margin-block-end: 0;
 }
@@ -153,9 +151,9 @@ button > img {
 }
 
 button:hover {
-   box-shadow: -1px 2px 0 rgba(0, 0, 0, 0.1),  /* Slight shadow on the left */
-                1px 2px 0 rgba(0, 0, 0, 0.1),   /* Slight shadow on the right */
-                0px 4px 2px rgba(0, 0, 0, 0.1);   /* Subtle bottom shadow */
+   box-shadow: -1px 2px 0 rgba(0, 0, 0, 0.1), 
+                1px 2px 0 rgba(0, 0, 0, 0.1),   
+                0px 4px 2px rgba(0, 0, 0, 0.1);  
 }
 
 button.active:hover {
@@ -163,13 +161,13 @@ button.active:hover {
 }
 
 .footer {
-    margin-left: 200px;
+    margin-left: 250px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: end;
     width: 800px;
-    padding-right: 32px;
+    flex: 1;
 }
 
 .text {
@@ -183,6 +181,7 @@ button.active:hover {
     font-size: 16px;
     font-weight:500!important;
     letter-spacing: 0.2px;
+    padding: 8px !important;
 
 }
 
@@ -194,11 +193,20 @@ button.active:hover {
 .btn-div-footer {
     display: flex;
     gap: 16px;
+    box-sizing: border-box;
+    margin-right: 42px;
     
 }
 
-.clear-icon > img {
-    width: 12px;
-    height: 12px;
-    font-weight: 100;
+.clear-icon {
+    margin-left: 4px;
+    color: #2A3647;
+}
+
+.clear-icon > svg {
+    stroke: #2A3647;
+}
+
+.btn-bright:hover svg {
+    stroke: var(--light-blue) !important; 
 }
