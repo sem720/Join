@@ -1,0 +1,60 @@
+:root {
+    --blue: #2a3647;
+    --dark-blue: #091931;
+    --light-blue: #29abe2;
+    --urgent: #ff3d00;
+    --medium: #f9a400;
+    --low: #74d727;
+    --grey: #cdcdcd;
+    --transition: 125ms;
+}
+
+.btn-dark {
+    background-color: var(--dark-blue);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: var(--transition);
+}
+
+.btn-dark:hover {
+    background-color: var(--light-blue);
+    box-shadow: 0 0 5px var(--light-blue);
+
+}
+
+.btn-bright {
+    background-color: white;
+    color: var(--dark-blue);
+    border: 1px solid var(--dark-blue);
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 12px 20px;
+    transition: var(--transition);
+
+}
+
+.btn-bright:hover {
+    color: var(--light-blue);
+    border-color: var(--light-blue);
+    box-shadow: 0 0 5px var(--light-blue);
+
+}
+
+.input-standard {
+    width: 400px;
+    border-radius: 8px;
+    border: 1px solid #091931;
+    padding: 12px 16px;
+    transition: var(--transition);
+}
+
+.input-standard:focus {
+    border-color: var(--light-blue);
+    outline: none;
+    box-shadow: 0 0 5px var(--light-blue);
+}

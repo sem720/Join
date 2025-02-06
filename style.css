@@ -83,3 +83,7 @@ body {
   display: flex;
   gap: 22px;
 }
+
+.d-none {
+  display: none;
+}
