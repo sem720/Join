@@ -178,7 +178,7 @@ button.active:hover {
     background-color: #F6F7F8 !important;
     width: 90px;
     height: 46px;
-    font-size: 16px;
+    font-size: 16px !important;
     font-weight:500!important;
     letter-spacing: 0.2px;
     padding: 8px !important;
@@ -190,7 +190,7 @@ button.active:hover {
     height: 46px;
     padding: 8px !important;
     font-family: "Inter", sans-serif;
-    font-size: 16px;
+    font-size: 16px !important;
 }
 
 .create-btn > img {
