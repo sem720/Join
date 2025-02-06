@@ -151,9 +151,9 @@ button > img {
 }
 
 button:hover {
-   box-shadow: -1px 2px 0 rgba(0, 0, 0, 0.1),  /* Slight shadow on the left */
-                1px 2px 0 rgba(0, 0, 0, 0.1),   /* Slight shadow on the right */
-                0px 4px 2px rgba(0, 0, 0, 0.1);   /* Subtle bottom shadow */
+   box-shadow: -1px 2px 0 rgba(0, 0, 0, 0.1), 
+                1px 2px 0 rgba(0, 0, 0, 0.1),   
+                0px 4px 2px rgba(0, 0, 0, 0.1);  
 }
 
 button.active:hover {
@@ -208,5 +208,5 @@ button.active:hover {
 }
 
 .btn-bright:hover svg {
-    stroke: var(--light-blue) !important; /* Change the color of the SVG stroke on hover */
+    stroke: var(--light-blue) !important; 
 }
