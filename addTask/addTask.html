@@ -25,12 +25,15 @@
                 </select>
             </form>
         </div>
-
+        <div class="separator"></div>
         <div class="right-container">
             <label for="due-date">Due Date <span class="required">*</span></label>
             <input type="date" id="due-date" name="due-date" placeholder="dd/mm/yyyy">
 
             <label for="priority">Prio</label>
+            <button id="urgent" name="urgent" type="button">Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon"></button>
+            <button id="medium" name="medium" type="button">Medium <img src="/assets/imgs/medium.png" alt="medium-icon"></button>
+            <button id="low" name="low" type="button">Low <img src="/assets/imgs/low.png" alt="low-icon"></button>
             
             <label for="category">Category <span class="required">*</span></label>
             <select id="category" name="category" required>
