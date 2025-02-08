@@ -82,21 +82,20 @@ function initialDefaultPriority() {
 
 
 
-function setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList, dropdownIcon) {
-  const defaultText = dropdownBtn.innerHTML;
-
-  dropdownBtn.addEventListener("click", (event) => {
-      event.preventDefault(); // 🔥 Stops the button from submitting the form
-
-      const isOpen = dropdownContainer.classList.toggle("open");
-      dropdownList.style.display =  isOpen ? "block" : "none";
-
-      dropdownIcon.src = isOpen ? "/assets/imgs/dropdown_upwards.png" : "/assets/imgs/dropdown-black.png";
-
-      if (!isOpen) {
-          dropdownBtn.innerHTML = defaultText;
-          document.getElementById("category").value = "";
-      }
+function setupDropdownToggle(btn, container, list) {
+  const defaultText = btn.innerHTML;
+  
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const isOpen = container.classList.toggle("open");
+    list.style.display = isOpen ? "block" : "none";
+  
+    btn.querySelector("img").src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
+  
+    if (!isOpen) {
+      btn.innerHTML = defaultText;
+      document.getElementById("category").value = "";
+    }
   });
 }
 
@@ -110,6 +109,7 @@ function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
         categoryInput.value = selectedValue;
 
         dropdownList.style.display = "none";
+       
       });
   });
 }
@@ -128,7 +128,9 @@ function clearTask() {
   document.getElementById("description").value = "";
   document.getElementById("subtasks").value = "";
   document.getElementById("due-date").value = "";
-  
+  document.getElementById("dropdown-btn").innerHTML = `Select task category <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
+  //document.getElementById("category").value = "";
+  //document.getElementById("assignmment-btn").innerHTML = ``
   
 }
 
