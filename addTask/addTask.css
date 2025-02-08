@@ -131,7 +131,11 @@ select {
 }
 
 select, #subtasks, .dropdown-btn {
-    box-shadow: -1px 1px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: -1px 1px 0px rgba(0, 0, 0, 0.10);
+}
+
+select:hover, #subtasks:hover, .dropdown-btn:hover {
+    box-shadow: -1px 1px 0px rgba(0, 0, 0, 0.3);
 }
 
 #urgent, 
@@ -244,6 +248,9 @@ select, #subtasks, .dropdown-btn {
     cursor: pointer;
     padding-left: 16px !important;
     margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .dropdown-options {
@@ -270,9 +277,7 @@ select, #subtasks, .dropdown-btn {
 #dropdown-icon {
     width: 8px;
     height: auto;
-    position: relative;
-    left: 130px;
-    bottom: 4px;
+    margin-right: 8px;
 }
 
 .dropdown-options > li {
@@ -283,10 +288,6 @@ select, #subtasks, .dropdown-btn {
 
 .dropdown-options > li:hover {
     background-color: #F6F7F8;
-}
-
-.dropdown-container:hover .dropdown-options {
-    display: block;
 }
 
 #subtasks {

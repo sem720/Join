@@ -57,6 +57,15 @@ function changeImageStyle(button, action) {
   }
 }
 
+function initialDefaultPriority() {
+  const mediumButton = document.getElementById('medium');
+
+  if (mediumButton) {
+      activateButton(mediumButton);
+      activeButton = mediumButton;
+  }
+}
+
 //Logik für Inputfelder die required sind: Schritte 1-4:
   //Schritt 1: Prüfen ob das Inputfeld leer ist, wenn der User submitted oder das Inputfeld verlässt
   //Schritt 2: Eine rote Border hinzufügen, wenn das Inputfeld leer ist
@@ -73,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function ()  {
   const dropdownContainer = document.querySelector(".dropdown-container");
   const dropdownList = document.getElementById("dropdown-list");
   const dropdownIcon = document.getElementById("dropdown-icon");
+  const categoryInput = document.getElementById("category");
   
   dropdownBtn.addEventListener("click", (event) => {
       event.preventDefault(); // 🔥 Stops the button from submitting the form
@@ -87,6 +97,19 @@ document.addEventListener('DOMContentLoaded', function ()  {
       }
   });
 
-  
-  
+  document.querySelectorAll('.dropdown-options li').forEach(option => { 
+      option.addEventListener('click', function () {
+        const selectedText = this.textContent;
+        const selectedValue = this.getAttribute('data-value');
+
+        dropdownBtn.innerHTML = `${selectedText} <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
+        categoryInput.value = selectedValue;
+
+        dropdownList.style.display = "none";
+      });
+  });
 });
+
+document.addEventListener('DOMContentLoaded', initialDefaultPriority);
+
+//Clear-Logik: in der Prio ist das Medium markiert; 
