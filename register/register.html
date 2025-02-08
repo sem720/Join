@@ -21,6 +21,9 @@
     <title>Join - Sign up</title>
   </head>
   <body>
+    <div id="sign-up-alert" class="sign-up-alert">
+      You Signed Up successfully
+    </div>
     <img id="join-logo" src="../assets/imgs/logo-black.png" />
     <form onsubmit="addUser(); return false;" class="form">
       <div class="form-head">
@@ -33,31 +36,46 @@
         <h1>Sign up</h1>
         <div class="line"></div>
       </div>
-
-      <input
-        class="input-standard"
-        type="text"
-        id="idName"
-        placeholder="Name"
-      />
-      <input
-        class="input-standard"
-        type="text"
-        id="idEmail"
-        placeholder="Email"
-      />
-      <input
-        class="input-standard"
-        type="password"
-        id="idPassword"
-        placeholder="Password"
-      />
-      <input
-        type="password"
-        id="idPasswordCon"
-        placeholder="Confirm Password"
-        class="input-standard"
-      />
+      <div class="div-input">
+        <input
+          class="input-standard"
+          type="text"
+          id="idName"
+          placeholder="Name"
+          maxlength="254"
+        />
+        <img id="input-icon" src="../assets/imgs/input-name.png" />
+      </div>
+      <div class="div-input">
+        <input
+          class="input-standard"
+          type="text"
+          id="idEmail"
+          placeholder="Email"
+          maxlength="254"
+        />
+        <img id="input-icon" src="../assets/imgs/input-email.png" />
+      </div>
+      <div class="div-input">
+        <input
+          class="input-standard"
+          type="password"
+          id="idPassword"
+          placeholder="Password"
+          maxlength="64"
+        />
+        <img id="input-icon" src="../assets/imgs/input-password.png" />
+      </div>
+      <div class="div-input">
+        <input
+          type="password"
+          id="idPasswordCon"
+          placeholder="Confirm Password"
+          class="input-standard"
+          maxlength="64"
+        />
+        <img id="input-icon" src="../assets/imgs/input-password.png" />
+      </div>
       <div id="render-alert" class="div-alert"></div>
       <div class="checkbox-privacy">
         <input class="checkbox-standard" id="idPolicy" type="checkbox" />

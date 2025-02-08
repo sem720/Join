@@ -24,24 +24,41 @@
 
   <body>
     <img id="join-logo" src="../assets/imgs/logo-black.png" />
+    <div class="navigate-signup">
+      Not a Join user?
+      <button
+        onclick="window.location.href='../register/register.html';"
+        class="btn-dark"
+      >
+        Sign up
+      </button>
+    </div>
 
     <form class="form">
       <div class="form-head">
         <h1>Log in</h1>
         <div class="line"></div>
       </div>
-      <input
-        class="input-standard"
-        type="email"
-        id="Email"
-        placeholder="Email"
-      />
-      <input
-        class="input-standard"
-        type="password"
-        id="Password"
-        placeholder="Password"
-      />
+      <div class="div-input">
+        <input
+          class="input-standard"
+          type="email"
+          id="Email"
+          placeholder="Email"
+          maxlength="254"
+        />
+        <img id="input-icon" src="./assets/imgs/input-email.png" />
+      </div>
+      <div class="div-input">
+        <input
+          class="input-standard"
+          type="password"
+          id="Password"
+          placeholder="Password"
+          maxlength="64"
+        />
+        <img id="input-icon" src="./assets/imgs/input-password.png" />
+      </div>
       <div id="render-alert" class="div-alert"></div>
       <div class="login-buttons">
         <button type="button" class="btn-dark" onclick="login()">Log in</button>

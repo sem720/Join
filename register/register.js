@@ -11,6 +11,7 @@ function addUser() {
   let email = document.getElementById("idEmail").value.trim().toLowerCase();
   let password = document.getElementById("idPassword").value;
   let name = document.getElementById("idName").value.toLowerCase();
+  let signupAlert = document.getElementById("sign-up-alert");
 
   const randomColor = getRandomColor();
 
@@ -29,11 +30,11 @@ function addUser() {
     body: JSON.stringify(userData),
   })
     .then(() => {
-      alert("Registrierung erfolgreich!");
+      signupAlert.classList.add("anim-sign-up");
       resetForm();
       setTimeout(() => {
         window.location.href = "../index.html";
-      }, 500);
+      }, 1500);
     })
     .catch((error) => console.error("Fehler:", error));
 }
