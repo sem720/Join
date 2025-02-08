@@ -114,19 +114,33 @@ function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
   });
 }
 
-function clearTask () {
- 
+function addSubtask() {
+  const inputField = document.getElementById("subtasks");
+  const subtaskText = inputField.value.trim();
+
+  if (subtaskText === "") {
+      return;
+  }
+}
+
+function clearTask() {
+  document.getElementById("task-name").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("subtasks").value = "";
+  document.getElementById("due-date").value = "";
+  
   
 }
 
-function init () {
+function init() {
   const dropdownBtn = document.getElementById("dropdown-btn");
   const dropdownList = document.getElementById("dropdown-list");
   const categoryInput = document.getElementById("category");
 
   initialDefaultPriority(),
-  setupDropdownOptions(dropdownBtn, dropdownList, categoryInput);
-  setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList, dropdownIcon);
+  setupDropdownOptions(dropdownBtn, dropdownList, categoryInput),
+  setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList, dropdownIcon),
+  clearTask();
 }
 
 window.onload = init;
