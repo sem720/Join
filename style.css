@@ -8,35 +8,52 @@ body {
   min-height: 100vh;
 }
 
-#join-logo {
+.div-join-logo {
   position: absolute;
-  top: 80px;
-  left: 70px;
-  height: 110px;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  background: #f6f7f8;
+  pointer-events: none;
+  animation: fade-out 1s forwards;
 }
 
 #join-logo {
+  animation: join-animation 1s forwards;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  height: 60%;
-  z-index: 10;
-  animation: join-animation 1s forwards;
+  height: 330px;
 }
 
 @keyframes join-animation {
   0% {
-    height: 60%;
+    height: 300px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
   100% {
-    height: 15%;
     top: 80px;
     left: 70px;
+    height: 110px;
     transform: translate(-0%, -0%);
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    background: #f6f7f8;
+  }
+
+  35% {
+    background: #f6f7f8;
+  }
+  100% {
+    background: #f6f7f800;
   }
 }
 
