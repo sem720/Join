@@ -28,29 +28,36 @@
         </div>
         <div class="separator"></div>
         <div class="right-container">
-            <label for="due-date">Due Date <span class="required">*</span></label>
-            <input type="date" id="due-date" name="due-date" placeholder="dd/mm/yyyy">
-
-            <label for="priority">Prio</label>
-            <div class="button-container">
-                <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
-                    Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon">
-                </button>
-                <button class="btn-switch" id="medium" name="medium" type="button" onclick="toggleButtons(this)">
-                    Medium <img src="/assets/imgs/medium.png" alt="medium-icon">
-                </button>
-                <button class="btn-switch" id="low" name="low" type="button" onclick="toggleButtons(this)">
-                    Low <img src="/assets/imgs/low.png" alt="low-icon">
-                </button>
-            </div>
-           
-            <label for="category">Category <span class="required">*</span></label>
-            <select id="category" name="category" required>
-                /*options */
-            </select>
-
-            <label for="subtasks">Subtasks</label>
-            <input type="text" id="subtasks" name="subtasks" placeholder="Add new subtask">
+            <form>
+                <label for="due-date">Due Date <span class="required">*</span></label>
+                <input type="date" id="due-date" name="due-date" placeholder="dd/mm/yyyy">
+    
+                <label for="priority">Prio</label>
+                <div class="button-container">
+                    <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
+                        Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon">
+                    </button>
+                    <button class="btn-switch" id="medium" name="medium" type="button" onclick="toggleButtons(this)">
+                        Medium <img src="/assets/imgs/medium.png" alt="medium-icon">
+                    </button>
+                    <button class="btn-switch" id="low" name="low" type="button" onclick="toggleButtons(this)">
+                        Low <img src="/assets/imgs/low.png" alt="low-icon">
+                    </button>
+                </div>
+               
+                <label for="category" id="category">Category <span class="required">*</span></label>
+                <div class="dropdown-container">
+                    <button class="dropdown-btn" id="dropdown-btn">Select task category <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon"></button>
+                    <div class="dropdown-options" id="dropdown-list">
+                        <li data-value="technical_task">Technical Task</li>
+                        <li data-value="user_story">User Story</li>
+                    </div>
+                </div>
+                <input type="hidden" id="selected-category" name="selected-category"> 
+    
+                <label for="subtasks">Subtasks</label>
+                <input type="text" id="subtasks" name="subtasks" placeholder="Add new subtask">
+            </form>
         </div>
     </main>
     <section class="footer">

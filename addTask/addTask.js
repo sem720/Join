@@ -1,3 +1,5 @@
+//Die Logik ist etwas lange, ich habe heute eine kürzere Version erarbeitet, die ich noch implementieren muss;
+
 let activeButton = null; 
 
 function toggleButtons(clickedButton) {
@@ -54,3 +56,37 @@ function changeImageStyle(button, action) {
       img.style.filter = ''; 
   }
 }
+
+//Logik für Inputfelder die required sind: Schritte 1-4:
+  //Schritt 1: Prüfen ob das Inputfeld leer ist, wenn der User submitted oder das Inputfeld verlässt
+  //Schritt 2: Eine rote Border hinzufügen, wenn das Inputfeld leer ist
+  //Schritt 3: Den Text in rot anzeigen (This field is required)
+  //Schritt 4: Die rote Border und den Text entfernen, wenn der User das Inputfeld ausfüllt
+
+  //in CSS: code für error border und error message erstellen
+
+  //div mit Error Message auf display none setzen und dann anzeigen, wenn das Inputfeld leer ist
+
+
+document.addEventListener('DOMContentLoaded', function ()  {
+  const dropdownBtn = document.getElementById("dropdown-btn");
+  const dropdownContainer = document.querySelector(".dropdown-container");
+  const dropdownList = document.getElementById("dropdown-list");
+  const dropdownIcon = document.getElementById("dropdown-icon");
+  
+  dropdownBtn.addEventListener("click", (event) => {
+      event.preventDefault(); // 🔥 Stops the button from submitting the form
+
+      const isOpen = dropdownContainer.classList.toggle("open");
+      dropdownList.style.display =  isOpen ? "block" : "none";
+
+      if (dropdownContainer.classList.contains("open")) {
+          dropdownIcon.src = "/assets/imgs/dropdown_upwards.png";
+      } else {
+          dropdownIcon.src = "/assets/imgs/dropdown-black.png";
+      }
+  });
+
+  
+  
+});
