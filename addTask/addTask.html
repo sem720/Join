@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/comp/components.css">
     
 </head>
-<body>
+<body onload="init()">
     <h1>Add Task</h1>
     <main class="main-addTask">
         <div class="left-container">
@@ -21,9 +21,8 @@
                 <textarea id="description" name="description" placeholder="Enter a Description"></textarea>
             
                 <label for="assignment">Assigned to</label>
-                <select id="assignment" name="assignment">
-                    /*dynamisches dropdown*/
-                </select>
+                <button class="assignment-btn" id="assignment-btn">Select contacts to assign <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon"></button>
+                
             </form>
         </div>
         <div class="separator"></div>

@@ -1,6 +1,10 @@
 //Die Logik ist etwas lange, ich habe heute eine kürzere Version erarbeitet, die ich noch implementieren muss;
-
 let activeButton = null; 
+const dropdownBtn = document.getElementById("dropdown-btn");
+const dropdownContainer = document.querySelector(".dropdown-container");
+const dropdownList = document.getElementById("dropdown-list");
+const dropdownIcon = document.getElementById("dropdown-icon");
+const categoryInput = document.getElementById("category");
 
 function toggleButtons(clickedButton) {
   if (activeButton) {
@@ -77,26 +81,26 @@ function initialDefaultPriority() {
   //div mit Error Message auf display none setzen und dann anzeigen, wenn das Inputfeld leer ist
 
 
-document.addEventListener('DOMContentLoaded', function ()  {
-  const dropdownBtn = document.getElementById("dropdown-btn");
-  const dropdownContainer = document.querySelector(".dropdown-container");
-  const dropdownList = document.getElementById("dropdown-list");
-  const dropdownIcon = document.getElementById("dropdown-icon");
-  const categoryInput = document.getElementById("category");
-  
+
+function setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList, dropdownIcon) {
+  const defaultText = dropdownBtn.innerHTML;
+
   dropdownBtn.addEventListener("click", (event) => {
       event.preventDefault(); // 🔥 Stops the button from submitting the form
 
       const isOpen = dropdownContainer.classList.toggle("open");
       dropdownList.style.display =  isOpen ? "block" : "none";
 
-      if (dropdownContainer.classList.contains("open")) {
-          dropdownIcon.src = "/assets/imgs/dropdown_upwards.png";
-      } else {
-          dropdownIcon.src = "/assets/imgs/dropdown-black.png";
+      dropdownIcon.src = isOpen ? "/assets/imgs/dropdown_upwards.png" : "/assets/imgs/dropdown-black.png";
+
+      if (!isOpen) {
+          dropdownBtn.innerHTML = defaultText;
+          document.getElementById("category").value = "";
       }
   });
+}
 
+function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
   document.querySelectorAll('.dropdown-options li').forEach(option => { 
       option.addEventListener('click', function () {
         const selectedText = this.textContent;
@@ -108,8 +112,23 @@ document.addEventListener('DOMContentLoaded', function ()  {
         dropdownList.style.display = "none";
       });
   });
-});
+}
 
-document.addEventListener('DOMContentLoaded', initialDefaultPriority);
+function clearTask () {
+ 
+  
+}
+
+function init () {
+  const dropdownBtn = document.getElementById("dropdown-btn");
+  const dropdownList = document.getElementById("dropdown-list");
+  const categoryInput = document.getElementById("category");
+
+  initialDefaultPriority(),
+  setupDropdownOptions(dropdownBtn, dropdownList, categoryInput);
+  setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList, dropdownIcon);
+}
+
+window.onload = init;
 
 //Clear-Logik: in der Prio ist das Medium markiert; 
