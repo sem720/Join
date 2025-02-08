@@ -274,9 +274,31 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
     list-style: none;
 }
 
-.dropdown-container {
+.dropdown-container, .subtask-container{
     position: relative;
     width: 100%;
+}
+
+.subtask-container input {
+    flex-grow: 1;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+.add-subtask-icon {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: auto;
+    cursor: pointer;
+}
+
+#subtask-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
 }
 
 #dropdown-icon {
@@ -297,6 +319,9 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
 
 #subtasks {
     margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 ul {
