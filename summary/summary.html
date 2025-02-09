@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../root.css" />
     <link rel="stylesheet" href="../comp/components.css" />
-    <link rel="stylesheet" href="../comp/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../comp/navbar/navbar.css" />
+    <link rel="stylesheet" href="../summary/summary.css" />
     <title>Summary</title>
   </head>
-  <body>
-    <div w3-include-html="../comp/sidebar/sidebar.html"></div>
+  <body onload="initNavbar()">
+    <div class="navbar-wrap" w3-include-html="../comp/navbar/navbar.html"></div>
   </body>
+  <script src="/comp/navbar/navbar.js"></script>
   <script src="https://www.w3schools.com/lib/w3.js"></script>
   <script>
     w3.includeHTML();
