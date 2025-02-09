@@ -53,14 +53,16 @@
                     </div>
                 </div>
                 <input type="hidden" id="selected-category" name="selected-category"> 
-    
-                <label for="subtasks">Subtasks</label>
+                
                 <div class="subtask-container">
-                    <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask">
-                    <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon">
+                    <label for="subtasks">Subtasks</label>
+                    <div class="subtask-input-wrapper">
+                        <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask">
+                        <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon">
+                    </div>
+                    <ul id="subtask-list"></ul>
                 </div>
-                <ul id="subtask-list">
-                    <!-- <li>Subtask 1</li> -->
+                   <!-- <li>Subtask 1</li> -->
             </form>
         </div>
     </main>

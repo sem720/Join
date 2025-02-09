@@ -123,14 +123,73 @@ function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
     }
   });
 }
-  
-function addSubtask() {
-  const inputField = document.getElementById("subtasks");
-  const subtaskText = inputField.value.trim();
 
-  if (subtaskText === "") {
-      return;
+function setupAddSubtaskButton() {
+  const addSubtaskBtn = document.querySelector(".add-subtask-icon");
+  const inputField = document.getElementById("subtasks");
+
+  if (addSubtaskBtn) {
+    addSubtaskBtn.addEventListener("click", showSubtaskActions);
   }
+
+  if (inputField) {
+    inputField.addEventListener("input", function () {
+      if (this.value.trim()) {
+        addSubtaskBtn.style.display = "none";
+        showSubtaskActions();
+      }
+    });
+  }
+}
+
+function showSubtaskActions() {
+  const inputField = document.getElementById("subtasks");
+  let iconContainer = document.querySelector(".subtask-action");
+
+  if (!iconContainer) {
+    iconContainer = document.createElement("div");
+    iconContainer.classList.add("subtask-action");
+
+    const deleteIcon = createIcon("/assets/imgs/clear-subtask.png", "Clear Icon", "clear-icon", clearSubtask);
+    const divider = document.createElement("div");
+    divider.classList.add("divider");
+    const checkIcon = createIcon("/assets/imgs/checkmark-black.png", "Checkmark Icon", "checkmark-icon", saveSubtask);
+
+    iconContainer.append(deleteIcon, divider, checkIcon);
+    inputField.parentElement.appendChild(iconContainer);
+  }
+}
+
+function createIcon(src, alt, className, eventHandler) {
+  const icon = document.createElement("img");
+  icon.src = src;
+  icon.alt = alt;
+  icon.classList.add(className);
+  icon.addEventListener("click", eventHandler);
+  return icon;
+}
+
+function clearSubtask() {
+  const inputField = document.getElementById("subtasks");
+  const iconContainer = document.querySelector(".subtask-action");
+  const addSubtaskBtn = document.querySelector(".add-subtask-icon");
+
+  inputField.value = "";
+  iconContainer?.remove();
+  addSubtaskBtn.style.display = "inline";
+}
+
+function saveSubtask() {
+  const inputField = document.getElementById("subtasks");
+  const subtaskList = document.getElementById("subtask-list");
+
+  if (inputField.value.trim()) {
+    const li = document.createElement("li");
+    li.textContent = inputField.value;
+    subtaskList.appendChild(li);
+  }
+
+  clearSubtask();
 }
 
 function clearTask() {
@@ -152,6 +211,7 @@ function init() {
   initialDefaultPriority(),
   setupDropdownOptions(dropdownBtn, dropdownList, categoryInput),
   setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList, dropdownIcon),
+  setupAddSubtaskButton(),
   clearTask();
 }
 
