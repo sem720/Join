@@ -18,15 +18,11 @@ function login() {
     .then((response) => response.json())
     .then((user) => {
       if (user && user.password === password) {
-        alert(`Willkommen zurück, ${user.name}!`);
-
         saveUserToLocalStorage(user, email);
-
-        console.log("Eingeloggt als:", user.name);
 
         setTimeout(() => {
           window.location.href = "../summary/summary.html";
-        }, 1500);
+        }, 500);
       } else {
         document.getElementById("render-alert").innerHTML =
           "the email or password is incorrect";
@@ -46,14 +42,20 @@ function saveUserToLocalStorage(user, email) {
   };
 
   localStorage.setItem("user", JSON.stringify(userData));
-  console.log("User-Daten im Local Storage gespeichert:", userData);
 }
 
 function guestLogin() {
-  logStatus = "Guest";
-  setTimeout(function () {
-    window.location.href = "index.html";
-  }, 1500);
+  const guestData = {
+    name: "Guest",
+    email: "guest@example.com",
+    color: getRandomColor(),
+  };
+
+  localStorage.setItem("user", JSON.stringify(guestData));
+
+  setTimeout(() => {
+    window.location.href = "../summary/summary.html";
+  }, 500);
 }
 
 function checkUserStatus() {
@@ -64,6 +66,15 @@ function checkUserStatus() {
   } else {
     console.log(`Willkommen zurück, ${user.name}!`);
   }
+}
+
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }
 
 // form validation

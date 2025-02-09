@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./comp/components.css" />
     <link rel="stylesheet" href="./style.css" />
     <link rel="stylesheet" href="../root.css" />
-    <link rel="stylesheet" href="./comp/components.css" />
     <link rel="stylesheet" href="./comp/navbar/navbar.css" />
     <link
       id="favicon-light"
@@ -24,7 +24,16 @@
 
   <body>
     <div class="div-join-logo">
-      <img id="join-logo" src="../assets/imgs/logo-black.png" />
+      <img
+        id="join-logo"
+        class="non-mobile"
+        src="../assets/imgs/logo-black.png"
+      />
+      <img
+        id="join-logo"
+        class="mobile"
+        src="../assets/imgs/logo-white-blue.png"
+      />
     </div>
     <div class="navigate-signup">
       Not a Join user?
@@ -69,6 +78,16 @@
         </button>
       </div>
     </form>
+
+    <div class="navigate-signup-mobile">
+      Not a Join user?
+      <button
+        onclick="window.location.href='../register/register.html';"
+        class="btn-dark"
+      >
+        Sign up
+      </button>
+    </div>
 
     <div class="div-privacy-links">
       <a class="privacy-link grey" href="#">Privacy Policy</a>
