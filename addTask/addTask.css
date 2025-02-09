@@ -1,6 +1,6 @@
 @font-face {
     font-family: "Inter";
-    src: url("/assets/fonts/Inter-VariableFont_opsz\,wght.ttf") format("truetype");
+    src: url("/assets/fonts/Inter-VariableFont_opsz,wght.ttf") format("truetype");
     font-weight: 100 900;
     font-style: normal;
 }
@@ -117,7 +117,7 @@ select {
     box-sizing: border-box;
     margin-bottom: 24px;
     padding-left: 16px !important;
-    width: 90%;
+    width: 400px;
     height: 42px;
     border: 1px solid #D7D7D7;
     font-family: inherit;

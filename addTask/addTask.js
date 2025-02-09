@@ -82,38 +82,48 @@ function initialDefaultPriority() {
 
 
 
-function setupDropdownToggle(btn, container, list) {
-  const defaultText = btn.innerHTML;
+function setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList) {
+  const defaultText = "Select a category"; // Ensure correct default text
   
-  btn.addEventListener("click", (e) => {
+  dropdownBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    const isOpen = container.classList.toggle("open");
-    list.style.display = isOpen ? "block" : "none";
   
-    btn.querySelector("img").src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
+    const isOpen = dropdownContainer.classList.toggle("open");
+    dropdownList.style.display = isOpen ? "block" : "none";
   
-    if (!isOpen) {
-      btn.innerHTML = defaultText;
-      document.getElementById("category").value = "";
+      // Update the icon: upwards when open, downwards when closed
+    dropdownBtn.querySelector("img").src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
+  });
+}
+  
+function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
+  const defaultText = "Select a category"; // Default text
+  
+  document.querySelectorAll(".dropdown-options li").forEach((option) => {
+    option.addEventListener("click", function () {
+      const selectedText = this.textContent;
+      const selectedValue = this.getAttribute("data-value");
+  
+      // Preserve button styling and only update text
+      dropdownBtn.innerHTML = `${selectedText} <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
+  
+      categoryInput.value = selectedValue;
+  
+      // Close dropdown
+      dropdownContainer.classList.remove("open");
+      dropdownList.style.display = "none";
+    });
+  });
+  
+  // Reset to default when clicking on the selected option again
+  dropdownBtn.addEventListener("click", (e) => {
+    if (dropdownBtn.textContent.trim() !== defaultText && !dropdownContainer.classList.contains("open")) {
+      dropdownBtn.innerHTML = `${defaultText} <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
+      categoryInput.value = "";
     }
   });
 }
-
-function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
-  document.querySelectorAll('.dropdown-options li').forEach(option => { 
-      option.addEventListener('click', function () {
-        const selectedText = this.textContent;
-        const selectedValue = this.getAttribute('data-value');
-
-        dropdownBtn.innerHTML = `${selectedText} <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
-        categoryInput.value = selectedValue;
-
-        dropdownList.style.display = "none";
-       
-      });
-  });
-}
-
+  
 function addSubtask() {
   const inputField = document.getElementById("subtasks");
   const subtaskText = inputField.value.trim();
