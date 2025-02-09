@@ -30,7 +30,7 @@ main {
     display: flex;
     flex-direction: row;  
     height: 50vh;
-    width: 800px;
+    width: 900px;
     margin-left: 250px;
 }
 
@@ -70,7 +70,7 @@ label {
 input, textarea {
     box-sizing: border-box;
     margin-bottom: 24px;
-    width: 90%;
+    width: 400px;
     height: 42px;
     border: 1px solid #D7D7D7;
     font-family: inherit;
@@ -79,6 +79,7 @@ input, textarea {
     font-weight: 300;
     cursor: pointer;
     padding-left: 16px !important;
+    transition: var(--transition);
 }
 
 input::placeholder, 
@@ -91,6 +92,7 @@ textarea::placeholder,
 input:focus,
 textarea:focus {
     outline: none;
+    border-color: var(--light-blue);
 }
 
 input {
@@ -141,7 +143,7 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
 #urgent, 
 #medium,
 #low {
-    width: 108px;
+    width: 140px;
     height: 44px;
     box-sizing: border-box;
     margin-bottom: 24px;
@@ -156,6 +158,8 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
 
 .button-container {
     display: flex;
+    justify-content: space-between;
+    width: 400px;
     gap: 12px;
 }
 
@@ -181,7 +185,7 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
     flex-direction: row;
     justify-content: space-between;
     align-items: end;
-    width: 800px;
+    width: 900px;
     flex: 1;
 }
 
@@ -238,7 +242,7 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
     background-color: white;
     text-align: left;
     box-sizing: border-box;
-    width: 90%;
+    width: 400px;
     height: 42px;
     border: 1px solid #D7D7D7;
     font-family: inherit;
@@ -276,7 +280,7 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
 
 .dropdown-container, .subtask-container{
     position: relative;
-    width: 100%;
+    width: 400px;
 }
 
 .subtask-container input {
@@ -287,7 +291,7 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
 
 .add-subtask-icon {
     position: absolute;
-    right: 50px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     width: 18px;
@@ -322,6 +326,7 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 400px;
 }
 
 ul {
