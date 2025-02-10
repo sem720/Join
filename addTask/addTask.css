@@ -340,15 +340,36 @@ select:hover, .dropdown-btn:hover {
 }
 
 #subtask-list { 
-    padding-left: 32px;
     margin: 0;
 }
 
-#subtask-list li {
-    font-size: 14px;
+#subtask-list li:hover {
+    background-color: #f3f3f3;
+    border-radius: 8px;
+    margin-top: 3px;
 }
 
+.subtask-text {
+    flex-grow: 1;
+    padding-left: 32px;
+}
 
+.li-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.edit-icon {
+    width: 18px;
+    height: auto;
+    cursor: pointer;
+}
+
+.delete-icon {
+    width: 15px;
+    height: auto;
+    cursor: pointer;
+}
 
 #dropdown-icon {
     width: 8px;
@@ -379,10 +400,34 @@ ul {
     width: 400px;
 }
 
-.divider {
-    width: 1px;
+.divider, .divider1 {
+    width: 2px;
     height: 16px;
     background-color: #D7D7D7;
     margin: 0 1px;
+    color: black;
 }
 
+.subtask-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+  
+  /* Icons verstecken, bis User darüber hovert */
+.subtask-item .li-actions {
+    display: none;
+}
+  
+  /* Beim Hovern erscheinen die Icons */
+.subtask-item:hover .li-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    
+}
+  
