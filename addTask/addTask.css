@@ -15,7 +15,6 @@
 body {
     display: flex;
     flex-direction: column;
-    background-color: #F6F7F8;
     height: 90vh;
 }
 
@@ -137,8 +136,12 @@ select, #subtasks, .dropdown-btn {
     box-shadow: -1px 1px 0px rgba(0, 0, 0, 0.10);
 }
 
-select:hover, #subtasks:hover, .dropdown-btn:hover {
+select:hover, .dropdown-btn:hover {
     box-shadow: -1px 1px 0px rgba(0, 0, 0, 0.3);
+}
+
+#subtasks:hover {
+    box-shadow: -2px 2px 0px var(--light-blue);
 }
 
 #urgent, 
@@ -202,7 +205,6 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
     font-weight:500!important;
     letter-spacing: 0.2px;
     padding: 8px !important;
-
 }
 
 .create-btn {
@@ -223,7 +225,6 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
     gap: 16px;
     box-sizing: border-box;
     margin-right: 42px;
-    
 }
 
 .clear-icon {
@@ -290,7 +291,7 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
     align-items: center;
     justify-content: space-between;
     width: 400px;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
 }
 
 .subtask-container input {
@@ -302,15 +303,20 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
 
 .subtask-action {
     position: absolute;
-    right: 35px;
+    right: 12px;
     display: flex;
-    gap: 8px;
+    gap: 4px;
 }
 
 .subtask-action img {
-    width: 16px;
+    width: 18px;
     height: auto;
     cursor: pointer;
+}
+
+#subtasks:focus {
+    outline: none;
+    box-shadow: -1px 2px 0px var(--light-blue);
 }
 
 .add-subtask-icon {
@@ -333,10 +339,13 @@ select:hover, #subtasks:hover, .dropdown-btn:hover {
     border-radius: 50%;
 }
 
-#subtask-list {
-    list-style: none;
-    padding: 0;
-    margin-top: 10px;
+#subtask-list { 
+    padding-left: 32px;
+    margin: 0;
+}
+
+#subtask-list li {
+    font-size: 14px;
 }
 
 
