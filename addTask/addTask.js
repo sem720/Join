@@ -238,38 +238,53 @@ function editSubtask(event) {
   if (!li) return;
 
   const span = li.querySelector(".subtask-text");
-  const input = createEditInput(span.textContent);
-  const newActions = createEditActions(li, span, input);
+  const input = createEditInput(span.textContent.trim());
+  const editContainer = createEditContainer(input, li, span);
 
   li.innerHTML = "";
-  li.appendChild(input);
-  li.appendChild(newActions);
+  li.appendChild(editContainer);
 
   input.focus();
 }
 
-function createEditInput() {
+function createEditContainer(input, li, span) {
+  const editContainer = document.createElement("div");
+
+  
+  editContainer.classList.add("edit-container");
+
+  const newActions = createEditActions(li, span, input);
+
+  editContainer.appendChild(input);
+  editContainer.appendChild(newActions);
+
+  return editContainer;
+}
+
+function createEditInput(text) {
   const input = document.createElement("input");
   input.type = "text";
-  input.value = text;
+  input.value = text.replace(/^•\s*/, "");
   input.classList.add("edit-input");
   return input;
 }
 
 function createEditActions(li, span, input) {
   const saveIcon = createIcon("/assets/imgs/checkmark-black.png", "Checkmark Icon", "checkmark-icon", () => saveEdit(li, input));
+  const divider = document.createElement("span");
+  divider.classList.add("divider1");
   const cancelIcon = createIcon("/assets/imgs/delete-black.png", "Clear Icon", "clear-icon", () => cancelEdit(li, span, input));
 
   const newActions = document.createElement("div");
   newActions.classList.add("subtask-actions");
-  newActions.append(saveIcon, cancelIcon);
+  newActions.append(cancelIcon, divider, saveIcon);  
   return newActions;
 }
 
 function saveEdit(li, input) {
   const span = document.createElement("span");
   span.classList.add("subtask-text");
-  span.textContent = input.value;
+  span.textContent = `• ${input.value.trim()}`;
 
   const liActions = createSubtaskListIcons(); // Fügt wieder die normalen Icons hinzu
 
