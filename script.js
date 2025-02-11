@@ -25,7 +25,7 @@ function login() {
         }, 500);
       } else {
         document.getElementById("render-alert").innerHTML =
-          "the email or password is incorrect";
+          "The email or password is incorrect.";
       }
     })
     .catch((error) => console.error("Fehler:", error));
@@ -38,7 +38,6 @@ function saveUserToLocalStorage(user, email) {
   const userData = {
     name: user.name,
     email: email,
-    color: user.color,
   };
 
   localStorage.setItem("user", JSON.stringify(userData));
@@ -48,7 +47,6 @@ function guestLogin() {
   const guestData = {
     name: "Guest",
     email: "guest@example.com",
-    color: getRandomColor(),
   };
 
   localStorage.setItem("user", JSON.stringify(guestData));
@@ -66,15 +64,6 @@ function checkUserStatus() {
   } else {
     console.log(`Willkommen zurück, ${user.name}!`);
   }
-}
-
-function getRandomColor() {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
 }
 
 // form validation

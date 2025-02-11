@@ -13,13 +13,10 @@ function addUser() {
   let name = document.getElementById("idName").value.toLowerCase();
   let signupAlert = document.getElementById("sign-up-alert");
 
-  const randomColor = getRandomColor();
-
   let userData = {
     name,
     email,
     password,
-    color: randomColor,
   };
 
   const firebaseKey = email.replace(/\./g, "_").replace(/@/g, "-");
@@ -45,15 +42,6 @@ function resetForm() {
   document.getElementById("idPassword").value = "";
   document.getElementById("idPasswordCon").value = "";
   document.getElementById("idPolicy").checked = false;
-}
-
-function getRandomColor() {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
 }
 
 // form validation
