@@ -239,26 +239,12 @@ function editSubtask(event) {
 
   const span = li.querySelector(".subtask-text");
   const input = createEditInput(span.textContent.trim());
-  const editContainer = createEditContainer(input, li, span);
+  const editActions = createEditActions(input, li, span);
 
   li.innerHTML = "";
-  li.appendChild(editContainer);
+  li.appendChild(editActions);
 
   input.focus();
-}
-
-function createEditContainer(input, li, span) {
-  const editContainer = document.createElement("div");
-
-  
-  editContainer.classList.add("edit-container");
-
-  const newActions = createEditActions(li, span, input);
-
-  editContainer.appendChild(input);
-  editContainer.appendChild(newActions);
-
-  return editContainer;
 }
 
 function createEditInput(text) {
@@ -310,6 +296,12 @@ function clearTask() {
   //document.getElementById("assignmment-btn").innerHTML = ``
   
 }
+
+document.getElementById("assignment-btn").addEventListener("click", (event) => {
+  event.preventDefault(); // Verhindert das Neuladen der Seite
+  document.getElementById("contacts-list").classList.toggle("visible");
+});
+
 
 function init() {
   const dropdownBtn = document.getElementById("dropdown-btn");

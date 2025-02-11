@@ -1,6 +1,8 @@
+@import url('addTask.comps.css');
+
 @font-face {
     font-family: "Inter";
-    src: url("/assets/fonts/Inter-VariableFont_opsz,wght.ttf") format("truetype");
+    src: url("/assets/fonts/Inter-VariableFont_opsz\,wght.ttf") format("truetype");
     font-weight: 100 900;
     font-style: normal;
 }
@@ -81,20 +83,6 @@ input, textarea {
     transition: var(--transition);
 }
 
-input::placeholder, 
-textarea::placeholder,
-#due-date::placeholder {
-    color: #D7D7D7;
-    opacity: 1;
-}
-
-input:focus,
-textarea:focus {
-    outline: none;
-    border-color: var(--light-blue);
-    box-shadow: 0 0 5px var(--light-blue);
-}
-
 input {
     padding: 7px;
     padding-left: 10px;
@@ -132,18 +120,6 @@ select {
     -moz-appearance: none;
 }
 
-select, #subtasks, .dropdown-btn {
-    box-shadow: -1px 1px 0px rgba(0, 0, 0, 0.10);
-}
-
-select:hover, .dropdown-btn:hover {
-    box-shadow: -1px 1px 0px rgba(0, 0, 0, 0.3);
-}
-
-#subtasks:hover {
-    box-shadow: -2px 2px 0px var(--light-blue);
-}
-
 #urgent, 
 #medium,
 #low {
@@ -167,22 +143,6 @@ select:hover, .dropdown-btn:hover {
     gap: 12px;
 }
 
-.btn-switch > img {
-    width: 16px;
-    height: 12px;
-    margin-left: 3px;
-}
-
-.btn-switch:hover {
-   box-shadow: -1px 2px 0 rgba(0, 0, 0, 0.1), 
-                1px 2px 0 rgba(0, 0, 0, 0.1),   
-                0px 4px 2px rgba(0, 0, 0, 0.1);  
-}
-
-.btn-switch.active:hover {
-    box-shadow: none;
-}
-
 .footer {
     margin-left: 250px;
     display: flex;
@@ -197,36 +157,6 @@ select:hover, .dropdown-btn:hover {
     font-size: 16px;
 }
 
-.clear-btn {
-    background-color: #F6F7F8 !important;
-    width: 90px;
-    height: 46px;
-    font-size: 16px !important;
-    font-weight:500!important;
-    letter-spacing: 0.2px;
-    padding: 8px !important;
-}
-
-.create-btn {
-    width: 142px;
-    height: 46px;
-    padding: 8px !important;
-    font-family: "Inter", sans-serif;
-    font-size: 16px !important;
-}
-
-.create-btn > img {
-    width: 13px;
-    height: auto;
-}
-
-.btn-div-footer {
-    display: flex;
-    gap: 16px;
-    box-sizing: border-box;
-    margin-right: 42px;
-}
-
 .clear-icon {
     margin-left: 4px;
     color: #2A3647;
@@ -234,29 +164,6 @@ select:hover, .dropdown-btn:hover {
 
 .clear-icon > svg {
     stroke: #2A3647;
-}
-
-.btn-bright:hover svg {
-    stroke: var(--light-blue) !important; 
-}
-
-.dropdown-btn, .assignment-btn {
-    background-color: white;
-    text-align: left;
-    box-sizing: border-box;
-    width: 400px;
-    height: 42px;
-    border: 1px solid #D7D7D7;
-    font-family: inherit;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: 300;
-    cursor: pointer;
-    padding-left: 16px !important;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 }
 
 .dropdown-options {
@@ -330,39 +237,21 @@ select:hover, .dropdown-btn:hover {
     cursor: pointer;
 }
 
-.add-subtask-icon:hover {
-    background-color: #F6F7F8;
-    border-radius: 50%;
-}
-
-#dropdown-icon:hover {
-    background-color: #F6F7F8;
-    border-radius: 50%;
-}
-
 #subtask-list { 
-    margin: 0;
-}
-
-#subtask-list li:hover {
-    background-color: hsla(210, 8%, 95%, 0.878);
-    border-radius: 8px;
-    margin-top: 3px;
-}
-
-#subtask-list li:has(input):hover {
-    background-color: #F6F7F8;
     margin: 0;
 }
 
 .subtask-text {
     flex-grow: 1;
-    padding-left: 32px;
+    margin-right: 10px;
 }
 
 .li-actions {
     display: flex;
+    align-items: center;
     gap: 4px;
+    padding-right: 8px !important;
+    min-width: 50px;
 }
 
 .edit-icon {
@@ -395,10 +284,6 @@ select:hover, .dropdown-btn:hover {
     padding: 8px;
 }
 
-.dropdown-options > li:hover {
-    background-color: hsl(210, 12%, 97%);
-}
-
 #subtasks {
     margin-bottom: 0;
     display: flex;
@@ -420,34 +305,28 @@ ul {
     color: black;
 }
 
-.subtask-item, .edit-container {
+.subtask-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: relative;
     width: 100%;
+    min-height: 32px;
     padding: 4px 8px;
     padding-left: 0 !important;
-    padding-right: 0 !important;
     cursor: pointer;
     font-size: 14px;
 }
   
-  /* Icons verstecken, bis User darüber hovert */
 .subtask-item .li-actions {
     display: none;
 }
   
-  /* Beim Hovern erscheinen die Icons */
-.subtask-item:hover .li-actions {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
 .edit-input {
     width: 100%;
     height: 100%;
+    flex-grow: 1;
+    height: 32px;
     border: none;
     font-size: inherit;
     display: flex;
@@ -461,12 +340,6 @@ ul {
     border-radius: 0    ;
 }
 
-.edit-container {
-    width: 400px;
-    display: flex;
-    align-items: center;
-}
-
 .subtask-actions {
     display: flex;
     position: absolute;
@@ -476,5 +349,76 @@ ul {
     gap: 4px;
 }
 
+.hidden {
+    display: none;
+}
 
-  
+#contacts-container {
+    padding: 10px;
+    width: 400px;
+    border: 1px solid #ccc;
+    background: white;
+    position: absolute;
+    top: auto;
+    left: 0;
+    z-index: 1000;
+    border:#ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    overflow-y: scroll;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px;
+}
+
+.avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    padding: 4px;
+    font-family: inherit;
+    font-weight: 400;
+    font-size: 10px;
+}
+
+.contact-checkbox {
+    margin: 0 !important;
+    width: 16px;
+    height: 16px;
+}
+
+#confirm-selection {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+}
+
+#confirm-selection:hover {
+    background-color: #0056b3;
+}
+
+.assignment-container{
+    position: relative;
+   
+}
+
+.contact-name {
+    margin-right: auto;
+    font-family: inherit;
+    font-size: 16px;
+    flex-grow: 0;
+}
