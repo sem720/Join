@@ -1,8 +1,7 @@
 Pseudoelemente und klassen und alles was btn in der Klasse oder id hat
 
 input::placeholder, 
-textarea::placeholder,
-#due-date::placeholder {
+textarea::placeholder {
     color: #D7D7D7;
     opacity: 1;
 }
@@ -130,3 +129,8 @@ select:hover, .dropdown-btn:hover {
     margin-bottom: 0 !important;
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    
+  }
+  

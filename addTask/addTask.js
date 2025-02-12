@@ -61,6 +61,33 @@ function changeImageStyle(button, action) {
   }
 }
 
+//Funktionen für das Datumsfeld
+document.addEventListener("DOMContentLoaded", function () {
+  const dateInput = document.getElementById("due-date");
+
+  dateInput.addEventListener("input", function () {
+    if (dateInput.value) {
+      dateInput.classList.add("has-value"); // Schwarz setzen
+    } else {
+      dateInput.classList.remove("has-value"); // Grau lassen
+    }
+  });
+});
+
+//Zurücksetzen wenn auf kalender-icon geklickt wird
+function setupDateReset() {
+  const dateInput = document.getElementById("due-date");
+  if (dateInput) dateInput.addEventListener('click', (event) => handleDateReset(event, dateInput));
+}
+
+function handleDateReset(event, input) {
+  if (isCalendarIconClicked(event, input)) {
+    event.preventDefault();
+    resetDateInput(input);
+  }
+}
+
+
 function initialDefaultPriority() {
   const mediumButton = document.getElementById('medium');
 
@@ -206,7 +233,6 @@ function createSubtaskListIcons() {
   divider.classList.add("divider1");
   const deleteIcon = createIcon("/assets/imgs/delete-black.png", "Delete Icon", "delete-icon", deleteSubtask);
   
-
   liActions.append(editIcon, divider, deleteIcon);
   return liActions;
 }
@@ -242,6 +268,7 @@ function editSubtask(event) {
   const editActions = createEditActions(input, li, span);
 
   li.innerHTML = "";
+  li.appendChild(input);
   li.appendChild(editActions);
 
   input.focus();
@@ -265,6 +292,12 @@ function createEditActions(li, span, input) {
   newActions.classList.add("subtask-actions");
   newActions.append(cancelIcon, divider, saveIcon);  
   return newActions;
+}
+
+function cancelEdit(li, span, input) {
+  input.value = "";
+  li.remove();
+  span.remove();
 }
 
 function saveEdit(li, input) {
@@ -318,4 +351,3 @@ function init() {
 
 window.onload = init;
 
-//Clear-Logik: in der Prio ist das Medium markiert; 

@@ -7,10 +7,9 @@
     <link rel="stylesheet" type="text/css" href="/addTask/addTask.css">
     <link rel="stylesheet"  href="/root.css">
     <link rel="stylesheet" href="/comp/components.css">
-
-    
 </head>
 <body onload="init()">
+    <div id="navbar-container"></div>
     <h1>Add Task</h1>
     <main class="main-addTask">
         <div class="left-container">
@@ -37,7 +36,7 @@
         <div class="right-container">
             <form>
                 <label for="due-date">Due Date <span class="required">*</span></label>
-                <input type="date" class="input-standard" id="due-date" name="due-date" placeholder="dd/mm/yyyy">
+                <input type="date" class="input-standard" id="due-date" name="due-date" data-placeholder="dd/mm/yyyy">
     
                 <label for="priority">Prio</label>
                 <div class="button-container">
@@ -90,5 +89,6 @@
     </section>
     <script src="/addTask/addTask.js"></script>
     <script src="/addTask/addTask.contact.js"></script>
+   
 </body>
 </html>
