@@ -32,7 +32,6 @@ function deactivateButton(button) {
   changeImageStyle(button, 'remove');
 }
 
-
 function changeButtonStyle(button, action) {
   const colorMap = {
       'urgent': '#FF3D00',
@@ -77,14 +76,25 @@ document.addEventListener("DOMContentLoaded", function () {
 //Zurücksetzen wenn auf kalender-icon geklickt wird
 function setupDateReset() {
   const dateInput = document.getElementById("due-date");
-  if (dateInput) dateInput.addEventListener('click', (event) => handleDateReset(event, dateInput));
+  if (dateInput) {
+    dateInput.addEventListener('click', (event) => handleDateReset(event, dateInput));
+  }
 }
 
 function handleDateReset(event, input) {
-  if (isCalendarIconClicked(event, input)) {
-    event.preventDefault();
-    resetDateInput(input);
+  if (iconClicked(event, input)) {
+     setTimeout(() => resetDateInput(input), 0);
   }
+}
+
+function iconClicked(event, input) {
+  const rect = input.getBoundingClientRect();
+  return event.clientX > rect.right - 30;
+}
+
+function resetDateInput(input) {
+  input.value = '';
+  input.classList.remove('has-value');
 }
 
 
@@ -323,7 +333,10 @@ function clearTask() {
   document.getElementById("task-name").value = "";
   document.getElementById("description").value = "";
   document.getElementById("subtasks").value = "";
-  document.getElementById("due-date").value = "";
+  
+  const input = document.getElementById("due-date");
+  resetDateInput(input);
+
   document.getElementById("dropdown-btn").innerHTML = `Select task category <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
   //document.getElementById("category").value = "";
   //document.getElementById("assignmment-btn").innerHTML = ``
@@ -342,6 +355,7 @@ function init() {
   const categoryInput = document.getElementById("category");
 
   initialDefaultPriority(),
+  setupDateReset(),
   setupDropdownOptions(dropdownBtn, dropdownList, categoryInput),
   setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList, dropdownIcon),
   setupAddSubtaskButton(),
