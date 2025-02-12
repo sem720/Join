@@ -1,7 +1,7 @@
 :root {
-  --col-shadow: #2b2b2b2f;
-  --col-white: white;
-  --col-lightblue: #29abe2;
+    --col-shadow: #2b2b2b2f;
+    --col-white: white;
+    --col-lightblue: #29abe2;
 }
 
 .bgc-darkblue {
@@ -18,7 +18,6 @@
 }
 
 .contacts-container {
-<<<<<<< HEAD
     display: flex;
     width: 100%;
     min-height: 100vh;
@@ -34,179 +33,139 @@
     padding-right: 4px;
     padding-top: 24px;
     border-top: 1px solid #e9e9e9;
-=======
-  display: flex;
-  padding-left: 32px;
-  height: calc(100vh - 100px);
-  overflow: hidden;
-}
-
-.contacts {
-  display: flex;
-  flex-direction: column;
-  width: clamp(350px, 100%, 456px);
-  height: 100%;
-  padding-left: 36px;
-  padding-right: 4px;
-  padding-top: 24px;
-  border-top: 1px solid #e9e9e9;
->>>>>>> f298ddb384c6653af3d1199238488641e2e23824
 }
 
 .addBtn-container {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  margin: auto;
-  width: 400px;
-  padding: 8px 24px;
-  background-color: transparent;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    margin: auto;
+    width: 400px;
+    padding: 8px 24px;
+    background-color: transparent;
 }
 
 .add-new-contact {
-  margin: auto;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  font-size: 24px;
+    margin: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-size: 24px;
 }
 
 .add-new-contact img {
-<<<<<<< HEAD
     width: 32px !important;
     height: 32px !important;
-=======
-  width: 32px;
-  height: 32px;
->>>>>>> f298ddb384c6653af3d1199238488641e2e23824
 }
 
 .contact-list {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 16px;
-  height: calc(100vh - 80px);
-  overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 16px;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
 }
 
 .contact-list div {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .contact-container {
-<<<<<<< HEAD
     width: 392px;
     margin: 0 auto;
-=======
-  width: 392px;
-  margin: auto;
->>>>>>> f298ddb384c6653af3d1199238488641e2e23824
 }
 
 .letter-underline {
-  font-weight: normal;
-  border-bottom: 2px solid var(--col-shadow);
-  padding: 16px 46px;
-  margin-bottom: 6px;
+    font-weight: normal;
+    border-bottom: 2px solid var(--col-shadow);
+    padding: 16px 46px;
+    margin-bottom: 6px;
 }
 
 .contact-content {
-  display: flex;
-  flex-direction: row !important;
-  align-items: center !important;
-  gap: 32px;
-  padding: 16px 0 16px 32px;
-  cursor: pointer;
+    display: flex;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 32px;
+    padding: 16px 0 16px 32px;
+    cursor: pointer;
 }
 
 .contact-content:hover {
-  background-color: #e9e9e9;
-  border-radius: 8px;
+    background-color: #e9e9e9;
+    border-radius: 8px;
 }
 
 .name-circle {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  color: white;
-  background-color: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: white;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .name-email {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .name-email h4 {
-  font-size: 1.25rem;
-  font-weight: normal;
-  margin: 0;
+    font-size: 1.25rem;
+    font-weight: normal;
+    margin: 0;
 }
 
 .name-email h5 {
-  font-size: 1rem;
-  font-weight: normal;
-  color: var(--col-lightblue);
-  margin: 0;
+    font-size: 1rem;
+    font-weight: normal;
+    color: var(--col-lightblue);
+    margin: 0;
 }
 
 .contacts-details {
-<<<<<<< HEAD
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: 32px;
-    width: 100%;
     min-height: 100vh;
     padding: 56px;
     background-color: #e9e9e9 !important;
     overflow: hidden;
     box-shadow: 0px 0px 10px 0px inset var(--col-shadow);
-=======
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  height: 100%;
-  width: 100%;
-  padding: 56px;
-  background-color: #e9e9e9 !important;
-  overflow: hidden;
-  box-shadow: 0px 0px 10px 0px inset var(--col-shadow);
->>>>>>> f298ddb384c6653af3d1199238488641e2e23824
 }
 
 .details-head {
-  display: flex;
-  align-content: center;
-  gap: 32px;
+    display: flex;
+    align-content: center;
+    gap: 32px;
 }
 
 .details-head .cont {
-  font-size: 4rem;
-  font-weight: bold;
-  letter-spacing: 1.8px;
+    font-size: 4rem;
+    font-weight: bold;
+    letter-spacing: 1.8px;
 }
 
 .side-line {
-  width: 3px;
-  height: 64px;
-  background-color: #29abe2;
-  margin-top: 4px;
+    width: 3px;
+    height: 64px;
+    background-color: #29abe2;
+    margin-top: 4px;
 }
 
 .details-head .better {
-  font-size: 28px;
-  font-weight: normal;
-  margin-top: 24px;
+    font-size: 28px;
+    font-weight: normal;
+    margin-top: 24px;
 }
 
 body {
@@ -214,7 +173,6 @@ body {
 }
 
 .details-content {
-<<<<<<< HEAD
     position: absolute;
     width: 95%;
     top: 160px;
@@ -223,11 +181,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
-=======
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
->>>>>>> f298ddb384c6653af3d1199238488641e2e23824
 }
 
 .details-content.active {
@@ -235,13 +188,12 @@ body {
 }
 
 .contact-name {
-  display: flex;
-  align-items: center;
-  gap: 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
 }
 
 .name-circle-sec {
-<<<<<<< HEAD
     width: 100px;
     height: 100px;
     border: 4px solid white;
@@ -252,108 +204,97 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 36px;
-=======
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background-color: black;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 36px;
->>>>>>> f298ddb384c6653af3d1199238488641e2e23824
 }
 
 .name-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .name-container .name {
-  font-size: 3rem;
-  font-weight: normal;
+    font-size: 3rem;
+    font-weight: normal;
 }
 
 .btns-container {
-  display: flex;
-  gap: 8px;
+    display: flex;
+    gap: 8px;
 }
 
 .btns-container button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 125ms;
-  font-size: 1rem;
-  background-color: transparent;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 125ms;
+    font-size: 1rem;
+    background-color: transparent;
 }
 
 .btns-container button:hover,
 .btns-container button:hover img {
-  color: var(--col-lightblue);
-  scale: 1.05;
+    color: var(--col-lightblue);
+    scale: 1.05;
 }
 
 .btns-container button img {
-  width: 18px;
-  height: 18px;
+    width: 18px;
+    height: 18px;
 }
 
 .details-content h2 {
-  font-size: 2rem;
-  font-weight: normal;
-  margin-bottom: 0;
+    font-size: 2rem;
+    font-weight: normal;
+    margin-bottom: 0;
 }
 
 .details-content h3 {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-bottom: -6px;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: -6px;
 }
 
 .details-content a {
-  font-size: 1rem;
-  color: var(--col-lightblue);
-  text-decoration: none;
+    font-size: 1rem;
+    color: var(--col-lightblue);
+    text-decoration: none;
 }
 
 .details-content a:hover {
-  color: var(--col-lightblue);
+    color: var(--col-lightblue);
 }
 
 /* Firefox */
 
 @-moz-document url-prefix() {
-  .contact-list {
-    scrollbar-width: thin;
-    scrollbar-color: #a8a8a8 !important;
-  }
+    .contact-list {
+        scrollbar-width: thin;
+        scrollbar-color: #a8a8a8 !important;
+    }
 }
 
 /* Chrome */
 .contact-list::-webkit-scrollbar {
-  width: 6px !important;
-  height: 8px !important;
+    width: 6px !important;
+    height: 8px !important;
 }
 
 .contact-list::-webkit-scrollbar-track {
-  background-color: transparent !important;
+    background-color: transparent !important;
 }
 
 .contact-list::-webkit-scrollbar-thumb {
-  background: #a8a8a8 !important;
-  border-radius: 8px !important;
+    background: #a8a8a8 !important;
+    border-radius: 8px !important;
 }
 
 .contact-list::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8 !important;
-  cursor: n-resize;
+    background: #a8a8a8 !important;
+    cursor: n-resize;
 }
 
 .contact-list::-webkit-scrollbar-button {
-  display: none !important;
+    display: none !important;
 }
