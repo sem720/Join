@@ -333,7 +333,7 @@ function clearTask() {
   document.getElementById("task-name").value = "";
   document.getElementById("description").value = "";
   document.getElementById("subtasks").value = "";
-  
+
   const input = document.getElementById("due-date");
   resetDateInput(input);
 
@@ -354,6 +354,7 @@ function init() {
   const dropdownList = document.getElementById("dropdown-list");
   const categoryInput = document.getElementById("category");
 
+  initNavbar(),
   initialDefaultPriority(),
   setupDateReset(),
   setupDropdownOptions(dropdownBtn, dropdownList, categoryInput),

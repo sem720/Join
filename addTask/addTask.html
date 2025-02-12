@@ -4,11 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adding a Task</title>
-    <link rel="stylesheet" type="text/css" href="/addTask/addTask.css">
     <link rel="stylesheet"  href="/root.css">
+    <link rel="stylesheet" type="text/css" href="/addTask/addTask.css">
     <link rel="stylesheet" href="/comp/components.css">
+    <link rel="stylesheet" href="/comp/navbar/navbar.css">
+    <link rel="stylesheet" href="/comp/sidebar/sidebar.css">
+    <link
+      id="favicon-light"
+      rel="icon"
+      href="../assets/imgs/logo-black.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      id="favicon-dark"
+      rel="icon"
+      href="../assets/imgs/logo-white-blue.png"
+      media="(prefers-color-scheme: dark)"
+    />
 </head>
 <body onload="init()">
+    <div class="navbar-wrap" w3-include-html="/comp/navbar/navbar.html"></div>
+    <div w3-include-html="/comp/sidebar/sidebar.html"></div>
+
     <div id="navbar-container"></div>
     <h1>Add Task</h1>
     <main class="main-addTask">
@@ -89,6 +106,29 @@
     </section>
     <script src="/addTask/addTask.js"></script>
     <script src="/addTask/addTask.contact.js"></script>
+    <script src="/comp/navbar/navbar.js"></script>
+    <script src="/comp/sidebar/sidebar.js"></script>
+    <script src="https://www.w3schools.com/lib/w3.js"></script>
+    <script>
+      w3.includeHTML(function () {
+        setActiveNav();
+        loadSidebar();
+      });
+  
+      function setActiveNav() {
+        const currentPage = window.location.pathname.split("/").pop();
+        document.querySelectorAll(".nav-button").forEach((button) => {
+          const link = button.getAttribute("data-link");
+          button.classList.toggle("sidebar-active-tap", link === currentPage);
+        });
+
+    function loadSidebar() {
+        const sidebarScript = document.createElement("script");
+        sidebarScript.src = "/comp/sidebar/sidebar.js";
+        document.body.appendChild(sidebarScript);
+    }
+}
+    </script>
    
 </body>
 </html>
