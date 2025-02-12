@@ -1,23 +1,41 @@
-/**
- * Adds a hover effect to a button.
- * 
- * @param {HTMLElement} button The button element to add the hover effect to.
- * @param {string} hoverSrc The source URL of the image to display on hover.
- * @param {string} defaultSrc The source URL of the default image to display.
- * 
- * @description This function adds a hover effect to a button by changing the source of the image inside the button.
- * 
- * @example
- * addHoverEffect(document.querySelector('.edit-icon').parentElement, '../assets/imgs/edit_blue.svg', '../assets/imgs/edit.svg');
- */
-function addHoverEffect(button, hoverSrc, defaultSrc) {
-    button.addEventListener('mouseover', function () {
-        this.querySelector('img').src = hoverSrc;
-    });
+const BASE_URL = 'https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/contacts/';
+const myArr = []
+async function fetchContacts(url) {
+    try {
+        const response = await fetch(url + '.json');
+        const contacts = await response.json();
+        const contactListElement = document.getElementById('contactList');
+        console.log(contacts);
+        myArr.push(contacts)
 
-    button.addEventListener('mouseout', function () {
-        this.querySelector('img').src = defaultSrc;
-    });
+        myArr.forEach((contact) => {
+            console.log(contact.contact1.email);
+        });
+    } catch (error) {
+        console.error('Fehler beim Fetchen der Kontakte:', error);
+    }
 }
-addHoverEffect(document.querySelector('.edit-icon').parentElement, '../assets/imgs/edit_blue.svg', '../assets/imgs/edit.svg');
-addHoverEffect(document.querySelector('.delete-icon').parentElement, '../assets/imgs/delete-blue.png', '../assets/imgs/delete.svg');
+fetchContacts(BASE_URL)
+
+
+/**
+ * Open the new contact overlay.
+ */
+function openAddContact() {
+    document.getElementById(`addContactOverlay`).classList.add("overlay");
+    // document.body.classList.add("overlay-overflow-hidden");
+    addContactOverlay.innerHTML += openAddContactTemp()
+    const addContact = document.getElementById("addContact");
+    addContact.addEventListener('click', (e) => {
+        e.stopPropagation()
+    })
+}
+
+/**
+ * Close the new contact overlay.
+ */
+function closeAddContact() {
+    document.getElementById(`addContactOverlay`).classList.remove("overlay");
+    // document.body.classList.remove("overlay-overflow-hidden");
+    addContactOverlay.innerHTML = "";
+}

@@ -1,0 +1,152 @@
+h1 {
+    margin: 0;
+}
+
+h3 {
+    margin: 0;
+}
+
+.d-none {
+    display: none !important;
+}
+
+.addContact-input {
+    width: 100% !important;
+    padding-left: 30px;
+}
+
+.contact-name {
+    background: url('../assets/imgs/input-name.png') no-repeat right center;
+}
+
+.contact-email {
+    background: url('../assets/imgs/input-email.png') no-repeat right center;
+}
+
+.contact-phone {
+    background: url('../assets/imgs/Input_Phone.png') no-repeat right center;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.overlay-overflow-hidden {
+    overflow: hidden;
+}
+
+#editContactsOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.addContact {
+    display: flex;
+    align-items: center;
+    height: 50vh;
+    z-index: 100;
+    overflow: hidden;
+    border-radius: 32px;
+}
+
+.addContact-titles {
+    min-height: 100%;
+    background-color: var(--blue);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 32px 0 32px;
+}
+
+.addContact-titles img {
+    height: 56px;
+    padding-bottom: 16px;
+}
+
+.blue-line {
+    height: 2px;
+    width: 56px;
+    background-color: var(--light-blue);
+}
+
+.addContact-container {
+    position: relative;
+    background-color: white;
+    width: 600px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.addContact-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contact-image {
+    width: 100px;
+    margin-right: 32px;
+}
+
+.close {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    top: 24px;
+    right: 40px;
+    background-color: transparent;
+    font-size: 24px;
+    font-weight: normal;
+    border-radius: 100%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 4px;
+    transition: .125s;
+}
+
+.close:hover {
+    background-color: #2b2b2b2f;
+}
+
+.buttons-addContact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+}
+
+.btn-dark img {
+    width: 16px;
+    height: 16px;
+}
+
+.inputs-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
