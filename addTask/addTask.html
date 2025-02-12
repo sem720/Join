@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adding a Task</title>
-    <link rel="stylesheet" href="/addTask/addTask.css">
-    <link rel="stylesheet" href="/root.css">
+    <link rel="stylesheet" type="text/css" href="/addTask/addTask.css">
+    <link rel="stylesheet"  href="/root.css">
     <link rel="stylesheet" href="/comp/components.css">
-    
 </head>
 <body onload="init()">
+    <div id="navbar-container"></div>
     <h1>Add Task</h1>
     <main class="main-addTask">
         <div class="left-container">
@@ -19,17 +19,24 @@
 
                 <label for="description">Description</label>
                 <textarea id="description" name="description" placeholder="Enter a Description"></textarea>
-            
-                <label for="assignment" id="assignment">Assigned to</label>
-                <button class="assignment-btn" id="assignment-btn">Select contacts to assign <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon"></button>
                 
+                <label for="assignment" id="assignment">Assigned to</label>
+                <div class="assignment-container">
+                    <button class="assignment-btn" id="assignment-btn">Select contacts to assign 
+                        <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                    </button>
+                
+                    <div id="contacts-container" class="hidden">
+                        <div id="contacts-list"></div>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="separator"></div>
         <div class="right-container">
             <form>
                 <label for="due-date">Due Date <span class="required">*</span></label>
-                <input type="date" class="input-standard" id="due-date" name="due-date" placeholder="dd/mm/yyyy">
+                <input type="date" class="input-standard" id="due-date" name="due-date" data-placeholder="dd/mm/yyyy">
     
                 <label for="priority">Prio</label>
                 <div class="button-container">
@@ -81,5 +88,7 @@
         </div>
     </section>
     <script src="/addTask/addTask.js"></script>
+    <script src="/addTask/addTask.contact.js"></script>
+   
 </body>
 </html>

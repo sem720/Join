@@ -32,7 +32,6 @@ function deactivateButton(button) {
   changeImageStyle(button, 'remove');
 }
 
-
 function changeButtonStyle(button, action) {
   const colorMap = {
       'urgent': '#FF3D00',
@@ -60,6 +59,44 @@ function changeImageStyle(button, action) {
       img.style.filter = ''; 
   }
 }
+
+//Funktionen für das Datumsfeld
+document.addEventListener("DOMContentLoaded", function () {
+  const dateInput = document.getElementById("due-date");
+
+  dateInput.addEventListener("input", function () {
+    if (dateInput.value) {
+      dateInput.classList.add("has-value"); // Schwarz setzen
+    } else {
+      dateInput.classList.remove("has-value"); // Grau lassen
+    }
+  });
+});
+
+//Zurücksetzen wenn auf kalender-icon geklickt wird
+function setupDateReset() {
+  const dateInput = document.getElementById("due-date");
+  if (dateInput) {
+    dateInput.addEventListener('click', (event) => handleDateReset(event, dateInput));
+  }
+}
+
+function handleDateReset(event, input) {
+  if (iconClicked(event, input)) {
+     setTimeout(() => resetDateInput(input), 0);
+  }
+}
+
+function iconClicked(event, input) {
+  const rect = input.getBoundingClientRect();
+  return event.clientX > rect.right - 30;
+}
+
+function resetDateInput(input) {
+  input.value = '';
+  input.classList.remove('has-value');
+}
+
 
 function initialDefaultPriority() {
   const mediumButton = document.getElementById('medium');
@@ -206,7 +243,6 @@ function createSubtaskListIcons() {
   divider.classList.add("divider1");
   const deleteIcon = createIcon("/assets/imgs/delete-black.png", "Delete Icon", "delete-icon", deleteSubtask);
   
-
   liActions.append(editIcon, divider, deleteIcon);
   return liActions;
 }
@@ -239,26 +275,13 @@ function editSubtask(event) {
 
   const span = li.querySelector(".subtask-text");
   const input = createEditInput(span.textContent.trim());
-  const editContainer = createEditContainer(input, li, span);
+  const editActions = createEditActions(input, li, span);
 
   li.innerHTML = "";
-  li.appendChild(editContainer);
+  li.appendChild(input);
+  li.appendChild(editActions);
 
   input.focus();
-}
-
-function createEditContainer(input, li, span) {
-  const editContainer = document.createElement("div");
-
-  
-  editContainer.classList.add("edit-container");
-
-  const newActions = createEditActions(li, span, input);
-
-  editContainer.appendChild(input);
-  editContainer.appendChild(newActions);
-
-  return editContainer;
 }
 
 function createEditInput(text) {
@@ -279,6 +302,12 @@ function createEditActions(li, span, input) {
   newActions.classList.add("subtask-actions");
   newActions.append(cancelIcon, divider, saveIcon);  
   return newActions;
+}
+
+function cancelEdit(li, span, input) {
+  input.value = "";
+  li.remove();
+  span.remove();
 }
 
 function saveEdit(li, input) {
@@ -304,12 +333,21 @@ function clearTask() {
   document.getElementById("task-name").value = "";
   document.getElementById("description").value = "";
   document.getElementById("subtasks").value = "";
-  document.getElementById("due-date").value = "";
+  
+  const input = document.getElementById("due-date");
+  resetDateInput(input);
+
   document.getElementById("dropdown-btn").innerHTML = `Select task category <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
   //document.getElementById("category").value = "";
   //document.getElementById("assignmment-btn").innerHTML = ``
   
 }
+
+document.getElementById("assignment-btn").addEventListener("click", (event) => {
+  event.preventDefault(); // Verhindert das Neuladen der Seite
+  document.getElementById("contacts-list").classList.toggle("visible");
+});
+
 
 function init() {
   const dropdownBtn = document.getElementById("dropdown-btn");
@@ -317,6 +355,7 @@ function init() {
   const categoryInput = document.getElementById("category");
 
   initialDefaultPriority(),
+  setupDateReset(),
   setupDropdownOptions(dropdownBtn, dropdownList, categoryInput),
   setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList, dropdownIcon),
   setupAddSubtaskButton(),
@@ -326,4 +365,3 @@ function init() {
 
 window.onload = init;
 
-//Clear-Logik: in der Prio ist das Medium markiert; 

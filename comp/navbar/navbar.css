@@ -8,6 +8,7 @@
   justify-content: space-between;
   padding: 0 60px 0 120px;
   position: relative;
+  z-index: 4;
 }
 
 .question-mark {
@@ -123,5 +124,17 @@
 
   .hide {
     display: none;
+  }
+}
+
+.navbar-wrap {
+  height: 100px;
+}
+
+/* Responsive */
+
+@media (max-width: 670px) {
+  .navbar-wrap {
+    padding-left: 0;
   }
 }
