@@ -112,7 +112,6 @@
     <script>
       w3.includeHTML(function () {
         setActiveNav();
-        loadSidebar();
       });
   
       function setActiveNav() {
@@ -121,13 +120,7 @@
           const link = button.getAttribute("data-link");
           button.classList.toggle("sidebar-active-tap", link === currentPage);
         });
-
-    function loadSidebar() {
-        const sidebarScript = document.createElement("script");
-        sidebarScript.src = "/comp/sidebar/sidebar.js";
-        document.body.appendChild(sidebarScript);
     }
-}
     </script>
    
 </body>
