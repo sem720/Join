@@ -343,10 +343,43 @@ function clearTask() {
   
 }
 
-document.getElementById("assignment-btn").addEventListener("click", (event) => {
+function initEventListeners() {
+  document.getElementById("assignment-btn")?.addEventListener("click", toggleContactsList);
+  document.getElementById("createTask")?.addEventListener("click", handleTaskCreation);
+}
+
+function toggleContactsList(event) {
   event.preventDefault(); // Verhindert das Neuladen der Seite
   document.getElementById("contacts-list").classList.toggle("visible");
-});
+}
+
+function handleTaskCreation(event) {
+  event.preventDefault(); // Verhindert, dass das Formular abgeschickt wird
+
+  if (validateForm()) {
+    alert("Task created!"); // Hier würdest du deine Task-Erstellung aufrufen
+  }
+}
+
+function validateForm() {
+  const fields = document.querySelectorAll(".input-standard");
+  let isValid = true;
+
+  fields.forEach(field => {
+    const errorMessage = field.nextElementSibling; // Fehlertext ist das nächste Element
+
+    if (!field.value.trim()) {
+      field.classList.add("error");
+      if (errorMessage) errorMessage.style.display = "block";
+      isValid = false;
+    } else {
+      field.classList.remove("error");
+      if (errorMessage) errorMessage.style.display = "none";
+    }
+  });
+
+  return isValid;
+}
 
 
 function init() {
@@ -360,9 +393,9 @@ function init() {
   setupDropdownOptions(dropdownBtn, dropdownList, categoryInput),
   setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList, dropdownIcon),
   setupAddSubtaskButton(),
+  initEventListeners(),
   clearTask();
- 
 }
 
-window.onload = init;
+
 

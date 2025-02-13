@@ -68,7 +68,7 @@ select:hover, .dropdown-btn:hover {
     display: flex;
     gap: 16px;
     box-sizing: border-box;
-    margin-right: 42px;
+    padding-right: 38px;
 }
 
 .btn-bright:hover svg {
@@ -88,18 +88,13 @@ select:hover, .dropdown-btn:hover {
     font-weight: 300;
     cursor: pointer;
     padding-left: 16px !important;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
 .add-subtask-icon:hover {
-    background-color: #F6F7F8;
-    border-radius: 50%;
-}
-
-#dropdown-icon:hover {
     background-color: #F6F7F8;
     border-radius: 50%;
 }
@@ -131,6 +126,34 @@ select:hover, .dropdown-btn:hover {
 
 input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
-    
-  }
+}
+
+#subtasks:focus {
+    outline: none;
+    box-shadow: -1px 2px 0px var(--light-blue);
+}
+
+.error {
+    border: 2px solid red;
+}
   
+.error-message {
+    color: red;
+    font-size: 12px;
+    display: none; /* Erst anzeigen, wenn Fehler */
+}
+  
+.dropdown-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 16px;
+}
+
+.dropdown-icon:hover #dropdown-icon {
+    background-color: #334556;
+    border-radius: 50%;
+}
+
+

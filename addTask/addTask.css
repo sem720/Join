@@ -7,13 +7,6 @@
     font-style: normal;
 }
 
-@font-face {
-    font-family: "Inter";
-    src: url("../assets/Inter-Italic-VariableFont_opsz,wght.ttf") format("truetype");
-    font-weight: 100 900;
-    font-style: italic;
-}
-
 body {
     display: flex;
     flex-direction: column;
@@ -27,12 +20,12 @@ body {
     font-size: 18px;
 }
 
-main {
+.main-addTask {
     display: flex;
     flex-direction: row;  
     height: 50vh;
     width: 900px;
-    margin-left: 130px;
+    margin-left: 100px;
 }
 
 .left-container {
@@ -53,8 +46,7 @@ main {
 }
 
 h1 {
-    margin-left: 130px !important;
-    margin-top: 130px; 
+    margin: 88px 0 16px 100px !important;
     font-weight: 700;
     margin-block-end: 0;
 }
@@ -65,12 +57,11 @@ label {
     font-size: 16px;
     color: #2A3647;
     line-height: normal;
-
 }
 
 input, textarea {
     box-sizing: border-box;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     width: 400px;
     height: 42px;
     border: 1px solid #D7D7D7;
@@ -124,7 +115,7 @@ select {
     width: 140px;
     height: 44px;
     box-sizing: border-box;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     border: 1px solid #D7D7D7;
     font-family: inherit;
     border-radius: 8px;
@@ -142,7 +133,7 @@ select {
 }
 
 .footer {
-    margin-left: 130px;
+    margin-left: 100px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -219,11 +210,6 @@ select {
     cursor: pointer;
 }
 
-#subtasks:focus {
-    outline: none;
-    box-shadow: -1px 2px 0px var(--light-blue);
-}
-
 .add-subtask-icon {
     position: absolute;
     right: 10px;
@@ -250,19 +236,7 @@ select {
     padding-right: 16px;
 }
 
-.edit-icon {
-    width: 14px;
-    height: auto;
-    cursor: pointer;
-}
-
-.delete-icon {
-    width: 14px;
-    height: auto;
-    cursor: pointer;
-}
-
-.clear-icon, .checkmark-icon {
+.clear-icon, .checkmark-icon, .edit-icon, .delete-icon {
     width: 14px;
     height: 14px;
     cursor: pointer;
@@ -271,7 +245,6 @@ select {
 #dropdown-icon {
     width: 8px;
     height: auto;
-    margin-right: 8px;
 }
 
 .dropdown-options > li {
@@ -409,8 +382,7 @@ ul {
 }
 
 .assignment-container{
-    position: relative;
-   
+    position: relative;  
 }
 
 .contact-name {
@@ -418,4 +390,17 @@ ul {
     font-family: inherit;
     font-size: 16px;
     flex-grow: 0;
+}
+
+.icon-container {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-container:hover {
+    background-color: #F6F7F8;
+    border-radius: 50%;
 }

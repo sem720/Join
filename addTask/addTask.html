@@ -30,17 +30,20 @@
     <h1>Add Task</h1>
     <main class="main-addTask">
         <div class="left-container">
-            <form>
+            <form action="" method="post">
                 <label for="task-name">Title <span class="required">*</span></label>
                 <input id="task-name" class="input-standard"  type="text" name="task-name" placeholder="Enter a title" required>
+                <span class="error-message">This field is required</span>
 
                 <label for="description">Description</label>
                 <textarea id="description" name="description" placeholder="Enter a Description"></textarea>
                 
                 <label for="assignment" id="assignment">Assigned to</label>
-                <div class="assignment-container">
+                <div class="assignment-container" id="assignment">
                     <button class="assignment-btn" id="assignment-btn">Select contacts to assign 
-                        <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                        <div class="icon-container">
+                            <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                        </div>
                     </button>
                 
                     <div id="contacts-container" class="hidden">
@@ -51,10 +54,11 @@
         </div>
         <div class="separator"></div>
         <div class="right-container">
-            <form>
+            <form action="" method="post">
                 <label for="due-date">Due Date <span class="required">*</span></label>
                 <input type="date" class="input-standard" id="due-date" name="due-date" data-placeholder="dd/mm/yyyy">
-    
+                <span class="error-message">This field is required</span>
+
                 <label for="priority">Prio</label>
                 <div class="button-container">
                     <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
@@ -69,8 +73,12 @@
                 </div>
                
                 <label for="category" id="category">Category <span class="required">*</span></label>
-                <div class="dropdown-container">
-                    <button class="dropdown-btn" id="dropdown-btn">Select task category<img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon"></button>
+                <div class="dropdown-container" id="category-container">
+                    <button class="dropdown-btn" id="dropdown-btn">Select task category
+                        <span class="icon-container">
+                            <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                        </span>
+                    </button>
                     <div class="dropdown-options" id="dropdown-list">
                         <li data-value="technical_task">Technical Task</li>
                         <li data-value="user_story">User Story</li>
