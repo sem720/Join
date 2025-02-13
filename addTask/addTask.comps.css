@@ -68,7 +68,7 @@ select:hover, .dropdown-btn:hover {
     display: flex;
     gap: 16px;
     box-sizing: border-box;
-    padding-right: 38px;
+    padding-right: 37px;
 }
 
 .btn-bright:hover svg {
