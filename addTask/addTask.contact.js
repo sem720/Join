@@ -1,9 +1,17 @@
 const selectedContacts = new Set();
 const contactsContainer = document.getElementById('contacts-container');
 const assignmentButton = document.getElementById('assignment-btn');
+const selectedContactsContainer = document.createElement("div");
+selectedContactsContainer.id = "selected-contacts-container"; 
+selectedContactsContainer.classList.add("selected-contacts-container");
+assignmentButton.insertAdjacentElement("afterend", selectedContactsContainer);
 
 assignmentButton.addEventListener('click', () => {
     contactsContainer.classList.toggle('hidden');
+
+    if (contactsContainer.classList.contains("hidden")) {
+        updateSelectedContactsDisplay();
+    }
 });
 
 async function fetchContacts() {
@@ -18,6 +26,10 @@ async function fetchContacts() {
     Object.values(data).forEach(({ name }) => name && contactsList.appendChild(createContactElement(capitalizeName(name)))
     );
     console.log("API Respnse:", data)
+    async function fetchContacts() {
+        console.log("fetchContacts() wurde aufgerufen");
+    }
+    
 }
 
 function capitalizeName(name) {
@@ -40,6 +52,15 @@ function createContactElement(name) {
     contactDiv.appendChild(checkbox); // Hier wird die Checkbox direkt hinzugefügt
     
     return contactDiv; 
+}
+
+function updateSelectedContactsDisplay() {
+    selectedContactsContainer.innerHTML = ""; // Vorherige Avatare entfernen
+
+    selectedContacts.forEach(name => {
+        const avatar = createAvatar(name);
+        selectedContactsContainer.appendChild(avatar);
+    });
 }
 
 function createAvatar(name) {

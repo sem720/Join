@@ -134,13 +134,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .error {
-    border: 2px solid red;
+    border: 1px solid red !important;
 }
   
 .error-message {
     color: red;
     font-size: 12px;
-    display: none; /* Erst anzeigen, wenn Fehler */
+    margin-top: 4px;
+    display: none; 
 }
   
 .dropdown-icon {
@@ -155,5 +156,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background-color: #334556;
     border-radius: 50%;
 }
+
+
+.dropdown-container.error {
+    border: 1px solid red !important;
+    border-radius: 8px !important;
+}
+
 
 

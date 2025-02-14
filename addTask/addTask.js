@@ -119,8 +119,8 @@ function initialDefaultPriority() {
 
 
 
-function setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList) {
-  const defaultText = "Select a category"; // Ensure correct default text
+function setupDropdownToggle(dropdownBtn, dropdownList) {
+  
   
   dropdownBtn.addEventListener("click", (e) => {
     e.preventDefault();
@@ -131,6 +131,11 @@ function setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList) {
       // Update the icon: upwards when open, downwards when closed
     dropdownBtn.querySelector("img").src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
   });
+}
+
+function toggleDropdown(dropdownContainer, dropdownList) {
+  dropdownContainer.classList.toggle("open");
+  dropdownList.style.display = dropdownContainer.classList.contains("open") ? "block" : "none";
 }
   
 function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
@@ -292,7 +297,7 @@ function createEditInput(text) {
   return input;
 }
 
-function createEditActions(li, span, input) {
+function createEditActions(input, li, span) {
   const saveIcon = createIcon("/assets/imgs/checkmark-black.png", "Checkmark Icon", "checkmark-icon", () => saveEdit(li, input));
   const divider = document.createElement("span");
   divider.classList.add("divider1");
@@ -339,8 +344,16 @@ function clearTask() {
 
   document.getElementById("dropdown-btn").innerHTML = `Select task category <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
   //document.getElementById("category").value = "";
-  //document.getElementById("assignmment-btn").innerHTML = ``
-  
+  document.getElementById("selected-contacts-container").innerHTML = "";
+
+  document.querySelectorAll(".error-message").forEach((error) => {
+    error.style.display = "none";
+  });
+
+  // 🚀 Error-Klassen entfernen
+  document.querySelectorAll(".error").forEach((el) => {
+    el.classList.remove("error");
+  });
 }
 
 function initEventListeners() {
@@ -381,7 +394,6 @@ function validateForm() {
   return isValid;
 }
 
-
 function init() {
   const dropdownBtn = document.getElementById("dropdown-btn");
   const dropdownList = document.getElementById("dropdown-list");
@@ -391,11 +403,16 @@ function init() {
   initialDefaultPriority(),
   setupDateReset(),
   setupDropdownOptions(dropdownBtn, dropdownList, categoryInput),
-  setupDropdownToggle(dropdownBtn, dropdownContainer, dropdownList, dropdownIcon),
+  setupDropdownToggle(dropdownBtn, dropdownList),
   setupAddSubtaskButton(),
   initEventListeners(),
   clearTask();
 }
+
+
+
+
+
 
 
 

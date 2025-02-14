@@ -30,7 +30,7 @@
     <h1>Add Task</h1>
     <main class="main-addTask">
         <div class="left-container">
-            <form action="" method="post">
+            <form>
                 <label for="task-name">Title <span class="required">*</span></label>
                 <input id="task-name" class="input-standard"  type="text" name="task-name" placeholder="Enter a title" required>
                 <span class="error-message">This field is required</span>
@@ -45,6 +45,7 @@
                             <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
                         </span>
                     </button>
+                    <div id="selected-contacts-container" class="selected-contacts"></div>
                     <div id="contacts-container" class="hidden">
                         <div id="contacts-list"></div>
                     </div>
@@ -53,7 +54,7 @@
         </div>
         <div class="separator"></div>
         <div class="right-container">
-            <form action="" method="post">
+            <form>
                 <label for="due-date">Due Date <span class="required">*</span></label>
                 <input type="date" class="input-standard" id="due-date" name="due-date" data-placeholder="dd/mm/yyyy">
                 <span class="error-message">This field is required</span>
@@ -108,13 +109,14 @@
                     </svg>
                 </span>
             </button>
-            <button class="btn-dark create-btn" onclick="createTask()">Create Task <img src="/assets/imgs/check-white.png" alt="check-icon"></button>
+            <button class="btn-dark create-btn" onclick="createTask(event)">Create Task <img src="/assets/imgs/check-white.png" alt="check-icon"></button>
         </div>
     </section>
     <script src="/addTask/addTask.js"></script>
     <script src="/addTask/addTask.contact.js"></script>
     <script src="/comp/navbar/navbar.js"></script>
     <script src="/comp/sidebar/sidebar.js"></script>
+    <script src="/addTask/addTask.createTask.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script>
       w3.includeHTML(function () {
@@ -129,6 +131,7 @@
         });
     }
     </script>
+    
    
 </body>
 </html>

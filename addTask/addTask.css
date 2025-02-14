@@ -179,6 +179,13 @@ select {
 .dropdown-container, .subtask-container{
     position: relative;
     width: 400px;
+    height: 42px;
+}
+
+.dropdown-btn {
+    height: 42px;
+    box-sizing: border-box;
+    margin-bottom: 0;
 }
 
 .subtask-input-wrapper {
@@ -329,7 +336,7 @@ ul {
     border: 1px solid #ccc;
     background: white;
     position: absolute;
-    top: auto;
+    top: 100%;
     left: 0;
     z-index: 1000;
     border:#ccc;
@@ -403,4 +410,29 @@ ul {
 .icon-container:hover {
     background-color: #F6F7F8;
     border-radius: 50%;
+}
+
+#contacts-list {
+    display: none;
+}
+  
+#contacts-list.visible {
+    display: block;
+}
+
+.selected-contacts-container {
+    display: flex;
+}
+
+.selected-contacts-container > div {
+    margin-top: 8px;
+    margin-right: 4px;
+    display: flex;
+}
+
+#task-name, #due-date, #category-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
 }

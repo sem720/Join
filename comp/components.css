@@ -52,7 +52,6 @@
 .input-standard:focus {
   border-color: var(--light-blue);
   outline: none;
-  background-color: white;
   box-shadow: 0 0 5px var(--light-blue);
 }
 
