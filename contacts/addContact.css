@@ -10,13 +10,15 @@ h3 {
     display: none !important;
 }
 
-.addContact-input {
+.addContact-input,
+.editContact-input {
     width: 100% !important;
     position: relative;
     padding-left: 30px;
 }
 
-.addContact-input img {
+.addContact-input img,
+.editContact-input img {
     position: absolute;
     top: 13px;
     right: 46px;
@@ -32,19 +34,50 @@ h3 {
     justify-content: center;
     align-items: center;
     z-index: 99;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.5s ease, visibility 0.5s ease;
+    visibility: hidden;
 }
 
-.addContact {
+.overlay.active {
+    background-color: rgba(0, 0, 0, 0.5);
+    visibility: visible;
+}
+
+.addContact,
+.editContact {
     display: flex;
     align-items: center;
     height: 50vh;
     z-index: 100;
     overflow: hidden;
     border-radius: 32px;
+    position: fixed;
+    right: -100%;
+    transition: right 0.5s ease, transform 0.5s ease;
 }
 
-.addContact-titles {
+.overlay.active .addContact,
+.overlay.active .editContact {
+    right: 50%;
+    transform: translateX(50%);
+}
+
+.overlay.closing {
+    background-color: rgba(0, 0, 0, 0);
+    visibility: hidden;
+}
+
+.overlay.closing .addContact,
+.overlay.closing .editContact,
+.closing-to-right {
+    right: -100%;
+    transform: translateX(0);
+}
+
+.addContact-titles,
+.editContact-titles {
+    width: 400px;
     min-height: 100%;
     background-color: var(--blue);
     color: white;
@@ -55,7 +88,8 @@ h3 {
     padding: 0 32px 0 32px;
 }
 
-.addContact-titles img {
+.addContact-titles img,
+.editContact-titles img {
     height: 56px;
     padding-bottom: 16px;
 }
@@ -66,7 +100,8 @@ h3 {
     background-color: var(--light-blue);
 }
 
-.addContact-container {
+.addContact-container,
+.editContact-container {
     position: relative;
     background-color: white;
     width: 660px;
@@ -76,7 +111,8 @@ h3 {
     align-items: center;
 }
 
-.addContact-content {
+.addContact-content,
+.editContact-content {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -111,7 +147,8 @@ h3 {
     background-color: #2b2b2b2f;
 }
 
-.buttons-addContact {
+.buttons-addContact,
+.buttons-editContact {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -133,18 +170,4 @@ h3 {
 
 .btn-dark {
     padding: 14px 20px;
-}
-
-.animateRightToLeft {
-    animation: animateRightToLeft .2s ease-out;
-}
-
-@keyframes animateRightToLeft {
-    0% {
-        transform: translateX(100%);
-    }
-
-    100% {
-        transform: translateX(0%);
-    }
 }

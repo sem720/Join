@@ -22,9 +22,9 @@
  * Open the new contact overlay.
  */
 function openAddContact() {
-    const addContactOverlay = document.getElementById(`addContactOverlay`);
-    addContactOverlay.classList.add("overlay", "animateRightToLeft");
-    addContactOverlay.innerHTML += openAddContactTemp();
+    addContactOverlay.classList.add("overlay", "active");
+    addContactOverlay.classList.remove("closing");
+    addContact.innerHTML += openAddContactTemp();
     addContact.addEventListener('click', (e) => {
         e.stopPropagation()
     })
@@ -34,9 +34,37 @@ function openAddContact() {
  * Close the new contact overlay.
  */
 function closeAddContact() {
-    const addContactOverlay = document.getElementById(`addContactOverlay`);
-    addContactOverlay.classList.remove("overlay", "animateRightToLeft");
-    addContactOverlay.innerHTML = "";
+    addContactOverlay.classList.add("closing");
+    addContact.classList.add("closing-to-right");
+    setTimeout(() => {
+        addContactOverlay.classList.remove("overlay", "active", "closing");
+        addContact.classList.remove("closing-to-right");
+        addContact.innerHTML = "";
+    }, 500);
 }
 
+/**
+ * Open the edit contact overlay.
+ */
+function openEditContact() {
+    editContactOverlay.classList.add("overlay", "active");
+    editContactOverlay.classList.remove("closing");
+    editContact.innerHTML += openEditContactTemp();
+    editContact.addEventListener('click', (e) => {
+        e.stopPropagation()
+    })
+}
+
+/**
+ * Close the edit contact overlay.
+ */
+function closeEditContact() {
+    editContactOverlay.classList.add("closing");
+    editContact.classList.add("closing-to-right");
+    setTimeout(() => {
+        editContactOverlay.classList.remove("overlay", "active", "closing");
+        editContact.classList.remove("closing-to-right");
+        editContact.innerHTML = "";
+    }, 500);
+}
 

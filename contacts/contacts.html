@@ -54,7 +54,7 @@
                     <div class="name-container">
                         <div class="name">Max Mustermann</div>
                         <div class="btns-container">
-                            <button id="edit">
+                            <button id="edit" onclick="openEditContact()">
                                 <img src="../assets/imgs/edit.svg" alt="" class="edit-icon">
                                 Edit
                             </button>
@@ -75,7 +75,12 @@
 
         <!---   add new Contact  --->
         <div class="" id="addContactOverlay" onclick="closeAddContact()">
+            <div class="addContact" id="addContact"></div>
+        </div>
 
+        <!-- edit contact -->
+        <div id="editContactOverlay" onclick="closeEditContact()">
+            <div class="editContact" id="editContact"></div>
         </div>
     </section>
 </body>
