@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../comp/components.css">
     <link rel="stylesheet" href="./contacts.css">
     <link rel="stylesheet" href="./addContact.css">
+    <link rel="stylesheet" href="./contactsResponsive.css">
     <link rel="stylesheet" href="../comp/navbar/navbar.css">
     <link rel="stylesheet" href="../comp/sidebar/sidebar.css">
     <link id="favicon-light" rel="icon" href="../assets/imgs/logo-black.png" media="(prefers-color-scheme: light)" />
@@ -20,7 +21,10 @@
     <div w3-include-html="../comp/sidebar/sidebar.html"></div>
     <section class="contacts-container">
         <!-- contacts list - left side -->
-        <div class="contacts">
+        <div class="contacts" id="contacts">
+            <button class="add-new-contact-icon btn-dark" onclick="openAddContact()">
+                <img src="../assets/imgs/person_add.png" alt="">
+            </button>
             <div class="addBtn-container">
                 <button class="add-new-contact btn-dark" onclick="openAddContact()">
                     Add new contact
@@ -42,11 +46,28 @@
         </div>
 
         <!-- contact details - right side -->
-        <div class="contacts-details">
+        <div class="contacts-details" id="contactsDetails">
+            <button class="more-btn btn-dark" id="moreBtn" onclick="toggleEditDeleteMenu()">
+                <img src="../assets/imgs/more.png" alt="">
+            </button>
+            <div class="edit-delete-menu" id="editDeleteMenu">
+                <button id="editResp" onclick="openEditContact()">
+                    <img src="../assets/imgs/edit.svg" alt="" class="edit-icon-resp">
+                    Edit
+                </button>
+                <button id="deleteResp">
+                    <img src="../assets/imgs/delete.svg" alt="" class="delete-icon-resp">
+                    Delete
+                </button>
+            </div>
             <div class="details-head">
+                <div class="back" onclick="toggleBack()">
+                    <img src="../assets/imgs/arrow-left.png" alt="">
+                </div>
                 <div class="cont">Contacts</div>
                 <div class="side-line"></div>
                 <div class="better">Better with a team!</div>
+                <div class="vertical-line"></div>
             </div>
             <div class="details-content" id="contentDetails">
                 <div class="contact-name">

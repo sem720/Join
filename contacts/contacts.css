@@ -17,6 +17,10 @@
     border: 2px solid var(--col-white) !important;
 }
 
+/* .d-block {
+    display: block !important;
+} */
+
 .contacts-container {
     display: flex;
     width: 100%;
@@ -27,7 +31,7 @@
 .contacts {
     display: flex;
     flex-direction: column;
-    width: clamp(240px, 100%, 456px);
+    width: 456px;
     min-height: 100vh;
     padding-left: 36px;
     padding-right: 4px;
@@ -39,7 +43,7 @@
     position: sticky;
     top: 0;
     z-index: 1;
-    margin: auto;
+    margin: 0 auto;
     width: 400px;
     padding: 8px 24px;
     background-color: transparent;
@@ -55,9 +59,21 @@
     font-size: 24px;
 }
 
-.add-new-contact img {
+.add-new-contact img,
+.add-new-contact-icon img {
     width: 32px !important;
     height: 32px !important;
+}
+
+.add-new-contact-icon {
+    display: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    padding: 8px !important;
+    position: absolute;
+    bottom: 90px;
+    right: 24px;
 }
 
 .contact-list {
@@ -144,7 +160,38 @@
     box-shadow: 0px 0px 10px 0px inset var(--col-shadow);
 }
 
+.back {
+    display: none;
+    position: absolute;
+    right: 0;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.back:hover {
+    background-color: #cdcdcd;
+}
+
+.more-btn {
+    display: none;
+    width: 56px;
+    height: 56px;
+    padding: 8px !important;
+    position: absolute;
+    bottom: 220px;
+    right: 24px;
+    border-radius: 50%;
+}
+
+.more-btn img {
+    width: 32px !important;
+    height: 32px !important;
+}
+
 .details-head {
+    position: relative;
     display: flex;
     align-content: center;
     gap: 32px;
@@ -161,6 +208,13 @@
     height: 64px;
     background-color: #29abe2;
     margin-top: 4px;
+}
+
+.vertical-line {
+    display: none;
+    width: 66px;
+    height: 3px;
+    background-color: #29abe2;
 }
 
 .details-head .better {
@@ -235,9 +289,11 @@ body {
 }
 
 .btns-container button:hover,
-.btns-container button:hover img {
-    color: var(--col-lightblue);
+#edit:hover .edit-icon,
+#delete:hover .delete-icon {
+    filter: brightness(0) saturate(100%) invert(57%) sepia(60%) saturate(583%) hue-rotate(154deg) brightness(90%) contrast(96%);
     scale: 1.05;
+
 }
 
 .btns-container button img {
@@ -268,7 +324,6 @@ body {
 }
 
 /* Firefox */
-
 @-moz-document url-prefix() {
     .contact-list {
         scrollbar-width: thin;

@@ -1,15 +1,19 @@
+/**
+ * Opens and returns the HTML template for adding a new contact.
+ * @returns {string} The HTML template for adding a contact.
+ */
 function openAddContactTemp() {
     return `    
                 <div class="addContact-titles">
                     <img src="../assets/imgs/logo-white-blue.png" />
                     <h1>Add Contact</h1>
-                    <p>Tasks are better with a team!</p>
+                    <p class="betterP">Tasks are better with a team!</p>
                     <div class="blue-line"></div>
                 </div>
 
                 <div class="addContact-container">
                     <div class="close" onclick="closeAddContact()">x</div>
-                    <div>
+                    <div class="contact-image-container">
                         <img class="contact-image" src="../assets/imgs/add-contact.png" />
                     </div>
                     <form class="addContact-content" onsubmit="">
@@ -32,7 +36,7 @@ function openAddContactTemp() {
                         </div>
                         
                         <div class="buttons-addContact">
-                            <button type="button" onclick="closeAddContact()" class="btn-bright">
+                            <button type="button" onclick="closeAddContact()" class="cancel btn-bright">
                                 Cancel &nbsp; X
                             </button>
                             <button type="submit" class="btn-dark">
@@ -45,6 +49,10 @@ function openAddContactTemp() {
 `
 }
 
+/**
+ * Opens and returns the HTML template for editing an existing contact.
+ * @returns {string} The HTML template for editing a contact.
+ */
 function openEditContactTemp() {
     return `    
                 <div class="editContact-titles">
@@ -55,7 +63,7 @@ function openEditContactTemp() {
 
                 <div class="editContact-container">
                     <div class="close" onclick="closeEditContact()">x</div>
-                    <div>
+                    <div class="contact-image-container">
                         <img class="contact-image" src="../assets/imgs/add-contact.png" />
                     </div>
                     <form class="editContact-content" onsubmit="">
@@ -78,7 +86,7 @@ function openEditContactTemp() {
                         </div>
                         
                         <div class="buttons-editContact">
-                            <button type="button" onclick="closeEditContact()" class="btn-bright">
+                            <button type="button" onclick="closeEditContact()" class="cancel btn-bright">
                                 Cancel &nbsp; X
                             </button>
                             <button type="submit" class="btn-dark">
