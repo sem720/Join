@@ -20,13 +20,11 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 32px;
-  padding: 32px;
+  padding: 2rem 6rem;
   background: white;
   border-radius: 25px;
-  width: 550px;
   -webkit-box-shadow: 0px 0px 10px -2px #2b2b2b2f;
   box-shadow: 0px 0px 10px -2px #2b2b2b2f;
-  z-index: 9;
 }
 
 .form-head {
@@ -148,5 +146,60 @@ body {
   }
   100% {
     bottom: 50%;
+  }
+}
+
+/* Responsive */
+
+.mobile {
+  display: none;
+}
+
+@media (max-width: 670px) {
+  .form {
+    padding: 2rem 0;
+  }
+
+  .navigate-signup {
+    display: none;
+  }
+
+  .navigate-signup-mobile {
+    display: flex;
+  }
+
+  .div-join-logo {
+    animation: fade-out 1s forwards;
+  }
+
+  .form input {
+    width: 280px;
+  }
+
+  .div-alert {
+    width: 350px;
+  }
+
+  .mobile {
+    display: block;
+  }
+
+  .btn-dark {
+    padding: 12px 50px;
+  }
+
+  @keyframes join-animation {
+    0% {
+      height: 150px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    100% {
+      top: 30px;
+      left: 30px;
+      height: 80px;
+      transform: translate(-0%, -0%);
+    }
   }
 }
