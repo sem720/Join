@@ -80,6 +80,125 @@ body {
   }
 }
 
+.box-1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10%;
+
+  &:hover .circle {
+    background: white;
+  }
+
+  &:hover #edit-icon {
+    fill: #2a3647;
+    width: 30px;
+    height: 30px;
+  }
+
+  &:hover #checkmark-icon {
+    stroke: #2a3647;
+    width: 30px;
+    height: 30px;
+  }
+
+  &:hover .info {
+    color: white;
+
+    span {
+      color: white;
+    }
+  }
+
+  .circle {
+    padding: 15px;
+    background: #2a3647;
+    border-radius: 50%;
+  }
+
+  #edit-icon {
+    fill: white;
+    width: 28px;
+    height: 28px;
+  }
+
+  .info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    color: #2a3647;
+  }
+
+  .info span {
+    font-size: 3.5rem;
+    font-weight: 600;
+    color: black;
+  }
+
+  #checkmark-icon {
+    height: 30px;
+    width: 30px;
+    transform: translateY(3px);
+    stroke: white;
+  }
+}
+
+.box-2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #2a3647;
+  gap: 10%;
+
+  .info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    color: #2a3647;
+    margin-left: -5%;
+  }
+
+  &:hover .info {
+    color: white;
+
+    span {
+      color: white;
+    }
+  }
+
+  .info span {
+    font-size: 3.5rem;
+    font-weight: 600;
+    color: black;
+  }
+
+  .line-urgent {
+    height: 60%;
+    width: 2px;
+    background-color: #d6d6d6;
+  }
+
+  .date {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    height: 100%;
+    justify-content: center;
+    font-size: 0.8rem;
+    gap: 10%;
+
+    span {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  }
+}
+
 .box-3 {
   height: 100%;
   aspect-ratio: 1 / 1;
