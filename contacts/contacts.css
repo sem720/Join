@@ -17,10 +17,6 @@
     border: 2px solid var(--col-white) !important;
 }
 
-/* .d-block {
-    display: block !important;
-} */
-
 .contacts-container {
     display: flex;
     width: 100%;
@@ -32,7 +28,7 @@
     display: flex;
     flex-direction: column;
     width: 456px;
-    min-height: 100vh;
+    height: calc(100vh - 130px);
     padding-left: 36px;
     padding-right: 4px;
     padding-top: 24px;
@@ -121,7 +117,6 @@
     height: 50px;
     border-radius: 50%;
     color: white;
-    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -174,7 +174,6 @@ h3 {
 
 .edit-delete-menu {
     position: absolute;
-    /* right: 12px; */
     right: -100%;
     bottom: 224px;
     height: 66px;
@@ -183,24 +182,20 @@ h3 {
     border-radius: 20px 20px 0 20px;
     box-shadow: 0px 4px 4px #a8a8a8;
     display: none;
-    /* Standardmäßig versteckt */
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
     padding: 10px;
     opacity: 0;
     transform: translateX(20px);
-    /* Startet leicht außerhalb */
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .edit-delete-menu.active {
     display: flex;
-    /* Sichtbar machen */
     right: 12px;
     opacity: 1;
     transform: translateX(0);
-    /* Nach rechts einblenden */
 }
 
 #editResp,

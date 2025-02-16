@@ -1,105 +1,138 @@
-// const BASE_URL = 'https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/contacts/';
-// const myArr = []
-// async function fetchContacts(url) {
-//     try {
-//         const response = await fetch(url + '.json');
-//         const contacts = await response.json();
-//         const contactListElement = document.getElementById('contactList');
-//         console.log(contacts);
-//         myArr.push(contacts)
+const BASE_URL = 'https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/contacts/';
 
-//         myArr.forEach((contact) => {
-//             console.log(contact.contact1.email);
-//         });
-//     } catch (error) {
-//         console.error('Fehler beim Fetchen der Kontakte:', error);
-//     }
-// }
-// fetchContacts(BASE_URL)
+async function fetchContacts(url) {
+    try {
+        const response = await fetch(url + '.json');
+        const contacts = await response.json();
 
-
-/**
- * Open the new contact overlay.
- */
-function openAddContact() {
-    addContactOverlay.classList.add("overlay", "active");
-    addContactOverlay.classList.remove("closing");
-    addContact.innerHTML += openAddContactTemp();
-    addContact.addEventListener('click', (e) => {
-        e.stopPropagation()
-    })
-}
-
-/**
- * Close the new contact overlay.
- */
-function closeAddContact() {
-    addContactOverlay.classList.add("closing");
-    addContact.classList.add("closing-to-right");
-    setTimeout(() => {
-        addContactOverlay.classList.remove("overlay", "active", "closing");
-        addContact.classList.remove("closing-to-right");
-        addContact.innerHTML = "";
-    }, 500);
-}
-
-/**
- * Open the edit contact overlay.
- */
-function openEditContact() {
-    editContactOverlay.classList.add("overlay", "active");
-    editContactOverlay.classList.remove("closing");
-    editContact.innerHTML += openEditContactTemp();
-    editContact.addEventListener('click', (e) => {
-        e.stopPropagation()
-    })
-}
-
-/**
- * Close the edit contact overlay.
- */
-function closeEditContact() {
-    editContactOverlay.classList.add("closing");
-    editContact.classList.add("closing-to-right");
-    setTimeout(() => {
-        editContactOverlay.classList.remove("overlay", "active", "closing");
-        editContact.classList.remove("closing-to-right");
-        editContact.innerHTML = "";
-    }, 500);
-}
-
-/**
- * Toggles CSS classes for various elements to change their appearance.
- */
-function toggleDetailsContact() {
-    if (window.innerWidth <= 1000) {
-        contacts.classList.add('hidden');
-        contactsDetails.classList.add('active');
-    } else {
-        contentDetails.classList.toggle("active");
-        contactContent.classList.toggle("bgc-darkblue");
-        nameInList.classList.toggle("color-white");
-        nameCircle.classList.toggle("border-white");
-    }
-    if (window.innerWidth > 1000) {
-        contacts.classList.remove('hidden');
-    }
-}
-
-/** */
-function checkWindowSize() {
-    if (window.innerWidth <= 1000) {
-        if (document.getElementById('contactsDetails').classList.contains('active')) {
-            document.getElementById('contacts').classList.add('hidden');
-        } else {
-            document.getElementById('contacts').classList.remove('hidden');
+        if (!contacts) {
+            console.log('Keine Kontakte gefunden.');
+            return [];
         }
-    } else {
-        document.getElementById('contacts').classList.remove('hidden');
+
+        const contactsArray = Object.entries(contacts).map(([id, contact]) => {
+            const { bgcolor, name, email, tel } = contact;
+            let initials = '';
+            if (name) {
+                const nameParts = name.split(' ');
+                initials = nameParts.length > 1
+                    ? nameParts[0][0] + nameParts[1][0]
+                    : nameParts[0][0];
+                initials = initials.toUpperCase();
+            }
+            return { id, bgcolor, name, email, tel, initials };
+        });
+
+        console.log("Geladene Kontakte:", contactsArray);
+        return contactsArray;
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Kontakte:', error);
+        return [];
     }
 }
-window.addEventListener('resize', checkWindowSize);
-checkWindowSize();
+
+async function renderContacts() {
+    try {
+        const contactsArray = await fetchContacts(BASE_URL) || [];
+
+        const contactList = document.getElementById("contactList");
+        if (!contactList) {
+            console.error("Fehler: Element mit ID 'contactList' nicht gefunden.");
+            return;
+        }
+
+        const sortedContacts = contactsArray.sort((a, b) => a.initials[0].localeCompare(b.initials[0]));
+        const groupedContacts = sortedContacts.reduce((acc, contact) => {
+            const initial = contact.initials[0];
+            if (!acc[initial]) {
+                acc[initial] = [];
+            }
+            acc[initial].push(contact);
+            return acc;
+        }, {});
+
+        Object.entries(groupedContacts).forEach(([initial, contacts]) => {
+            contactList.innerHTML += contactsListTemplate(initial, contacts);
+        });
+
+        document.querySelectorAll('.contact-content').forEach(contactElement => {
+            contactElement.addEventListener('click', () => {
+                const contactId = contactElement.dataset.id;
+                const initial = contactElement.dataset.initial;
+                fetchContactDetails(contactId, initial);
+                toggleDetailsContact(contactId, initial);
+            });
+        });
+    } catch (error) {
+        console.error("Fehler beim Rendern der Kontakte:", error);
+    }
+}
+
+async function fetchContactDetails(contactId, initial) {
+    try {
+        const response = await fetch(`${BASE_URL}${contactId}.json`);
+        const contact = await response.json();
+
+        if (contact) {
+            const contactDetails = document.getElementById("contentDetails");
+            if (contactDetails) {
+                contactDetails.innerHTML = contactDetailsTemplate(contact, initial);
+            }
+        }
+    } catch (error) {
+        console.error("Fehler beim Abrufen der Kontaktinformationen:", error);
+    }
+}
+
+
+function toggleDetailsContact(contactId, initial) {
+    const contactContent = document.querySelector(`.contact-content[data-id="${contactId}"]`);
+    const contentDetails = document.getElementById('contentDetails');
+    const nameInList = contactContent.querySelector('.name-in-list');
+    const nameCircle = contactContent.querySelector('.name-circle');
+    const isActive = contactContent.classList.contains('bgc-darkblue');
+
+    document.querySelectorAll('.contact-content').forEach(contact => {
+        contact.classList.remove('bgc-darkblue');
+        const otherNameInList = contact.querySelector('.name-in-list');
+        const otherNameCircle = contact.querySelector('.name-circle');
+        otherNameInList.classList.remove('color-white');
+        otherNameCircle.classList.remove('border-white');
+    });
+
+    if (!isActive) {
+        contactContent.classList.add('bgc-darkblue');
+        nameInList.classList.add('color-white');
+        nameCircle.classList.add('border-white');
+        contentDetails.classList.add('active');
+        fetchContactDetails(contactId, initial);
+    } else {
+        contentDetails.classList.remove('active');
+    }
+
+    if (window.innerWidth <= 1000) {
+        document.getElementById("contacts").classList.add('hidden');
+        document.getElementById("contactsDetails").classList.add('active');
+    } else {
+        document.getElementById("contacts").classList.remove('hidden');
+    }
+}
+
+
+
+
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    console.log(color);
+    return color;
+}
+// getRandomColor()
+
+
 
 
 /**
@@ -110,42 +143,7 @@ checkWindowSize();
  */
 function toggleBack() {
     if (window.innerWidth <= 1000) {
-        // Details ausblenden und Kontaktliste anzeigen
         contacts.classList.remove('hidden');
         contactsDetails.classList.remove('active');
-    }
-}
-
-function toggleEditDeleteMenu() {
-    const menu = document.getElementById('editDeleteMenu');
-
-    if (!menu.classList.contains('active')) {
-        menu.classList.add('active');
-        menu.style.display = 'flex'; // Sicherstellen, dass es angezeigt wird
-
-        // Event-Listener hinzufügen, um das Menü bei Klick außerhalb zu schließen
-        setTimeout(() => {
-            document.addEventListener('click', closeMenuOnClickOutside);
-        }, 10);
-    } else {
-        closeMenu();
-    }
-}
-
-function closeMenu() {
-    const menu = document.getElementById('editDeleteMenu');
-    menu.classList.remove('active');
-    setTimeout(() => {
-        menu.style.display = 'none'; // Nach der Animation ausblenden
-    }, 500); // Animation auf 0.5s verlängert
-    document.removeEventListener('click', closeMenuOnClickOutside);
-}
-
-function closeMenuOnClickOutside(event) {
-    const menu = document.getElementById('editDeleteMenu');
-    const moreBtn = document.getElementById('moreBtn');
-
-    if (!menu.contains(event.target) && !moreBtn.contains(event.target)) {
-        closeMenu();
     }
 }

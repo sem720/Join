@@ -98,3 +98,50 @@ function openEditContactTemp() {
                 </div>
 `
 }
+
+function contactsListTemplate(initial, contacts) {
+    return `
+        <div class="contact-container">
+            <h3 class="letter-underline">${initial}</h3>
+            ${contacts.map(contact => `
+                <div class="contact-content" data-id="${contact.id}" data-initial="${contact.initials}">
+                    <div class="name-circle" style="background-color: ${contact.bgcolor};">${contact.initials}</div>
+                    <div class="name-email">
+                        <h4 class="name-in-list">${contact.name}</h4>
+                        <h5>${contact.email}</h5>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function contactDetailsTemplate(contact, initial) {
+    return `
+        <div class="contact-name">
+            <div class="name-circle-sec" style="background-color: ${contact.bgcolor};">${initial}</div>
+            <div class="name-container">
+                <div class="name">${contact.name}</div>
+                <div class="btns-container">
+                    <button id="edit" onclick="openEditContact()">
+                        <img src="../assets/imgs/edit.svg" alt="" class="edit-icon">
+                        Edit
+                    </button>
+                    <button id="delete">
+                        <img src="../assets/imgs/delete.svg" alt="" class="delete-icon">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+        <h2>Contact Information</h2>
+        <h3>Email</h3>
+        <a href="mailto:${contact.email}">${contact.email}</a>
+        <h3>Phone</h3>
+        <a href="tel:${contact.tel}">${contact.tel}</a>
+    `;
+}
+
+// toggleDetailsContact(${contact.id});
+// fetchContactDetails(${contact.id});
+// onclick = "fetchContactDetails(${contact.id});

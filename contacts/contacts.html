@@ -16,7 +16,7 @@
     <title>Join - Contacts</title>
 </head>
 
-<body onload="initNavbar()">
+<body onload="initNavbar(), renderContacts()">
     <div class="navbar-wrap" w3-include-html="../comp/navbar/navbar.html"></div>
     <div w3-include-html="../comp/sidebar/sidebar.html"></div>
     <section class="contacts-container">
@@ -32,16 +32,6 @@
                 </button>
             </div>
             <div class="contact-list" id="contactList">
-                <div class="contact-container">
-                    <h3 class="letter-underline">M</h3>
-                    <div class="contact-content" id="contactContent" onclick="toggleDetailsContact()">
-                        <div class="name-circle" id="nameCircle">MM</div>
-                        <div class="name-email">
-                            <h4 id="nameInList">Max Mustermann</h4>
-                            <h5>max.mustermann@test.test</h5>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -70,7 +60,7 @@
                 <div class="vertical-line"></div>
             </div>
             <div class="details-content" id="contentDetails">
-                <div class="contact-name">
+                <!-- <div class="contact-name">
                     <div class="name-circle-sec" id="nameCircleSec">MM</div>
                     <div class="name-container">
                         <div class="name">Max Mustermann</div>
@@ -90,7 +80,7 @@
                 <h3>Email</h3>
                 <a href="mailto:max.mustermann@test.test">max.mustermann@test.test</a>
                 <h3>Phone</h3>
-                <a href="tel:+49 123 456 7890">+49 123 456 7890</a>
+                <a href="tel:+49 123 456 7890">+49 123 456 7890</a> -->
             </div>
         </div>
 
@@ -108,7 +98,7 @@
 
 <script src="./contacts.js"></script>
 <script src="./contactsTemp.js"></script>
-<script src="./hoverEffect.js"></script>
+<script src="./contactsOverlay.js"></script>
 <script src="/comp/navbar/navbar.js"></script>
 <script src="/comp/sidebar/sidebar.js"></script>
 <script src="https://www.w3schools.com/lib/w3.js"></script>
