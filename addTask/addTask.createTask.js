@@ -117,4 +117,3 @@ function showTaskPopup() {
     }, 1500);
 }
 
-document.getElementById("createTaskButton").addEventListener("click", showPopup);

@@ -57,7 +57,7 @@ body {
     background-color: #d1d1d1;
 }
 
-h1 {
+.h1-addTask {
     margin: 88px 0 16px 100px !important;
     font-weight: 700;
     margin-block-end: 0;

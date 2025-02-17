@@ -16,30 +16,23 @@ assignmentButton.addEventListener('click', () => {
 });
 
 async function fetchContacts() {
-    const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/contacts.json');
+    const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
     const data = await response.json();
 
     if (!data) return console.error("Keine Nutzerdaten gefunden.");
         
     const contactsList = document.getElementById('contacts-list');
     contactsList.innerHTML = '';
-
     allContacts.clear();
 
-    Object.entries(data).forEach(([key, value]) => {
-        const id = key;
-        let name = value.name;
-        let bgcolor = value.bgcolor
+    Object.values(data).forEach(user => {
+        let name = capitalizeName(user.name);
+        let bgcolor = user.bgcolor;
 
-        name = capitalizeName(name);
-
-        allContacts.set(id, { id, name, bgcolor }); 
+        allContacts.set(name, { name, bgcolor }); 
     
-        contactsList.appendChild(createContactElement(id, name, bgcolor));
+        contactsList.appendChild(createContactElement(name, bgcolor));
     }); 
-
-    console.log("📜 Alle Kontakte gespeichert:", allContacts);
-
 }
 
 function capitalizeName(name) {
@@ -50,14 +43,14 @@ function capitalizeName(name) {
         .join(" ");
 }
 
-function createContactElement(id, name, color) {
+function createContactElement(name, bgcolor) {
     const contactDiv = createElement("div", "contact-item");
-    contactDiv.appendChild(createAvatar(name, color)); 
+    contactDiv.appendChild(createAvatar(name, bgcolor)); 
         
     const nameSpan = createElement("span", "contact-name", name);
     contactDiv.appendChild(nameSpan); 
     
-    const checkbox = createCheckbox(id, name);
+    const checkbox = createCheckbox(name);
     contactDiv.appendChild(checkbox); 
     
     return contactDiv; 
@@ -72,26 +65,26 @@ function updateSelectedContactsDisplay() {
     });
 }
 
-function createAvatar(name, color) {
+function createAvatar(name, bgcolor) {
     const avatar = createElement("div", "avatar", getInitials(name));
-    avatar.style.backgroundColor = color;
+    avatar.style.backgroundColor = bgcolor;
     return avatar;
 }
 
-function createCheckbox(id, name) {
+function createCheckbox(name) {
     const checkbox = createElement("input", "contact-checkbox");
     checkbox.type = "checkbox";
-    checkbox.dataset.contactId = id;
-    checkbox.addEventListener("change", () => toggleContactSelection(id, name, checkbox.checked));
+    checkbox.dataset.contactId = name;
+    checkbox.addEventListener("change", () => toggleContactSelection(name, checkbox.checked));
     return checkbox;
 }
 
-function toggleContactSelection(id, name, isChecked) {
-    const contact = allContacts.get(id);
+function toggleContactSelection(name, isChecked) {
+    const contact = allContacts.get(name);
     if (!contact) return;
 
     if (isChecked) {
-        selectedContacts.add({ id, name, bgcolor: contact.bgcolor });
+        selectedContacts.add(contact);
     } else {
         selectedContacts.forEach(c=> {
             if (c.id === id) {

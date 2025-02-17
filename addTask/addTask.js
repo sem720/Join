@@ -340,7 +340,7 @@ function clearTask() {
     
   // Datum zurücksetzen
   resetDateInput(document.getElementById("due-date"));
-  document.getElementById("dropdown-btn").innerHTML = `Select task category <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
+  document.getElementById("dropdown-btn").innerHTML = `Select task category <span class="icon-container"><img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon"></span>`;
   document.getElementById("selected-contacts-container").innerHTML = "";
 
   document.querySelectorAll(".error-message").forEach((error) => {error.style.display = "none";});
