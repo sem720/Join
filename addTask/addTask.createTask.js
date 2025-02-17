@@ -17,6 +17,7 @@ function createTask(event) {
 }
 
 function getTaskFormData() {
+    let selectedValue = document.getElementById("selected-category")?.value || "";
     return {
         title: getValue("#task-name"),
         description: getValue("#description"),
@@ -27,6 +28,10 @@ function getTaskFormData() {
         subtasks: getSubtasks()
     };
 }
+
+console.log("Selected category input:", categoryInput);
+console.log("Selected category value:", selectedValue);
+
 
 function getValue(selector) {
     return document.querySelector(selector)?.value.trim() || "";
@@ -49,68 +54,46 @@ function getSubtasks() {
 function validateTaskData(taskData) {
     let isValid = true;
 
-    if (!taskData.title.trim()) {
-        showError("#task-name", "Title is required.");
-        isValid = false;
-    } else {
-        clearError("#task-name");
-    }
-
-    if (!taskData.dueDate.trim()) {
-        showError("#due-date", "Due Date is required.");
-        isValid = false;
-    } else {
-        clearError("#due-date");
-    }
-
-    if (!taskData.category.trim()) {
-        showError("#selected-category", "Category is required.");
-        isValid = false;
-    } else {
-        clearError("#selected-category");
-    }
+    !taskData.title.trim() ? (showError("#task-name", "Title is required."), isValid = false) : clearError("#task-name");
+    !taskData.dueDate.trim() ? (showError("#due-date", "Due Date is required."), isValid = false) : clearError("#due-date");
+    !taskData.category.trim() ? (showError("#selected-category", "Category is required."), isValid = false) : clearError("#selected-category");
 
     return isValid;
 }
 
+// Zeigt eine Fehlermeldung an
 function showError(selector, message) {
     let field = document.querySelector(selector);
     if (!field) return;
 
-    let container; 
+    let errorMsg = field.nextElementSibling; // Die Fehlermeldung kommt direkt nach dem Eingabefeld
+    errorMsg?.classList.contains("error-message") && (errorMsg.textContent = message, errorMsg.style.display = "block");
+ 
+    const elementToHighlight = selector === "#selected-category" ? document.querySelector("#category-container") : field;
 
-    if (selector === "#selected-category") {
-        container = field.previousElementSibling; // Spezifisch für das Dropdown
-    } else {
-        container = field.closest(".input-container") || field.parentElement;
-    }
-
-    if (container && container.classList.contains("dropdown-container")) {
-        container.classList.add("error");
-    } else {
-        field.classList.add("error");
-    }
-
-    let errorMsg = container.querySelector(".error-message");
-    if (!errorMsg) {
-        errorMsg = document.createElement("div");
-        errorMsg.classList.add("error-message");
-        container.insertAdjacentElement("afterend", errorMsg);
-    }
-
-    errorMsg.textContent = message;
-    errorMsg.style.display = "block";
+    elementToHighlight.classList.add("error");
 }
 
-
+// Versteckt eine Fehlermeldung
 function clearError(selector) {
     let field = document.querySelector(selector);
-    field.classList.remove("error");
+    if (!field) return;
 
-    let errorMsg = field.nextElementSibling;
-    if (errorMsg && errorMsg.classList.contains("error-message")) {
-        errorMsg.remove();
-    }
+    let errorMsg = field.nextElementSibling; // Die Fehlermeldung kommt direkt nach dem Eingabefeld
+
+    errorMsg?.classList.contains("error-message") && (errorMsg.style.display = "none");
+
+    (selector === "#selected-category" ? document.querySelector("#category-container") : field).classList.remove("error");
 }
 
-    
+function saveTaskToFirebase(taskData) {
+    return firebase.database().ref("tasks").push(taskData)
+        .then(() => {
+            console.log("Task erfolgreich gespeichert:", taskData);
+            showSuccessToast("Task wurde erfolgreich zum Board hinzugefügt!");
+        })
+        .catch(error => {
+            console.error("Fehler beim Speichern des Tasks:", error);
+            alert("Fehler beim Speichern des Tasks. Bitte versuchen Sie es erneut.");
+        });
+}

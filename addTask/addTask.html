@@ -33,7 +33,7 @@
             <form>
                 <label for="task-name">Title <span class="required">*</span></label>
                 <input id="task-name" class="input-standard"  type="text" name="task-name" placeholder="Enter a title" required>
-                <span class="error-message">This field is required</span>
+                <div class="error-message" style="display: none;"></div>
 
                 <label for="description">Description</label>
                 <textarea id="description" name="description" placeholder="Enter a Description"></textarea>
@@ -57,7 +57,7 @@
             <form>
                 <label for="due-date">Due Date <span class="required">*</span></label>
                 <input type="date" class="input-standard" id="due-date" name="due-date" data-placeholder="dd/mm/yyyy">
-                <span class="error-message">This field is required</span>
+                <div class="error-message" style="display: none;"></div>
 
                 <label for="priority">Prio</label>
                 <div class="button-container">
@@ -85,15 +85,15 @@
                     </div>
                 </div>
                 <input type="hidden" id="selected-category" name="selected-category"> 
-                
-                <div class="subtask-container">
-                    <label for="subtasks">Subtasks</label>
-                    <div class="subtask-input-wrapper">
-                        <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask" autocomplete="off">
-                        <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon">
-                    </div>
-                    <ul id="subtask-list"></ul>
+                <div class="error-message" style="display: none;"></div>
+        
+                <label for="subtasks">Subtasks</label>
+                <div class="subtask-input-wrapper">
+                    <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask" autocomplete="off">
+                    <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon">
                 </div>
+                <ul id="subtask-list"></ul>
+              
             </form>
         </div>
     </main>
@@ -131,7 +131,36 @@
         });
     }
     </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
     
-   
+        const firebaseConfig = {
+            apiKey: "DEIN_API_KEY",
+            authDomain: "DEIN_AUTH_DOMAIN",
+            databaseURL: "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/",
+            projectId: "DEIN_PROJECT_ID",
+            storageBucket: "DEIN_STORAGE_BUCKET",
+            messagingSenderId: "DEIN_MESSAGING_SENDER_ID",
+            appId: "DEINE_APP_ID"
+        };
+    
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+    
+        // Hier wird die Funktion dem window-Objekt hinzugefügt
+        window.saveTaskToFirebase = async function(taskData) {
+            try {
+                await push(ref(database, "tasks"), taskData);
+                console.log("Task erfolgreich gespeichert:", taskData);
+                alert("Task wurde erfolgreich gespeichert!");
+            } catch (error) {
+                console.error("Fehler beim Speichern des Tasks:", error);
+                alert("Fehler beim Speichern des Tasks. Bitte versuchen Sie es erneut.");
+            }
+        };
+    </script>
+    
+
 </body>
 </html>

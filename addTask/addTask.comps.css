@@ -88,7 +88,6 @@ select:hover, .dropdown-btn:hover {
     font-weight: 300;
     cursor: pointer;
     padding-left: 16px !important;
-    margin-bottom: 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -140,8 +139,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .error-message {
     color: red;
     font-size: 12px;
-    margin-top: 4px;
-    display: none; 
+    margin-top: -20px !important;
+    margin-bottom: 20px;
+    position: relative;
 }
   
 .dropdown-icon {
@@ -156,7 +156,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background-color: #334556;
     border-radius: 50%;
 }
-
 
 .dropdown-container.error {
     border: 1px solid red !important;

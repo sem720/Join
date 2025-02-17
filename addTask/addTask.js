@@ -107,21 +107,8 @@ function initialDefaultPriority() {
   }
 }
 
-//Logik für Inputfelder die required sind: Schritte 1-4:
-  //Schritt 1: Prüfen ob das Inputfeld leer ist, wenn der User submitted oder das Inputfeld verlässt
-  //Schritt 2: Eine rote Border hinzufügen, wenn das Inputfeld leer ist
-  //Schritt 3: Den Text in rot anzeigen (This field is required)
-  //Schritt 4: Die rote Border und den Text entfernen, wenn der User das Inputfeld ausfüllt
-
-  //in CSS: code für error border und error message erstellen
-
-  //div mit Error Message auf display none setzen und dann anzeigen, wenn das Inputfeld leer ist
-
-
-
 function setupDropdownToggle(dropdownBtn, dropdownList) {
-  
-  
+
   dropdownBtn.addEventListener("click", (e) => {
     e.preventDefault();
   
@@ -143,13 +130,18 @@ function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
   
   document.querySelectorAll(".dropdown-options li").forEach((option) => {
     option.addEventListener("click", function () {
+
+      console.log("Dropdown wurde geklickt");
+
       const selectedText = this.textContent;
       const selectedValue = this.getAttribute("data-value");
+
+      console.log("Selected category value:", selectedValue);
   
       // Preserve button styling and only update text
       dropdownBtn.innerHTML = `${selectedText} <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
   
-      categoryInput.value = selectedValue;
+      document.getElementById("selected-category").value = selectedValue;
   
       // Close dropdown
       dropdownContainer.classList.remove("open");
@@ -201,6 +193,15 @@ function handleSubtaskInput() {
   }
 }
 
+function createSubtaskIcons() {
+  const deleteIcon = createIcon("/assets/imgs/clear-subtask.png", "Clear Icon", "clear-icon", clearSubtask);
+  const divider = document.createElement("div");
+  divider.classList.add("divider");
+  const checkIcon = createIcon("/assets/imgs/checkmark-black.png", "Checkmark Icon", "checkmark-icon", saveSubtask);
+  
+  return [deleteIcon, divider, checkIcon];
+}
+
 function showSubtaskActions() {
   const inputField = document.getElementById("subtasks");
   let iconContainer = document.querySelector(".subtask-action");
@@ -209,15 +210,12 @@ function showSubtaskActions() {
     iconContainer = document.createElement("div");
     iconContainer.classList.add("subtask-action");
 
-    const deleteIcon = createIcon("/assets/imgs/clear-subtask.png", "Clear Icon", "clear-icon", clearSubtask);
-    const divider = document.createElement("div");
-    divider.classList.add("divider");
-    const checkIcon = createIcon("/assets/imgs/checkmark-black.png", "Checkmark Icon", "checkmark-icon", saveSubtask);
-
-    iconContainer.append(deleteIcon, divider, checkIcon);
+    const icons = createSubtaskIcons();
+    iconContainer.append(...icons);
     inputField.parentElement.appendChild(iconContainer);
   }
 }
+
 
 function createIcon(src, alt, className, eventHandler) {
   const icon = document.createElement("img");
@@ -252,25 +250,30 @@ function createSubtaskListIcons() {
   return liActions;
 }
 
+function createSubtaskElement(value) {
+  const li = document.createElement("li");
+  li.classList.add("subtask-item");
+
+  const span = document.createElement("span");
+  span.classList.add("subtask-text");
+  span.textContent = `• ${value}`;
+
+  const liActions = createSubtaskListIcons();
+  li.appendChild(span);
+  li.appendChild(liActions);
+  return li;
+}
+
 function saveSubtask() {
   const inputField = document.getElementById("subtasks");
   const subtaskList = document.getElementById("subtask-list");
 
   if (inputField.value.trim()) {
-    const li = document.createElement("li");
-    li.classList.add("subtask-item");
-
-    const span = document.createElement("span");
-    span.classList.add("subtask-text");
-    span.textContent = `• ${inputField.value}`;
-
-    const liActions = createSubtaskListIcons();
-    li.appendChild(span);
-    li.appendChild(liActions);
+    const li = createSubtaskElement(inputField.value);
     subtaskList.appendChild(li);
   }
-  console.log(document.querySelector(".li-actions"));
 
+  console.log(document.querySelector(".li-actions"));
   clearSubtask();
 }
 
@@ -327,33 +330,21 @@ function saveEdit(li, input) {
   li.appendChild(liActions);
 }
 
-
 function deleteSubtask(event) {
   const li = event.target.closest("li");
   if (li) li.remove();
 }
 
-
 function clearTask() {
-  document.getElementById("task-name").value = "";
-  document.getElementById("description").value = "";
-  document.getElementById("subtasks").value = "";
-
-  const input = document.getElementById("due-date");
-  resetDateInput(input);
-
+  ["task-name", "description", "subtasks"].forEach(id => document.getElementById(id).value = "");
+    
+  // Datum zurücksetzen
+  resetDateInput(document.getElementById("due-date"));
   document.getElementById("dropdown-btn").innerHTML = `Select task category <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
-  //document.getElementById("category").value = "";
   document.getElementById("selected-contacts-container").innerHTML = "";
 
-  document.querySelectorAll(".error-message").forEach((error) => {
-    error.style.display = "none";
-  });
-
-  // 🚀 Error-Klassen entfernen
-  document.querySelectorAll(".error").forEach((el) => {
-    el.classList.remove("error");
-  });
+  document.querySelectorAll(".error-message").forEach((error) => {error.style.display = "none";});
+  document.querySelectorAll(".error").forEach((el) => {el.classList.remove("error");});
 }
 
 function initEventListeners() {
@@ -374,26 +365,6 @@ function handleTaskCreation(event) {
   }
 }
 
-function validateForm() {
-  const fields = document.querySelectorAll(".input-standard");
-  let isValid = true;
-
-  fields.forEach(field => {
-    const errorMessage = field.nextElementSibling; // Fehlertext ist das nächste Element
-
-    if (!field.value.trim()) {
-      field.classList.add("error");
-      if (errorMessage) errorMessage.style.display = "block";
-      isValid = false;
-    } else {
-      field.classList.remove("error");
-      if (errorMessage) errorMessage.style.display = "none";
-    }
-  });
-
-  return isValid;
-}
-
 function init() {
   const dropdownBtn = document.getElementById("dropdown-btn");
   const dropdownList = document.getElementById("dropdown-list");
@@ -408,8 +379,6 @@ function init() {
   initEventListeners(),
   clearTask();
 }
-
-
 
 
 

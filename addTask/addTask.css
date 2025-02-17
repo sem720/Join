@@ -23,7 +23,7 @@ body {
 .main-addTask {
     display: flex;
     flex-direction: row;  
-    height: 50vh;
+    height: 60vh;
     width: 900px;
     margin-left: 100px;
 }
@@ -35,8 +35,11 @@ body {
 }
 
 .right-container {
+    display: flex;
+    flex-direction: column;
     width: 50%;
     margin-left: 30px;
+    flex: 1;
 }
 
 .separator {
@@ -61,7 +64,6 @@ label {
 
 input, textarea {
     box-sizing: border-box;
-    margin-bottom: 32px;
     width: 400px;
     height: 42px;
     border: 1px solid #D7D7D7;
@@ -94,7 +96,6 @@ textarea {
 
 select {
     box-sizing: border-box;
-    margin-bottom: 24px;
     padding-left: 16px !important;
     width: 400px;
     height: 42px;
@@ -115,7 +116,6 @@ select {
     width: 140px;
     height: 44px;
     box-sizing: border-box;
-    margin-bottom: 32px;
     border: 1px solid #D7D7D7;
     font-family: inherit;
     border-radius: 8px;
@@ -432,7 +432,20 @@ ul {
 
 #task-name, #due-date, #category-container {
     position: relative;
-    display: flex;
-    flex-direction: column;
+}
 
+#task-name, 
+#description, 
+#due-date, 
+.button-container, 
+.dropdown-container {
+    margin-bottom: 24px;
+}
+
+#task-name.error, 
+#description.error, 
+#due-date.error, 
+.button-container.error, 
+.dropdown-container.error {
+    margin-bottom: none; 
 }
