@@ -170,7 +170,7 @@
 
 @media (max-width:670px) {
     .contacts {
-        height: calc(100vh - 200px);
+        height: calc(100vh - 210px);
     }
 
     .add-new-contact {

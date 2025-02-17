@@ -5,11 +5,6 @@ async function fetchContacts(url) {
         const response = await fetch(url + '.json');
         const contacts = await response.json();
 
-        if (!contacts) {
-            console.log('Keine Kontakte gefunden.');
-            return [];
-        }
-
         const contactsArray = Object.entries(contacts).map(([id, contact]) => {
             const { bgcolor, name, email, tel } = contact;
             let initials = '';
@@ -22,7 +17,6 @@ async function fetchContacts(url) {
             }
             return { id, bgcolor, name, email, tel, initials };
         });
-
         console.log("Geladene Kontakte:", contactsArray);
         return contactsArray;
     } catch (error) {
@@ -34,24 +28,28 @@ async function fetchContacts(url) {
 async function renderContacts() {
     try {
         const contactsArray = await fetchContacts(BASE_URL) || [];
-
         const contactList = document.getElementById("contactList");
-        if (!contactList) {
-            console.error("Fehler: Element mit ID 'contactList' nicht gefunden.");
-            return;
-        }
+        contactList.innerHTML = ""; // Reset list
 
-        const sortedContacts = contactsArray.sort((a, b) => a.initials[0].localeCompare(b.initials[0]));
-        const groupedContacts = sortedContacts.reduce((acc, contact) => {
-            const initial = contact.initials[0];
-            if (!acc[initial]) {
-                acc[initial] = [];
+        // Kontakte nach dem ersten Buchstaben des Vornamens gruppieren
+        const groupedContacts = contactsArray.reduce((acc, contact) => {
+            const firstLetter = contact.name.charAt(0).toUpperCase();
+            if (!acc[firstLetter]) {
+                acc[firstLetter] = [];
             }
-            acc[initial].push(contact);
+            acc[firstLetter].push(contact);
             return acc;
         }, {});
 
-        Object.entries(groupedContacts).forEach(([initial, contacts]) => {
+        // Gruppen alphabetisch nach dem ersten Buchstaben des Vornamens sortieren
+        const sortedGroups = Object.keys(groupedContacts).sort().reduce((acc, key) => {
+            acc[key] = groupedContacts[key];
+            return acc;
+        }, {});
+
+        // Innerhalb jeder Gruppe Kontakte nach dem vollständigen Namen sortieren
+        Object.entries(sortedGroups).forEach(([initial, contacts]) => {
+            contacts.sort((a, b) => a.name.localeCompare(b.name));
             contactList.innerHTML += contactsListTemplate(initial, contacts);
         });
 
@@ -120,6 +118,80 @@ function toggleDetailsContact(contactId, initial) {
 
 
 
+function validateContactForm(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("newContactName").value.trim();
+    const email = document.getElementById("newContactEmail").value.trim();
+    const phone = document.getElementById("newContactPhone").value.trim();
+
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$/;
+    const phonePattern = /^(\\+|0)[0-9]+$/;
+
+    if (!name || name.length < 3) {
+        alert("Bitte einen gültigen Namen mit mindestens 3 Zeichen eingeben.");
+        return false;
+    }
+    if (!emailPattern.test(email)) {
+        alert("Bitte eine gültige E-Mail-Adresse eingeben");
+        return false;
+    }
+    if (!phonePattern.test(phone)) {
+        alert("Bitte eine gültige Telefonnummer eingeben.");
+        return false;
+    }
+    saveContactToFirebase({ name, email, phone });
+}
+
+
+
+async function saveContactToFirebase(validatedData) {
+    if (!validatedData) return;
+
+    const newContact = {
+        name: validatedData.name,
+        email: validatedData.email,
+        tel: validatedData.phone,
+        bgcolor: getRandomColor(),
+    };
+
+    try {
+        const response = await fetch(BASE_URL + ".json", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newContact),
+        });
+
+        if (!response.ok) {
+            throw new Error("Fehler beim Speichern des Kontakts.");
+        }
+
+        alert("Kontakt erfolgreich gespeichert!");
+        closeAddContact();
+        renderContacts();
+    } catch (error) {
+        console.error("Fehler beim Speichern des Kontakts:", error);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
@@ -130,7 +202,6 @@ function getRandomColor() {
     console.log(color);
     return color;
 }
-// getRandomColor()
 
 
 

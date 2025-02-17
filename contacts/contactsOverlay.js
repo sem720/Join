@@ -63,7 +63,7 @@ function checkWindowSize() {
 window.addEventListener('resize', checkWindowSize);
 checkWindowSize();
 
-
+/** */
 function toggleEditDeleteMenu() {
     const menu = document.getElementById('editDeleteMenu');
     if (!menu.classList.contains('active')) {
@@ -77,6 +77,10 @@ function toggleEditDeleteMenu() {
     }
 }
 
+/**
+ *
+ *
+ */
 function closeMenu() {
     const menu = document.getElementById('editDeleteMenu');
     menu.classList.remove('active');
@@ -89,7 +93,6 @@ function closeMenu() {
 function closeMenuOnClickOutside(event) {
     const menu = document.getElementById('editDeleteMenu');
     const moreBtn = document.getElementById('moreBtn');
-
     if (!menu.contains(event.target) && !moreBtn.contains(event.target)) {
         closeMenu();
     }

@@ -16,11 +16,11 @@ function openAddContactTemp() {
                     <div class="contact-image-container">
                         <img class="contact-image" src="../assets/imgs/add-contact.png" />
                     </div>
-                    <form class="addContact-content" onsubmit="">
+                    <form class="addContact-content" onsubmit="validateContactForm()">
                         <div class="inputs-container">
                             <div class="addContact-input">
                                 <input required id="newContactName" class="input-standard contact-name"
-                                    placeholder="Name" type="text" />
+                                    placeholder="Name" type="text" minlength="3" />
                                 <img src="../assets/imgs/input-name.png" alt="">
                             </div>
                             <div class="addContact-input">
