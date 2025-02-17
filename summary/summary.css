@@ -17,14 +17,15 @@ body {
   display: flex;
   align-items: center;
   gap: 20px;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   margin-bottom: 30px;
 }
 
 .line {
-  height: 100px;
-  width: 5px;
-  color: red;
+  height: 60px;
+  width: 3px;
+  background: #29abe2;
+  border-radius: 2.5px;
 }
 
 .good-morning-text {
@@ -34,17 +35,26 @@ body {
   color: #2a3647;
   font-size: 3rem;
   font-weight: 500;
+
+  h1 {
+    color: #29abe2;
+  }
 }
 
-.good-morning-text h1 {
-  color: #29abe2;
+.line-h {
+  width: 120px;
+  height: 3px;
+  border-radius: 1.5px;
+  background: #29abe2;
+  margin-top: 20px;
+  display: none;
 }
-
-/* Quadrat */
+/* Square */
 
 .information {
   height: 520px;
   width: 520px;
+  /* Square layout mostly responsive to height and width of the .information container */
   position: relative;
   display: flex;
   flex-direction: column;
@@ -213,5 +223,190 @@ body {
     font-size: 3.5rem;
     font-weight: 600;
     color: black;
+  }
+}
+
+@media (max-width: 1290px) {
+  .good-morning-text {
+    display: none;
+  }
+}
+
+@media (max-width: 950px) {
+  .summary-subject {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: inherit;
+  }
+
+  .line {
+    display: none;
+  }
+
+  .box-1 .info span {
+    font-size: 3rem;
+  }
+
+  .box-2 .info span {
+    font-size: 3rem;
+  }
+
+  .box-3 span {
+    font-size: 3rem;
+  }
+
+  .box-1 .circle {
+    padding: 10px;
+  }
+
+  .line-h {
+    display: block;
+  }
+}
+
+@media (max-width: 900px) {
+  .information {
+    height: 420px;
+    width: 420px;
+  }
+
+  .box-1 .info span {
+    font-size: 2.5rem;
+  }
+
+  .box-2 .info span {
+    font-size: 2.5rem;
+  }
+
+  .box-3 span {
+    font-size: 2.5rem;
+  }
+
+  #urgent-icon {
+    height: 50px;
+    width: 50px;
+  }
+}
+
+@media (max-width: 790px) {
+  .information {
+    height: 360px;
+    width: 360px;
+  }
+
+  .box-1 .info span {
+    font-size: 2rem;
+  }
+
+  .box-2 .info span {
+    font-size: 2rem;
+  }
+
+  .box-3 span {
+    font-size: 2rem;
+  }
+
+  .box-1,
+  .box-2,
+  .box-3 {
+    font-size: 0.8rem;
+  }
+
+  .box-2 {
+    gap: 7%;
+  }
+}
+
+@media (max-width: 720px) {
+  .information {
+    height: 310px;
+    width: 310px;
+  }
+
+  .box-2 {
+    gap: 5%;
+  }
+
+  #urgent-icon {
+    height: 40px;
+    width: 40px;
+  }
+}
+
+@media (max-width: 670px) {
+  .information {
+    height: 440px;
+    width: 440px;
+  }
+
+  .box-1,
+  .box-2,
+  .box-3 {
+    font-size: 1rem;
+  }
+
+  .box-2 {
+    gap: 10%;
+  }
+
+  #urgent-icon {
+    height: 50px;
+    width: 50px;
+  }
+}
+
+@media (max-width: 560px) {
+  .information {
+    height: 340px;
+    width: 340px;
+  }
+
+  .box-1,
+  .box-2,
+  .box-3 {
+    font-size: 0.8rem;
+  }
+  .box-2 {
+    gap: 7%;
+  }
+
+  #urgent-icon {
+    height: 40px;
+    width: 40px;
+  }
+}
+
+@media (max-width: 460px) {
+  .div-information {
+    width: 100%;
+    padding: 30px;
+  }
+
+  .information {
+    height: inherit;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+  .box-2 {
+    gap: 8%;
+  }
+
+  #urgent-icon {
+    height: 35px;
+    width: 35px;
+  }
+  .box-1 #checkmark-icon {
+    height: 20px;
+    width: 20px;
+  }
+
+  .box-1 #edit-icon {
+    height: 20px;
+    width: 20px;
+  }
+
+  .summary-subject h1 {
+    font-size: 3rem;
+    line-height: 4rem;
   }
 }
