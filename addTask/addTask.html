@@ -112,6 +112,10 @@
             <button class="btn-dark create-btn" onclick="createTask(event)">Create Task <img src="/assets/imgs/check-white.png" alt="check-icon"></button>
         </div>
     </section>
+    <div id="task-added-popup" class="task-popup btn-dark">
+        Task added to board
+        <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
+    </div>
     <script src="/addTask/addTask.js"></script>
     <script src="/addTask/addTask.contact.js"></script>
     <script src="/comp/navbar/navbar.js"></script>
@@ -153,14 +157,11 @@
             try {
                 await push(ref(database, "tasks"), taskData);
                 console.log("Task erfolgreich gespeichert:", taskData);
-                alert("Task wurde erfolgreich gespeichert!");
             } catch (error) {
                 console.error("Fehler beim Speichern des Tasks:", error);
-                alert("Fehler beim Speichern des Tasks. Bitte versuchen Sie es erneut.");
             }
         };
     </script>
-    
 
 </body>
 </html>

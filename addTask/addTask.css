@@ -449,3 +449,25 @@ ul {
 .dropdown-container.error {
     margin-bottom: none; 
 }
+
+.task-popup {
+    width: 250px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    font-size: 18px !important;
+    font-weight: 300 !important;
+    border-radius: 18px !important;
+    position: fixed;
+    
+    left: 50%;
+    transform: translateX(-50%);
+    transition: bottom 0.5s ease-out, opacity 0.5s ease-in-out;
+}
+
+#popup-icon {
+    width: 25px;
+    height: 29px;
+}

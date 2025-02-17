@@ -8,11 +8,15 @@ function createTask(event) {
         return;
     }
 
-    saveTaskToFirebase(taskData).then(() => {
-        window.location.href = "board.html";
-    }).catch(error => {
+    saveTaskToFirebase(taskData)
+    .then(() => {
+        showTaskPopup(); 
+        setTimeout(() => {
+            window.location.href = "board.html"; // Nach 2 Sekunden zur Board-Seite
+        }, 2000);
+    })
+    .catch(error => {
         console.error("Fehler beim Speichern des Tasks:", error);
-        alert("Es gab ein Problem beim Speichern des Tasks. Bitte versuchen Sie es erneut.");
     });
 }
 
@@ -90,10 +94,19 @@ function saveTaskToFirebase(taskData) {
     return firebase.database().ref("tasks").push(taskData)
         .then(() => {
             console.log("Task erfolgreich gespeichert:", taskData);
-            showSuccessToast("Task wurde erfolgreich zum Board hinzugefügt!");
         })
         .catch(error => {
             console.error("Fehler beim Speichern des Tasks:", error);
-            alert("Fehler beim Speichern des Tasks. Bitte versuchen Sie es erneut.");
         });
+}
+
+function showTaskPopup() {
+    let popup = document.getElementById("task-added-popup");
+    popup.style.bottom = "50%";  // Popup in die Mitte bringen
+    popup.style.opacity = "1";
+
+    setTimeout(() => {
+        popup.style.bottom = "-100px"; // Wieder ausblenden
+        popup.style.opacity = "0";
+    }, 2000); // Popup bleibt 1,5 Sekunden sichtbar
 }
