@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board</title>
     <link rel="stylesheet"  href="/root.css">
-    <link rel="stylesheet" type="text/css" href="/addTask/addTask.css">
+    <link rel="stylesheet" type="text/css" href="/board/board.css">
     <link rel="stylesheet" href="/comp/components.css">
     <link rel="stylesheet" href="/comp/navbar/navbar.css">
     <link rel="stylesheet" href="/comp/sidebar/sidebar.css">
@@ -25,6 +25,36 @@
 <body>
     <div class="navbar-wrap" w3-include-html="/comp/navbar/navbar.html"></div>
     <div w3-include-html="/comp/sidebar/sidebar.html"></div>
+
+    <!-- Modal und Overlay -->
+    <div id="overlay" class="overlay hidden"></div>
+    <div id="add-task-modal" class="modal hidden">
+      <div id="add-task-content" class="modal-content">
+        <button id="close-modal" class="close-btn">&times;</button>
+      </div>
+    </div>
+
+    <!-- Haupt-Board -->
+    <div class="board-wrap">
+      <div class="board-header">
+        <h1 class="h1-board">Board</h1>
+        <div class="header-part-search">
+          <div class="search-input-board">
+            <input name="findTask" id="findTask" class="input-standard" placeholder="Find Task">
+          <div class="search-divider"></div>
+          <div class="search-icon">
+            <img src="/assets/imgs/search.png" alt="search" onclick="findTask()">
+          </div>
+          
+          </div>
+          
+          <button id="addTask" class="btn-dark" onclick="addTask()">
+              Add Task
+              <img src="/assets/imgs/plus-white.png" alt="add Task" id="plus-white">
+          </button>
+        </div>
+      </div>
+    </div>
 
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script>
