@@ -12,8 +12,8 @@ function createTask(event) {
     .then(() => {
         showTaskPopup(); 
         setTimeout(() => {
-            window.location.href = "board.html"; // Nach 2 Sekunden zur Board-Seite
-        }, 2000);
+            window.location.href = "/board/board.html"; // Nach 2 Sekunden zur Board-Seite
+        }, 1500);
     })
     .catch(error => {
         console.error("Fehler beim Speichern des Tasks:", error);
@@ -21,21 +21,17 @@ function createTask(event) {
 }
 
 function getTaskFormData() {
-    let selectedValue = document.getElementById("selected-category")?.value || "";
+    const assignedContacts = getSelectedContacts();
     return {
         title: getValue("#task-name"),
         description: getValue("#description"),
-        assignedTo: getSelectedContacts(),
+        assignedTo: assignedContacts, 
         dueDate: getValue("#due-date"),
         priority: getSelectedPriority(),
         category: getValue("#selected-category"),
         subtasks: getSubtasks()
     };
 }
-
-console.log("Selected category input:", categoryInput);
-console.log("Selected category value:", selectedValue);
-
 
 function getValue(selector) {
     return document.querySelector(selector)?.value.trim() || "";
@@ -46,9 +42,20 @@ function getSelectedPriority() {
 }
 
 function getSelectedContacts() {
-    return Array.from(document.querySelectorAll("#contacts-list .selected"))
-                .map(contact => contact.dataset.contactId);
+    const selectedCheckboxes = Array.from(document.querySelectorAll(".contact-checkbox:checked"));
+
+    console.log("🎯 Gefundene Checkboxen:", selectedCheckboxes);
+
+    const selected = selectedCheckboxes.map(checkbox => {
+        console.log("📌 Checkbox Data:", checkbox, "dataset.contactId:", checkbox.dataset.contactId);
+        return checkbox.dataset.contactId || "FEHLER"; // Falls `undefined`, sehen wir "FEHLER" in der Konsole
+    });
+
+    console.log("✅ Ausgewählte Kontakte für Backend:", selected);
+
+    return selected.filter(id => id !== "FEHLER" && id !== undefined && id !== "");
 }
+
 
 function getSubtasks() {
     return Array.from(document.querySelectorAll(".subtask-text"))
@@ -102,11 +109,12 @@ function saveTaskToFirebase(taskData) {
 
 function showTaskPopup() {
     let popup = document.getElementById("task-added-popup");
-    popup.style.bottom = "50%";  // Popup in die Mitte bringen
-    popup.style.opacity = "1";
+    
+    popup.classList.add("show");
 
     setTimeout(() => {
-        popup.style.bottom = "-100px"; // Wieder ausblenden
-        popup.style.opacity = "0";
-    }, 2000); // Popup bleibt 1,5 Sekunden sichtbar
+        window.location.href = "/board/board.html"; // Pfad anpassen
+    }, 1500);
 }
+
+document.getElementById("createTaskButton").addEventListener("click", showPopup);

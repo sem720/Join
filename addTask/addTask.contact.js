@@ -1,3 +1,4 @@
+const allContacts = new Map();
 const selectedContacts = new Set();
 const contactsContainer = document.getElementById('contacts-container');
 const assignmentButton = document.getElementById('assignment-btn');
@@ -15,7 +16,7 @@ assignmentButton.addEventListener('click', () => {
 });
 
 async function fetchContacts() {
-    const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
+    const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/contacts.json');
     const data = await response.json();
 
     if (!data) return console.error("Keine Nutzerdaten gefunden.");
@@ -23,61 +24,91 @@ async function fetchContacts() {
     const contactsList = document.getElementById('contacts-list');
     contactsList.innerHTML = '';
 
-    Object.values(data).forEach(({ name }) => name && contactsList.appendChild(createContactElement(capitalizeName(name)))
-    );
-    console.log("API Respnse:", data)
-    async function fetchContacts() {
-        console.log("fetchContacts() wurde aufgerufen");
-    }
+    allContacts.clear();
+
+    Object.entries(data).forEach(([key, value]) => {
+        const id = key;
+        let name = value.name;
+        let bgcolor = value.bgcolor
+
+        name = capitalizeName(name);
+
+        allContacts.set(id, { id, name, bgcolor }); 
     
+        contactsList.appendChild(createContactElement(id, name, bgcolor));
+    }); 
+
+    console.log("📜 Alle Kontakte gespeichert:", allContacts);
+
 }
 
 function capitalizeName(name) {
     return name
-        .toLowerCase() // Falls der Name komplett in Großbuchstaben gespeichert ist
+        .toLowerCase() 
         .split(" ")
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Erstes Zeichen groß
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
         .join(" ");
 }
 
-
-function createContactElement(name) {
+function createContactElement(id, name, color) {
     const contactDiv = createElement("div", "contact-item");
-    contactDiv.appendChild(createAvatar(name)); 
+    contactDiv.appendChild(createAvatar(name, color)); 
         
     const nameSpan = createElement("span", "contact-name", name);
     contactDiv.appendChild(nameSpan); 
     
-    const checkbox = createCheckbox(name);
-    contactDiv.appendChild(checkbox); // Hier wird die Checkbox direkt hinzugefügt
+    const checkbox = createCheckbox(id, name);
+    contactDiv.appendChild(checkbox); 
     
     return contactDiv; 
 }
 
 function updateSelectedContactsDisplay() {
-    selectedContactsContainer.innerHTML = ""; // Vorherige Avatare entfernen
+    selectedContactsContainer.innerHTML = ""; 
 
-    selectedContacts.forEach(name => {
-        const avatar = createAvatar(name);
+    selectedContacts.forEach(({ name, bgcolor }) => {
+        const avatar = createAvatar(name, bgcolor);
         selectedContactsContainer.appendChild(avatar);
     });
 }
 
-function createAvatar(name) {
+function createAvatar(name, color) {
     const avatar = createElement("div", "avatar", getInitials(name));
-    avatar.style.backgroundColor = getRandomColor();
+    avatar.style.backgroundColor = color;
     return avatar;
 }
 
-function createCheckbox(name) {
+function createCheckbox(id, name) {
     const checkbox = createElement("input", "contact-checkbox");
     checkbox.type = "checkbox";
-    checkbox.addEventListener("change", () => toggleContactSelection(name, checkbox.checked));
+    checkbox.dataset.contactId = id;
+    checkbox.addEventListener("change", () => toggleContactSelection(id, name, checkbox.checked));
     return checkbox;
 }
 
-function toggleContactSelection(name, isChecked) {
-    isChecked ? selectedContacts.add(name) : selectedContacts.delete(name);
+function toggleContactSelection(id, name, isChecked) {
+    const contact = allContacts.get(id);
+    if (!contact) return;
+
+    if (isChecked) {
+        selectedContacts.add({ id, name, bgcolor: contact.bgcolor });
+    } else {
+        selectedContacts.forEach(c=> {
+            if (c.id === id) {
+                selectedContacts.delete(c);
+            }
+        });
+    }
+    updateSelectedContactsDisplay();
+}
+
+function updateSelectedContactsDisplay() {
+    selectedContactsContainer.innerHTML = "";
+
+    selectedContacts.forEach(({ name, bgcolor }) => {
+        const avatar = createAvatar(name, bgcolor);
+        selectedContactsContainer.appendChild(avatar);
+    });
 }
 
 function createElement(tag, className = "", text = "") {
@@ -90,11 +121,6 @@ function createElement(tag, className = "", text = "") {
 function getInitials(name) {
     const parts = name.split(" ");
     return parts.map((part) => part[0]).join("").toUpperCase();
-}
-
-function getRandomColor() {
-    const colors = ["#00bee8", "#ff7a00", "#9327ff", "#FF33A1", "#6e52ff", "#fc71ff", "#ffbb2b", "#1fd7c1", "#462f8a", "#ff4646"];
-    return colors[Math.floor(Math.random() * colors.length)];
 }
 
 document.addEventListener("DOMContentLoaded", fetchContacts);
