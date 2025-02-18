@@ -47,13 +47,19 @@
   height: 28px;
 }
 
+.div-links a:hover {
+  color: #29abe2;
+  text-decoration: none;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+}
+
 .div-links {
   position: absolute;
   display: flex;
   flex-direction: column;
   bottom: 80px;
-  left: 55px;
-  gap: 18px;
+  left: 0;
 }
 
 .div-links a {
@@ -61,11 +67,11 @@
   font-weight: 300;
 }
 
-.div-links a:hover {
-  color: #29abe2;
-  text-decoration: none;
-  font-weight: bold;
-  letter-spacing: -0.3px;
+.legals-button {
+  cursor: pointer;
+  padding: 10px;
+  padding-left: 55px;
+  width: 240px;
 }
 
 /* Sidebar responsive */

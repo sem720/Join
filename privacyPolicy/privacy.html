@@ -110,7 +110,7 @@
 
     function setActiveNav() {
       const currentPage = window.location.pathname.split("/").pop();
-      document.querySelectorAll(".nav-button").forEach((button) => {
+      document.querySelectorAll(".nav").forEach((button) => {
         const link = button.getAttribute("data-link");
         button.classList.toggle("sidebar-active-tap", link === currentPage);
       });
