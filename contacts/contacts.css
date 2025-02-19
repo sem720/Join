@@ -175,8 +175,8 @@
     height: 56px;
     padding: 8px !important;
     position: absolute;
-    bottom: 220px;
-    right: 24px;
+    bottom: -270px;
+    right: -12px;
     border-radius: 50%;
 }
 

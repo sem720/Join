@@ -183,7 +183,7 @@
 
     .more-btn {
         display: block;
-        bottom: 230px !important;
+        /* bottom: 230px !important; */
     }
 
     #edit,
@@ -266,10 +266,44 @@
     .editContact-titles h1 {
         font-size: 2.5rem;
     }
+
+    .more-btn {
+        bottom: -310px;
+        right: -26px;
+    }
+
+    .edit-delete-menu {
+        bottom: -312px;
+    }
+
+    .edit-delete-menu.active {
+        right: -28px;
+    }
+}
+
+@media (max-width:345px) {
+    .more-btn {
+        bottom: -292px;
+        right: -20px;
+    }
+
+    .edit-delete-menu {
+        bottom: -290px;
+    }
+
+    .edit-delete-menu.active {
+        right: -24px;
+    }
 }
 
 @media (max-width:360px) {
     .contact-content {
         padding: 4px 8px;
+    }
+}
+
+@media (min-width: 671px) {
+    .edit-delete-menu {
+        display: none !important;
     }
 }
