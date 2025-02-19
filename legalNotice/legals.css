@@ -18,20 +18,6 @@
   color: var(--col-lightblue);
 }
 
-.back {
-  /* display: none; */
-  position: absolute;
-  right: 0;
-  padding: 8px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.back:hover {
-  background-color: #cdcdcd;
-}
-
 .privacy-container {
   display: flex;
   flex-direction: column;
@@ -109,9 +95,6 @@ address span {
   .privacy-content h1 {
     font-size: 2.5rem;
     margin-top: 32px;
-    padding: 32px;
-    line-height: 1.5;
-    text-align: center;
   }
 
   .privacy-content {
