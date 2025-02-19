@@ -1,19 +1,34 @@
 const allContacts = new Map();
 const selectedContacts = new Set();
-const contactsContainer = document.getElementById('contacts-container');
-const assignmentButton = document.getElementById('assignment-btn');
-const selectedContactsContainer = document.createElement("div");
-selectedContactsContainer.id = "selected-contacts-container"; 
-selectedContactsContainer.classList.add("selected-contacts-container");
-assignmentButton.insertAdjacentElement("afterend", selectedContactsContainer);
 
-assignmentButton.addEventListener('click', () => {
-    contactsContainer.classList.toggle('hidden');
+let contactsContainer;
+let assignmentButton;
+let selectedContactsContainer;
 
-    if (contactsContainer.classList.contains("hidden")) {
-        updateSelectedContactsDisplay();
-    }
-});
+window.initAddTaskContacts = function() {
+    contactsContainer = document.getElementById('contacts-container');
+    assignmentButton = document.getElementById('assignment-btn');
+
+    selectedContactsContainer = document.createElement("div");
+    selectedContactsContainer.id = "selected-contacts-container"; 
+    selectedContactsContainer.classList.add("selected-contacts-container");
+    assignmentButton.insertAdjacentElement("afterend", selectedContactsContainer);
+
+    assignmentButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        document.getElementById("contacts-list").classList.toggle("visible");
+      });
+    
+
+    assignmentButton.addEventListener('click', () => {
+        contactsContainer.classList.toggle('hidden');
+        if (contactsContainer.classList.contains("hidden")) {
+            updateSelectedContactsDisplay();
+        }
+    });
+
+    fetchContacts();
+}
 
 async function fetchContacts() {
     const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
@@ -87,21 +102,12 @@ function toggleContactSelection(name, isChecked) {
         selectedContacts.add(contact);
     } else {
         selectedContacts.forEach(c=> {
-            if (c.id === id) {
+            if (c.name === name) {
                 selectedContacts.delete(c);
             }
         });
     }
     updateSelectedContactsDisplay();
-}
-
-function updateSelectedContactsDisplay() {
-    selectedContactsContainer.innerHTML = "";
-
-    selectedContacts.forEach(({ name, bgcolor }) => {
-        const avatar = createAvatar(name, bgcolor);
-        selectedContactsContainer.appendChild(avatar);
-    });
 }
 
 function createElement(tag, className = "", text = "") {
@@ -116,4 +122,3 @@ function getInitials(name) {
     return parts.map((part) => part[0]).join("").toUpperCase();
 }
 
-document.addEventListener("DOMContentLoaded", fetchContacts);

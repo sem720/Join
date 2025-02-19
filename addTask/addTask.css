@@ -345,6 +345,7 @@ ul {
 #contacts-container {
     padding: 10px;
     width: 400px;
+    height: 200px;
     border: 1px solid #ccc;
     background: white;
     position: absolute;
@@ -354,7 +355,7 @@ ul {
     border:#ccc;
     border-radius: 8px;
     box-sizing: border-box;
-    overflow-y: scroll;
+    overflow-y: scroll; 
 }
 
 .contact-item {
@@ -375,6 +376,7 @@ ul {
     color: white;
     font-weight: bold;
     padding: 4px;
+    margin: 4px !important; 
     font-family: inherit;
     font-weight: 400;
     font-size: 10px;

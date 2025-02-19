@@ -1,10 +1,6 @@
-//Die Logik ist etwas lange, ich habe heute eine kürzere Version erarbeitet, die ich noch implementieren muss;
 let activeButton = null; 
-const dropdownBtn = document.getElementById("dropdown-btn");
-const dropdownContainer = document.querySelector(".dropdown-container");
-const dropdownList = document.getElementById("dropdown-list");
-const dropdownIcon = document.getElementById("dropdown-icon");
-const categoryInput = document.getElementById("category");
+let dropdownBtn, dropdownList, dropdownIcon, categoryInput;
+let dropdownContainer = document.querySelector(".dropdown-container");
 
 function toggleButtons(clickedButton) {
   if (activeButton) {
@@ -61,17 +57,17 @@ function changeImageStyle(button, action) {
 }
 
 //Funktionen für das Datumsfeld
-document.addEventListener("DOMContentLoaded", function () {
+function dateInput() {
   const dateInput = document.getElementById("due-date");
 
   dateInput.addEventListener("input", function () {
     if (dateInput.value) {
-      dateInput.classList.add("has-value"); // Schwarz setzen
+      dateInput.classList.add("has-value"); 
     } else {
-      dateInput.classList.remove("has-value"); // Grau lassen
+      dateInput.classList.remove("has-value"); 
     }
   });
-});
+}
 
 //Zurücksetzen wenn auf kalender-icon geklickt wird
 function setupDateReset() {
@@ -97,7 +93,6 @@ function resetDateInput(input) {
   input.classList.remove('has-value');
 }
 
-
 function initialDefaultPriority() {
   const mediumButton = document.getElementById('medium');
 
@@ -108,14 +103,10 @@ function initialDefaultPriority() {
 }
 
 function setupDropdownToggle(dropdownBtn, dropdownList) {
-
   dropdownBtn.addEventListener("click", (e) => {
     e.preventDefault();
-  
     const isOpen = dropdownContainer.classList.toggle("open");
     dropdownList.style.display = isOpen ? "block" : "none";
-  
-      // Update the icon: upwards when open, downwards when closed
     dropdownBtn.querySelector("img").src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
   });
 }
@@ -130,29 +121,28 @@ function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
   
   document.querySelectorAll(".dropdown-options li").forEach((option) => {
     option.addEventListener("click", function () {
-
-      console.log("Dropdown wurde geklickt");
-
       const selectedText = this.textContent;
       const selectedValue = this.getAttribute("data-value");
 
-      console.log("Selected category value:", selectedValue);
-  
-      // Preserve button styling and only update text
-      dropdownBtn.innerHTML = `${selectedText} <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
-  
+      dropdownBtn.innerHTML = `${selectedText} 
+                              <span class="icon-container">
+                                  <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                              </span>
+                            `; 
       document.getElementById("selected-category").value = selectedValue;
-  
-      // Close dropdown
       dropdownContainer.classList.remove("open");
       dropdownList.style.display = "none";
     });
   });
   
   // Reset to default when clicking on the selected option again
-  dropdownBtn.addEventListener("click", (e) => {
+  dropdownBtn.addEventListener("click", () => {
     if (dropdownBtn.textContent.trim() !== defaultText && !dropdownContainer.classList.contains("open")) {
-      dropdownBtn.innerHTML = `${defaultText} <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">`;
+      dropdownBtn.innerHTML = `${defaultText} 
+                                 <span class="icon-container">
+                                  <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                              </span>
+                             `; 
       categoryInput.value = "";
     }
   });
@@ -215,7 +205,6 @@ function showSubtaskActions() {
     inputField.parentElement.appendChild(iconContainer);
   }
 }
-
 
 function createIcon(src, alt, className, eventHandler) {
   const icon = document.createElement("img");
@@ -348,30 +337,24 @@ function clearTask() {
 }
 
 function initEventListeners() {
-  document.getElementById("assignment-btn")?.addEventListener("click", toggleContactsList);
   document.getElementById("createTask")?.addEventListener("click", handleTaskCreation);
-}
-
-function toggleContactsList(event) {
-  event.preventDefault(); // Verhindert das Neuladen der Seite
-  document.getElementById("contacts-list").classList.toggle("visible");
 }
 
 function handleTaskCreation(event) {
   event.preventDefault(); // Verhindert, dass das Formular abgeschickt wird
 
   if (validateForm()) {
-    alert("Task created!"); // Hier würdest du deine Task-Erstellung aufrufen
+    alert("Task created!"); 
   }
 }
 
 function init() {
-  const dropdownBtn = document.getElementById("dropdown-btn");
-  const dropdownList = document.getElementById("dropdown-list");
-  const categoryInput = document.getElementById("category");
-
-  initNavbar(),
+  dropdownBtn = document.getElementById("dropdown-btn");
+  dropdownList = document.getElementById("dropdown-list");
+  categoryInput = document.getElementById("category");
+  
   initialDefaultPriority(),
+  dateInput(),
   setupDateReset(),
   setupDropdownOptions(dropdownBtn, dropdownList, categoryInput),
   setupDropdownToggle(dropdownBtn, dropdownList),

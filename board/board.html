@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="/comp/components.css">
     <link rel="stylesheet" href="/comp/navbar/navbar.css">
     <link rel="stylesheet" href="/comp/sidebar/sidebar.css">
+    <link rel="stylesheet" href="/addTask/addTask.css">
+    <link rel="stylesheet" href="/addTask/addTask.comps.css">
     <link
       id="favicon-light"
       rel="icon"
@@ -22,15 +24,17 @@
       media="(prefers-color-scheme: dark)"
     />
 </head>
-<body>
+<body onload="initBoard()">
     <div class="navbar-wrap" w3-include-html="/comp/navbar/navbar.html"></div>
     <div w3-include-html="/comp/sidebar/sidebar.html"></div>
 
     <!-- Modal und Overlay -->
-    <div id="overlay" class="overlay hidden"></div>
+    <div id="task-overlay" class="overlay hidden"></div>
     <div id="add-task-modal" class="modal hidden">
       <div id="add-task-content" class="modal-content">
         <button id="close-modal" class="close-btn">&times;</button>
+
+        <div id="modal-body"></div>
       </div>
     </div>
 
@@ -48,14 +52,17 @@
           
           </div>
           
-          <button id="addTask" class="btn-dark" onclick="addTask()">
+          <button id="addTask" class="btn-dark" onclick="openAddTaskModal()">
               Add Task
               <img src="/assets/imgs/plus-white.png" alt="add Task" id="plus-white">
           </button>
         </div>
       </div>
     </div>
-
+    <script src="/addTask/addTask.js"></script>
+    <script src="/addTask/addTask.contact.js"></script>
+    <script src="/addTask/addTask.createTask.js"></script>
+    <script src="/board/board.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script>
       w3.includeHTML(function () {
