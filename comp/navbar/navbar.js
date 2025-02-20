@@ -1,6 +1,5 @@
 function displayInitials() {
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
 
   if (user && user.name) {
     const initials = user.name

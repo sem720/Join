@@ -15,7 +15,7 @@
     />
     <title>Summary</title>
   </head>
-  <body onload="initNavbar()">
+  <body onload="initNavbar(), initSum()">
     <div w3-include-html="../comp/sidebar/sidebar.html"></div>
     <div class="navbar-wrap" w3-include-html="../comp/navbar/navbar.html"></div>
     <div class="main-wrap">
@@ -98,7 +98,7 @@
                 src="/assets/imgs/urgent-orange-white.png"
               />
               <div class="info">
-                <span>1</span>
+                <span id="urgentTasks">1</span>
                 Urgent
               </div>
               <div class="line-urgent"></div>
@@ -113,7 +113,7 @@
               onclick="window.location.href='../board/board.html';"
               class="infobox box-3"
             >
-              <span>5</span>
+              <span id="totalTasks">5</span>
               Tasks in <br />
               Board
             </div>
@@ -137,8 +137,8 @@
         </div>
       </div>
       <div class="good-morning-text">
-        Good morning,
-        <h1>Sofia Müller</h1>
+        <span id="greeting"></span>
+        <h1 id="renderName">Sofia Müller</h1>
       </div>
     </div>
   </body>
