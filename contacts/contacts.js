@@ -25,15 +25,15 @@ async function fetchContacts(url) {
 
         const contactsArray = Object.entries(contacts).map(([id, contact]) => {
             const { bgcolor, name, email, tel } = contact;
-            let initials = '';
+            let initial = '';
             if (name) {
                 const nameParts = name.split(' ');
-                initials = nameParts.length > 1
+                initial = nameParts.length > 1
                     ? nameParts[0][0] + nameParts[1][0]
                     : nameParts[0][0];
-                initials = initials.toUpperCase();
+                initial = initial.toUpperCase();
             }
-            return { id, bgcolor, name, email, tel, initials };
+            return { id, bgcolor, name, email, tel, initial };
         }); // console.log("Geladene Kontakte:", contactsArray);
         return contactsArray;
     } catch (error) {
@@ -41,6 +41,7 @@ async function fetchContacts(url) {
         return [];
     }
 }
+
 
 /**
  * Fetches and renders a list of contacts in a grouped and sorted format.
@@ -76,21 +77,27 @@ async function renderContacts() {
 
         Object.entries(sortedGroups).forEach(([initial, contacts]) => {
             contacts.sort((a, b) => a.name.localeCompare(b.name));
+            contacts.forEach(contact => {
+                contact.initials = getInitials(contact.name);
+            });
             contactList.innerHTML += contactsListTemplate(initial, contacts);
         });
 
         document.querySelectorAll('.contact-content').forEach(contactElement => {
             contactElement.addEventListener('click', () => {
                 const contactId = contactElement.dataset.id;
-                const initial = contactElement.dataset.initial;
-                fetchContactDetails(contactId, initial);
-                toggleDetailsContact(contactId, initial);
+                const contactName = contactElement.querySelector('.name-in-list').innerText;
+                const initials = getInitials(contactName);
+
+                fetchContactDetails(contactId, initials);
+                toggleDetailsContact(contactId, initials);
             });
         });
     } catch (error) {
         console.error("Fehler beim Rendern der Kontakte:", error);
     }
 }
+
 
 /**
  * Fetches and displays detailed information for a specific contact.
@@ -104,11 +111,13 @@ async function renderContacts() {
  *
  * @throws {Error} Throws an error if the fetch operation fails or if the response is not valid JSON.
  */
-async function fetchContactDetails(contactId, initial) {
+async function fetchContactDetails(contactId) {
     try {
         const response = await fetch(`${BASE_URL}${contactId}.json`);
         const contact = await response.json();
+
         if (contact) {
+            const initial = getInitials(contact.name);  // Initialen immer berechnen
             const contactDetails = document.getElementById("contentDetails");
             contactDetails.innerHTML = contactDetailsTemplate(contact, initial);
         }
@@ -116,6 +125,7 @@ async function fetchContactDetails(contactId, initial) {
         console.error("Fehler beim Abrufen der Kontaktinformationen:", error);
     }
 }
+
 
 /**
  * Toggles the display of detailed information for a specific contact.
@@ -161,6 +171,7 @@ function toggleDetailsContact(contactId, initial) {
         document.getElementById("contacts").classList.remove('hidden');
     }
 }
+
 
 /**
  * Creates a new contact in Firebase if the contact form is valid.
@@ -260,6 +271,7 @@ async function saveNewContact(event) {
     }
 }
 
+
 /**
  * Generates a random hexadecimal color code.
  *
@@ -276,6 +288,7 @@ function getRandomColor() {
     }
     return color;
 }
+
 
 /**
  * Saves the edited contact information to Firebase.
@@ -298,28 +311,27 @@ async function saveEditedContact(event) {
         const response = await fetch(`${BASE_URL}${contactId}.json`);
         const existingContact = await response.json();
 
-        const updatedContact = {
-            name: document.getElementById("editContactName").value.trim(),
-            email: document.getElementById("editContactEmail").value.trim(),
-            tel: document.getElementById("editContactPhone").value.trim(),
-        };
+        const updatedName = document.getElementById("editContactName").value.trim();
+        const updatedEmail = document.getElementById("editContactEmail").value.trim();
+        const updatedTel = document.getElementById("editContactPhone").value.trim();
 
-        const mergedContact = { ...existingContact, ...updatedContact };
+        const updatedContact = {
+            ...existingContact,
+            name: updatedName,
+            email: updatedEmail,
+            tel: updatedTel
+        };
 
         await fetch(`${BASE_URL}${contactId}.json`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(mergedContact),
-        });
-        console.log("✅ Kontakt erfolgreich aktualisiert:", mergedContact);
+            body: JSON.stringify(updatedContact),
+        }); // console.log("✅ Kontakt erfolgreich aktualisiert:", updatedContact);
 
         await renderContacts();
         closeEditContact();
-
-        editContactName.value = "";
-        editContactEmail.value = "";
-        editContactPhone.value = "";
-
+        const initial = getInitials(updatedName);
+        fetchContactDetails(contactId, initial);
         let successEditAlert = document.getElementById("successEditAlert");
         successEditAlert.classList.add("success-animation");
         setTimeout(() => {
@@ -329,6 +341,7 @@ async function saveEditedContact(event) {
         console.error("Fehler beim Speichern des Kontakts:", error);
     }
 }
+
 
 /**
  * Deletes a contact from Firebase by its ID.
@@ -359,7 +372,6 @@ async function deleteContact(contactId) {
         setTimeout(() => {
             successDeleteAlert.classList.remove("success-animation");
         }, 5000);
-
     } catch (error) {
         console.error("Fehler beim Löschen des Kontakts:", error);
     }
@@ -375,5 +387,18 @@ function toggleBack() {
     if (window.innerWidth <= 1000) {
         contacts.classList.remove('hidden');
         contactsDetails.classList.remove('active');
+    }
+}
+
+
+function getInitials(name) {
+    if (!name || typeof name !== "string") {
+        return "??"; // Falls Name fehlt, Notfallinitialen setzen
+    }
+    const nameParts = name.trim().split(/\s+/);
+    if (nameParts.length > 1) {
+        return (nameParts[0][0] + nameParts[1][0]).toUpperCase();
+    } else {
+        return nameParts[0][0].toUpperCase();
     }
 }
