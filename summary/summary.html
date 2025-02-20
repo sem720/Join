@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../comp/components.css" />
     <link rel="stylesheet" href="../comp/navbar/navbar.css" />
     <link rel="stylesheet" href="../comp/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="../summary/sumAnimation.css" />
     <link rel="stylesheet" href="../summary/summary.css" />
     <link
       rel="shortcut icon"
@@ -16,6 +17,10 @@
     <title>Summary</title>
   </head>
   <body onload="initNavbar(), initSum()">
+    <div class="greeting-animation">
+      <span id="greeting-1"></span>
+      <h1 id="renderName-1"></h1>
+    </div>
     <div w3-include-html="../comp/sidebar/sidebar.html"></div>
     <div class="navbar-wrap" w3-include-html="../comp/navbar/navbar.html"></div>
     <div class="main-wrap">
@@ -137,8 +142,8 @@
         </div>
       </div>
       <div class="good-morning-text">
-        <span id="greeting"></span>
-        <h1 id="renderName">Sofia Müller</h1>
+        <span id="greeting-2"></span>
+        <h1 id="renderName-2"></h1>
       </div>
     </div>
   </body>

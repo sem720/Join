@@ -8,12 +8,12 @@ function initSum() {
 function displayInfo() {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  if (user && user.name) {
-    const uname = user.name;
-
-    document.getElementById("renderName").innerText = uname;
+  if (user && user.name && user.name !== "Guest") {
+    document.getElementById("renderName-1").innerText = user.name;
+    document.getElementById("renderName-2").innerText = user.name;
   } else {
-    document.getElementById("renderName").innerText = "Guest";
+    document.getElementById("renderName-1").innerText = "";
+    document.getElementById("renderName-2").innerText = "";
   }
 }
 
@@ -22,14 +22,15 @@ function getGreeting() {
   let message;
 
   if (hour < 12) {
-    message = "Good morning,";
+    message = "Good morning";
   } else if (hour < 18) {
-    message = "Nice to see you,";
+    message = "Nice to see you";
   } else {
-    message = "Good night,";
+    message = "Good night";
   }
 
-  document.getElementById("greeting").innerText = message;
+  document.getElementById("greeting-1").innerText = message;
+  document.getElementById("greeting-2").innerText = message;
 }
 
 async function countTasks() {
@@ -41,7 +42,6 @@ async function countTasks() {
     const taskCount = data ? Object.keys(data).length : 0;
     document.getElementById("totalTasks").innerText = `${taskCount}`;
   } catch (error) {
-    console.error("Fehler beim Abrufen der Tasks:", error);
     document.getElementById("totalTasks").innerText = "-";
   }
 }
@@ -62,7 +62,6 @@ async function countUrgentTasks() {
 
     document.getElementById("urgentTasks").innerText = `${urgentCount}`;
   } catch (error) {
-    console.error("Fehler beim Abrufen der Urgent Tasks:", error);
     document.getElementById("urgentTasks").innerText = "-";
   }
 }
