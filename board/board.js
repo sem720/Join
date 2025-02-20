@@ -14,15 +14,31 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function openAddTaskModal() {
-    document.querySelector(".modal").classList.remove("hidden");
-    document.querySelector(".overlay").classList.remove("hidden");
+    const overlay = document.getElementById("task-overlay");
+    const modal = document.getElementById("addTaskModal");
+  
+    overlay.classList.remove("hidden");
+    modal.classList.remove("show");    
+    modal.classList.remove("hidden");  
+  
+    void modal.offsetHeight; // or modal.offsetWidth
+  
+    modal.classList.add("show");
+  
     fetchAddTaskContent();
-}
-
-function closeModal() {
-    document.querySelector(".overlay").classList.add("hidden");
-    document.querySelector(".modal").classList.add("hidden");
-}
+  }
+  
+  function closeModal() {
+    const overlay = document.getElementById("task-overlay");
+    const modal = document.getElementById("addTaskModal");
+  
+    overlay.classList.add("hidden");
+    modal.classList.remove("show");
+  
+    setTimeout(() => {
+      modal.classList.add("hidden");
+    }, 400); 
+  }
 
 function closeAddTaskModal() {
     
@@ -70,6 +86,6 @@ function findTask() {
 }
 
 function initBoard() {
-    document.getElementById("close-modal").addEventListener("click", closeAddTaskModal);
+    
 }
 
