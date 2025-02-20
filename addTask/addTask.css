@@ -15,6 +15,12 @@ body {
     margin: 0;
 }
 
+#addTask-wrap {
+    padding: 40px;
+    margin-top: 72px;
+    width: 90vw;
+}
+
 .required {
     color: #FF8190;
     margin-left: -5px;
@@ -35,16 +41,17 @@ body {
 .left-container {
     display: flex;
     flex-direction: column;
-    width: 300px;
+    align-items: flex-start;
+    min-width: 300px;
     width: 50%;
     flex: 1;
     box-sizing: border-box;
-    
 }
 
 .right-container {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     min-width: 300px;
     width: 50%;
     flex: 1;
@@ -58,10 +65,10 @@ body {
 }
 
 .h1-addTask {
-    margin: 88px 0 16px 100px !important;
+    margin-left: 100px;
+    margin-bottom: 16px !important;
     font-weight: 700;
     margin-block-end: 0;
-    max-width: 1200px;
     width: 80%;
 }
 
@@ -148,9 +155,8 @@ select {
     display: flex;
     justify-content: space-between;
     align-items: start;
-    max-width: 1200px;
-    width: 70%;
-    flex: 1;
+    max-width: 1000px;
+    width: 73%;
 }
 
 .text {

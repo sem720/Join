@@ -1,33 +1,75 @@
-function openAddTaskModal() {
-    document.getElementById("task-overlay").classList.remove("hidden");
-    document.getElementById("add-task-modal").classList.remove("hidden");
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.querySelector('.modal-content');
+    const closeBtn = document.querySelector(".close-btn");
+    const overlay = document.querySelector(".overlay");
 
-    fetch("/addTask/addTaskContent.html")
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById("modal-body").innerHTML = html;
-            
-            window.init();
-            window.initAddTaskContacts();
-        })
-        .catch(error => console.error("Error loading modal content:", error));
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    };
+});
+
+function openAddTaskModal() {
+    document.querySelector(".modal").classList.remove("hidden");
+    document.querySelector(".overlay").classList.remove("hidden");
+    fetchAddTaskContent();
 }
 
-function closeModalWitchClick() {
-    document.getElementById("close-modal").addEventListener("click", closeAddTaskModal);
+function closeModal() {
+    document.querySelector(".overlay").classList.add("hidden");
+    document.querySelector(".modal").classList.add("hidden");
 }
 
 function closeAddTaskModal() {
-    document.getElementById("task-overlay").classList.add("hidden");
-    document.getElementById("add-task-modal").classList.add("hidden");
+    
 }
 
+function fetchAddTaskContent() {
+    fetch("/addTask/addTaskContent.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("modal-body").innerHTML = data;
+
+            const tempElement = document.createElement('div');
+            tempElement.innerHTML = data;
+
+            const scripts = tempElement.querySelectorAll('script');
+            scripts.forEach(script => {
+                const newScript = document.createElement('script');
+                newScript.textContent = script.textContent;
+                document.body.appendChild(newScript);
+            });
+        })
+        .catch(error => console.error('Error fetching addTaskContent.html:', error));
+}
+
+
+
+function toggleButtons(button) {
+    const buttons = document.querySelectorAll('.btn-switch');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
+}
+
+function clearTask() {
+    // Implement the clear task functionality
+    console.log("Clear task function called");
+}
+
+function createTask(event) {
+    event.preventDefault();
+    // Implement the create task functionality
+    console.log("Create task function called");
+}
 function findTask() {
 
 }
 
 function initBoard() {
-    openAddTaskModal(),
-    closeModalWitchClick();
-
+    document.getElementById("close-modal").addEventListener("click", closeAddTaskModal);
 }
+

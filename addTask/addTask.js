@@ -117,49 +117,61 @@ function toggleDropdown(dropdownContainer, dropdownList) {
 }
   
 function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
-  const defaultText = "Select a category"; // Default text
+  const defaultText = "Select a category"; // Unverändert
   
+  initOptionClickListeners(dropdownBtn, dropdownList, categoryInput, defaultText);
+  initResetClickListener(dropdownBtn, categoryInput, defaultText);
+}
+
+function initOptionClickListeners(dropdownBtn, dropdownList, categoryInput, defaultText) {
   document.querySelectorAll(".dropdown-options li").forEach((option) => {
     option.addEventListener("click", function () {
       const selectedText = this.textContent;
       const selectedValue = this.getAttribute("data-value");
-
-      dropdownBtn.innerHTML = `${selectedText} 
-                              <span class="icon-container">
-                                  <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
-                              </span>
-                            `; 
+      
+      // 1) Button-Text & Icon setzen
+      dropdownBtn.innerHTML = `
+        ${selectedText}
+        <span class="icon-container">
+          <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+        </span>
+      `;
+      // 2) Category-Value merken
       document.getElementById("selected-category").value = selectedValue;
+      // 3) Dropdown schließen
       dropdownContainer.classList.remove("open");
       dropdownList.style.display = "none";
     });
   });
-  
-  // Reset to default when clicking on the selected option again
+}
+
+function initResetClickListener(dropdownBtn, categoryInput, defaultText) {
   dropdownBtn.addEventListener("click", () => {
-    if (dropdownBtn.textContent.trim() !== defaultText && !dropdownContainer.classList.contains("open")) {
-      dropdownBtn.innerHTML = `${defaultText} 
-                                 <span class="icon-container">
-                                  <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
-                              </span>
-                             `; 
+    // Nur zurücksetzen, wenn aktuell eine Kategorie gesetzt ist
+    // und das Dropdown nicht offen ist.
+    if (
+      dropdownBtn.textContent.trim() !== defaultText &&
+      !dropdownContainer.classList.contains("open")
+    ) {
+      dropdownBtn.innerHTML = `
+        ${defaultText}
+        <span class="icon-container">
+          <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+        </span>
+      `;
       categoryInput.value = "";
     }
   });
 }
+
 
 //Initialisiert Event Listener für das + Icon und das Inputfeld 
 function setupAddSubtaskButton() {
   const addSubtaskBtn = document.querySelector(".add-subtask-icon");
   const inputField = document.getElementById("subtasks");
 
-  if (addSubtaskBtn) {
-    addSubtaskBtn.addEventListener("click", handleAddSubtaskClick);
-  }
-
-  if (inputField) {
-    inputField.addEventListener("input", handleSubtaskInput);
-  }
+  if (addSubtaskBtn) addSubtaskBtn.addEventListener("click", handleAddSubtaskClick);
+  if (inputField) inputField.addEventListener("input", handleSubtaskInput);
 }
 
 //wird aufgerufen, wenn auf das + icon geklickt wird

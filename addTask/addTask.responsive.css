@@ -1,0 +1,5 @@
+@media only screen and (max-width: 1330px) {
+    .main-addTask, .h1-addTask, .footer {
+        margin-left: 60px !important;
+    }
+}

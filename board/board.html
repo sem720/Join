@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board</title>
-    <link rel="stylesheet"  href="/root.css">
-    <link rel="stylesheet" type="text/css" href="/board/board.css">
+    <link rel="stylesheet" href="/root.css">
+    <link rel="stylesheet" href="/board/board.css">
     <link rel="stylesheet" href="/comp/components.css">
     <link rel="stylesheet" href="/comp/navbar/navbar.css">
     <link rel="stylesheet" href="/comp/sidebar/sidebar.css">
@@ -24,18 +24,16 @@
       media="(prefers-color-scheme: dark)"
     />
 </head>
-<body onload="initBoard()">
+<body>
     <div class="navbar-wrap" w3-include-html="/comp/navbar/navbar.html"></div>
     <div w3-include-html="/comp/sidebar/sidebar.html"></div>
 
     <!-- Modal und Overlay -->
     <div id="task-overlay" class="overlay hidden"></div>
-    <div id="add-task-modal" class="modal hidden">
-      <div id="add-task-content" class="modal-content">
+    <div id="addTaskModal" class="modal hidden">
         <button id="close-modal" class="close-btn">&times;</button>
 
         <div id="modal-body"></div>
-      </div>
     </div>
 
     <!-- Haupt-Board -->
@@ -59,9 +57,9 @@
         </div>
       </div>
     </div>
-    <script src="/addTask/addTask.js"></script>
-    <script src="/addTask/addTask.contact.js"></script>
-    <script src="/addTask/addTask.createTask.js"></script>
+    <script src="/addTask/addTask.js" defer></script>
+    <script src="/addTask/addTask.contact.js" defer></script>
+    <script src="/addTask/addTask.createTask.js" defer></script>
     <script src="/board/board.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script>
