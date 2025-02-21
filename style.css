@@ -28,6 +28,15 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   height: 330px;
+  z-index: 10;
+}
+
+#join-logo path {
+  fill: #2a3647;
+}
+
+#bright-blue {
+  fill: #29abe2 !important;
 }
 
 @keyframes join-animation {
@@ -191,8 +200,18 @@ body {
     width: 350px;
   }
 
-  .mobile {
-    display: block;
+  .login-buttons {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-head h1 {
+    font-size: 3.7rem;
+  }
+
+  #join-logo path {
+    fill: #ffffff;
+    animation: fade-color 1s forwards;
   }
 
   @keyframes join-animation {
@@ -209,7 +228,6 @@ body {
       transform: translate(-0%, -0%);
     }
   }
-
   @keyframes fade-out {
     0% {
       background: #2a3647;
@@ -220,6 +238,19 @@ body {
     }
     100% {
       background: #2a364700;
+    }
+  }
+
+  @keyframes fade-color {
+    0% {
+      fill: #ffffff;
+    }
+
+    30% {
+      fill: #ffffff;
+    }
+    100% {
+      fill: #2a3647;
     }
   }
 }

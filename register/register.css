@@ -6,6 +6,7 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 #join-logo {
@@ -13,6 +14,64 @@ body {
   top: 80px;
   left: 70px;
   height: 110px;
+}
+
+.div-join-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  background: #f6f7f8;
+  pointer-events: none;
+  animation: fade-out 1s forwards;
+}
+
+#join-logo {
+  animation: join-animation 1s forwards;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 330px;
+  z-index: 10;
+}
+
+#join-logo path {
+  fill: #2a3647;
+}
+
+#bright-blue {
+  fill: #29abe2 !important;
+}
+
+@keyframes join-animation {
+  0% {
+    height: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    top: 80px;
+    left: 70px;
+    height: 110px;
+    transform: translate(-0%, -0%);
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    background: #f6f7f8;
+  }
+
+  35% {
+    background: #f6f7f8;
+  }
+  100% {
+    background: #f6f7f800;
+  }
 }
 
 .form {
@@ -155,6 +214,12 @@ body {
   display: none;
 }
 
+@media (max-width: 1010px) {
+  #join-logo {
+    display: none;
+  }
+}
+
 @media (max-width: 670px) {
   .form {
     padding: 2rem 0;
@@ -176,6 +241,10 @@ body {
     width: 280px;
   }
 
+  .form-head h1 {
+    font-size: 3.7rem;
+  }
+
   .div-alert {
     width: 350px;
   }
@@ -186,6 +255,15 @@ body {
 
   .btn-dark {
     padding: 12px 50px;
+  }
+
+  #join-logo {
+    display: block;
+  }
+
+  #join-logo path {
+    fill: #ffffff;
+    animation: fade-color 1s forwards;
   }
 
   @keyframes join-animation {
@@ -200,6 +278,31 @@ body {
       left: 30px;
       height: 80px;
       transform: translate(-0%, -0%);
+    }
+  }
+  @keyframes fade-out {
+    0% {
+      background: #2a3647;
+    }
+
+    35% {
+      background: #2a3647;
+    }
+    100% {
+      background: #2a364700;
+    }
+  }
+
+  @keyframes fade-color {
+    0% {
+      fill: #ffffff;
+    }
+
+    30% {
+      fill: #ffffff;
+    }
+    100% {
+      fill: #2a3647;
     }
   }
 }
