@@ -39,21 +39,16 @@ function closeAddContact() {
  * @param {string} contactId - The unique identifier for the contact to be edited.
  * @returns {Promise<void>} A promise that resolves when the overlay is opened.
  */
-async function openEditContact(contactId) {
-    console.log("Aufgerufene contactId:", contactId);
+async function openEditContact(contactId) { // console.log("Aufgerufene contactId:", contactId);
     try {
         const response = await fetch(`${BASE_URL}${contactId}.json`);
         const contact = await response.json();
-
         document.getElementById("editContactName").value = contact.name;
         document.getElementById("editContactEmail").value = contact.email;
         document.getElementById("editContactPhone").value = contact.tel;
-
         document.getElementById("editContactOverlay").classList.add("overlay", "active");
         document.getElementById("editContactOverlay").classList.remove("closing");
-        document.getElementById("editContact").addEventListener("click", (e) => {
-            e.stopPropagation();
-        });
+        document.getElementById("editContact").addEventListener("click", (e) => e.stopPropagation());
         document.getElementById("editContact").setAttribute("data-contact-id", contactId);
     } catch (error) {
         console.error("Fehler beim Laden der Kontaktdaten:", error);
