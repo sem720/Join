@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Task Modal</title>
-    <link rel="stylesheet" href="/root.css">
+    <link rel="stylesheet" href="/board/addTaskModal.css">
     <link rel="stylesheet" href="/addTask/addTask.css">
-    <link rel="stylesheet" href="/addTask/addTask.comps.css">
     <script src="/addTask/addTask.js" defer></script>
     <script src="/addTask/addTask.contact.js" defer></script>
     <script src="/addTask/addTask.createTask.js" defer></script>
@@ -15,6 +14,7 @@
     <div class="modal-addTask-container">
     <h1 class="h1-addTask">Add Task</h1>
     <main class="main-addTask">
+        <form onsubmit="createTask(event)">
         <div class="left-container">
             <form>
                 <label for="task-name">Title <span class="required">*</span></label>
@@ -40,47 +40,46 @@
         </div>
 
         <div class="right-container">
-            <form>
-                <label for="due-date">Due Date <span class="required">*</span></label>
-                <input type="date" class="input-standard" id="due-date" name="due-date" data-placeholder="dd/mm/yyyy">
-                <div class="error-message" style="display: none;"></div>
+            <label for="due-date">Due Date <span class="required">*</span></label>
+            <input type="date" class="input-standard" id="due-date" name="due-date" data-placeholder="dd/mm/yyyy">
+            <div class="error-message" style="display: none;"></div>
 
-                <label for="priority">Prio</label>
-                <div class="button-container">
-                    <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
-                        Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon">
-                    </button>
-                    <button class="btn-switch" id="medium" name="medium" type="button" onclick="toggleButtons(this)">
-                        Medium <img src="/assets/imgs/medium.png" alt="medium-icon">
-                    </button>
-                    <button class="btn-switch" id="low" name="low" type="button" onclick="toggleButtons(this)">
-                        Low <img src="/assets/imgs/low.png" alt="low-icon">
-                    </button>
-                </div>
+            <label for="priority">Prio</label>
+            <div class="button-container">
+                <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
+                    Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon">
+                </button>
+                <button class="btn-switch" id="medium" name="medium" type="button" onclick="toggleButtons(this)">
+                    Medium <img src="/assets/imgs/medium.png" alt="medium-icon">
+                </button>
+                <button class="btn-switch" id="low" name="low" type="button" onclick="toggleButtons(this)">
+                    Low <img src="/assets/imgs/low.png" alt="low-icon">
+                </button>
+            </div>
 
-                <label for="category" id="category">Category <span class="required">*</span></label>
-                <div class="dropdown-container" id="category-container">
-                    <button class="dropdown-btn" id="dropdown-btn">Select task category
-                        <span class="icon-container">
-                            <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
-                        </span>
-                    </button>
-                    <div class="dropdown-options" id="dropdown-list">
-                        <li data-value="technical_task">Technical Task</li>
-                        <li data-value="user_story">User Story</li>
-                    </div>
+            <label for="category" id="category">Category <span class="required">*</span></label>
+            <div class="dropdown-container" id="category-container">
+                <button class="dropdown-btn" id="dropdown-btn">Select task category
+                    <span class="icon-container">
+                        <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                    </span>
+                </button>
+                <div class="dropdown-options" id="dropdown-list">
+                    <li data-value="technical_task">Technical Task</li>
+                    <li data-value="user_story">User Story</li>
                 </div>
-                <input type="hidden" id="selected-category" name="selected-category"> 
-                <div class="error-message" style="display: none;"></div>
+            </div>
+            <input type="hidden" id="selected-category" name="selected-category"> 
+            <div class="error-message" style="display: none;"></div>
 
-                <label for="subtasks">Subtasks</label>
-                <div class="subtask-input-wrapper">
-                    <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask" autocomplete="off">
-                    <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon">
-                </div>
-                <ul id="subtask-list"></ul>
-            </form>
+            <label for="subtasks">Subtasks</label>
+            <div class="subtask-input-wrapper">
+                <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask" autocomplete="off">
+                <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon">
+            </div>
+            <ul id="subtask-list"></ul>
         </div>
+    </form>
     </main>
     <section class="footer">
         <div class="text"><span class="required">*</span>This field is required.</div>
@@ -105,7 +104,7 @@
     <script>
         window.taskUI.init()
         window.contactsModule.allcontacts()
-        w
+        
     </script>
 </body>
 </html>
