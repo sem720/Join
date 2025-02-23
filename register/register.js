@@ -1,44 +1,8 @@
 const dbUrl =
   "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app";
 
-// Add User function ==>
-// function addUser() {
-//   if (!validateForm()) {
-//     return; // break when validation is false
-//   }
 
-//   let email = document.getElementById("idEmail").value.trim().toLowerCase();
-//   let password = document.getElementById("idPassword").value;
-//   let name = document.getElementById("idName").value.toLowerCase();
-//   let signupAlert = document.getElementById("sign-up-alert");
-
-//   const randomColor = getRandomColor();
-
-//   let userData = {
-//     name,
-//     email,
-//     password,
-//     bgcolor: randomColor,
-//   };
-
-//   const firebaseKey = email.replace(/\./g, "_").replace(/@/g, "-");
-
-//   fetch(`${dbUrl}/users/${firebaseKey}.json`, {
-//     method: "PUT",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(userData),
-//   })
-//     .then(() => {
-//       signupAlert.classList.add("anim-sign-up");
-//       resetForm();
-//       setTimeout(() => {
-//         window.location.href = "../index.html";
-//       }, 1500);
-//     })
-//     .catch((error) => console.error("Fehler:", error));
-// }
-
-// Add User function ==> neue Funktion
+// Add User function
 async function addUser() {
   if (!validateForm()) return;
 
