@@ -4,6 +4,7 @@
        flex-direction: column;
        min-height: 60vh;
        gap: 1rem;
+       width: 100%;
     }
 
     .h1-addTask {
@@ -12,6 +13,7 @@
         line-height: normal;
         padding-top: 24px;
         padding-bottom: 24px;
+        margin: 0 !important;
     }
 
     #addTask-wrap {
@@ -19,12 +21,14 @@
     }
 
     input, .assignment-container, .assignment-btn {
-        width: 300px !important;
+        min-width: 300px !important;
+        width: 100% !important;
         height: 32px;
     }
 
     textarea, .button-container, #contacts-container {
-        width: 300px !important;
+        min-width: 300px !important;
+        width: 100% !important;
     }
 
     .subtask-input-wrapper, #label-subtask {
@@ -39,7 +43,7 @@
         padding: 0;
         height: 300px;
         justify-content: center;
-        
+        width: 100%;
     }
 
     .footer > .text, #category, .dropdown-container{
@@ -58,12 +62,17 @@
         font-size: 14px;
    }
 
-   input, #due-date {
-        padding: 8px;
+   #task-name {
+        padding: 8px !important;
+   }
+
+   #due-date[data-placeholder] {
+        font-size: 14px !important;
    }
 
    #urgent, #medium, #low {
-        width: 110px;
+        min-width: 90px;
+        width: 100%;
         height: 32px;
         font-size: 14px;
    }
@@ -96,13 +105,26 @@
 
    .contact-checkbox {
         width: 20% !important;
+        outline: none !important;
    }
 
    #contacts-container {
         padding: 0;
    }
 
-   ::selection {
-        background-color: white !important;
+   .contact-checkbox:focus {
+        box-shadow: none;
    }
+
+   #selected-contacts-container {
+        padding-top: 4px;
+   }
+
+   #selected-contacts-container > div {
+        margin-right: 2px !important;
+   }
+}
+
+@media only screen and (max-width: 768px) {
+    
 }
