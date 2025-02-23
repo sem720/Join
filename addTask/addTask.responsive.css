@@ -1,5 +1,108 @@
-@media only screen and (max-width: 1330px) {
-    .main-addTask, .h1-addTask, .footer {
-        margin-left: 60px !important;
+@media only screen and (max-width: 500px) {
+    .main-addTask, form {
+       display: flex;
+       flex-direction: column;
+       min-height: 60vh;
+       gap: 1rem;
     }
+
+    .h1-addTask {
+        font-size: 3rem;
+        display: block;
+        line-height: normal;
+        padding-top: 24px;
+        padding-bottom: 24px;
+    }
+
+    #addTask-wrap {
+        padding: 10px;
+    }
+
+    input, .assignment-container, .assignment-btn {
+        width: 300px !important;
+        height: 32px;
+    }
+
+    textarea, .button-container, #contacts-container {
+        width: 300px !important;
+    }
+
+    .subtask-input-wrapper, #label-subtask {
+        display: none;
+    }
+
+    label, .assignment-btn {
+        font-size: 14px;
+    }
+
+    .right-container, .left-container {
+        padding: 0;
+        height: 300px;
+        justify-content: center;
+        
+    }
+
+    .footer > .text, #category, .dropdown-container{
+        display: none;
+    }
+
+    .footer {
+        justify-content: flex-end;
+    }
+
+    .btn-div-footer {
+        gap: 24px;
+    }
+
+   ::placeholder {
+        font-size: 14px;
+   }
+
+   input, #due-date {
+        padding: 8px;
+   }
+
+   #urgent, #medium, #low {
+        width: 110px;
+        height: 32px;
+        font-size: 14px;
+   }
+
+   .btn-switch > img {
+        width: 12px;
+        height: 10px;
+   }
+
+   .contact-item {
+        white-space: nowrap;
+        gap: 10px;
+        width: 100%;
+   }
+
+   .contact-item > .contact-name {
+        width: 60%;
+   }
+
+   .contact-name {
+        font-size: 14px;
+        flex-grow: 1;
+   }
+
+   .avatar {
+        width: 20px;
+        height: 18px;
+        margin: 0 !important;
+   }
+
+   .contact-checkbox {
+        width: 20% !important;
+   }
+
+   #contacts-container {
+        padding: 0;
+   }
+
+   ::selection {
+        background-color: white !important;
+   }
 }

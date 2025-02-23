@@ -61,6 +61,9 @@
                 <label for="category" id="category">Category <span class="required">*</span></label>
                 <div class="dropdown-container" id="category-container">
                     <button class="dropdown-btn" id="dropdown-btn">Select task category
+                        <span class="icon-container">
+                            <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                        </span>
                     </button>
                     <div class="dropdown-options" id="dropdown-list">
                         <li data-value="technical_task">Technical Task</li>
@@ -83,7 +86,7 @@
         <div class="text"><span class="required">*</span>This field is required.</div>
         <div class="btn-div-footer">
             <button class="btn-bright clear-btn" onclick="clearTask()">
-                Clear
+                Cancel
                 <span class="clear-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 30 30">
                         <line x1="0" y1="0" x2="30" y2="30" stroke-width="3"/>
@@ -99,8 +102,10 @@
         <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
     </div>
     </div>
-    <script src="/addTask/addTask.js" defer></script>
-    <script src="/addTask/addTask.contact.js" defer></script>
-    <script src="/addTask/addTask.createTask.js" defer></script>
+    <script>
+        window.taskUI.init()
+        window.contactsModule.allcontacts()
+        w
+    </script>
 </body>
 </html>

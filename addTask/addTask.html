@@ -23,15 +23,15 @@
       media="(prefers-color-scheme: dark)"
     />
 </head>
-<body onload="init(); initAddTaskContacts();">
+<body onload="init(); initAddTaskContacts(); initNavbar()">
     <div class="navbar-wrap" w3-include-html="/comp/navbar/navbar.html"></div>
     <div w3-include-html="/comp/sidebar/sidebar.html"></div>
 
     <div id="addTask-wrap">
     <h1 class="h1-addTask">Add Task</h1>
     <main class="main-addTask">
-        <div class="left-container">
-            <form>
+        <form onsubmit="createTask(event)">
+            <div class="left-container">
                 <label for="task-name">Title <span class="required">*</span></label>
                 <input id="task-name" class="input-standard"  type="text" name="task-name" placeholder="Enter a title" required>
                 <div class="error-message" style="display: none;"></div>
@@ -39,7 +39,7 @@
                 <label for="description">Description</label>
                 <textarea id="description" name="description" placeholder="Enter a Description"></textarea>
                 
-                <label for="assignment" id="assignment">Assigned to</label>
+                <label id="assignment">Assigned to</label>
                 <div class="assignment-container" id="assignment">
                     <button class="assignment-btn" id="assignment-btn">Select contacts to assign 
                         <span class="icon-container">
@@ -51,16 +51,14 @@
                         <div id="contacts-list"></div>
                     </div>
                 </div>
-            </form>
         </div>
 
         <div class="right-container">
-            <form>
                 <label for="due-date">Due Date <span class="required">*</span></label>
                 <input type="date" class="input-standard" id="due-date" name="due-date" data-placeholder="dd/mm/yyyy">
                 <div class="error-message" style="display: none;"></div>
 
-                <label for="priority">Prio</label>
+                <label>Prio</label>
                 <div class="button-container">
                     <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
                         Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon">
@@ -73,7 +71,7 @@
                     </button>
                 </div>
                
-                <label for="category" id="category">Category <span class="required">*</span></label>
+                <label id="category">Category <span class="required">*</span></label>
                 <div class="dropdown-container" id="category-container">
                         <button class="dropdown-btn" id="dropdown-btn">Select task category
                         </button>
@@ -85,15 +83,15 @@
                 <input type="hidden" id="selected-category" name="selected-category"> 
                 <div class="error-message" style="display: none;"></div>
         
-                <label for="subtasks">Subtasks</label>
+                <label for="subtasks" id="label-subtask">Subtasks</label>
                 <div class="subtask-input-wrapper">
                     <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask" autocomplete="off">
                     <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon">
                 </div>
                 <ul id="subtask-list"></ul>
-              
-            </form>
-        </div>
+
+            </div>
+        </form>
     </main>
     <section class="footer">
         <div class="text"><span class="required">*</span>This field is required.</div>

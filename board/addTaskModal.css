@@ -34,4 +34,15 @@
     width: 870px;
 }
 
+.modal-addTask-container .clear-btn {
+    width: 100px;
+    background-color: white !important;
+}
 
+.modal-addTask-container input[type="date"] {
+    color: black;
+}
+
+.modal-addTask-container input[type="date"]::placeholder {
+    color: #d7d7d7 !important;
+}

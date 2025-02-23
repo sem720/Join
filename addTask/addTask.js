@@ -56,7 +56,6 @@ function changeImageStyle(button, action) {
   }
 }
 
-//Funktionen für das Datumsfeld
 function dateInput() {
   const dateInput = document.getElementById("due-date");
 
@@ -69,7 +68,6 @@ function dateInput() {
   });
 }
 
-//Zurücksetzen wenn auf kalender-icon geklickt wird
 function setupDateReset() {
   const dateInput = document.getElementById("due-date");
   if (dateInput) {
@@ -117,28 +115,26 @@ function toggleDropdown(dropdownContainer, dropdownList) {
 }
   
 function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
-  const defaultText = "Select a category"; // Unverändert
+  const defaultText = "Select a category"; 
   
   initOptionClickListeners(dropdownBtn, dropdownList, categoryInput, defaultText);
   initResetClickListener(dropdownBtn, categoryInput, defaultText);
 }
 
-function initOptionClickListeners(dropdownBtn, dropdownList, categoryInput, defaultText) {
+function initOptionClickListeners(dropdownBtn, dropdownList) {
   document.querySelectorAll(".dropdown-options li").forEach((option) => {
     option.addEventListener("click", function () {
       const selectedText = this.textContent;
       const selectedValue = this.getAttribute("data-value");
       
-      // 1) Button-Text & Icon setzen
       dropdownBtn.innerHTML = `
         ${selectedText}
         <span class="icon-container">
           <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
         </span>
       `;
-      // 2) Category-Value merken
+
       document.getElementById("selected-category").value = selectedValue;
-      // 3) Dropdown schließen
       dropdownContainer.classList.remove("open");
       dropdownList.style.display = "none";
     });
@@ -147,8 +143,6 @@ function initOptionClickListeners(dropdownBtn, dropdownList, categoryInput, defa
 
 function initResetClickListener(dropdownBtn, categoryInput, defaultText) {
   dropdownBtn.addEventListener("click", () => {
-    // Nur zurücksetzen, wenn aktuell eine Kategorie gesetzt ist
-    // und das Dropdown nicht offen ist.
     if (
       dropdownBtn.textContent.trim() !== defaultText &&
       !dropdownContainer.classList.contains("open")
@@ -164,8 +158,6 @@ function initResetClickListener(dropdownBtn, categoryInput, defaultText) {
   });
 }
 
-
-//Initialisiert Event Listener für das + Icon und das Inputfeld 
 function setupAddSubtaskButton() {
   const addSubtaskBtn = document.querySelector(".add-subtask-icon");
   const inputField = document.getElementById("subtasks");
@@ -174,7 +166,6 @@ function setupAddSubtaskButton() {
   if (inputField) inputField.addEventListener("input", handleSubtaskInput);
 }
 
-//wird aufgerufen, wenn auf das + icon geklickt wird
 function handleAddSubtaskClick() {
   const inputField = document.getElementById("subtasks");
   if (inputField.value.trim()) {
@@ -182,7 +173,6 @@ function handleAddSubtaskClick() {
   }
 }
 
-//wird aufgerufen, wenn der User im Inputfeld etwas eingibt oder löscht
 function handleSubtaskInput() {
   const inputField = document.getElementById("subtasks");
   const addSubtaskBtn = document.querySelector(".add-subtask-icon");
@@ -237,7 +227,6 @@ function clearSubtask() {
   addSubtaskBtn.style.display = "inline";
 }
 
-//Funktion für die Icons im Listenelement der Subtasks
 function createSubtaskListIcons() {
   const liActions = document.createElement("div");
   liActions.classList.add("li-actions");
@@ -324,7 +313,7 @@ function saveEdit(li, input) {
   span.classList.add("subtask-text");
   span.textContent = `• ${input.value.trim()}`;
 
-  const liActions = createSubtaskListIcons(); // Fügt wieder die normalen Icons hinzu
+  const liActions = createSubtaskListIcons(); 
 
   li.innerHTML = "";
   li.appendChild(span);
@@ -339,7 +328,6 @@ function deleteSubtask(event) {
 function clearTask() {
   ["task-name", "description", "subtasks"].forEach(id => document.getElementById(id).value = "");
     
-  // Datum zurücksetzen
   resetDateInput(document.getElementById("due-date"));
   document.getElementById("dropdown-btn").innerHTML = `Select task category <span class="icon-container"><img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon"></span>`;
   document.getElementById("selected-contacts-container").innerHTML = "";
@@ -353,7 +341,7 @@ function initEventListeners() {
 }
 
 function handleTaskCreation(event) {
-  event.preventDefault(); // Verhindert, dass das Formular abgeschickt wird
+  event.preventDefault(); 
 
   if (validateForm()) {
     alert("Task created!"); 
@@ -375,6 +363,50 @@ function init() {
   clearTask();
 }
 
+window.taskUI = {
+  activeButton,
+  dropdownBtn,
+  dropdownList,
+  dropdownIcon,
+  categoryInput,
+  dropdownContainer,
+  toggleButtons,
+  activateButton,
+  deactivateButton,
+  changeButtonStyle,
+  changeImageStyle,
+  dateInput,
+  setupDateReset,
+  handleDateReset,
+  iconClicked,
+  resetDateInput,
+  initialDefaultPriority,
+  setupDropdownToggle,
+  toggleDropdown,
+  setupDropdownOptions,
+  initOptionClickListeners,
+  initResetClickListener,
+  setupAddSubtaskButton,
+  handleAddSubtaskClick,
+  handleSubtaskInput,
+  createSubtaskIcons,
+  showSubtaskActions,
+  createIcon,
+  clearSubtask,
+  createSubtaskListIcons,
+  createSubtaskElement,
+  saveSubtask,
+  editSubtask,
+  createEditInput,
+  createEditActions,
+  cancelEdit,
+  saveEdit,
+  deleteSubtask,
+  clearTask,
+  initEventListeners,
+  handleTaskCreation,
+  init
+};
 
 
 

@@ -45,7 +45,6 @@ async function fetchContacts() {
         let bgcolor = user.bgcolor;
 
         allContacts.set(name, { name, bgcolor }); 
-    
         contactsList.appendChild(createContactElement(name, bgcolor));
     }); 
 }
@@ -122,3 +121,17 @@ function getInitials(name) {
     return parts.map((part) => part[0]).join("").toUpperCase();
 }
 
+window.contactsModule = {
+    allContacts,
+    selectedContacts,
+    initAddTaskContacts,
+    fetchContacts,
+    capitalizeName,
+    createContactElement,
+    updateSelectedContactsDisplay,
+    createAvatar,
+    createCheckbox,
+    toggleContactSelection,
+    createElement,
+    getInitials
+};

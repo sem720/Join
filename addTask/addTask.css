@@ -11,14 +11,14 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    width: 100%;
     margin: 0;
+    overflow: hidden;
 }
 
 #addTask-wrap {
-    padding: 40px;
-    margin-top: 72px;
-    width: 90vw;
+    height: 80vh;
+    padding: 100px 0 0 100px;
+    overflow: hidden;
 }
 
 .required {
@@ -29,13 +29,15 @@ body {
 }
 
 .main-addTask {
+    max-width: 900px;
+}
+
+.main-addTask form {
     display: flex;
     justify-content: center;
     align-items: flex-start;
     height: 50vh;
-    max-width: 1200px;
-    width: 80%;
-    margin-left: 100px;
+    max-width: 900px;
 }
 
 .left-container {
@@ -52,17 +54,17 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    padding-left: 97px;
     min-width: 300px;
     width: 50%;
     flex: 1;
 }
 
 .h1-addTask {
-    margin-left: 100px;
     margin-bottom: 16px !important;
     font-weight: 700;
     margin-block-end: 0;
-    width: 80%;
+    width: 300px;
 }
 
 label {
@@ -85,15 +87,6 @@ input, textarea {
     cursor: pointer;
     padding-left: 16px !important;
     transition: var(--transition);
-}
-
-#due-date {
-   color:  #D7D7D7;
-   font-family: "Inter", sans-serif;
-}
-
-#due-date.has-value {
-    color: black;
 }
 
 textarea {
@@ -136,20 +129,12 @@ select {
     cursor: pointer;
 }
 
-.button-container {
-    display: flex;
-    justify-content: space-between;
-    width: 400px;
-    gap: 12px;
-}
-
 .footer {
-    margin-left: 100px;
     display: flex;
     justify-content: space-between;
     align-items: start;
-    max-width: 1000px;
-    width: 73%;
+    max-width: 900px;
+    align-self: flex-end;
 }
 
 .text {
@@ -191,12 +176,6 @@ select {
     position: relative;
     width: 400px;
     height: 42px;
-}
-
-.dropdown-btn {
-    height: 42px;
-    box-sizing: border-box;
-    margin-bottom: 0;
 }
 
 .subtask-input-wrapper {
@@ -397,10 +376,6 @@ ul {
     width: 100%;
 }
 
-#confirm-selection:hover {
-    background-color: #0056b3;
-}
-
 .assignment-container{
     position: relative;  
 }
@@ -420,84 +395,5 @@ ul {
     justify-content: center;
 }
 
-.icon-container:hover {
-    background-color: #F6F7F8;
-    border-radius: 50%;
-}
 
-#contacts-list {
-    display: none;
-}
-  
-#contacts-list.visible {
-    display: block;
-}
 
-.selected-contacts-container {
-    display: flex;
-}
-
-.selected-contacts-container > div {
-    margin-top: 8px;
-    margin-right: 4px;
-    display: flex;
-}
-
-#task-name, #due-date, #category-container {
-    position: relative;
-}
-
-#task-name, 
-#description, 
-#due-date, 
-.button-container, 
-.dropdown-container {
-    margin-bottom: 24px;
-}
-
-#task-name.error, 
-#description.error, 
-#due-date.error, 
-.button-container.error, 
-.dropdown-container.error {
-    margin-bottom: none; 
-}
-
-.task-popup {
-    width: 250px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-    font-size: 18px !important;
-    font-weight: 300 !important;
-    border-radius: 18px !important;
-    position: fixed;
-    bottom: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: bottom 0.5s ease-out, opacity 0.5s ease-in-out;
-}
-
-.task-popup.show {
-    bottom: 50%;
-    opacity: 1;
-}
-
-@keyframes slideIn {
-    from {
-        bottom: -100px;
-        opacity: 0;
-    }
-    to {
-        bottom: 50%;
-        opacity: 1;
-    }
-}
-
-#popup-icon {
-    width: 25px;
-    height: 29px;
-}

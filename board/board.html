@@ -24,7 +24,7 @@
       media="(prefers-color-scheme: dark)"
     />
 </head>
-<body onload="initBoard()">
+<body onload="initBoard(), initNavbar()">
     <div class="navbar-wrap" w3-include-html="/comp/navbar/navbar.html"></div>
     <div w3-include-html="/comp/sidebar/sidebar.html"></div>
 
@@ -56,6 +56,40 @@
           </button>
         </div>
       </div>
+      <section class="board-main">
+
+        <div class="toDo column" id="to-do">
+          <div class="column-header">
+            <h3 class="h3-column">To do</h3>
+            <img src="/assets/imgs/plus-button.png" alt="plus-button" id="plus-button" onclick="openAddTaskModal()">
+          </div>
+          <div class="column-body"></div>
+        </div>
+
+        <div class="inProgress column" id="in-progress">
+          <div class="column-header">
+            <h3 class="h3-column">In progress</h3>
+            <img src="/assets/imgs/plus-button.png" alt="plus-button" id="plus-button" onclick="openAddTaskModal()">
+          </div>
+          <div class="column-body"></div>
+        </div>
+         
+        <div class="feedback column" id="awaitFeedback">
+          <div class="column-header">
+            <h3 class="h3-column">Await feedback</h3>
+            <img src="/assets/imgs/plus-button.png" alt="plus-button" id="plus-button" onclick="openAddTaskModal()">
+          </div>
+          <div class="column-body"></div>
+        </div>
+
+        <div class="done column" id="done">
+          <div class="column-header">
+            <h3 class="h3-column">Done</h3>
+          </div>
+          <div class="column-body"></div>
+        </div>
+
+      </section>
     </div>
     <script src="/addTask/addTask.js" defer></script>
     <script src="/addTask/addTask.contact.js" defer></script>

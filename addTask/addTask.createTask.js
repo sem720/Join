@@ -12,7 +12,7 @@ function createTask(event) {
     .then(() => {
         showTaskPopup(); 
         setTimeout(() => {
-            window.location.href = "/board/board.html"; // Nach 2 Sekunden zur Board-Seite
+            window.location.href = "/board/board.html"; 
         }, 1500);
     })
     .catch(error => {
@@ -34,32 +34,76 @@ function getTaskFormData() {
 }
 
 function getValue(selector) {
-    return document.querySelector(selector)?.value.trim() || "";
+    let value = document.querySelector(selector)?.value.trim() || "";
+    return formatText(value);
 }
 
 function getSelectedPriority() {
-    return document.querySelector(".btn-switch.active")?.innerText.trim() || "Medium";
+    const priorityText = document.querySelector(".btn-switch.active")?.innerText.trim() || "Medium";
+
+    const priorityImages = {
+        "Low": "/assets/imgs/low.png",
+        "Medium": "/assets/imgs/medium.png",
+        "Urgent": "/assets/imgs/urgent.png"
+    };
+
+    return {
+        text: priorityText,
+        image: priorityImages[priorityText] || "/assets/img/medium.png" // Default to "Medium"
+    };
 }
 
 function getSelectedContacts() {
     const selectedCheckboxes = Array.from(document.querySelectorAll(".contact-checkbox:checked"));
+    
+    return selectedCheckboxes.map(checkbox => {
+        let name = checkbox.dataset.contactName?.trim() || "Unknown";
+        let bgcolor = checkbox.dataset.contactBgcolor;
 
-    console.log("🎯 Gefundene Checkboxen:", selectedCheckboxes);
-
-    const selected = selectedCheckboxes.map(checkbox => {
-        console.log("📌 Checkbox Data:", checkbox, "dataset.contactId:", checkbox.dataset.contactId);
-        return checkbox.dataset.contactId || "FEHLER"; // Falls `undefined`, sehen wir "FEHLER" in der Konsole
+        return {
+            name: name,
+            avatar: generateAvatar(name, bgcolor)
+        };
     });
-
-    console.log("✅ Ausgewählte Kontakte für Backend:", selected);
-
-    return selected.filter(id => id !== "FEHLER" && id !== undefined && id !== "");
 }
 
+function getInitials(name) {
+    if (!name) return "??";  // ✅ Return placeholder initials if undefined
+
+    const parts = name.split(" ");
+    return parts.map(part => part[0]).join("").toUpperCase();
+}
+
+function generateAvatar(name, bgcolor) {
+    let initials = getInitials(name);
+    return {
+        initials: initials,
+        bgcolor: bgcolor
+    };
+}
+
+function getSelectedCategory() {
+    const category = document.querySelector("#selected-category")?.value.trim().toLowerCase();
+
+    if (category === "technical task" || category === "user story") {
+        return category
+            .split(" ") 
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
+            .join(" "); 
+    }
+}
 
 function getSubtasks() {
-    return Array.from(document.querySelectorAll(".subtask-text"))
-                .map(subtask => subtask.innerText.trim());
+    return Array.from(document.querySelectorAll("#subtask-list li"))
+        .map(subtask => formatText(subtask.innerText.trim()));
+}
+
+function formatText(text) {
+    return text
+        .replace(/_/g, " ")
+        .split(" ") 
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) 
+        .join(" "); 
 }
 
 function validateTaskData(taskData) {
@@ -72,7 +116,6 @@ function validateTaskData(taskData) {
     return isValid;
 }
 
-// Zeigt eine Fehlermeldung an
 function showError(selector, message) {
     let field = document.querySelector(selector);
     if (!field) return;
@@ -85,7 +128,6 @@ function showError(selector, message) {
     elementToHighlight.classList.add("error");
 }
 
-// Versteckt eine Fehlermeldung
 function clearError(selector) {
     let field = document.querySelector(selector);
     if (!field) return;
@@ -113,7 +155,21 @@ function showTaskPopup() {
     popup.classList.add("show");
 
     setTimeout(() => {
-        window.location.href = "/board/board.html"; // Pfad anpassen
+        window.location.href = "/board/board.html"; 
     }, 1500);
 }
+
+window.taskModule = {
+    createTask,
+    getTaskFormData,
+    getValue,
+    getSelectedPriority,
+    getSelectedContacts,
+    getSubtasks,
+    validateTaskData,
+    showError,
+    clearError,
+    saveTaskToFirebase,
+    showTaskPopup
+};
 
