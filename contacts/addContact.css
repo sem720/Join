@@ -221,8 +221,8 @@ h3 {
 
 .edit-delete-menu {
     position: absolute;
-    right: -100%;
-    bottom: -270px;
+    right: 0;
+    bottom: 0;
     height: 66px;
     width: 100px;
     background: white;

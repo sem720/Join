@@ -83,7 +83,7 @@
     }
 
     .contacts-details.active {
-        display: block !important;
+        display: flex !important;
     }
 
     .contacts.hidden {
@@ -96,6 +96,7 @@
         right: 0 !important;
         margin-top: 32px;
         left: 16px;
+        flex-grow: 1;
     }
 
     .back {
@@ -173,6 +174,10 @@
         height: calc(100vh - 210px);
     }
 
+    .contacts-container {
+        height: calc(100vh - 160px) !important;
+    }
+
     .add-new-contact {
         display: none;
     }
@@ -183,7 +188,6 @@
 
     .more-btn {
         display: block;
-        /* bottom: 230px !important; */
     }
 
     #edit,
@@ -268,31 +272,16 @@
     }
 
     .more-btn {
-        bottom: -310px;
-        right: -26px;
+        bottom: 0;
+        right: 0;
     }
 
     .edit-delete-menu {
-        bottom: -312px;
+        bottom: 0;
     }
 
     .edit-delete-menu.active {
-        right: -28px;
-    }
-}
-
-@media (max-width:345px) {
-    .more-btn {
-        bottom: -292px;
-        right: -20px;
-    }
-
-    .edit-delete-menu {
-        bottom: -290px;
-    }
-
-    .edit-delete-menu.active {
-        right: -24px;
+        right: 0;
     }
 }
 
