@@ -1,4 +1,4 @@
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 1000px) {
     .main-addTask, form {
        flex-direction: column;
        min-height: 80vh;
@@ -21,7 +21,7 @@
      }
 
      #addTask-wrap {
-        padding: 10px;
+        padding: clamp(10px, 3vw, 50px);
         flex-grow: 1;
         max-height: 70vh;
         overflow-y: auto;
@@ -53,7 +53,7 @@
         height: 40px;
      }
 
-     textarea, .button-container, #contacts-container, .dropdown-options, #contacts-list, #subtask-list {
+     textarea, .button-container, #contacts-container, #subtasks, .dropdown-options, #contacts-list, #subtask-list {
         min-width: 300px !important;
         width: 100% !important;
      }
@@ -74,32 +74,30 @@
 
      .footer {
        position: fixed;
-       bottom: 100px;
-       right: 10px;
+       bottom: clamp(20px, 10vh, 100px);
+       right: clamp(0px, 2vw, 10px);
        z-index: 100;
+       display: flex;
+       justify-content: flex-end;
      }
 
      .btn-div-footer {
-        gap: 24px;
+          gap: clamp(10px, 2vw, 24px);
+          justify-content: flex-end;
      }
 
-     ::placeholder {
-        font-size: 16px;
-     }
-
-     #task-name {
-        padding: 8px !important;
+     ::placeholder, #task-name {
         font-size: 16px;
      }
 
      #due-date[data-placeholder] {
-        font-size: 14px !important;
+        font-size: 16px !important;
      }
 
      #urgent, #medium, #low {
         min-width: 90px;
         width: 100%;
-        height: 40px;
+        height: 44px;
         font-size: 14px;
      }
 
@@ -150,11 +148,70 @@
      #selected-contacts-container > div {
         margin-right: 2px !important;
      }
-
-  
-
 }
 
-@media only screen and (max-width: 768px) {
-    
+@media only screen and (min-width: 670px) {
+     .h1-addTask {
+        font-size: 4rem;
+     }
+
+     #urgent, #medium, #low {
+          font-size: 16px;
+          height: 46px;
+     }
+
+     label {
+          margin-bottom: 6px;
+     }
+
+     #task-name, 
+     #description, 
+     #due-date, 
+     .button-container, 
+     .dropdown-container {
+          margin-bottom: 28px;
+     }
+
+     .footer {
+          bottom: 10px;
+          padding: 12px 0 12px 0px;
+          right: clamp(0px, 7vw, 30px);
+     }   
+     
+     #addTask-wrap {
+          padding: clamp(20px, 4vw, 80px);    
+     }
+}
+
+@media only screen and (min-width: 1001px) {
+     .left-container, .right-container {
+          width: 50%;
+     }
+
+     .right-container {
+          padding-left: clamp(12px, 5vw, 120px);
+     }
+
+     #task-name, 
+     #description, 
+     #due-date, 
+     #subtasks,
+     .button-container, 
+     .dropdown-container, 
+     .assignment-container, 
+     .assignment-btn,
+     .dropdown-btn,
+     .subtask-input-wrapper {
+          width: 100%;
+     }
+
+     .footer {
+          padding: 0;
+     }
+
+     .h1-addTask {
+          margin: 0 !important;
+          padding-top: 40px;
+          padding-bottom: 40px;
+     }
 }
