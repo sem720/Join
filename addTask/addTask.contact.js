@@ -9,35 +9,43 @@ window.initAddTaskContacts = function() {
     contactsContainer = document.getElementById('contacts-container');
     assignmentButton = document.getElementById('assignment-btn');
 
+    createSelectedContactsContainer();
+    assignmentButton.addEventListener("click", toggleContactsVisibility);
+    fetchContacts();
+}
+
+function createSelectedContactsContainer() {
     selectedContactsContainer = document.createElement("div");
     selectedContactsContainer.id = "selected-contacts-container"; 
     selectedContactsContainer.classList.add("selected-contacts-container");
     assignmentButton.insertAdjacentElement("afterend", selectedContactsContainer);
+}
 
-    assignmentButton.addEventListener("click", (e) => {
-        e.preventDefault();
-        document.getElementById("contacts-list").classList.toggle("visible");
-      });
-    
+function toggleContactsVisibility(e) {
+    e.preventDefault();
 
-    assignmentButton.addEventListener('click', () => {
-        contactsContainer.classList.toggle('hidden');
-        if (contactsContainer.classList.contains("hidden")) {
-            updateSelectedContactsDisplay();
-        }
-    });
+    contactsContainer.classList.toggle('hidden');
+    document.getElementById("contacts-list").classList.toggle("visible");
 
-    fetchContacts();
+    if (contactsContainer.classList.contains("hidden")) {
+        updateSelectedContactsDisplay();
+    }
 }
 
 async function fetchContacts() {
     const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
+  
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
     const data = await response.json();
-
     if (!data) return console.error("Keine Nutzerdaten gefunden.");
         
-    const contactsList = document.getElementById('contacts-list');
-    contactsList.innerHTML = '';
+    processContactsData(data); 
+    renderContactsList();
+}
+
+function processContactsData(data) {
     allContacts.clear();
 
     Object.values(data).forEach(user => {
@@ -45,8 +53,16 @@ async function fetchContacts() {
         let bgcolor = user.bgcolor;
 
         allContacts.set(name, { name, bgcolor }); 
-        contactsList.appendChild(createContactElement(name, bgcolor));
     }); 
+}
+
+function renderContactsList() {
+    const contactsList = document.getElementById('contacts-list');
+    contactsList.innerHTML = '';
+
+    allContacts.forEach(({ name, bgcolor }) => {
+        contactsList.appendChild(createContactElement(name, bgcolor));
+    })
 }
 
 function capitalizeName(name) {
@@ -85,10 +101,12 @@ function createAvatar(name, bgcolor) {
     return avatar;
 }
 
-function createCheckbox(name) {
+function createCheckbox(name, avatar) {
     const checkbox = createElement("input", "contact-checkbox");
     checkbox.type = "checkbox";
-    checkbox.dataset.contactId = name;
+
+    checkbox.dataset.contactName = name;
+    checkbox.dataset.contactAvatar = avatar;
     checkbox.addEventListener("change", () => toggleContactSelection(name, checkbox.checked));
     return checkbox;
 }
@@ -121,17 +139,6 @@ function getInitials(name) {
     return parts.map((part) => part[0]).join("").toUpperCase();
 }
 
-window.contactsModule = {
-    allContacts,
-    selectedContacts,
-    initAddTaskContacts,
-    fetchContacts,
-    capitalizeName,
-    createContactElement,
-    updateSelectedContactsDisplay,
-    createAvatar,
-    createCheckbox,
-    toggleContactSelection,
-    createElement,
-    getInitials
-};
+
+
+

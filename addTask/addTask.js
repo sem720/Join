@@ -363,50 +363,7 @@ function init() {
   clearTask();
 }
 
-window.taskUI = {
-  activeButton,
-  dropdownBtn,
-  dropdownList,
-  dropdownIcon,
-  categoryInput,
-  dropdownContainer,
-  toggleButtons,
-  activateButton,
-  deactivateButton,
-  changeButtonStyle,
-  changeImageStyle,
-  dateInput,
-  setupDateReset,
-  handleDateReset,
-  iconClicked,
-  resetDateInput,
-  initialDefaultPriority,
-  setupDropdownToggle,
-  toggleDropdown,
-  setupDropdownOptions,
-  initOptionClickListeners,
-  initResetClickListener,
-  setupAddSubtaskButton,
-  handleAddSubtaskClick,
-  handleSubtaskInput,
-  createSubtaskIcons,
-  showSubtaskActions,
-  createIcon,
-  clearSubtask,
-  createSubtaskListIcons,
-  createSubtaskElement,
-  saveSubtask,
-  editSubtask,
-  createEditInput,
-  createEditActions,
-  cancelEdit,
-  saveEdit,
-  deleteSubtask,
-  clearTask,
-  initEventListeners,
-  handleTaskCreation,
-  init
-};
+
 
 
 

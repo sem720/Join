@@ -1,61 +1,70 @@
 @media only screen and (max-width: 500px) {
     .main-addTask, form {
-       display: flex;
        flex-direction: column;
        min-height: 60vh;
-       gap: 1rem;
+       max-height: 100vh;
+       gap: 4rem;
        width: 100%;
     }
+
+    .main-addTask::-webkit-scrollbar {
+       display: none;
+     }
+
+     .main-addTask {
+       overflow-y: auto;
+       scrollbar-width: none;
+     }
 
     .h1-addTask {
         font-size: 3rem;
         display: block;
         line-height: normal;
-        padding-top: 24px;
-        padding-bottom: 24px;
+        padding-top: 40px;
+        padding-bottom: 40px;
         margin: 0 !important;
     }
 
     #addTask-wrap {
         padding: 10px;
+        flex-grow: 1;
+        max-height: 100vh;
     }
 
-    input, .assignment-container, .assignment-btn {
+    .text {
+     display: none;
+    }
+
+    input, .assignment-container, .assignment-btn, .dropdown-btn, #category-container, .subtask-input-wrapper {
         min-width: 300px !important;
         width: 100% !important;
         height: 32px;
     }
 
-    textarea, .button-container, #contacts-container {
+    textarea, .button-container, #contacts-container, .dropdown-options {
         min-width: 300px !important;
         width: 100% !important;
     }
 
-    .subtask-input-wrapper, #label-subtask {
-        display: none;
-    }
-
-    label, .assignment-btn {
+    label, .assignment-btn, .dropdown-btn, .dropdown-options {
         font-size: 14px;
     }
 
     .right-container, .left-container {
         padding: 0;
-        height: 300px;
+        height: 40%;
         justify-content: center;
         width: 100%;
     }
 
-    .footer > .text, #category, .dropdown-container{
-        display: none;
-    }
-
     .footer {
-        justify-content: flex-end;
+        justify-content: end;
+     
     }
 
     .btn-div-footer {
         gap: 24px;
+        
     }
 
    ::placeholder {
@@ -83,6 +92,7 @@
    }
 
    .contact-item {
+        overflow-x: hidden;
         white-space: nowrap;
         gap: 10px;
         width: 100%;
@@ -123,6 +133,21 @@
    #selected-contacts-container > div {
         margin-right: 2px !important;
    }
+
+   #category-container, .subtask-input-wrapper, .error-message {
+     opacity: 0;
+     transform: translateY(20px);
+     transition: opacity 0.3s ease, transform 0.3s ease;
+   }
+
+  .main-addTask.scrolled #category-container,
+  .main-addTask.scrolled .subtask-input-wrapper,
+  .main-addTask.scrolled .error-message {
+     opacity: 1;
+     transform: translateY(0);
+  }
+
+
 }
 
 @media only screen and (max-width: 768px) {
