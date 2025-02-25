@@ -30,16 +30,12 @@ function renderTasks(tasks) {
     });
 }
 
-
-function createTaskElement(task) {
-    const taskDiv = document.createElement('div');
-    taskDiv.classList.add('task-card');
-
+function createTaskTemplate(task) {
     let avatarsHTML = task.assignedTo ? task.assignedTo.map(user => 
         `<div class="avatar" style="background-color: ${user.avatar.bgcolor};">${user.avatar.initials}</div>`
     ).join('') : "";
-    
-    taskDiv.innerHTML = `
+
+    return  `
         <div class="task-category">${task.category}</div>
         <p class="task-title">${task.title}</p>
         <p class="task-description">${task.description}</p>
@@ -49,11 +45,16 @@ function createTaskElement(task) {
             <img src="${task.priority.image}" alt="${task.priority.text}" class="prio-icon">
         </div>
     `;
+}
 
+function createTaskElement(task) {
+    const taskDiv = document.createElement('div');
+    taskDiv.classList.add('task-card');    
+    taskDiv.innerHTML = createTaskElement(task);
     return taskDiv;
 }
 
-//Funktion zum Hinzufügen in die entsprechende Spalte, 
+//Funktion zum Hinzufügen in die entsprechende Spalte
 function addTaskToBoard(task) {
     const columnId = "todo-column";
     const taskElement = createTaskElement(task);
@@ -77,8 +78,6 @@ function getColumnBody(category ) {
 
     return document.getElementById(columnMap[category]);
 }
-
-
 
 // Call fetchTasks when the board loads
 fetchTasks();
