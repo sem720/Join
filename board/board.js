@@ -1,12 +1,15 @@
 async function fetchTasks() {
     try {
-        const response = await fetch("https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json"); 
+        const response = await fetch("https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json"); // Replace with your actual API URL);
+        const data = await response.json();
         if (!data) {
             console.warn("No tasks found in database.");
             return;
         }
+
         const tasks = Object.values(data);
         renderTasks(tasks)
+
     } catch (error) {
             console.error("Error fetching tasks:", error);
     }
@@ -76,6 +79,8 @@ function getColumnBody(category ) {
 }
 
 
+
+// Call fetchTasks when the board loads
 fetchTasks();
 
 function findTask() {
