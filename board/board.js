@@ -50,7 +50,7 @@ function createTaskTemplate(task) {
 function createTaskElement(task) {
     const taskDiv = document.createElement('div');
     taskDiv.classList.add('task-card');    
-    taskDiv.innerHTML = createTaskElement(task);
+    taskDiv.innerHTML = createTaskTemplate(task);
     return taskDiv;
 }
 
