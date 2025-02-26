@@ -185,3 +185,40 @@ function validateEmail(email) {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailPattern.test(email);
 }
+
+//Password Input Show Password function
+
+function setupPasswordToggle(inputId) {
+  const passwordInput = document.getElementById(inputId);
+  const container = passwordInput.parentElement;
+  const lockIcon = container.querySelector(".lock-icon");
+  const eyeSlashIcon = container.querySelector(".eye-icon");
+  const eyeIcon = container.querySelector(".eye-slash-icon");
+
+  passwordInput.addEventListener("input", () => {
+    if (passwordInput.value) {
+      lockIcon.classList.add("d_none");
+      eyeSlashIcon.classList.remove("d_none");
+    } else {
+      lockIcon.classList.remove("d_none");
+      eyeSlashIcon.classList.add("d_none");
+      eyeIcon.classList.add("d_none");
+      passwordInput.type = "password";
+    }
+  });
+
+  eyeSlashIcon.addEventListener("click", () => {
+    passwordInput.type = "text";
+    eyeSlashIcon.classList.add("d_none");
+    eyeIcon.classList.remove("d_none");
+  });
+
+  eyeIcon.addEventListener("click", () => {
+    passwordInput.type = "password";
+    eyeIcon.classList.add("d_none");
+    eyeSlashIcon.classList.remove("d_none");
+  });
+}
+
+setupPasswordToggle("idPassword");
+setupPasswordToggle("idPasswordCon");

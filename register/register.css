@@ -129,7 +129,7 @@ body {
   position: relative;
 }
 
-#input-icon {
+.input-icon {
   position: absolute;
   top: 15px;
   right: 20px;
@@ -305,4 +305,14 @@ body {
       fill: #2a3647;
     }
   }
+}
+
+.d_none {
+  display: none;
+}
+
+.eye-slash-icon,
+.eye-icon {
+  margin-top: -3px;
+  margin-right: -2px;
 }

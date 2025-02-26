@@ -99,3 +99,34 @@ function validateEmail(email) {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailPattern.test(email);
 }
+
+//Password Input Show Password function
+
+const passwordInput = document.getElementById("Password");
+const lockIcon = document.getElementById("lock-icon");
+const eyeSlashIcon = document.getElementById("input-icon-visibility-off");
+const eyeIcon = document.getElementById("input-icon-visibility");
+
+passwordInput.addEventListener("input", () => {
+  if (passwordInput.value) {
+    lockIcon.classList.add("d_none");
+    eyeSlashIcon.classList.remove("d_none");
+  } else {
+    lockIcon.classList.remove("d_none");
+    eyeSlashIcon.classList.add("d_none");
+    eyeIcon.classList.add("d_none");
+    passwordInput.type = "password";
+  }
+});
+
+eyeSlashIcon.addEventListener("click", () => {
+  passwordInput.type = "text";
+  eyeSlashIcon.classList.add("d_none");
+  eyeIcon.classList.remove("d_none");
+});
+
+eyeIcon.addEventListener("click", () => {
+  passwordInput.type = "password";
+  eyeIcon.classList.add("d_none");
+  eyeSlashIcon.classList.remove("d_none");
+});
