@@ -30,11 +30,20 @@
 
     <!-- Modal und Overlay -->
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <div id="task-overlay" class="overlay hidden"></div>
     <div id="addTaskModal" class="modal hidden">
       <button id="close-modal" class="close-btn">&times;</button>
 =======
     <div id="task-overlay" class="modal-overlay" onclick="closeModal()"></div>
+=======
+    <div id="task-overlay" class="modal-overlay" onclick="closeModal()"></div>
+
+    <div id="addTaskModal" class="modal hidden" onclick="event.stopPropagation()">
+        <button id="close-modal" class="close-btn" onclick="closeModal()">
+          &times;
+        </button>
+>>>>>>> Stashed changes
 
     <div id="addTaskModal" class="modal hidden" onclick="event.stopPropagation()">
         <button id="close-modal" class="close-btn" onclick="closeModal()">
