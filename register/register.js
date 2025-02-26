@@ -1,7 +1,6 @@
 const dbUrl =
   "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app";
 
-
 // Add User function
 async function addUser() {
   if (!validateForm()) return;
@@ -20,26 +19,22 @@ async function addUser() {
   }
 }
 
-
 function getUserInput() {
   return {
     email: document.getElementById("idEmail").value.trim().toLowerCase(),
     password: document.getElementById("idPassword").value,
     name: document.getElementById("idName").value.trim(),
-    phone: document.getElementById("idPhone")?.value.trim() || ""
+    phone: document.getElementById("idPhone")?.value.trim() || "",
   };
 }
-
 
 function prepareUserData(name, email, password) {
   return { name, email, password, bgcolor: getRandomColor() };
 }
 
-
 function formatFirebaseKey(email) {
   return email.replace(/\./g, "_").replace(/@/g, "-");
 }
-
 
 async function saveUser(firebaseKey, userData) {
   await fetch(`${dbUrl}/users/${firebaseKey}.json`, {
@@ -49,34 +44,49 @@ async function saveUser(firebaseKey, userData) {
   });
 }
 
-
 async function saveContact(name, email, phone, bgcolor) {
   let response = await fetch(`${dbUrl}/contacts.json`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, tel: phone, bgcolor, initials: getInitials(name) }),
+    body: JSON.stringify({
+      name,
+      email,
+      tel: phone,
+      bgcolor,
+      initials: getInitials(name),
+    }),
   });
   let responseData = await response.json();
   return responseData.name;
 }
 
-
 async function updateContact(contactId, name, email, phone, bgcolor) {
   await fetch(`${dbUrl}/contacts/${contactId}.json`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id: contactId, name, email, tel: phone, bgcolor, initials: getInitials(name) }),
+    body: JSON.stringify({
+      id: contactId,
+      name,
+      email,
+      tel: phone,
+      bgcolor,
+      initials: getInitials(name),
+    }),
   });
-  console.log("✅ Neuer Kontakt mit Initialen gespeichert:", { id: contactId, name, email, tel: phone, bgcolor });
+  console.log("✅ Neuer Kontakt mit Initialen gespeichert:", {
+    id: contactId,
+    name,
+    email,
+    tel: phone,
+    bgcolor,
+  });
 }
-
 
 function finalizeSignup() {
   document.getElementById("sign-up-alert").classList.add("anim-sign-up");
   resetForm();
-  setTimeout(() => window.location.href = "../index.html", 1500);
+  setTimeout(() => (window.location.href = "../index.html"), 1500);
 }
-
 
 // Reset-Formular nach Registrierung
 function resetForm() {
@@ -90,7 +100,6 @@ function resetForm() {
   }
 }
 
-
 // Zufällige Farbe für Kontakte generieren
 function getRandomColor() {
   const letters = "0123456789ABCDEF";
@@ -100,7 +109,6 @@ function getRandomColor() {
   }
   return color;
 }
-
 
 function getInitials(name) {
   if (!name || typeof name !== "string") {
@@ -114,7 +122,6 @@ function getInitials(name) {
   }
 }
 
-
 function resetForm() {
   document.getElementById("idName").value = "";
   document.getElementById("idEmail").value = "";
@@ -122,7 +129,6 @@ function resetForm() {
   document.getElementById("idPasswordCon").value = "";
   document.getElementById("idPolicy").checked = false;
 }
-
 
 function getRandomColor() {
   const letters = "0123456789ABCDEF";
@@ -132,7 +138,6 @@ function getRandomColor() {
   }
   return color;
 }
-
 
 // form validation
 function validateForm() {
@@ -174,7 +179,6 @@ function validateForm() {
 
   return true;
 }
-
 
 // email validation
 function validateEmail(email) {

@@ -26,7 +26,7 @@ function getGreeting() {
   } else if (hour < 18) {
     message = "Nice to see you";
   } else {
-    message = "Good night";
+    message = "Good evening";
   }
 
   document.getElementById("greeting-1").innerText = message;

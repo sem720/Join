@@ -22,6 +22,11 @@
   box-shadow: 0 0 5px var(--light-blue);
 }
 
+.btn-dark:disabled {
+  background-color: var(--dark-blue);
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0);
+}
+
 .btn-bright {
   background-color: white;
   color: var(--dark-blue);
