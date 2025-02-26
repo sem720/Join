@@ -316,10 +316,6 @@ ul {
     gap: 4px;
 }
 
-.hidden {
-    display: none;
-}
-
 #contacts-container {
     padding: 10px;
     width: 400px;
