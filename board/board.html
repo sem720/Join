@@ -29,9 +29,18 @@
     <div w3-include-html="/comp/sidebar/sidebar.html"></div>
 
     <!-- Modal und Overlay -->
+<<<<<<< Updated upstream
     <div id="task-overlay" class="overlay hidden"></div>
     <div id="addTaskModal" class="modal hidden">
       <button id="close-modal" class="close-btn">&times;</button>
+=======
+    <div id="task-overlay" class="modal-overlay" onclick="closeModal()"></div>
+
+    <div id="addTaskModal" class="modal hidden" onclick="event.stopPropagation()">
+        <button id="close-modal" class="close-btn" onclick="closeModal()">
+          &times;
+        </button>
+>>>>>>> Stashed changes
 
       <div id="modal-body"></div>
     </div>
@@ -116,10 +125,10 @@
         </div>
       </section>
     </div>
+    <script src="/board/board.addTaskModal.js"></script>
     <script src="/addTask/addTask.js"></script>
     <script src="/addTask/addTask.contact.js"></script>
     <script src="/addTask/addTask.createTask.js"></script>
-    <script src="/board/board.addTaskModal.js"></script>
     <script src="/board/board.js"></script>
     <script src="/comp/navbar/navbar.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
