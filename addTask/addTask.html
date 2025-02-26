@@ -178,6 +178,7 @@
                 </svg>
               </span>
             </button>
+
             <button class="btn-dark create-btn" onclick="createTask(event)">
               Create Task
               <img src="/assets/imgs/check-white.png" alt="check-icon" />
@@ -186,7 +187,11 @@
         </section>
       </main>
       <div id="task-added-popup" class="task-popup btn-dark">
-        Task added to board
+            <button class="btn-dark create-btn" type="submit" onclick="createTask(event)">Create Task <img src="/assets/imgs/check-white.png" alt="check-icon"></button>
+        </div>
+    </section>
+    </main>
+    <div id="task-added-popup" class="task-popup btn-dark">
         <img
           src="/assets/imgs/board-icon.svg"
           alt="board-icon"

@@ -117,10 +117,16 @@ body {
   position: relative;
 }
 
-#input-icon {
+.input-icon {
   position: absolute;
   top: 15px;
   right: 20px;
+}
+
+#input-icon-visibility-off,
+#input-icon-visibility {
+  margin-top: -3px;
+  margin-right: -2px;
 }
 
 .div-alert {
