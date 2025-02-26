@@ -77,7 +77,7 @@
     background: rgba(0, 0, 0, 0.2);
     display: block;
     z-index: 40;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 .modal {
