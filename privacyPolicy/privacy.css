@@ -14,20 +14,6 @@
   position: fixed !important;
 }
 
-.back {
-  /* display: none; */
-  position: absolute;
-  right: 0;
-  padding: 8px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.back:hover {
-  background-color: #cdcdcd;
-}
-
 .privacy-container {
   display: flex;
   flex-direction: column;

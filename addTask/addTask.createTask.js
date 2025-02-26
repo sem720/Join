@@ -1,23 +1,17 @@
 function createTask(event) {
     event.preventDefault();
-
     let taskData = getTaskFormData();
-    console.log("Task Data:", taskData); 
 
-    if (!validateTaskData(taskData)) {
-        return;
-    }
-
+    if (!validateTaskData(taskData)) return;
+    
     saveTaskToFirebase(taskData)
-    .then(() => {
-        showTaskPopup(); 
-        setTimeout(() => {
-            window.location.href = "/board/board.html"; 
-        }, 1500);
-    })
-    .catch(error => {
-        console.error("Fehler beim Speichern des Tasks:", error);
-    });
+        .then(() => handleTaskSuccess())
+        .catch(error => console.error("Fehler beim Speichern des Tasks: ", error));
+}
+    
+function handleTaskSuccess() {
+    showTaskPopup();
+    setTimeout(() => window.location.href = "/board/board.html", 1500);
 }
 
 function getTaskFormData() {
@@ -40,7 +34,6 @@ function getValue(selector) {
 
 function getSelectedPriority() {
     const priorityText = document.querySelector(".btn-switch.active")?.innerText.trim() || "Medium";
-
     const priorityImages = {
         "Low": "/assets/imgs/low.png",
         "Medium": "/assets/imgs/medium.png",
@@ -57,15 +50,23 @@ function getSelectedContacts() {
     const selectedCheckboxes = Array.from(document.querySelectorAll(".contact-checkbox:checked"));
     
     return selectedCheckboxes.map(checkbox => {
-        let name = checkbox.dataset.contactName?.trim() || "Unknown";
-        let bgcolor = checkbox.dataset.contactBgcolor;
+        const name = checkbox.dataset.contactName;
+        const contact = allContacts.get(name); // 🔹 Kontakt-Objekt holen
+
+        if (!contact) {
+            console.warn(`Kein Kontakt gefunden für ${name}`); // 🔥 Debugging
+            return null; // Falls der Kontakt nicht existiert, abbrechen
+        }
 
         return {
             name: name,
-            avatar: generateAvatar(name, bgcolor)
+            avatar: generateAvatar(name, contact.bgcolor) // ✅ bgcolor direkt von allContacts!
         };
-    });
+    }).filter(contact => contact !== null); // Entfernt ungültige Einträge
 }
+
+console.log("All Contacts Map:", allContacts); // 🔥 Alle Kontakte aus dem Backend
+console.log("Selected Contacts:", getSelectedContacts()); // 🔥 Ausgewählte Kontakte checken
 
 function getInitials(name) {
     if (!name) return "??";  // ✅ Return placeholder initials if undefined
@@ -124,7 +125,6 @@ function showError(selector, message) {
     errorMsg?.classList.contains("error-message") && (errorMsg.textContent = message, errorMsg.style.display = "block");
  
     const elementToHighlight = selector === "#selected-category" ? document.querySelector("#category-container") : field;
-
     elementToHighlight.classList.add("error");
 }
 
@@ -159,17 +159,4 @@ function showTaskPopup() {
     }, 1500);
 }
 
-window.taskModule = {
-    createTask,
-    getTaskFormData,
-    getValue,
-    getSelectedPriority,
-    getSelectedContacts,
-    getSubtasks,
-    validateTaskData,
-    showError,
-    clearError,
-    saveTaskToFirebase,
-    showTaskPopup
-};
 

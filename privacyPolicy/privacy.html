@@ -19,9 +19,6 @@
   <div w3-include-html="../comp/sidebar/sidebar.html"></div>
   <div class="privacy-container">
     <div class="privacy-content">
-      <div class="back" onclick="toggleBack()">
-        <img src="../assets/imgs/arrow-left.png" alt="" />
-      </div>
       <h1>Privacy Policy</h1>
       <p><strong>Effective Date:</strong> February XX, 2025</p>
 
@@ -100,20 +97,6 @@
       const link = button.getAttribute("data-link");
       button.classList.toggle("sidebar-active-tap", link === currentPage);
     });
-  }
-
-
-  /**
-* Navigates the browser back to the previous page.
-*
-* This function uses the `window.history.back()` method to navigate the browser back to the previous page.
-* If the previous page is not available in the browser's history, the function will not throw an error.
-*
-* @function toggleBack
-* @global
-*/
-  function toggleBack() {
-    window.history.back();
   }
 </script>
 
