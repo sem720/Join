@@ -68,7 +68,7 @@
     position: relative;
 }
 
-Modal und Overlay #task-overlay {
+#task-overlay {
     visibility: hidden;
     opacity: 0;
 }
@@ -141,7 +141,7 @@ Modal und Overlay #task-overlay {
     border-radius: 50%;
 }
 
-Modal und Overlay Ende Modal und Overlay Ende .board-main {
+.board-main {
     display: flex;
     flex-direction: row;
     gap: 32px;
