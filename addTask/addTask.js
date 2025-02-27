@@ -1,6 +1,6 @@
 let activeButton = null; 
-let dropdownBtn, dropdownList, dropdownIcon, categoryInput;
-let dropdownContainer = document.querySelector(".dropdown-container");
+let dropdownBtn, dropdownList, dropdownContainer, selectedCategory;
+const defaultText = "Select a category";
 
 function toggleButtons(clickedButton) {
   if (activeButton) {
@@ -100,62 +100,40 @@ function initialDefaultPriority() {
   }
 }
 
-function setupDropdownToggle(dropdownBtn, dropdownList) {
-  dropdownBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    const isOpen = dropdownContainer.classList.toggle("open");
-    dropdownList.style.display = isOpen ? "block" : "none";
-    dropdownBtn.querySelector("img").src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
-  });
-}
+function toggleDropdown() {
+  const isOpen = dropdownContainer.classList.toggle("open");
+  dropdownList.style.display = isOpen ? "block" : "none";
+  dropdownBtn.querySelector("img").src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
 
-function toggleDropdown(dropdownContainer, dropdownList) {
-  dropdownContainer.classList.toggle("open");
-  dropdownList.style.display = dropdownContainer.classList.contains("open") ? "block" : "none";
+  if (isOpen) {
+    resetDropdown();
+  }
 }
   
-function setupDropdownOptions(dropdownBtn, dropdownList, categoryInput) {
-  const defaultText = "Select a category"; 
+function selectCategory(option) {
+  const selectedText = option.textContent;
+  const selectedValue = option.getAttribute("data-value");
   
-  initOptionClickListeners(dropdownBtn, dropdownList, categoryInput, defaultText);
-  initResetClickListener(dropdownBtn, categoryInput, defaultText);
+  dropdownBtn.innerHTML = `
+    ${selectedText}
+    <span class="icon-container">
+      <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+    </span>
+  `;
+
+  selectedCategory.value = selectedValue;
+  dropdownContainer.classList.remove("open");
+  dropdownList.style.display = "none";
 }
 
-function initOptionClickListeners(dropdownBtn, dropdownList) {
-  document.querySelectorAll(".dropdown-options li").forEach((option) => {
-    option.addEventListener("click", function () {
-      const selectedText = this.textContent;
-      const selectedValue = this.getAttribute("data-value");
-      
-      dropdownBtn.innerHTML = `
-        ${selectedText}
-        <span class="icon-container">
-          <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
-        </span>
-      `;
-
-      document.getElementById("selected-category").value = selectedValue;
-      dropdownContainer.classList.remove("open");
-      dropdownList.style.display = "none";
-    });
-  });
-}
-
-function initResetClickListener(dropdownBtn, categoryInput, defaultText) {
-  dropdownBtn.addEventListener("click", () => {
-    if (
-      dropdownBtn.textContent.trim() !== defaultText &&
-      !dropdownContainer.classList.contains("open")
-    ) {
-      dropdownBtn.innerHTML = `
-        ${defaultText}
-        <span class="icon-container">
-          <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
-        </span>
-      `;
-      categoryInput.value = "";
-    }
-  });
+function resetDropdown() {
+  dropdownBtn.innerHTML = `
+    ${defaultText}
+    <span class="icon-container">
+      <img src="/assets/imgs/dropdown-upwards.png" alt="Dropdown Icon" id="dropdown-icon">
+    </span>
+  `;
+  selectedCategory.value = "";
 }
 
 function setupAddSubtaskButton() {
@@ -351,13 +329,12 @@ function handleTaskCreation(event) {
 function init() {
   dropdownBtn = document.getElementById("dropdown-btn");
   dropdownList = document.getElementById("dropdown-list");
-  categoryInput = document.getElementById("category");
-  
+  dropdownContainer = document.getElementById("category-container");
+  selectedCategory = document.getElementById("selected-category");
+
   initialDefaultPriority(),
   dateInput(),
   setupDateReset(),
-  setupDropdownOptions(dropdownBtn, dropdownList, categoryInput),
-  setupDropdownToggle(dropdownBtn, dropdownList),
   setupAddSubtaskButton(),
   initEventListeners(),
   clearTask();

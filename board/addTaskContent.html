@@ -56,14 +56,14 @@
 
                 <label id="category">Category <span class="required">*</span></label>
                 <div class="dropdown-container" id="category-container">
-                    <button class="dropdown-btn" id="dropdown-btn" type="button">Select task category
+                    <button class="dropdown-btn" id="dropdown-btn" type="button" onclick="toggleDropdown()">Select task category
                         <span class="icon-container">
                             <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
                         </span>
                     </button>
                     <div class="dropdown-options" id="dropdown-list">
-                        <li data-value="technical_task">Technical Task</li>
-                        <li data-value="user_story">User Story</li>
+                        <li data-value="technical_task" onclick="selectCategory(this)">Technical Task</li>
+                        <li data-value="user_story" onclick="selectCategory(this)">User Story</li>
                     </div>
                 </div>
                 <input type="hidden" id="selected-category" name="selected-category"> 

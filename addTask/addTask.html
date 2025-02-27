@@ -83,6 +83,7 @@
               id="due-date"
               name="due-date"
               data-placeholder="dd/mm/yyyy"
+              required
             />
             <div class="error-message" style="display: none"></div>
 
@@ -121,12 +122,12 @@
               >Category <span class="required">*</span></label
             >
             <div class="dropdown-container" id="category-container">
-              <button class="dropdown-btn" id="dropdown-btn">
+              <button class="dropdown-btn" id="dropdown-btn" onclick="toggleDropdown()">
                 Select task category
               </button>
               <div class="dropdown-options" id="dropdown-list">
-                <li data-value="technical_task">Technical Task</li>
-                <li data-value="user_story">User Story</li>
+                <li onclick="selectCategory(this)" data-value="technical_task">Technical Task</li>
+                <li onclick="selectCategory(this)" data-value="user_story">User Story</li>
               </div>
             </div>
             <input
