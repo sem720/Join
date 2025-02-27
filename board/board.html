@@ -1,144 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Board</title>
-    <link rel="stylesheet" href="/root.css" />
-    <link rel="stylesheet" href="/board/board.css" />
-    <link rel="stylesheet" href="/comp/components.css" />
-    <link rel="stylesheet" href="/comp/navbar/navbar.css" />
-    <link rel="stylesheet" href="/comp/sidebar/sidebar.css" />
-    <link rel="stylesheet" href="/board/addTaskModal.css" />
-    <link rel="stylesheet" href="/addTask/addTask.comps.css" />
-    <link
-      id="favicon-light"
-      rel="icon"
-      href="../assets/imgs/logo-black.png"
-      media="(prefers-color-scheme: light)"
-    />
-    <link
-      id="favicon-dark"
-      rel="icon"
-      href="../assets/imgs/logo-white-blue.png"
-      media="(prefers-color-scheme: dark)"
-    />
-  </head>
-  <body onload="initBoard(), initNavbar()">
-    <div class="navbar-wrap" w3-include-html="/comp/navbar/navbar.html"></div>
-    <div w3-include-html="/comp/sidebar/sidebar.html"></div>
 
-    <!-- Modal und Overlay -->
-   <div id="task-overlay" class="modal-overlay" onclick="closeModal()"></div>
-   <div id="addTaskModal" class="modal hidden" onclick="event.stopPropagation()">
-        <button id="close-modal" class="close-btn" onclick="closeModal()">
-          &times;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Board</title>
+  <link rel="stylesheet" href="/root.css" />
+  <link rel="stylesheet" href="/board/board.css" />
+  <link rel="stylesheet" href="/comp/components.css" />
+  <link rel="stylesheet" href="/comp/navbar/navbar.css" />
+  <link rel="stylesheet" href="/comp/sidebar/sidebar.css" />
+  <link rel="stylesheet" href="/board/addTaskModal.css" />
+  <link rel="stylesheet" href="/addTask/addTask.comps.css" />
+  <link id="favicon-light" rel="icon" href="../assets/imgs/logo-black.png" media="(prefers-color-scheme: light)" />
+  <link id="favicon-dark" rel="icon" href="../assets/imgs/logo-white-blue.png" media="(prefers-color-scheme: dark)" />
+</head>
+
+<body onload="initBoard(), initNavbar()">
+  <div class="navbar-wrap" w3-include-html="/comp/navbar/navbar.html"></div>
+  <div w3-include-html="/comp/sidebar/sidebar.html"></div>
+
+  <!-- Modal und Overlay -->
+  <div id="task-overlay" class="modal-overlay" onclick="closeModal()"></div>
+  <div id="addTaskModal" class="modal hidden" onclick="event.stopPropagation()">
+    <button id="close-modal" class="close-btn" onclick="closeModal()">
+      &times;
+    </button>
+
+
+    <div id="modal-body"></div>
+  </div>
+
+  <!-- Haupt-Board -->
+  <div class="board-wrap">
+    <div class="board-header">
+      <h1 class="h1-board">Board</h1>
+      <div class="header-part-search">
+        <div class="search-input-board">
+          <input name="findTask" id="findTask" class="input-standard" placeholder="Find Task" />
+          <div class="search-divider"></div>
+          <div class="search-icon">
+            <img src="/assets/imgs/search.png" alt="search" onclick="findTask()" />
+          </div>
+        </div>
+
+        <button id="addTask" class="btn-dark" onclick="openAddTaskModal()">
+          Add Task
+          <img src="/assets/imgs/plus-white.png" alt="add Task" id="plus-white" />
         </button>
-
-
-      <div id="modal-body"></div>
-    </div>
-
-    <!-- Haupt-Board -->
-    <div class="board-wrap">
-      <div class="board-header">
-        <h1 class="h1-board">Board</h1>
-        <div class="header-part-search">
-          <div class="search-input-board">
-            <input
-              name="findTask"
-              id="findTask"
-              class="input-standard"
-              placeholder="Find Task"
-            />
-            <div class="search-divider"></div>
-            <div class="search-icon">
-              <img
-                src="/assets/imgs/search.png"
-                alt="search"
-                onclick="findTask()"
-              />
-            </div>
-          </div>
-
-          <button id="addTask" class="btn-dark" onclick="openAddTaskModal()">
-            Add Task
-            <img
-              src="/assets/imgs/plus-white.png"
-              alt="add Task"
-              id="plus-white"
-            />
-          </button>
-        </div>
       </div>
-      <section class="board-main">
-        <div class="toDo column" id="to-do">
-          <div class="column-header">
-            <h3 class="h3-column">To do</h3>
-            <img
-              src="/assets/imgs/plus-button.png"
-              alt="plus-button"
-              id="plus-button"
-              onclick="openAddTaskModal()"
-            />
-          </div>
-          <div class="column-body"></div>
-        </div>
-
-        <div class="inProgress column" id="in-progress">
-          <div class="column-header">
-            <h3 class="h3-column">In progress</h3>
-            <img
-              src="/assets/imgs/plus-button.png"
-              alt="plus-button"
-              id="plus-button"
-              onclick="openAddTaskModal()"
-            />
-          </div>
-          <div class="column-body"></div>
-        </div>
-
-        <div class="feedback column" id="awaitFeedback">
-          <div class="column-header">
-            <h3 class="h3-column">Await feedback</h3>
-            <img
-              src="/assets/imgs/plus-button.png"
-              alt="plus-button"
-              id="plus-button"
-              onclick="openAddTaskModal()"
-            />
-          </div>
-          <div class="column-body"></div>
-        </div>
-
-        <div class="done column" id="done">
-          <div class="column-header">
-            <h3 class="h3-column">Done</h3>
-          </div>
-          <div class="column-body"></div>
-        </div>
-      </section>
     </div>
-    <script src="/board/board.addTaskModal.js"></script>
-    <script src="/addTask/addTask.js"></script>
-    <script src="/addTask/addTask.contact.js"></script>
-    <script src="/addTask/addTask.createTask.js"></script>
-    <script src="/board/board.js"></script>
-    <script src="/comp/navbar/navbar.js"></script>
-    <script src="https://www.w3schools.com/lib/w3.js"></script>
-    <script src="/root.js"></script>
-    <script>
-      w3.includeHTML(function () {
-        setActiveNav();
-      });
+    <section class="board-main">
+      <div class="toDo column" id="to-do">
+        <div class="column-header">
+          <h3 class="h3-column">To do</h3>
+          <img src="/assets/imgs/plus-button.png" alt="plus-button" id="plus-button" onclick="openAddTaskModal()" />
+        </div>
+        <div class="column-body"></div>
+      </div>
 
-      function setActiveNav() {
-        const currentPage = window.location.pathname.split("/").pop();
-        document.querySelectorAll(".nav-button").forEach((button) => {
-          const link = button.getAttribute("data-link");
-          button.classList.toggle("sidebar-active-tap", link === currentPage);
-        });
-      }
-    </script>
-  </body>
+      <div class="inProgress column" id="in-progress">
+        <div class="column-header">
+          <h3 class="h3-column">In progress</h3>
+          <img src="/assets/imgs/plus-button.png" alt="plus-button" id="plus-button" onclick="openAddTaskModal()" />
+        </div>
+        <div class="column-body"></div>
+      </div>
+
+      <div class="feedback column" id="awaitFeedback">
+        <div class="column-header">
+          <h3 class="h3-column">Await feedback</h3>
+          <img src="/assets/imgs/plus-button.png" alt="plus-button" id="plus-button" onclick="openAddTaskModal()" />
+        </div>
+        <div class="column-body"></div>
+      </div>
+
+      <div class="done column" id="done">
+        <div class="column-header">
+          <h3 class="h3-column">Done</h3>
+        </div>
+        <div class="column-body"></div>
+      </div>
+    </section>
+  </div>
+  <script src="/board/board.addTaskModal.js"></script>
+  <script src="/addTask/addTask.js"></script>
+  <script src="/addTask/addTask.contact.js"></script>
+  <script src="/addTask/addTask.createTask.js"></script>
+  <script src="/board/board.js"></script>
+  <script src="/comp/navbar/navbar.js"></script>
+  <script src="https://www.w3schools.com/lib/w3.js"></script>
+  <script src="/root.js"></script>
+  <script>
+    w3.includeHTML(function () {
+      setActiveNav();
+    });
+
+    function setActiveNav() {
+      const currentPage = window.location.pathname.split("/").pop();
+      document.querySelectorAll(".nav-button").forEach((button) => {
+        const link = button.getAttribute("data-link");
+        button.classList.toggle("sidebar-active-tap", link === currentPage);
+      });
+    }
+  </script>
+</body>
+
 </html>

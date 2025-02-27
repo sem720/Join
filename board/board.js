@@ -11,7 +11,7 @@ async function fetchTasks() {
         renderTasks(tasks)
 
     } catch (error) {
-            console.error("Error fetching tasks:", error);
+        console.error("Error fetching tasks:", error);
     }
 }
 
@@ -31,16 +31,25 @@ function renderTasks(tasks) {
 }
 
 function createTaskTemplate(task) {
-    let avatarsHTML = task.assignedTo ? task.assignedTo.map(user => 
+    let avatarsHTML = task.assignedTo ? task.assignedTo.map(user =>
         `<div class="avatar" style="background-color: ${user.avatar.bgcolor};">${user.avatar.initials}</div>`
     ).join('') : "";
 
-    return  `
-        <div class="task-category">${task.category}</div>
+    return `
+        <div class="task-category">
+            ${task.category}
+        </div>
         <p class="task-title">${task.title}</p>
         <p class="task-description">${task.description}</p>
-        <p class ="subtask-checked">${task.subtasks ? task.subtasks.length : 0} Subtasks</p>
-        <div class="task-card-bottom">
+        <div class="subtask-bar" id="subtaskBar">
+            <div class="subtask-bar-progress" id="subtaskBarProgress">
+                <div class="subtask-bar-prog-blue" style="width: 20%;"></div>
+            </div>
+            <p class ="subtask-checked">
+                ${task.subtasks ? task.subtasks.length : 0} Subtasks
+            </p>
+        </div>
+        <div class="task-card-footer">
             <div class="task-card-avatar">${avatarsHTML}</div>
             <img src="${task.priority.image}" alt="${task.priority.text}" class="prio-icon">
         </div>
@@ -49,7 +58,7 @@ function createTaskTemplate(task) {
 
 function createTaskElement(task) {
     const taskDiv = document.createElement('div');
-    taskDiv.classList.add('task-card');    
+    taskDiv.classList.add('task-card');
     taskDiv.innerHTML = createTaskTemplate(task);
     return taskDiv;
 }
@@ -62,7 +71,7 @@ function addTaskToBoard(task) {
 }
 
 //besonders für drag and drop dann interessant
-function getColumnBody(category ) {
+function getColumnBody(category) {
     const columnMap = {
         "To do": "todo-column",
         "In progress": "in-progress-column",
@@ -87,5 +96,5 @@ function findTask() {
 }
 
 function initBoard() {
-    
+
 }
