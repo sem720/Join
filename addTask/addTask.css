@@ -318,7 +318,7 @@ ul {
 
 #contacts-container {
     padding: 10px;
-    width: 400px;
+    width: 100%;
     height: 200px;
     border: 1px solid #ccc;
     background: white;

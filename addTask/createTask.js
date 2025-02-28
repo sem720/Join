@@ -51,25 +51,22 @@ function getSelectedContacts() {
     
     return selectedCheckboxes.map(checkbox => {
         const name = checkbox.dataset.contactName;
-        const contact = allContacts.get(name); // 🔹 Kontakt-Objekt holen
+        const contact = allContacts.get(name); // 
 
         if (!contact) {
-            console.warn(`Kein Kontakt gefunden für ${name}`); // 🔥 Debugging
-            return null; // Falls der Kontakt nicht existiert, abbrechen
+            console.warn(`Kein Kontakt gefunden für ${name}`); 
+            return null; 
         }
 
         return {
             name: name,
-            avatar: generateAvatar(name, contact.bgcolor) // ✅ bgcolor direkt von allContacts!
+            avatar: generateAvatar(name, contact.bgcolor) // 
         };
-    }).filter(contact => contact !== null); // Entfernt ungültige Einträge
+    }).filter(contact => contact !== null); 
 }
 
-console.log("All Contacts Map:", allContacts); // 🔥 Alle Kontakte aus dem Backend
-console.log("Selected Contacts:", getSelectedContacts()); // 🔥 Ausgewählte Kontakte checken
-
 function getInitials(name) {
-    if (!name) return "??";  // ✅ Return placeholder initials if undefined
+    if (!name) return "??";  // 
 
     const parts = name.split(" ");
     return parts.map(part => part[0]).join("").toUpperCase();

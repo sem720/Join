@@ -5,7 +5,7 @@ let contactsContainer;
 let assignmentButton;
 let selectedContactsContainer;
 
-window.initAddTaskContacts = function() {
+function initAddTaskContacts() {
     contactsContainer = document.getElementById('contacts-container');
     assignmentButton = document.getElementById('assignment-btn');
 
@@ -138,7 +138,3 @@ function getInitials(name) {
     const parts = name.split(" ");
     return parts.map((part) => part[0]).join("").toUpperCase();
 }
-
-
-
-

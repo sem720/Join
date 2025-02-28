@@ -109,15 +109,7 @@
     display: block;
 }
 
-#modal-body {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 80vh;
-    max-height: 80vh;
-    flex-wrap: wrap;
-}
+
 
 .close-btn {
     position: absolute;

@@ -59,6 +59,11 @@ function changeImageStyle(button, action) {
 function dateInput() {
   const dateInput = document.getElementById("due-date");
 
+  if (!dateInput) {
+    console.error("Element with ID 'due-date' not found.");
+    return; // Exit if the element is missing
+  }
+
   dateInput.addEventListener("input", function () {
     if (dateInput.value) {
       dateInput.classList.add("has-value"); 
@@ -339,6 +344,8 @@ function init() {
   initEventListeners(),
   clearTask();
 }
+
+document.addEventListener("DOMContentLoaded", dateInput);
 
 
 
