@@ -24,7 +24,6 @@ function renderTasks(tasks) {
     }
 
     tasks.forEach(task => {
-        console.log("Rendering task:", task);
         const taskElement = createTaskElement(task);
         columnBody.appendChild(taskElement);
     });

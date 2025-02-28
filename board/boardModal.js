@@ -2,6 +2,8 @@ function openAddTaskModal() {
     document.getElementById("task-overlay").classList.add("active");
     document.getElementById("addTaskModal").classList.remove("hidden");
     document.getElementById("addTaskModal").classList.add("show");  
+    document.getElementById("close-modal").removeAttribute("disabled");
+
 }
 
 function closeModal() {
@@ -16,10 +18,16 @@ function closeModal() {
     }, 400);
 }
 
-function removeDisabled() {
-    document.getElementById("close-modal").removeAttribute("disabled");
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("addTaskModal");
+    console.log("Modal Element:", modal);
+    if (modal) {
+        console.log("✅ Modal is found, ready to apply classList changes.");
+    } else {
+        console.error("❌ Modal not found! Check if the script runs too early.");
+    }
+});
 
-}
 
 
 

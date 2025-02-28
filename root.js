@@ -20,7 +20,11 @@ function attachLoadingStateToButtons() {
     button.onclick = function (event) {
       if (originalOnClick) {
         event.preventDefault();
-        executeWithLoadingState(() => originalOnClick.call(button, event));
+        const result = originalOnClick.call(button, event);
+        
+        if (result instanceof Promise) {
+          executeWithLoadingState(() => result);
+        }
       }
     };
   });

@@ -1,3 +1,5 @@
+console.log("✅ addTaskForm.js is loaded and running!");
+
 let activeButton = null; 
 let dropdownBtn, dropdownList, dropdownContainer, selectedCategory;
 const defaultText = "Select a category";
@@ -106,10 +108,15 @@ function initialDefaultPriority() {
 }
 
 function toggleDropdown() {
+  const dropdownContainer = document.querySelector(".dropdown-container");
+  const dropdownList = document.querySelector(".dropdown-list");
+  const dropdownBtn = document.querySelector(".dropdown-btn");
+  
   const isOpen = dropdownContainer.classList.toggle("open");
   dropdownList.style.display = isOpen ? "block" : "none";
   dropdownBtn.querySelector("img").src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
 
+  
   if (isOpen) {
     resetDropdown();
   }
