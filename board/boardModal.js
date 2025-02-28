@@ -16,6 +16,10 @@ function closeModal() {
     }, 400);
 }
 
+function removeDisabled() {
+    document.getElementById("close-modal").removeAttribute("disabled");
+
+}
 
 
 
