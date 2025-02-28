@@ -35,7 +35,7 @@
 
     <!-- Modal und Overlay -->
    <div id="task-overlay" class="modal-overlay" onclick="closeModal()"></div>
-   <div id="addTaskModal" class="modal hidden" onclick="event.stopPropagation()">
+   <div id="addTaskModal" class="modal hidden">
         <button id="close-modal" class="close-btn" onclick="closeModal()">
           &times;
         </button>
@@ -43,170 +43,82 @@
       <div id="modal-body">
         <div class="modal-addTask-container">
           <h1 class="h1-addTask">Add Task</h1>
-      <main class="main-addTask">
-        <form onsubmit="createTask(event)">
-          <div class="left-container">
-            <label for="task-name">Title <span class="required">*</span></label>
-            <input
-              id="task-name"
-              class="input-standard"
-              type="text"
-              name="task-name"
-              placeholder="Enter a title"
-              required
-            />
-            <div class="error-message" style="display: none"></div>
-
-            <label for="description">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              placeholder="Enter a Description"
-            ></textarea>
-
-            <label id="assignment">Assigned to</label>
-            <div class="assignment-container" id="assignment">
-              <button class="assignment-btn" id="assignment-btn">
-                Select contacts to assign
-                <span class="icon-container">
-                  <img
-                    src="/assets/imgs/dropdown-black.png"
-                    alt="Dropdown Icon"
-                    id="dropdown-icon"
-                  />
-                </span>
-              </button>
-              <div
-                id="selected-contacts-container"
-                class="selected-contacts"
-              ></div>
-              <div id="contacts-container" class="hidden">
-                <div id="contacts-list"></div>
-              </div>
-            </div>
+            <main class="main-addTask">
+              <form onsubmit="createTask(event)">
+                <div class="left-container">
+                  <label for="task-name">Title <span class="required">*</span></label>
+                  <input id="task-name" class="input-standard" type="text" name="task-name" placeholder="Enter a title" required />
+                  
+                  <label for="description">Description</label>
+                  <textarea id="description" name="description" placeholder="Enter a Description"></textarea>
+      
+                  <label id="assignment-label">Assigned to</label>
+                  <div class="assignment-container">
+                    <button class="assignment-btn" id="assignment-btn">
+                      Select contacts to assign
+                      <span class="icon-container">
+                        <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" />
+                      </span>
+                    </button>
+                    <div id="selected-contacts-container" class="selected-contacts"></div>
+                    <div id="contacts-container" class="hidden">
+                      <div id="contacts-list"></div>
+                    </div>
+                  </div>
+                </div> <!-- END left-container -->
+      
+                <div class="right-container">
+                  <label for="due-date">Due Date <span class="required">*</span></label>
+                  <input type="date" class="input-standard" id="due-date" name="due-date" required />
+                  
+                  <label>Prio</label>
+                  <div class="button-container">
+                    <button class="btn-switch" id="urgent" type="button" onclick="toggleButtons(this)">Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" /></button>
+                    <button class="btn-switch" id="medium" type="button" onclick="toggleButtons(this)">Medium <img src="/assets/imgs/medium.png" alt="medium-icon" /></button>
+                    <button class="btn-switch" id="low" type="button" onclick="toggleButtons(this)">Low <img src="/assets/imgs/low.png" alt="low-icon" /></button>
+                  </div>
+      
+                  <label>Category <span class="required">*</span></label>
+                  <div class="dropdown-container">
+                    <button class="dropdown-btn" onclick="toggleDropdown()">Select task category</button>
+                    <div class="dropdown-options">
+                      <li onclick="selectCategory(this)" data-value="technical_task">Technical Task</li>
+                      <li onclick="selectCategory(this)" data-value="user_story">User Story</li>
+                    </div>
+                  </div>
+                  <input type="hidden" id="selected-category" name="selected-category" />
+      
+                  <label for="subtasks">Subtasks</label>
+                  <div class="subtask-input-wrapper">
+                    <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask" autocomplete="off" />
+                    <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
+                  </div>
+                  <ul id="subtask-list"></ul>
+                </div> <!-- END right-container -->
+      
+                <div class="text resp" style="display: none">
+                  <span class="required"> *</span> This field is required.
+                </div>
+              </form>
+      
+              <section class="footer">
+                <div class="text">
+                  <span class="required">*</span>This field is required.
+                </div>
+                <div class="btn-div-footer">
+                  <button class="btn-bright clear-btn" onclick="clearTask()">Clear</button>
+                  <button class="btn-dark create-btn" onclick="createTask(event)">Create Task <img src="/assets/imgs/check-white.png" alt="check-icon" /></button>
+                </div>
+              </section>
+            </main>
+            <div id="task-added-popup" class="task-popup btn-dark">
+              Task added to board
+              <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
           </div>
-
-          <div class="right-container">
-            <label for="due-date"
-              >Due Date <span class="required">*</span></label
-            >
-            <input
-              type="date"
-              class="input-standard"
-              id="due-date"
-              name="due-date"
-              data-placeholder="dd/mm/yyyy"
-              required
-            />
-            <div class="error-message" style="display: none"></div>
-
-            <label>Prio</label>
-            <div class="button-container">
-              <button
-                class="btn-switch"
-                id="urgent"
-                name="urgent"
-                type="button"
-                onclick="toggleButtons(this)"
-              >
-                Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
-              </button>
-              <button
-                class="btn-switch"
-                id="medium"
-                name="medium"
-                type="button"
-                onclick="toggleButtons(this)"
-              >
-                Medium <img src="/assets/imgs/medium.png" alt="medium-icon" />
-              </button>
-              <button
-                class="btn-switch"
-                id="low"
-                name="low"
-                type="button"
-                onclick="toggleButtons(this)"
-              >
-                Low <img src="/assets/imgs/low.png" alt="low-icon" />
-              </button>
-            </div>
-
-            <label id="category"
-              >Category <span class="required">*</span></label
-            >
-            <div class="dropdown-container" id="category-container">
-              <button class="dropdown-btn" id="dropdown-btn" onclick="toggleDropdown()">
-                Select task category
-              </button>
-              <div class="dropdown-options" id="dropdown-list">
-                <li onclick="selectCategory(this)" data-value="technical_task">Technical Task</li>
-                <li onclick="selectCategory(this)" data-value="user_story">User Story</li>
-              </div>
-            </div>
-            <input
-              type="hidden"
-              id="selected-category"
-              name="selected-category"
-            />
-            <div class="error-message" style="display: none"></div>
-
-            <label for="subtasks" id="label-subtask">Subtasks</label>
-            <div class="subtask-input-wrapper">
-              <input
-                type="text"
-                class="input-standard"
-                id="subtasks"
-                name="subtasks"
-                placeholder="Add new subtask"
-                autocomplete="off"
-              />
-              <img
-                src="/assets/imgs/add-subtask.png"
-                alt="addSubtask-icon"
-                class="add-subtask-icon"
-              />
-            </div>
-            <ul id="subtask-list"></ul>
-          </div>
-          <div class="text resp" style="display: none">
-            <span class="required"> *</span>
-            This field is required.
-          </div>
-        </form>
-        <section class="footer">
-          <div class="text">
-            <span class="required">*</span>This field is required.
-          </div>
-          <div class="btn-div-footer">
-            <button class="btn-bright clear-btn" onclick="clearTask()">
-              Clear
-              <span class="clear-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="10"
-                  height="10"
-                  viewBox="0 0 30 30"
-                >
-                  <line x1="0" y1="0" x2="30" y2="30" stroke-width="3" />
-                  <line x1="30" y1="0" x2="0" y2="30" stroke-width="3" />
-                </svg>
-              </span>
-            </button>
-
-            <button class="btn-dark create-btn" onclick="createTask(event)">
-              Create Task
-              <img src="/assets/imgs/check-white.png" alt="check-icon" />
-            </button>
-          </div>
-        </section>
-      </main>
-      <div id="task-added-popup" class="task-popup btn-dark">
-        Task added to board
-        <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
-    </div>
-        </div>
-      </div>
-
+          </div> <!-- END modal-addTask-container -->
+        </div> <!-- END modal-body -->
+      </div> <!-- END addTaskModal -->
+   
   <!-- Haupt-Board -->
   <div class="board-wrap">
     <div class="board-header">
@@ -230,7 +142,7 @@
       <div class="toDo column" id="to-do">
         <div class="column-header">
           <h3 class="h3-column">To do</h3>
-          <img src="/assets/imgs/plus-button.png" alt="plus-button" id="plus-button" onclick="openAddTaskModal()" />
+          <img src="/assets/imgs/plus-button.png" alt="plus-button" class="plus-button" onclick="openAddTaskModal()" />
         </div>
         <div class="column-body"></div>
       </div>
@@ -238,7 +150,7 @@
       <div class="inProgress column" id="in-progress">
         <div class="column-header">
           <h3 class="h3-column">In progress</h3>
-          <img src="/assets/imgs/plus-button.png" alt="plus-button" id="plus-button" onclick="openAddTaskModal()" />
+          <img src="/assets/imgs/plus-button.png" alt="plus-button" class="plus-button" onclick="openAddTaskModal()" />
         </div>
         <div class="column-body"></div>
       </div>
@@ -246,7 +158,7 @@
       <div class="feedback column" id="awaitFeedback">
         <div class="column-header">
           <h3 class="h3-column">Await feedback</h3>
-          <img src="/assets/imgs/plus-button.png" alt="plus-button" id="plus-button" onclick="openAddTaskModal()" />
+          <img src="/assets/imgs/plus-button.png" alt="plus-button" class="plus-button" onclick="openAddTaskModal()" />
         </div>
         <div class="column-body"></div>
       </div>
