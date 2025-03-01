@@ -126,8 +126,8 @@
                 Select task category
               </button>
               <div class="dropdown-options" id="dropdown-list">
-                <li onclick="selectCategory(this)" data-value="technical_task">Technical Task</li>
-                <li onclick="selectCategory(this)" data-value="user_story">User Story</li>
+                <li onclick="selectCategory(this)" data-value="technical_task" class="no-loading">Technical Task</li>
+                <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
               </div>
             </div>
             <input
@@ -192,9 +192,14 @@
         <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
     </div>
     </div>
-    <script src="/addTask/addTaskForm.js"></script>
-    <script src="/addTask/addTaskContact.js"></script>
+    <script src="/addTask/taskHelpers.js"></script>
+    <script src="/addTask/date.js"></script>
+    <script src="/addTask/dropdown.js"></script>
+    <script src="/addTask/subtasks.js"></script>
+    <script src="/addTask/taskContact.js"></script>
+    <script src="/addTask/taskPriority.js"></script>
     <script src="/addTask/createTask.js"></script>
+    <script src="/addTask/taskMain.js"></script>
     <script src="/comp/navbar/navbar.js"></script>
     <script src="/comp/sidebar/sidebar.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>

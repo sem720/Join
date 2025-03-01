@@ -64,14 +64,6 @@ function renderContactsList() {
     })
 }
 
-function capitalizeName(name) {
-    return name
-        .toLowerCase() 
-        .split(" ")
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
-        .join(" ");
-}
-
 function createContactElement(name, bgcolor) {
     const contactDiv = createElement("div", "contact-item");
     contactDiv.appendChild(createAvatar(name, bgcolor)); 
@@ -94,22 +86,6 @@ function updateSelectedContactsDisplay() {
     });
 }
 
-function createAvatar(name, bgcolor) {
-    const avatar = createElement("div", "avatar", getInitials(name));
-    avatar.style.backgroundColor = bgcolor;
-    return avatar;
-}
-
-function createCheckbox(name, avatar) {
-    const checkbox = createElement("input", "contact-checkbox");
-    checkbox.type = "checkbox";
-
-    checkbox.dataset.contactName = name;
-    checkbox.dataset.contactAvatar = avatar;
-    checkbox.addEventListener("change", () => toggleContactSelection(name, checkbox.checked));
-    return checkbox;
-}
-
 function toggleContactSelection(name, isChecked) {
     const contact = allContacts.get(name);
     if (!contact) return;
@@ -126,14 +102,4 @@ function toggleContactSelection(name, isChecked) {
     updateSelectedContactsDisplay();
 }
 
-function createElement(tag, className = "", text = "") {
-    const element = document.createElement(tag);
-    if (className) element.classList.add(className);
-    if (text) element.innerText = text;
-    return element;
-}
 
-function getInitials(name) {
-    const parts = name.split(" ");
-    return parts.map((part) => part[0]).join("").toUpperCase();
-}

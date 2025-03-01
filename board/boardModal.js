@@ -13,7 +13,6 @@ async function openAddTaskModal() {
     renderContactsList();
     setupAddSubtaskButton();
     dateInput();
-    validateTaskData();
 }
 
 function closeModal() {
@@ -28,15 +27,7 @@ function closeModal() {
     }, 400);
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const modal = document.getElementById("addTaskModal");
-    console.log("Modal Element:", modal);
-    if (modal) {
-        console.log("✅ Modal is found, ready to apply classList changes.");
-    } else {
-        console.error("❌ Modal not found! Check if the script runs too early.");
-    }
-});
+
 
 
 
