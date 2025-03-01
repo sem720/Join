@@ -207,7 +207,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
      color: black;
  }
 
- .task-popup {
+.task-popup {
     width: 250px;
     height: 48px;
     display: flex;
@@ -219,7 +219,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-radius: 18px !important;
     position: fixed;
     bottom: -50%;
-    left: 50%;
+    left: 60%;
     transform: translateX(-50%);
     opacity: 0;
     transition: bottom 0.5s ease-out, opacity 0.5s ease-in-out;
@@ -239,11 +239,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         bottom: 50%;
         opacity: 1;
     }
-}
-
-#popup-icon {
-    width: 25px;
-    height: 29px;
 }
 
 #contacts-list {

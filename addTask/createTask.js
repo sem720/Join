@@ -22,7 +22,7 @@ function handleTaskCreation(event) {
 
 function handleTaskSuccess() {
     showTaskPopup();
-    setTimeout(() => window.location.href = "/board/board.html", 20000);
+    setTimeout(() => window.location.href = "/board/board.html", 1500);
 }
 
 /** ================================
@@ -169,7 +169,7 @@ function showTaskPopup() {
     let popup = document.getElementById("task-added-popup");
     popup.classList.add("show");
 
-    setTimeout(() => window.location.href = "/board/board.html", 20000);
+    setTimeout(() => window.location.href = "/board/board.html", 1500);
 }
 
   
