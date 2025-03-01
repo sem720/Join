@@ -3,33 +3,32 @@ const selectedContacts = new Set();
 
 let contactsContainer;
 let assignmentButton;
-let selectedContactsContainer;
+const selectedContactsContainer = document.getElementById("selected-contacts-container");
 
 function initAddTaskContacts() {
     contactsContainer = document.getElementById('contacts-container');
     assignmentButton = document.getElementById('assignment-btn');
 
-    createSelectedContactsContainer();
-    assignmentButton.addEventListener("click", toggleContactsVisibility);
     fetchContacts();
 }
 
-function createSelectedContactsContainer() {
-    selectedContactsContainer = document.createElement("div");
-    selectedContactsContainer.id = "selected-contacts-container"; 
-    selectedContactsContainer.classList.add("selected-contacts-container");
-    assignmentButton.insertAdjacentElement("afterend", selectedContactsContainer);
-}
+function toggleContacts(event) {
+    event.preventDefault();
+    const contactsList = document.getElementById("contacts-list");
+    const icon = document.getElementById("dropdown-icon");
+    
+    if (!contactsList) return console.error("❌ Element #contacts-list not found!");
+        
+    contactsList.classList.toggle("hidden");
+    contactsList.classList.toggle("visible");
 
-function toggleContactsVisibility(e) {
-    e.preventDefault();
-
-    contactsContainer.classList.toggle('hidden');
-    document.getElementById("contacts-list").classList.toggle("visible");
-
-    if (contactsContainer.classList.contains("hidden")) {
-        updateSelectedContactsDisplay();
-    }
+    const contactsContainer = contactsList.parentElement; // Adjust as needed
+    if (contactsContainer) contactsContainer.classList.toggle("hidden");
+    
+    const isOpen = contactsList.classList.contains("visible");
+    if (icon) icon.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
+    
+    if (!isOpen) updateSelectedContactsDisplay();
 }
 
 async function fetchContacts() {
@@ -47,7 +46,7 @@ async function fetchContacts() {
 
 function processContactsData(data) {
     allContacts.clear();
-
+    console.log("✅ Processed Contacts:", data);
     Object.values(data).forEach(user => {
         let name = capitalizeName(user.name);
         let bgcolor = user.bgcolor;
@@ -59,7 +58,7 @@ function processContactsData(data) {
 function renderContactsList() {
     const contactsList = document.getElementById('contacts-list');
     contactsList.innerHTML = '';
-
+    console.log("🔹 Contacts to render:", contactsList);
     allContacts.forEach(({ name, bgcolor }) => {
         contactsList.appendChild(createContactElement(name, bgcolor));
     })

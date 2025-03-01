@@ -25,11 +25,24 @@
     background-color: white !important;
 }
 
-.modal-addTask-container input[type="date"] {
+input[type="date"] {
     color: black;
 }
 
-.modal-addTask-container input[type="date"]::placeholder {
+input[type="date"]::placeholder {
     color: #d7d7d7 !important;
+}
+
+.icon-container > img {
+    width: 10px;
+    height: auto;
+}
+
+.icon-container {
+   margin-right: 4px;
+}
+
+.contact-item {
+    padding: 8px 4px 8px 4px !important;
 }
 

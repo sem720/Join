@@ -36,7 +36,7 @@
     <!-- Modal und Overlay -->
    <div id="task-overlay" class="modal-overlay" onclick="closeModal()"></div>
    <div id="addTaskModal" class="modal hidden">
-        <button id="close-modal" class="close-btn" onclick="closeModal()">
+        <button id="close-modal" class="close-btn no-loading" onclick="closeModal()">
           &times;
         </button>
 
@@ -54,10 +54,10 @@
       
                   <label id="assignment-label">Assigned to</label>
                   <div class="assignment-container">
-                    <button class="assignment-btn" id="assignment-btn">
+                    <button class="assignment-btn no-loading" id="assignment-btn"  onclick="toggleContacts(event)">
                       Select contacts to assign
                       <span class="icon-container">
-                        <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" />
+                        <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon"/>
                       </span>
                     </button>
                     <div id="selected-contacts-container" class="selected-contacts"></div>
@@ -80,10 +80,14 @@
       
                   <label>Category <span class="required">*</span></label>
                   <div class="dropdown-container">
-                    <button class="dropdown-btn" onclick="toggleDropdown()">Select task category</button>
-                    <div class="dropdown-options">
-                      <li onclick="selectCategory(this)" data-value="technical_task">Technical Task</li>
-                      <li onclick="selectCategory(this)" data-value="user_story">User Story</li>
+                    <button class="dropdown-btn no-loading" onclick="toggleDropdown()">Select task category
+                      <span class="icon-container">
+                        <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                      </span>
+                    </button>
+                    <div class="dropdown-options" id="dropdown-list">
+                      <li onclick="selectCategory(this)" data-value="technical_task" class="no-loading">Technical Task</li>
+                      <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
                     </div>
                   </div>
                   <input type="hidden" id="selected-category" name="selected-category" />
@@ -106,8 +110,8 @@
                   <span class="required">*</span>This field is required.
                 </div>
                 <div class="btn-div-footer">
-                  <button class="btn-bright clear-btn" onclick="clearTask()">Clear</button>
-                  <button class="btn-dark create-btn" onclick="createTask(event)">Create Task <img src="/assets/imgs/check-white.png" alt="check-icon" /></button>
+                  <button class="btn-bright clear-btn no-loading" onclick="clearTask()">Clear</button>
+                  <button class="btn-dark create-btn no-loading" onclick="createTask(event)">Create Task <img src="/assets/imgs/check-white.png" alt="check-icon" /></button>
                 </div>
               </section>
             </main>
@@ -132,7 +136,7 @@
           </div>
         </div>
 
-        <button id="addTask" class="btn-dark" onclick="openAddTaskModal()">
+        <button id="addTask" class="btn-dark no-loading" onclick="openAddTaskModal()">
           Add Task
           <img src="/assets/imgs/plus-white.png" alt="add Task" id="plus-white" />
         </button>

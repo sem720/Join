@@ -1,7 +1,8 @@
-console.log("✅ addTaskForm.js is loaded and running!");
-
 let activeButton = null; 
-let dropdownBtn, dropdownList, dropdownContainer, selectedCategory;
+const selectedCategory = document.getElementById('selected-category');
+const dropdownBtn = document.querySelector('.dropdown-btn');
+const dropdownList = document.getElementById('dropdown-list');
+const dropdownContainer = document.querySelector('.dropdown-container');
 const defaultText = "Select a category";
 
 function toggleButtons(clickedButton) {
@@ -16,6 +17,10 @@ function toggleButtons(clickedButton) {
   
   activateButton(clickedButton);
   activeButton = clickedButton;
+
+  console.log("🔄 Button Clicked:", clickedButton);
+    console.log("📌 Button ID:", clickedButton.id);
+    console.log("📌 Current Class List:", clickedButton.classList);
 }
 
 function activateButton(button) {
@@ -108,15 +113,10 @@ function initialDefaultPriority() {
 }
 
 function toggleDropdown() {
-  const dropdownContainer = document.querySelector(".dropdown-container");
-  const dropdownList = document.querySelector(".dropdown-list");
-  const dropdownBtn = document.querySelector(".dropdown-btn");
-  
   const isOpen = dropdownContainer.classList.toggle("open");
   dropdownList.style.display = isOpen ? "block" : "none";
   dropdownBtn.querySelector("img").src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
 
-  
   if (isOpen) {
     resetDropdown();
   }
@@ -339,11 +339,6 @@ function handleTaskCreation(event) {
 }
 
 function init() {
-  dropdownBtn = document.getElementById("dropdown-btn");
-  dropdownList = document.getElementById("dropdown-list");
-  dropdownContainer = document.getElementById("category-container");
-  selectedCategory = document.getElementById("selected-category");
-
   initialDefaultPriority(),
   dateInput(),
   setupDateReset(),
@@ -352,7 +347,6 @@ function init() {
   clearTask();
 }
 
-document.addEventListener("DOMContentLoaded", dateInput);
 
 
 

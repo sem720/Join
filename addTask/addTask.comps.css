@@ -256,11 +256,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: block;
 }
 
-.selected-contacts-container {
+#selected-contacts-container {
     display: flex;
 }
 
-.selected-contacts-container > div {
+#selected-contacts-container > div {
     margin-top: 8px;
     margin-right: 4px;
     display: flex;

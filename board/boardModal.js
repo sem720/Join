@@ -1,9 +1,10 @@
-function openAddTaskModal() {
+async function openAddTaskModal() {
+    await fetchContacts();
     document.getElementById("task-overlay").classList.add("active");
     document.getElementById("addTaskModal").classList.remove("hidden");
     document.getElementById("addTaskModal").classList.add("show");  
-    document.getElementById("close-modal").removeAttribute("disabled");
 
+    renderContactsList();
 }
 
 function closeModal() {
