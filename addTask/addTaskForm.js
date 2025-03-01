@@ -152,8 +152,16 @@ function setupAddSubtaskButton() {
   const addSubtaskBtn = document.querySelector(".add-subtask-icon");
   const inputField = document.getElementById("subtasks");
 
+  console.log("🔎 Checking elements...");
+  console.log("📌 addSubtaskBtn:", addSubtaskBtn);
+  console.log("📌 inputField:", inputField);
+
   if (addSubtaskBtn) addSubtaskBtn.addEventListener("click", handleAddSubtaskClick);
   if (inputField) inputField.addEventListener("input", handleSubtaskInput);
+
+  if (addSubtaskBtn) console.log("✅ Add Subtask Button Found");
+  if (inputField) console.log("✅ Input Field Found");
+
 }
 
 function handleAddSubtaskClick() {
@@ -196,6 +204,9 @@ function showSubtaskActions() {
     iconContainer.append(...icons);
     inputField.parentElement.appendChild(iconContainer);
   }
+
+  console.log("📌 Creating subtask actions...");
+
 }
 
 function createIcon(src, alt, className, eventHandler) {

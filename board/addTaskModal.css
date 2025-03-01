@@ -25,14 +25,6 @@
     background-color: white !important;
 }
 
-input[type="date"] {
-    color: black;
-}
-
-input[type="date"]::placeholder {
-    color: #d7d7d7 !important;
-}
-
 .icon-container > img {
     width: 10px;
     height: auto;
@@ -44,5 +36,17 @@ input[type="date"]::placeholder {
 
 .contact-item {
     padding: 8px 4px 8px 4px !important;
+}
+
+#subtask-list {
+    width: 100%;
+}
+
+#due-date {
+    color: #d7d7d7;
+}
+
+#due-date.has-value {
+    color: black;
 }
 

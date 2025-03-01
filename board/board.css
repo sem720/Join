@@ -102,11 +102,13 @@
     max-height: 100vh;
     z-index: 30;
     background-color: white;
+    pointer-events: none;
 }
 
 .modal.show {
     transform: translate(-50%, -50%);
     display: block;
+    pointer-events: all;
 }
 
 .close-btn {

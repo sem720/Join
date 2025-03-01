@@ -47,20 +47,38 @@
               <form onsubmit="createTask(event)">
                 <div class="left-container">
                   <label for="task-name">Title <span class="required">*</span></label>
-                  <input id="task-name" class="input-standard" type="text" name="task-name" placeholder="Enter a title" required />
-                  
+                  <input 
+                    id="task-name" 
+                    class="input-standard" 
+                    type="text" name="task-name" 
+                    placeholder="Enter a title" 
+                    required 
+                  />
+                  <div class="error-message" style="display: none"></div>
+
                   <label for="description">Description</label>
-                  <textarea id="description" name="description" placeholder="Enter a Description"></textarea>
+                  <textarea i
+                    id="description" 
+                    name="description" 
+                    placeholder="Enter a Description"
+                  ></textarea>
       
                   <label id="assignment-label">Assigned to</label>
                   <div class="assignment-container">
                     <button class="assignment-btn no-loading" id="assignment-btn"  onclick="toggleContacts(event)">
                       Select contacts to assign
                       <span class="icon-container">
-                        <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon"/>
+                        <img 
+                          src="/assets/imgs/dropdown-black.png" 
+                          alt="Dropdown Icon" 
+                          id="dropdown-icon"
+                        />
                       </span>
                     </button>
-                    <div id="selected-contacts-container" class="selected-contacts"></div>
+                    <div 
+                      id="selected-contacts-container" 
+                      class="selected-contacts">
+                    </div>
                     <div id="contacts-container" class="hidden">
                       <div id="contacts-list"></div>
                     </div>
@@ -68,17 +86,49 @@
                 </div> <!-- END left-container -->
       
                 <div class="right-container">
-                  <label for="due-date">Due Date <span class="required">*</span></label>
-                  <input type="date" class="input-standard" id="due-date" name="due-date" required />
-                  
+                  <label for="due-date"
+                    >Due Date <span class="required">*</span></label
+                  >
+                  <input 
+                    type="date" 
+                    class="input-standard" 
+                    id="due-date" 
+                    name="due-date" 
+                    required 
+                  />
+                  <div class="error-message" style="display: none"></div>
+
                   <label>Prio</label>
                   <div class="button-container">
-                    <button class="btn-switch" id="urgent" type="button" onclick="toggleButtons(this)">Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" /></button>
-                    <button class="btn-switch" id="medium" type="button" onclick="toggleButtons(this)">Medium <img src="/assets/imgs/medium.png" alt="medium-icon" /></button>
-                    <button class="btn-switch" id="low" type="button" onclick="toggleButtons(this)">Low <img src="/assets/imgs/low.png" alt="low-icon" /></button>
+                    <button 
+                    class="btn-switch" 
+                    id="urgent" 
+                    type="button" 
+                    onclick="toggleButtons(this)"
+                    >
+                      Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
+                    </button>
+                    <button 
+                      class="btn-switch" 
+                      id="medium" 
+                      type="button" 
+                      onclick="toggleButtons(this)"
+                    >
+                      Medium <img src="/assets/imgs/medium.png" alt="medium-icon" />
+                    </button>
+                    <button 
+                      class="btn-switch" 
+                      id="low" 
+                      type="button" 
+                      onclick="toggleButtons(this)"
+                    >
+                      Low <img src="/assets/imgs/low.png" alt="low-icon" />
+                    </button>
                   </div>
       
-                  <label>Category <span class="required">*</span></label>
+                  <label id="category"
+                    >Category <span class="required">*</span></label
+                  >
                   <div class="dropdown-container">
                     <button class="dropdown-btn no-loading" onclick="toggleDropdown()">Select task category
                       <span class="icon-container">
@@ -90,12 +140,28 @@
                       <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
                     </div>
                   </div>
-                  <input type="hidden" id="selected-category" name="selected-category" />
+                  <input 
+                    type="hidden" 
+                    id="selected-category" 
+                    name="selected-category" 
+                  />
+                  <div class="error-message" style="display: none"></div>
       
                   <label for="subtasks">Subtasks</label>
                   <div class="subtask-input-wrapper">
-                    <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask" autocomplete="off" />
-                    <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
+                    <input 
+                      type="text" 
+                      class="input-standard" 
+                      id="subtasks" 
+                      name="subtasks" 
+                      placeholder="Add new subtask" 
+                      autocomplete="off"
+                    />
+                    <img 
+                      src="/assets/imgs/add-subtask.png" 
+                      alt="addSubtask-icon" 
+                      class="add-subtask-icon" 
+                    />
                   </div>
                   <ul id="subtask-list"></ul>
                 </div> <!-- END right-container -->
@@ -110,8 +176,18 @@
                   <span class="required">*</span>This field is required.
                 </div>
                 <div class="btn-div-footer">
-                  <button class="btn-bright clear-btn no-loading" onclick="clearTask()">Clear</button>
-                  <button class="btn-dark create-btn no-loading" onclick="createTask(event)">Create Task <img src="/assets/imgs/check-white.png" alt="check-icon" /></button>
+                  <button 
+                    class="btn-bright clear-btn no-loading" 
+                    onclick="clearTask()"
+                    >Clear
+                  </button>
+                  <button 
+                    class="btn-dark create-btn no-loading" 
+                    onclick="createTask(event)"
+                    >Create Task 
+                    <img src="/assets/imgs/check-white.png" alt="check-icon" 
+                    />
+                  </button>
                 </div>
               </section>
             </main>

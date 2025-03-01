@@ -1,10 +1,19 @@
 async function openAddTaskModal() {
     await fetchContacts();
-    document.getElementById("task-overlay").classList.add("active");
-    document.getElementById("addTaskModal").classList.remove("hidden");
-    document.getElementById("addTaskModal").classList.add("show");  
+    const overlay = document.getElementById("task-overlay");
+    const modal = document.getElementById("addTaskModal");
+
+    overlay.classList.add("active");
+    modal.classList.remove("hidden");
+
+    setTimeout(() => {
+        modal.classList.add("show");
+    }, 10);
 
     renderContactsList();
+    setupAddSubtaskButton();
+    dateInput();
+    validateTaskData();
 }
 
 function closeModal() {
