@@ -26,8 +26,11 @@ function selectCategory(option) {
     `;
   
     selectedCategory.value = selectedValue;
+    console.log("🟢 Updated selected-category value:", selectedCategory.value);
     dropdownContainer.classList.remove("open");
     dropdownList.style.display = "none";
+
+    console.log("✅ Selected Category Updated:", selectedCategory); 
   
     clearError("#selected-category");
 }

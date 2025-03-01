@@ -165,7 +165,7 @@
             <span class="required">*</span>This field is required.
           </div>
           <div class="btn-div-footer">
-            <button class="btn-bright clear-btn" onclick="clearTask()">
+            <button class="btn-bright clear-btn no-loading" onclick="clearTask()">
               Clear
               <span class="clear-icon">
                 <svg
@@ -180,7 +180,7 @@
               </span>
             </button>
 
-            <button class="btn-dark create-btn" onclick="createTask(event)">
+            <button class="btn-dark create-btn no-loading" onclick="createTask(event)">
               Create Task
               <img src="/assets/imgs/check-white.png" alt="check-icon" />
             </button>
@@ -192,6 +192,7 @@
         <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
     </div>
     </div>
+    
     <script src="/addTask/taskHelpers.js"></script>
     <script src="/addTask/date.js"></script>
     <script src="/addTask/dropdown.js"></script>

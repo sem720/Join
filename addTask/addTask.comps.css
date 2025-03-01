@@ -1,5 +1,3 @@
-Pseudoelemente und klassen und alles was btn in der Klasse oder id hat, .error und .error-message, #due-date, .task-popup, .selected-contacts-list, .contacts-list
-
 input::placeholder, 
 textarea::placeholder {
     color: #D7D7D7;
@@ -220,7 +218,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-weight: 300 !important;
     border-radius: 18px !important;
     position: fixed;
-    bottom: -100px;
+    bottom: -50%;
     left: 50%;
     transform: translateX(-50%);
     opacity: 0;

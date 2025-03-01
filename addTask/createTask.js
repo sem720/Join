@@ -22,7 +22,7 @@ function handleTaskCreation(event) {
 
 function handleTaskSuccess() {
     showTaskPopup();
-    setTimeout(() => window.location.href = "/board/board.html", 1500);
+    setTimeout(() => window.location.href = "/board/board.html", 20000);
 }
 
 /** ================================
@@ -60,11 +60,14 @@ function clearTask() {
  *        TASK VALIDATION
  * ================================ */
 function validateTaskData(taskData) {
+    console.log("🛠 Validating task data:", taskData);
     let isValid = true;
 
     !taskData.title.trim() ? (showError("#task-name", "Title is required."), isValid = false) : clearError("#task-name");
     !taskData.dueDate.trim() ? (showError("#due-date", "Due Date is required."), isValid = false) : clearError("#due-date");
     !taskData.category.trim() ? (showError("#selected-category", "Category is required."), isValid = false) : clearError("#selected-category");
+
+    console.log("Category Element Found:", document.getElementById("selected-category"));
 
     return isValid;
 }
@@ -119,15 +122,28 @@ function generateAvatar(name, bgcolor) {
  *      CATEGORY SELECTION
  * ================================ */
 function getSelectedCategory() {
-    const category = document.querySelector("#selected-category")?.value.trim().toLowerCase();
+    const selectedInput = document.getElementById("selected-category");
 
-    if (category === "technical task" || category === "user story") {
-        return category
-            .split(" ") 
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
-            .join(" "); 
+    if (!selectedInput) {
+        console.error("❌ Error: Could not find #selected-category input.");
+        return "";
     }
+
+    let category = selectedInput.value?.trim(); // Ensure it's a string
+
+    if (!category) {
+        console.warn("⚠️ No category selected!");
+        return ""; // Prevent `undefined` errors
+    }
+
+    console.log("✅ getSelectedCategory() returning:", category);
+
+    return category.replace("_", " ") // Convert "technical_task" → "Technical Task"
+        .split(" ")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
 }
+
 
 /** ================================
  *      SUBTASKS HANDLING
@@ -153,7 +169,7 @@ function showTaskPopup() {
     let popup = document.getElementById("task-added-popup");
     popup.classList.add("show");
 
-    setTimeout(() => window.location.href = "/board/board.html", 1500);
+    setTimeout(() => window.location.href = "/board/board.html", 20000);
 }
 
   
