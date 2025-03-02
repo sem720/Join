@@ -95,13 +95,12 @@ function createTaskTemplate(task) {
 
 
 function createTaskElement(task) {
-    let categoryColor = "";
+    let categoryColor = task.category === "User Story" ? "#0039fe" : "#1fd7c1";
 
-    if (task.category === "User Story") {
-        categoryColor = "#0039fe";
-    } else if (task.category === "Technical Task") {
-        categoryColor = "#1fd7c1";
-    }
+    // Berechne den Subtask-Fortschritt
+    let totalSubtasks = task.subtasks ? task.subtasks.length : 0;
+    let completedSubtasks = task.subtasks ? task.subtasks.filter(s => s.completed).length : 0;
+    let progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
 
     const avatarsHTML = task.assignedTo
         ? task.assignedTo.map(user =>
@@ -119,6 +118,15 @@ function createTaskElement(task) {
         </div>
         <h3 class="task-title">${task.title || "No Title"}</h3>
         <p class="task-description">${task.description || "No Description"}</p>
+        
+        <!-- 📌 Snackbar für Subtasks -->
+        <div class="subtask-snackbar">
+            <div class="subtask-bar-progress">
+                <div class="subtask-bar-prog-blue" style="width: ${progressPercent}%;"></div>
+            </div>
+            <p class="subtask-checked">${completedSubtasks}/${totalSubtasks} Subtasks</p>
+        </div>
+
         <div class="task-card-footer">
             <div class="task-card-avatar">${avatarsHTML}</div>
             <img src="${task.priority?.image || ''}" alt="${task.priority?.text || ''}" class="prio-icon">
@@ -127,6 +135,7 @@ function createTaskElement(task) {
 
     return taskDiv;
 }
+
 
 
 function addTaskToBoard(task) {
