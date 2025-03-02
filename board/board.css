@@ -72,73 +72,19 @@ body {
     overflow: hidden;
 }
 
-#task-overlay {
+.overlay {
     position: fixed;
     top: 0;
     right: 0;
-    width: 100vw;
     height: 100vh;
+    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0);
-    visibility: hidden;
-    transition: background-color 0.5s ease, visibility 0.5s ease;
     z-index: 99;
-}
-
-#task-overlay.active {
-    background-color: rgba(0, 0, 0, 0.5);
-    visibility: visible;
-}
-
-/* Modal für addTask */
-#addTaskModal {
-    display: flex;
-    align-items: center;
-    height: 80vh;
-    z-index: 100;
-    overflow: hidden;
-    border-radius: 32px;
-    position: fixed;
-    right: -100%;
-    transition: right 0.5s ease, transform 0.5s ease;
-}
-
-/* Wenn das Overlay aktiv ist, kommt das Modal nach links */
-#task-overlay.active #addTaskModal {
-    right: 50%;
-    transform: translateX(50%);
-}
-
-/* Beim Schließen geht das Modal nach rechts */
-#task-overlay.closing {
     background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.5s ease, visibility 0.5s ease;
     visibility: hidden;
-}
-
-#task-overlay.closing #addTaskModal,
-.closing-to-right {
-    right: -100%;
-    transform: translateX(0);
-}
-
-.close-btn {
-    position: absolute;
-    top: 40px;
-    right: 40px;
-    font-size: 28px;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    border: none;
-    background: none;
-}
-
-.close-btn:hover,
-.close-btn:focus {
-    background-color: #F6F7F8;
-    border-radius: 50%;
 }
 
 .board-main {

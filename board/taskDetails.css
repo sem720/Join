@@ -41,7 +41,8 @@ li {
     transform: scale(0.9);
     transition: transform 0.3s ease;
     overflow-y: auto;
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    scrollbar-color: #a9a9a9 transparent;
 }
 
 #taskDetailOverlay.active #taskDetailModal {
@@ -52,6 +53,8 @@ li {
     max-height: 200px;
     overflow: auto;
     width: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: #a9a9a9 transparent;
 }
 
 #closeTaskDetail {
@@ -134,6 +137,8 @@ li {
     input {
         width: fit-content;
         height: 16px;
+        box-shadow: none;
+        cursor: auto;
     }
 
     &:hover {
@@ -161,4 +166,30 @@ li {
 .btn-edit:hover {
     filter: brightness(0) saturate(100%) invert(57%) sepia(60%) saturate(583%) hue-rotate(154deg) brightness(90%) contrast(96%);
     scale: 1.15;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #a9a9a9;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #a9a9a9 transparent;
 }

@@ -276,7 +276,7 @@ function openTaskDetail(task) {
 
     let subtasksHTML = "";
     if (!task.subtasks || task.subtasks.length === 0) {
-        subtasksHTML = `<p>Keine Subtasks vorhanden</p>`;
+        subtasksHTML = `<p>No subtasks available</p>`;
     } else {
         subtasksHTML = task.subtasks.map(subtask => `
                 <div class="subtasks-content">
@@ -412,6 +412,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initTaskDetailOverlay();
     initTaskCardClickEvents();
 });
+
 
 function formatDate(dueDate) {
     if (!dueDate) return "Kein Datum";
