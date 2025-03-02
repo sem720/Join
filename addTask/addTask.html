@@ -53,7 +53,7 @@
 
             <label id="assignment">Assigned to</label>
             <div class="assignment-container" id="assignment">
-              <button class="assignment-btn" id="assignment-btn">
+              <button class="assignment-btn no-loading" id="assignment-btn" onclick="toggleContacts(event)">
                 Select contacts to assign
                 <span class="icon-container">
                   <img
@@ -74,8 +74,8 @@
           </div>
 
           <div class="right-container">
-            <label for="due-date"
-              >Due Date <span class="required">*</span></label
+            <label for="due-date">
+              Due Date <span class="required">*</span></label
             >
             <input
               type="date"
@@ -126,8 +126,8 @@
                 Select task category
               </button>
               <div class="dropdown-options" id="dropdown-list">
-                <li onclick="selectCategory(this)" data-value="technical_task">Technical Task</li>
-                <li onclick="selectCategory(this)" data-value="user_story">User Story</li>
+                <li onclick="selectCategory(this)" data-value="technical_task" class="no-loading">Technical Task</li>
+                <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
               </div>
             </div>
             <input
@@ -165,7 +165,7 @@
             <span class="required">*</span>This field is required.
           </div>
           <div class="btn-div-footer">
-            <button class="btn-bright clear-btn" onclick="clearTask()">
+            <button class="btn-bright clear-btn no-loading" onclick="clearTask()">
               Clear
               <span class="clear-icon">
                 <svg
@@ -180,7 +180,7 @@
               </span>
             </button>
 
-            <button class="btn-dark create-btn" onclick="createTask(event)">
+            <button class="btn-dark create-btn no-loading" onclick="createTask(event)">
               Create Task
               <img src="/assets/imgs/check-white.png" alt="check-icon" />
             </button>
@@ -192,9 +192,15 @@
         <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
     </div>
     </div>
-    <script src="/addTask/addTaskForm.js"></script>
-    <script src="/addTask/addTaskContact.js"></script>
+    
+    <script src="/addTask/taskHelpers.js"></script>
+    <script src="/addTask/date.js"></script>
+    <script src="/addTask/dropdown.js"></script>
+    <script src="/addTask/subtasks.js"></script>
+    <script src="/addTask/taskContact.js"></script>
+    <script src="/addTask/taskPriority.js"></script>
     <script src="/addTask/createTask.js"></script>
+    <script src="/addTask/taskMain.js"></script>
     <script src="/comp/navbar/navbar.js"></script>
     <script src="/comp/sidebar/sidebar.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>

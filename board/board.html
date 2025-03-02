@@ -140,7 +140,7 @@
           </div>
         </div>
 
-        <button id="addTask" class="btn-dark" onclick="openAddTaskModal()">
+        <button id="addTask" class="btn-dark no-loading" onclick="openAddTaskModal()">
           Add Task
           <img src="/assets/imgs/plus-white.png" alt="add Task" id="plus-white" />
         </button>
@@ -187,6 +187,14 @@
       </div>
     </section>
   </div>
+  <script src="/addTask/taskHelpers.js"></script>
+  <script src="/addTask/date.js"></script>
+  <script src="/addTask/dropdown.js"></script>
+  <script src="/addTask/subtasks.js"></script>
+  <script src="/addTask/taskContact.js"></script>
+  <script src="/addTask/createTask.js"></script>
+  <script src="/addTask/taskPriority.js"></script>
+  <script src="/addTask/taskMain.js"></script>
   <script src="/board/boardModal.js"></script>
   <script src="/board/board.js"></script>
   <script src="/comp/navbar/navbar.js"></script>
@@ -204,6 +212,38 @@
         button.classList.toggle("sidebar-active-tap", link === currentPage);
       });
     }
+  </script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      push,
+    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "DEIN_API_KEY",
+      authDomain: "DEIN_AUTH_DOMAIN",
+      databaseURL:
+        "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/",
+      projectId: "DEIN_PROJECT_ID",
+      storageBucket: "DEIN_STORAGE_BUCKET",
+      messagingSenderId: "DEIN_MESSAGING_SENDER_ID",
+      appId: "DEINE_APP_ID",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // Hier wird die Funktion dem window-Objekt hinzugefügt
+    window.saveTaskToFirebase = async function (taskData) {
+      try {
+        await push(ref(database, "tasks"), taskData);
+        console.log("Task erfolgreich gespeichert:", taskData);
+      } catch (error) {
+        console.error("Fehler beim Speichern des Tasks:", error);
+      }
+    };
   </script>
 </body>
 

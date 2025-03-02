@@ -15,19 +15,19 @@ function executeWithLoadingState(actionFunction) {
 }
 
 function attachLoadingStateToButtons() {
-  document.querySelectorAll("button").forEach((button) => {
+  document.querySelectorAll("button:not(.no-loading)").forEach((button) => {
+    console.log("Checking button:", button, "Has no-loading class?", button.classList.contains("no-loading"));
+    console.log("✅ Applying loading state to:", button); // Debugging Log
     const originalOnClick = button.onclick;
-    button.onclick = function (event) {
-      if (originalOnClick) {
+
+    if (originalOnClick) {
+      button.onclick = function (event) {
         event.preventDefault();
-        const result = originalOnClick.call(button, event);
-        
-        if (result instanceof Promise) {
-          executeWithLoadingState(() => result);
-        }
-      }
-    };
+        executeWithLoadingState(() => originalOnClick.call(button, event));
+      };
+    }
   });
 }
+
 
 window.addEventListener("DOMContentLoaded", attachLoadingStateToButtons);
