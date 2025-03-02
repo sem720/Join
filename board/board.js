@@ -31,6 +31,11 @@ function renderTasks(tasks) {
         "Done": document.querySelector("#done .column-body")
     };
 
+    // ❗ Leere nur Task-Cards, aber lasse das "no-task"-Element bestehen
+    Object.values(columnMap).forEach(column => {
+        column.querySelectorAll(".task-card").forEach(task => task.remove());
+    });
+
     tasks.forEach(task => {
         let category = task.mainCategory || "To do";
         const column = columnMap[category];
@@ -43,8 +48,14 @@ function renderTasks(tasks) {
         column.appendChild(taskElement);
     });
 
-    updateNoTaskVisibility();
+    // ❗ Stelle sicher, dass Drag & Drop-Events neu gesetzt werden
+    setupDragAndDrop();
+
+    // ❗ Stelle sicher, dass Klick-Events neu gesetzt werden
     initTaskCardClickEvents();
+
+    // ❗ Update Sichtbarkeit der "No Tasks"-Meldung
+    updateNoTaskVisibility();
 }
 
 
