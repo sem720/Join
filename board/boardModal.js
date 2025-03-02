@@ -2,9 +2,9 @@ function openAddTaskModal() {
     const overlay = document.getElementById("task-overlay");
     const modal = document.getElementById("addTaskModal");
 
-    overlay.classList.add("overlay", "active");
+    overlay.classList.add("active");
     overlay.classList.remove("closing");
-    // modal.classList.remove("closing-to-right");
+    modal.classList.remove("closing-to-right");
 
     modal.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -20,7 +20,7 @@ function closeModal() {
     modal.classList.add("closing-to-right");
 
     setTimeout(() => {
-        overlay.classList.remove("overlay", "active", "closing");
+        overlay.classList.remove("active", "closing");
         modal.classList.remove("closing-to-right");
     }, 500);
 }
