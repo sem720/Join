@@ -7,7 +7,10 @@ function getInitials(name) {
 
 function formatText(text) {
     return text
+        .trim()
+        .replace(/^\d+\.\s*|\*|\•|\-/g, "")
         .replace(/_/g, " ")
+        .replace(/\s+/g, " ")
         .split(" ") 
         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) 
         .join(" "); 

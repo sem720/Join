@@ -149,8 +149,10 @@ function getSelectedCategory() {
  *      SUBTASKS HANDLING
  * ================================ */
 function getSubtasks() {
-    return Array.from(document.querySelectorAll("#subtask-list li"))
-        .map(subtask => formatText(subtask.innerText.trim()));
+    return Array.from(document.querySelectorAll("#subtask-list li")).map(subtask => ({
+        text: formatText(subtask.textContent),
+        completed: false
+    }));
 }
 
 /** ================================
