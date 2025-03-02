@@ -11,6 +11,7 @@ function openAddTaskModal() {
     });
 }
 
+
 function closeModal() {
     const overlay = document.getElementById("task-overlay");
     const modal = document.getElementById("addTaskModal");
@@ -25,8 +26,6 @@ function closeModal() {
 }
 
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("addTaskModal");
     console.log("Modal Element:", modal);
@@ -38,9 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
-    fetchTasks(); // Tasks aus Firebase laden
+    fetchTasks();
     initTaskDetailOverlay();
 });

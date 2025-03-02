@@ -9,20 +9,18 @@ async function fetchTasks() {
         }
 
         const tasks = Object.keys(data).map(taskId => ({
-            id: taskId, // Verwenden des Firebase-Schlüssels als ID
-            ...data[taskId] // Alle anderen Felder übernehmen
+            id: taskId,
+            ...data[taskId]
         }));
 
         renderTasks(tasks);
-        initTaskCardClickEvents(); // Event-Listener für Klick-Events setzen
-        setupDragAndDrop(); // Drag & Drop nach dem Rendern aktivieren
+        initTaskCardClickEvents();
+        setupDragAndDrop();
 
     } catch (error) {
         console.error("❌ Fehler beim Laden der Tasks:", error);
     }
 }
-
-
 
 
 function renderTasks(tasks) {
@@ -34,7 +32,7 @@ function renderTasks(tasks) {
     };
 
     tasks.forEach(task => {
-        let category = task.mainCategory || "To do";  // Falls `mainCategory` fehlt, Standardwert setzen
+        let category = task.mainCategory || "To do";
         const column = columnMap[category];
         if (!column) {
             console.warn(`⚠️ Keine passende Spalte für Kategorie: ${category}`);
@@ -46,9 +44,8 @@ function renderTasks(tasks) {
     });
 
     updateNoTaskVisibility();
-    initTaskCardClickEvents(); // Klick-Events für das Overlay registrieren
+    initTaskCardClickEvents();
 }
-
 
 
 function createTaskTemplate(task) {
@@ -103,7 +100,7 @@ function createTaskElement(task) {
 
     const taskDiv = document.createElement("div");
     taskDiv.classList.add("task-card");
-    taskDiv.setAttribute("data-id", task.id); // Task-ID setzen für Drag & Drop und Klick-Events
+    taskDiv.setAttribute("data-id", task.id);
 
     taskDiv.innerHTML = `
         <div class="task-category" style="background-color: ${categoryColor};">
@@ -121,16 +118,13 @@ function createTaskElement(task) {
 }
 
 
-
-
-//Funktion zum Hinzufügen in die entsprechende Spalte
 function addTaskToBoard(task) {
     const columnId = "todo-column";
     const taskElement = createTaskElement(task);
     document.getElementById(columnId).appendChild(taskElement);
 }
 
-//besonders für drag and drop dann interessant
+
 function getColumnBody(category) {
     const columnMap = {
         "To do": "todo-column",
@@ -148,9 +142,6 @@ function getColumnBody(category) {
     return document.getElementById(columnMap[category]);
 }
 
-// Call fetchTasks when the board loads
-// fetchTasks();
-
 
 function updateNoTaskVisibility() {
     document.querySelectorAll(".column-body").forEach(column => {
@@ -158,9 +149,9 @@ function updateNoTaskVisibility() {
         const hasTasks = column.querySelector(".task-card") !== null;
 
         if (hasTasks) {
-            noTaskDiv.classList.add("d-none"); // Verstecke "No Tasks"
+            noTaskDiv.classList.add("d-none");
         } else {
-            noTaskDiv.classList.remove("d-none"); // Zeige "No Tasks" wieder an
+            noTaskDiv.classList.remove("d-none");
         }
     });
 }
@@ -179,27 +170,32 @@ function setupDragAndDrop() {
         column.addEventListener("dragleave", handleDragLeave);
     });
 }
-let draggedTask = null;
 
+
+let draggedTask = null;
 function handleDragStart(event) {
     draggedTask = event.target;
     event.target.style.opacity = "0.5";
     event.dataTransfer.effectAllowed = "move";
 }
 
+
 function handleDragEnd(event) {
     event.target.style.opacity = "1";
     draggedTask = null;
 }
 
+
 function handleDragOver(event) {
-    event.preventDefault(); // Erlaubt das Ablegen
+    event.preventDefault();
     event.currentTarget.classList.add("drag-over");
 }
+
 
 function handleDragLeave(event) {
     event.currentTarget.classList.remove("drag-over");
 }
+
 
 function handleDrop(event) {
     event.preventDefault();
@@ -208,17 +204,14 @@ function handleDrop(event) {
     if (draggedTask) {
         const newColumn = event.currentTarget;
         newColumn.appendChild(draggedTask);
-
-        // Aktualisiere die mainCategory des verschobenen Tasks
         updateTaskCategory(draggedTask, newColumn.id);
-
-        // 🛠 Nach Drag & Drop die "no-task"-Anzeige prüfen
         updateNoTaskVisibility();
     }
 }
 
+
 async function updateTaskCategory(taskElement, newColumnId) {
-    const taskId = taskElement.dataset.id; // ID aus Dataset abrufen
+    const taskId = taskElement.dataset.id;
     const newCategory = mapColumnIdToCategory(newColumnId);
 
     if (!taskId || !newCategory) return;
@@ -230,9 +223,9 @@ async function updateTaskCategory(taskElement, newColumnId) {
             body: JSON.stringify({ mainCategory: newCategory })
         });
 
-        console.log(`✅ Task ${taskId} wurde in "${newCategory}" verschoben.`);
+        console.log(`Task ${taskId} wurde in "${newCategory}" verschoben.`);
     } catch (error) {
-        console.error("❌ Fehler beim Aktualisieren der Task-Kategorie:", error);
+        console.error("Fehler beim Aktualisieren der Task-Kategorie:", error);
     }
 }
 function mapColumnIdToCategory(columnId) {
@@ -247,25 +240,9 @@ function mapColumnIdToCategory(columnId) {
 document.addEventListener("DOMContentLoaded", setupDragAndDrop);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Öffnet das Task-Detail-Overlay
 function openTaskDetail(task) {
     if (!task) {
-        console.error("⚠️ Keine Task-Daten vorhanden!");
+        console.error("Keine Task-Daten vorhanden!");
         return;
     }
     const overlay = document.getElementById("taskDetailOverlay");
@@ -289,7 +266,6 @@ function openTaskDetail(task) {
             `).join("");
     }
 
-    // HTML für die Task-Details generieren
     taskDetailContent.innerHTML = `
         <div class="task-detail-header">
             <span class="task-detail-category" style="background: ${categoryColor};">
@@ -329,17 +305,16 @@ function openTaskDetail(task) {
         </div>
     `;
 
-    // Overlay sichtbar machen
     overlay.classList.add("active");
 }
 
-// Schließt das Task-Detail-Overlay
+
 function closeTaskDetail() {
     const overlay = document.getElementById("taskDetailOverlay");
     overlay.classList.remove("active");
 }
 
-// Initialisiert die Event-Listener für das Overlay
+
 function initTaskDetailOverlay() {
     const overlay = document.getElementById("taskDetailOverlay");
     const closeBtn = document.getElementById("closeTaskDetail");
@@ -357,7 +332,7 @@ function initTaskDetailOverlay() {
     }
 }
 
-// Setzt die Event-Listener für Task-Cards
+
 function initTaskCardClickEvents() {
     document.querySelectorAll(".task-card").forEach(taskCard => {
         taskCard.addEventListener("click", async function () {
@@ -395,14 +370,16 @@ async function fetchTaskById(taskId) {
             category: taskData.category || "General",
             categoryColor: taskData.categoryColor || "#ccc",
             dueDate: taskData.dueDate || "Kein Datum",
-            priority: taskData.priority || { text: "Keine Priorität", image: "" }, // Sicherstellen, dass es ein Objekt ist
+            priority: taskData.priority || { text: "Keine Priorität", image: "" },
             assignedTo: Array.isArray(taskData.assignedTo)
                 ? taskData.assignedTo.map(user => ({
                     name: user.name || "Unbekannter Benutzer",
-                    avatar: user.avatar || { bgcolor: "#ccc", initials: "?" } // Falls `avatar` fehlt, Standardwerte setzen
+                    avatar: user.avatar || { bgcolor: "#ccc", initials: "?" }
                 }))
                 : [],
-            subtasks: taskData.subtasks || []
+            subtasks: Array.isArray(taskData.subtasks)
+                ? taskData.subtasks.map(subtask => ({ name: subtask, completed: false }))
+                : []
         };
     } catch (error) {
         console.error("❌ Fehler beim Laden der Task:", error);
@@ -411,28 +388,20 @@ async function fetchTaskById(taskId) {
 }
 
 
-
-
-// Initialisiert das Task-Overlay nach dem Laden der Seite
 document.addEventListener("DOMContentLoaded", function () {
     initTaskDetailOverlay();
     initTaskCardClickEvents();
 });
 
 function formatDate(dueDate) {
-    if (!dueDate) return "Kein Datum"; // Falls kein Datum vorhanden ist
+    if (!dueDate) return "Kein Datum";
 
     const date = new Date(dueDate);
-    if (isNaN(date.getTime())) return "Ungültiges Datum"; // Falls das Datum ungültig ist
+    if (isNaN(date.getTime())) return "Ungültiges Datum";
 
-    const day = String(date.getDate()).padStart(2, "0"); // Tag zweistellig
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Monat zweistellig (Monate beginnen bei 0)
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
 
     return `${day}/${month}/${year}`;
 }
-
-
-// fetch("https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json")
-//     .then(response => response.json())
-//     .then(data => console.log(Object.values(data)));
