@@ -286,7 +286,6 @@ body {
 #delete:hover .delete-icon {
     filter: brightness(0) saturate(100%) invert(57%) sepia(60%) saturate(583%) hue-rotate(154deg) brightness(90%) contrast(96%);
     scale: 1.05;
-
 }
 
 .btns-container button img {
