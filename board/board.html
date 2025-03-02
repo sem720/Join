@@ -1,124 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Board</title>
-    <link rel="stylesheet" href="/root.css" />
-    <link rel="stylesheet" href="/board/board.css" />
-    <link rel="stylesheet" href="/comp/components.css" />
-    <link rel="stylesheet" href="/comp/navbar/navbar.css" />
-    <link rel="stylesheet" href="/comp/sidebar/sidebar.css" />
-    <link rel="stylesheet" href="/board/addTaskModal.css" />
-    <link rel="stylesheet" href="/addTask/addTask.css"  />
-    <link rel="stylesheet" href="/addTask/addTask.comps.css" />
-    <link rel="stylesheet" href="/addTask/addTask.responsive.css" />
-    <script src="/addTask/addTaskForm.js" defer></script>
-    <script src="/addTask/addTaskContact.js" defer></script>
-    <script src="/addTask/createTask.js" defer></script>
-    <link
-      id="favicon-light"
-      rel="icon"
-      href="../assets/imgs/logo-black.png"
-      media="(prefers-color-scheme: light)"
-    />
-    <link
-      id="favicon-dark"
-      rel="icon"
-      href="../assets/imgs/logo-white-blue.png"
-      media="(prefers-color-scheme: dark)"
-    />
-  </head>
-  <body onload="initBoard(), initNavbar()">
-    <div class="navbar-wrap" w3-include-html="/comp/navbar/navbar.html"></div>
-    <div w3-include-html="/comp/sidebar/sidebar.html"></div>
 
-    <!-- Modal und Overlay -->
-   <div id="task-overlay" class="modal-overlay" onclick="closeModal()"></div>
-   <div id="addTaskModal" class="modal hidden">
-        <button id="close-modal" class="close-btn" onclick="closeModal()">
-          &times;
-        </button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Board</title>
+  <link rel="stylesheet" href="/root.css" />
+  <link rel="stylesheet" href="/board/board.css" />
+  <link rel="stylesheet" href="/comp/components.css" />
+  <link rel="stylesheet" href="/comp/navbar/navbar.css" />
+  <link rel="stylesheet" href="/comp/sidebar/sidebar.css" />
+  <link rel="stylesheet" href="/board/addTaskModal.css" />
+  <link rel="stylesheet" href="/addTask/addTask.css" />
+  <link rel="stylesheet" href="/addTask/addTask.comps.css" />
+  <link rel="stylesheet" href="/addTask/addTask.responsive.css" />
+  <link rel="stylesheet" href="./taskDetails.css">
+  <script src="/addTask/addTaskForm.js" defer></script>
+  <script src="/addTask/addTaskContact.js" defer></script>
+  <script src="/addTask/createTask.js" defer></script>
+  <link id="favicon-light" rel="icon" href="../assets/imgs/logo-black.png" media="(prefers-color-scheme: light)" />
+  <link id="favicon-dark" rel="icon" href="../assets/imgs/logo-white-blue.png" media="(prefers-color-scheme: dark)" />
+</head>
+
+<body onload="initNavbar(), fetchTasks();">
+  <div class="navbar-wrap" w3-include-html="/comp/navbar/navbar.html"></div>
+  <div w3-include-html="/comp/sidebar/sidebar.html"></div>
+
+  <!-- Modal und Overlay -->
+  <div id="task-overlay" class="modal-overlay" onclick="closeModal()">
+    <div id="addTaskModal" class="modal hidden">
+      <button id="close-modal" class="close-btn" onclick="closeModal()">
+        &times;
+      </button>
 
       <div id="modal-body">
         <div class="modal-addTask-container">
           <h1 class="h1-addTask">Add Task</h1>
-            <main class="main-addTask">
-              <form onsubmit="createTask(event)">
-                <div class="left-container">
-                  <label for="task-name">Title <span class="required">*</span></label>
-                  <input id="task-name" class="input-standard" type="text" name="task-name" placeholder="Enter a title" required />
-                  
-                  <label for="description">Description</label>
-                  <textarea id="description" name="description" placeholder="Enter a Description"></textarea>
-      
-                  <label id="assignment-label">Assigned to</label>
-                  <div class="assignment-container">
-                    <button class="assignment-btn" id="assignment-btn">
-                      Select contacts to assign
-                      <span class="icon-container">
-                        <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" />
-                      </span>
-                    </button>
-                    <div id="selected-contacts-container" class="selected-contacts"></div>
-                    <div id="contacts-container" class="hidden">
-                      <div id="contacts-list"></div>
-                    </div>
+          <main class="main-addTask">
+            <form onsubmit="createTask(event)">
+              <div class="left-container">
+                <label for="task-name">Title <span class="required">*</span></label>
+                <input id="task-name" class="input-standard" type="text" name="task-name" placeholder="Enter a title"
+                  required />
+
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Enter a Description"></textarea>
+
+                <label id="assignment-label">Assigned to</label>
+                <div class="assignment-container">
+                  <button class="assignment-btn" id="assignment-btn">
+                    Select contacts to assign
+                    <span class="icon-container">
+                      <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" />
+                    </span>
+                  </button>
+                  <div id="selected-contacts-container" class="selected-contacts"></div>
+                  <div id="contacts-container" class="hidden">
+                    <div id="contacts-list"></div>
                   </div>
-                </div> <!-- END left-container -->
-      
-                <div class="right-container">
-                  <label for="due-date">Due Date <span class="required">*</span></label>
-                  <input type="date" class="input-standard" id="due-date" name="due-date" required />
-                  
-                  <label>Prio</label>
-                  <div class="button-container">
-                    <button class="btn-switch" id="urgent" type="button" onclick="toggleButtons(this)">Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" /></button>
-                    <button class="btn-switch" id="medium" type="button" onclick="toggleButtons(this)">Medium <img src="/assets/imgs/medium.png" alt="medium-icon" /></button>
-                    <button class="btn-switch" id="low" type="button" onclick="toggleButtons(this)">Low <img src="/assets/imgs/low.png" alt="low-icon" /></button>
-                  </div>
-      
-                  <label>Category <span class="required">*</span></label>
-                  <div class="dropdown-container">
-                    <button class="dropdown-btn" onclick="toggleDropdown()">Select task category</button>
-                    <div class="dropdown-options">
-                      <li onclick="selectCategory(this)" data-value="technical_task">Technical Task</li>
-                      <li onclick="selectCategory(this)" data-value="user_story">User Story</li>
-                    </div>
-                  </div>
-                  <input type="hidden" id="selected-category" name="selected-category" />
-      
-                  <label for="subtasks">Subtasks</label>
-                  <div class="subtask-input-wrapper">
-                    <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask" autocomplete="off" />
-                    <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
-                  </div>
-                  <ul id="subtask-list"></ul>
-                </div> <!-- END right-container -->
-      
-                <div class="text resp" style="display: none">
-                  <span class="required"> *</span> This field is required.
                 </div>
-              </form>
-      
-              <section class="footer">
-                <div class="text">
-                  <span class="required">*</span>This field is required.
+              </div> <!-- END left-container -->
+
+              <div class="right-container">
+                <label for="due-date">Due Date <span class="required">*</span></label>
+                <input type="date" class="input-standard" id="due-date" name="due-date" required />
+
+                <label>Prio</label>
+                <div class="button-container">
+                  <button class="btn-switch" id="urgent" type="button" onclick="toggleButtons(this)">Urgent <img
+                      src="/assets/imgs/urgent.png" alt="urgent-icon" /></button>
+                  <button class="btn-switch" id="medium" type="button" onclick="toggleButtons(this)">Medium <img
+                      src="/assets/imgs/medium.png" alt="medium-icon" /></button>
+                  <button class="btn-switch" id="low" type="button" onclick="toggleButtons(this)">Low <img
+                      src="/assets/imgs/low.png" alt="low-icon" /></button>
                 </div>
-                <div class="btn-div-footer">
-                  <button class="btn-bright clear-btn" onclick="clearTask()">Clear</button>
-                  <button class="btn-dark create-btn" onclick="createTask(event)">Create Task <img src="/assets/imgs/check-white.png" alt="check-icon" /></button>
+
+                <label>Category <span class="required">*</span></label>
+                <div class="dropdown-container">
+                  <button class="dropdown-btn" onclick="toggleDropdown()">Select task category</button>
+                  <div class="dropdown-options">
+                    <li onclick="selectCategory(this)" data-value="technical_task">Technical Task</li>
+                    <li onclick="selectCategory(this)" data-value="user_story">User Story</li>
+                  </div>
                 </div>
-              </section>
-            </main>
-            <div id="task-added-popup" class="task-popup btn-dark">
-              Task added to board
-              <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
+                <input type="hidden" id="selected-category" name="selected-category" />
+
+                <label for="subtasks">Subtasks</label>
+                <div class="subtask-input-wrapper">
+                  <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask"
+                    autocomplete="off" />
+                  <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
+                </div>
+                <ul id="subtask-list"></ul>
+              </div> <!-- END right-container -->
+
+              <div class="text resp" style="display: none">
+                <span class="required"> *</span> This field is required.
+              </div>
+            </form>
+
+            <section class="footer">
+              <div class="text">
+                <span class="required">*</span>This field is required.
+              </div>
+              <div class="btn-div-footer">
+                <button class="btn-bright clear-btn" onclick="clearTask()">Clear</button>
+                <button class="btn-dark create-btn" onclick="createTask(event)">Create Task <img
+                    src="/assets/imgs/check-white.png" alt="check-icon" /></button>
+              </div>
+            </section>
+          </main>
+          <div id="task-added-popup" class="task-popup btn-dark">
+            Task added to board
+            <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
           </div>
-          </div> <!-- END modal-addTask-container -->
-        </div> <!-- END modal-body -->
-      </div> <!-- END addTaskModal -->
-   
+        </div> <!-- END modal-addTask-container -->
+      </div> <!-- END modal-body -->
+    </div> <!-- END addTaskModal -->
+  </div>
+
+  <!-- Overlay für Task-Details -->
+  <div id="taskDetailOverlay">
+    <div id="taskDetailModal">
+      <button id="closeTaskDetail">&times;</button>
+      <div id="taskDetailContent"></div>
+    </div>
+  </div>
+
   <!-- Haupt-Board -->
   <div class="board-wrap">
     <div class="board-header">
@@ -144,30 +152,38 @@
           <h3 class="h3-column">To do</h3>
           <img src="/assets/imgs/plus-button.png" alt="plus-button" class="plus-button" onclick="openAddTaskModal()" />
         </div>
-        <div class="column-body"></div>
+        <div class="column-body" id="to-do-body">
+          <div class="no-task">No Tasks To Do</div>
+        </div>
       </div>
 
       <div class="inProgress column" id="in-progress">
-        <div class="column-header">
+        <div class="column-header" id="in-progress-body">
           <h3 class="h3-column">In progress</h3>
           <img src="/assets/imgs/plus-button.png" alt="plus-button" class="plus-button" onclick="openAddTaskModal()" />
         </div>
-        <div class="column-body"></div>
+        <div class="column-body">
+          <div class="no-task">No Tasks in progress</div>
+        </div>
       </div>
 
       <div class="feedback column" id="awaitFeedback">
-        <div class="column-header">
+        <div class="column-header" id="awaitFeedback-body">
           <h3 class="h3-column">Await feedback</h3>
           <img src="/assets/imgs/plus-button.png" alt="plus-button" class="plus-button" onclick="openAddTaskModal()" />
         </div>
-        <div class="column-body"></div>
+        <div class="column-body">
+          <div class="no-task">No Tasks await feedback</div>
+        </div>
       </div>
 
       <div class="done column" id="done">
-        <div class="column-header">
+        <div class="column-header" id="done-body">
           <h3 class="h3-column">Done</h3>
         </div>
-        <div class="column-body"></div>
+        <div class="column-body">
+          <div class="no-task">No Tasks Done</div>
+        </div>
       </div>
     </section>
   </div>
@@ -180,7 +196,7 @@
     w3.includeHTML(function () {
       setActiveNav();
     });
-        
+
     function setActiveNav() {
       const currentPage = window.location.pathname.split("/").pop();
       document.querySelectorAll(".nav-button").forEach((button) => {
@@ -190,4 +206,5 @@
     }
   </script>
 </body>
+
 </html>

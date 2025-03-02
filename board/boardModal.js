@@ -1,22 +1,31 @@
 function openAddTaskModal() {
-    document.getElementById("task-overlay").classList.add("active");
-    document.getElementById("addTaskModal").classList.remove("hidden");
-    document.getElementById("addTaskModal").classList.add("show");  
-    document.getElementById("close-modal").removeAttribute("disabled");
+    const overlay = document.getElementById("task-overlay");
+    const modal = document.getElementById("addTaskModal");
 
+    overlay.classList.add("active");
+    overlay.classList.remove("closing");
+    modal.classList.remove("closing-to-right");
+
+    modal.addEventListener("click", (e) => {
+        e.stopPropagation();
+    });
 }
 
 function closeModal() {
     const overlay = document.getElementById("task-overlay");
     const modal = document.getElementById("addTaskModal");
 
-    modal.classList.remove("show");
+    overlay.classList.add("closing");
+    modal.classList.add("closing-to-right");
 
     setTimeout(() => {
-        modal.classList.add("hidden");
-        overlay.classList.remove("active");
-    }, 400);
+        overlay.classList.remove("active", "closing");
+        modal.classList.remove("closing-to-right");
+    }, 500);
 }
+
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("addTaskModal");
@@ -31,3 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+document.addEventListener("DOMContentLoaded", function () {
+    fetchTasks(); // Tasks aus Firebase laden
+    initTaskDetailOverlay();
+});

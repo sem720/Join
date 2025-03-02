@@ -1,5 +1,8 @@
 .modal-addTask-container {
     padding: 30px;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 40px;
 }
 
 .modal-addTask-container .left-container {
@@ -33,3 +36,6 @@
     color: #d7d7d7 !important;
 }
 
+.modal-addTask-container {
+    overflow-y: auto;
+}
