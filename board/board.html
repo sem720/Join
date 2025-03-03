@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,9 +14,6 @@
   <link rel="stylesheet" href="/addTask/addTask.comps.css" />
   <link rel="stylesheet" href="/addTask/addTask.responsive.css" />
   <link rel="stylesheet" href="./taskDetails.css">
-  <script src="/addTask/addTaskForm.js" defer></script>
-  <script src="/addTask/addTaskContact.js" defer></script>
-  <script src="/addTask/createTask.js" defer></script>
   <link id="favicon-light" rel="icon" href="../assets/imgs/logo-black.png" media="(prefers-color-scheme: light)" />
   <link id="favicon-dark" rel="icon" href="../assets/imgs/logo-white-blue.png" media="(prefers-color-scheme: dark)" />
 </head>
@@ -27,7 +23,7 @@
   <div w3-include-html="/comp/sidebar/sidebar.html"></div>
 
   <!-- Modal und Overlay -->
-  <div id="task-overlay" class="modal-overlay" onclick="closeModal()">
+  <div id="task-overlay" class="modal-overlay" onclick="closeModal()"></div>
     <div id="addTaskModal" class="modal">
       <button id="close-modal" class="close-btn" onclick="closeModal()">
         &times;
@@ -77,7 +73,7 @@
 
                 <label>Category <span class="required">*</span></label>
                 <div class="dropdown-container">
-                  <button class="dropdown-btn" onclick="toggleDropdown()">Select task category</button>
+                  <button class="dropdown-btn" onclick="toggleDropdown()" type="button">Select task category</button>
                   <div class="dropdown-options">
                     <li onclick="selectCategory(this)" data-value="technical_task">Technical Task</li>
                     <li onclick="selectCategory(this)" data-value="user_story">User Story</li>
@@ -105,7 +101,7 @@
               </div>
               <div class="btn-div-footer">
                 <button class="btn-bright clear-btn" onclick="clearTask()">Clear</button>
-                <button class="btn-dark create-btn" onclick="createTask(event)">Create Task <img
+                <button class="btn-dark create-btn" onclick="createTask(event)" type="submit">Create Task <img
                     src="/assets/imgs/check-white.png" alt="check-icon" /></button>
               </div>
             </section>
@@ -117,7 +113,7 @@
         </div> <!-- END modal-addTask-container -->
       </div> <!-- END modal-body -->
     </div> <!-- END addTaskModal -->
-  </div>
+  
 
   <!-- Overlay für Task-Details -->
   <div id="taskDetailOverlay">

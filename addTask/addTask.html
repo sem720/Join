@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/comp/navbar/navbar.css" />
     <link rel="stylesheet" href="/comp/sidebar/sidebar.css" />
     <link rel="stylesheet" href="/addTask/addTask.responsive.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link
       id="favicon-light"
       rel="icon"
@@ -250,5 +251,13 @@
         }
       };
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr("#due-date", {
+            dateFormat: "d/m/Y", 
+            allowInput: true 
+        });
+    </script>
+
   </body>
 </html>
