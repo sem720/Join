@@ -2,7 +2,7 @@ const selectedCategory = document.getElementById('selected-category');
 const dropdownBtn = document.querySelector('.dropdown-btn');
 const dropdownList = document.getElementById('dropdown-list');
 const dropdownContainer = document.querySelector('.dropdown-container');
-const defaultText = "Select a category";
+const defaultText = "Select task category";
 
 function toggleDropdown() {
     const isOpen = dropdownContainer.classList.toggle("open");

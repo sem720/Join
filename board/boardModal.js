@@ -1,4 +1,4 @@
-function openAddTaskModal() {
+async function openAddTaskModal() {
     const overlay = document.getElementById("task-overlay");
     const modal = document.getElementById("addTaskModal");
 
@@ -9,10 +9,10 @@ function openAddTaskModal() {
         modal.classList.add("show");
     }, 10);
 
+    await fetchContacts();
     renderContactsList();
     setupAddSubtaskButton();
     dateInput();
-    
 }
 
 function closeModal() {

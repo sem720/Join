@@ -1,8 +1,9 @@
 const allContacts = new Map();
 const selectedContacts = new Set();
 
-let contactsContainer;
 let assignmentButton;
+
+const icon = document.getElementById("dropdown-icon");
 const selectedContactsContainer = document.getElementById("selected-contacts-container");
 
 function initAddTaskContacts() {
@@ -14,17 +15,20 @@ function initAddTaskContacts() {
 
 function toggleContacts(event) {
     event.preventDefault();
+    const contactsContainer = document.getElementById('contacts-container');
     const contactsList = document.getElementById("contacts-list");
-    const icon = document.getElementById("dropdown-icon");
-    
-    if (!contactsList) return console.error("❌ Element #contacts-list not found!");
-        
-    contactsList.classList.toggle("hidden");
-    contactsList.classList.toggle("visible");
 
-    const contactsContainer = contactsList.parentElement; // Adjust as needed
-    if (contactsContainer) contactsContainer.classList.toggle("hidden");
+    if (!contactsList) return console.error("❌ Element #contacts-list not found!");
+    const isHidden = contactsContainer.classList.contains("hidden");
     
+    contactsContainer.classList.toggle("hidden", !isHidden);
+    contactsContainer.classList.toggle("visible", isHidden);
+
+    contactsList.classList.toggle("hidden", !isHidden);
+    contactsList.classList.toggle("visible", isHidden);
+
+    console.log("After toggle:", contactsContainer.classList, contactsList.classList);
+
     const isOpen = contactsList.classList.contains("visible");
     if (icon) icon.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
     
@@ -41,7 +45,7 @@ async function fetchContacts() {
     if (!data) return console.error("Keine Nutzerdaten gefunden.");
         
     processContactsData(data); 
-    renderContactsList();
+    await renderContactsList();
 }
 
 function processContactsData(data) {
@@ -55,7 +59,7 @@ function processContactsData(data) {
     }); 
 }
 
-function renderContactsList() {
+async function renderContactsList() {
     const contactsList = document.getElementById('contacts-list');
     contactsList.innerHTML = '';
     console.log("🔹 Contacts to render:", contactsList);
