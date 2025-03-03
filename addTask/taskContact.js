@@ -2,7 +2,7 @@ const allContacts = new Map();
 const selectedContacts = new Set();
 
 let assignmentButton;
-
+let contactsContainer;
 const icon = document.getElementById("dropdown-icon");
 const selectedContactsContainer = document.getElementById("selected-contacts-container");
 
@@ -15,12 +15,21 @@ function initAddTaskContacts() {
 
 function toggleContacts(event) {
     event.preventDefault();
+
     const contactsContainer = document.getElementById('contacts-container');
     const contactsList = document.getElementById("contacts-list");
 
     if (!contactsList) return console.error("❌ Element #contacts-list not found!");
+
+    const isOpen = toggleVisibility(contactsContainer, contactsList);
+    updateDropdownIcon(isOpen);
+
+    if (!isOpen) updateSelectedContactsDisplay();
+}
+
+function toggleVisibility(contactsContainer, contactsList) {
     const isHidden = contactsContainer.classList.contains("hidden");
-    
+
     contactsContainer.classList.toggle("hidden", !isHidden);
     contactsContainer.classList.toggle("visible", isHidden);
 
@@ -29,10 +38,13 @@ function toggleContacts(event) {
 
     console.log("After toggle:", contactsContainer.classList, contactsList.classList);
 
-    const isOpen = contactsList.classList.contains("visible");
-    if (icon) icon.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
-    
-    if (!isOpen) updateSelectedContactsDisplay();
+    return contactsList.classList.contains("visible"); // Return new state
+}
+
+function updateDropdownIcon(isOpen) {
+    if (icon) {
+        icon.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
+    }
 }
 
 async function fetchContacts() {
@@ -62,7 +74,7 @@ function processContactsData(data) {
 async function renderContactsList() {
     const contactsList = document.getElementById('contacts-list');
     contactsList.innerHTML = '';
-    console.log("🔹 Contacts to render:", contactsList);
+
     allContacts.forEach(({ name, bgcolor }) => {
         contactsList.appendChild(createContactElement(name, bgcolor));
     })

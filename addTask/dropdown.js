@@ -18,12 +18,7 @@ function selectCategory(option) {
     const selectedText = option.textContent;
     const selectedValue = option.getAttribute("data-value");
     
-    dropdownBtn.innerHTML = `
-      ${selectedText}
-      <span class="icon-container">
-        <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
-      </span>
-    `;
+    updateDropdownHTML(selectedText);
   
     selectedCategory.value = selectedValue;
     console.log("🟢 Updated selected-category value:", selectedCategory.value);
@@ -33,6 +28,15 @@ function selectCategory(option) {
     console.log("✅ Selected Category Updated:", selectedCategory); 
   
     clearError("#selected-category");
+}
+
+function updateDropdownHTML(selectedText) {
+  dropdownBtn.innerHTML = `
+    ${selectedText}
+    <span class="icon-container">
+      <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+    </span>
+  `;
 }
   
 function resetDropdown() {
