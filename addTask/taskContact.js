@@ -20,6 +20,7 @@ function initAddTaskContacts() {
     document.addEventListener("keydown", handleKeydownOutsideAssignment);
 }
 
+
 /**
  * Handles keydown events when the focus is outside the assignment button or contact field.
  * Prevents opening the contacts list when Enter is pressed.
@@ -34,12 +35,15 @@ function handleKeydownOutsideAssignment(event) {
     }
 }
 
+
 /**
  * Toggles the visibility of the contacts container. It opens the contacts list if it's closed
  * and closes it if it's open.
  * 
  * @param {MouseEvent} event - The click event triggered when the user clicks the toggle button.
  */
+
+
 function toggleContacts(event) {
     event.preventDefault();
     
@@ -56,6 +60,7 @@ function toggleContacts(event) {
     }
 }
 
+
 /**
  * Manages the outside click event listener. If enabled, the listener will close the contacts
  * list when a click occurs outside of the assignment container.
@@ -69,6 +74,7 @@ function manageOutsideClick(enable) {
         document.removeEventListener("click", closeOnOutsideClick);
     }
 }
+
 
 /**
  * Closes the contacts list if a click happens outside of the assignment container.
@@ -84,6 +90,7 @@ function closeOnOutsideClick(event) {
     }
 }
 
+
 /**
  * Updates the dropdown icon to indicate whether the contacts list is open or closed.
  * 
@@ -94,6 +101,7 @@ function updateDropdownIcon(isOpen) {
         icon.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
     }
 }
+
 
 /**
  * Opens the contacts list by adding the "visible" class and removing the "hidden" class.
@@ -114,6 +122,7 @@ function openContacts() {
     updateSelectedContactsDisplay(); // Aktiviert das Schließen bei Klick außerhalb
 }
 
+
 /**
  * Closes the contacts list by adding the "hidden" class and removing the "visible" class.
  * It also updates the dropdown icon and disables outside click behavior.
@@ -133,6 +142,7 @@ function closeContacts() {
     updateSelectedContactsDisplay(); // Deaktiviert das Schließen bei Klick außerhalb
 }
 
+
 /**
  * Fetches the contacts data from an external source and processes it into a usable format.
  * 
@@ -151,6 +161,7 @@ async function fetchContacts() {
     await renderContactsList();
 }
 
+
 /**
  * Processes the raw contacts data and stores it in the `allContacts` map.
  * 
@@ -167,6 +178,7 @@ function processContactsData(data) {
     }); 
 }
 
+
 /**
  * Renders the list of contacts in the contacts container by creating HTML elements for each contact.
  */
@@ -178,6 +190,7 @@ async function renderContactsList() {
         contactsList.appendChild(createContactElement(name, bgcolor));
     });
 }
+
 
 /**
  * Creates a contact element to be displayed in the contacts list.
@@ -199,6 +212,7 @@ function createContactElement(name, bgcolor) {
     return contactDiv; 
 }
 
+
 /**
  * Updates the display of selected contacts in the selected contacts container.
  */
@@ -210,6 +224,7 @@ function updateSelectedContactsDisplay() {
         selectedContactsContainer.appendChild(avatar);
     });
 }
+
 
 /**
  * Toggles the selection state of a contact and updates the display of selected contacts.
