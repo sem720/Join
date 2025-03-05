@@ -118,15 +118,12 @@ function createTaskElement(task) {
         </div>
         <h3 class="task-title">${task.title || "No Title"}</h3>
         <p class="task-description">${task.description || "No Description"}</p>
-        
-        <!-- 📌 Snackbar für Subtasks -->
         <div class="subtask-snackbar">
             <div class="subtask-bar-progress">
                 <div class="subtask-bar-prog-blue" style="width: ${progressPercent}%;"></div>
             </div>
             <p class="subtask-checked">${completedSubtasks}/${totalSubtasks} Subtasks</p>
         </div>
-
         <div class="task-card-footer">
             <div class="task-card-avatar">${avatarsHTML}</div>
             <img src="${task.priority?.image || ''}" alt="${task.priority?.text || ''}" class="prio-icon">
@@ -265,26 +262,23 @@ function openTaskDetail(task) {
         console.error("Keine Task-Daten vorhanden!");
         return;
     }
+
     const overlay = document.getElementById("taskDetailOverlay");
     const taskDetailContent = document.getElementById("taskDetailContent");
-    let categoryColor = "";
-    if (task.category === "User Story") {
-        categoryColor = "#0039fe";
-    } else if (task.category === "Technical Task") {
-        categoryColor = "#1fd7c1";
-    }
 
-    let subtasksHTML = "";
-    if (!task.subtasks || task.subtasks.length === 0) {
-        subtasksHTML = `<p>No subtasks available</p>`;
-    } else {
-        subtasksHTML = task.subtasks.map(subtask => `
-                <div class="subtasks-content">
-                    <input type="checkbox" ${subtask.completed ? "checked" : ""} />
-                    <label>${subtask.name}</label>
-                </div>
-            `).join("");
-    }
+    let categoryColor = task.category === "User Story" ? "#0039fe" : "#1fd7c1";
+
+    // ✅ Subtask-Rendering mit `toggleSubtask()`
+    let subtasksHTML = task.subtasks && task.subtasks.length > 0
+        ? task.subtasks.map((subtask, index) => `
+            <div class="subtasks-content">
+                <input type="checkbox" id="subtask-${task.id}-${index}" 
+                    ${subtask.completed ? "checked" : ""} 
+                    onchange="toggleSubtask('${task.id}', ${index})">
+                <label for="subtask-${task.id}-${index}">${subtask.text}</label>
+            </div>
+        `).join("")
+        : `<p>No subtasks available</p>`;
 
     taskDetailContent.innerHTML = `
         <div class="task-detail-header">
@@ -295,7 +289,8 @@ function openTaskDetail(task) {
         <h2 class="task-detail-title">${task.title}</h2>
         <p class="task-detail-content">${task.description}</p>
         <p><strong style="padding-right: 16px;">Due date:</strong> ${formatDate(task.dueDate)}</p>
-        <p><strong style="padding-right: 16px;">Priority:</strong> ${task.priority.text} <img src="${task.priority?.image || ''}" alt="${task.priority?.text || ''}" class="prio-icon">
+        <p><strong style="padding-right: 16px;">Priority:</strong> ${task.priority.text} 
+            <img src="${task.priority?.image || ''}" alt="${task.priority?.text || ''}" class="prio-icon">
         </p>
         <p style="padding-bottom: 0;"><strong>Assigned To:</strong></p>
         <ul>
@@ -327,6 +322,58 @@ function openTaskDetail(task) {
 
     overlay.classList.add("active");
 }
+
+
+
+async function toggleSubtask(taskId, subtaskIndex) {
+    try {
+        // 📌 Task aus der Datenbank abrufen
+        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
+        const task = await response.json();
+
+        if (!task || !task.subtasks || subtaskIndex >= task.subtasks.length) {
+            console.error("❌ Subtask nicht gefunden!");
+            return;
+        }
+
+        // 📌 Status des Subtasks umkehren (lokal)
+        task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
+
+        // 📌 Task-Card-Snackbar sofort aktualisieren
+        updateTaskCard(taskId, task);
+
+        // 📌 Backend mit neuem Status aktualisieren (asynchron)
+        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ subtasks: task.subtasks })
+        });
+
+    } catch (error) {
+        console.error("❌ Fehler beim Aktualisieren des Subtasks:", error);
+    }
+}
+
+
+
+function updateTaskCard(taskId, task) {
+    const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
+    if (!taskElement) {
+        console.warn(`⚠️ Task-Card für Task ${taskId} nicht gefunden.`);
+        return;
+    }
+
+    let totalSubtasks = task.subtasks.length;
+    let completedSubtasks = task.subtasks.filter(st => st.completed).length;
+    let progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
+
+    // 📌 Fortschrittsbalken aktualisieren
+    taskElement.querySelector(".subtask-bar-prog-blue").style.width = `${progressPercent}%`;
+
+    // 📌 Subtask-Text aktualisieren
+    taskElement.querySelector(".subtask-checked").textContent = `${completedSubtasks}/${totalSubtasks} Subtasks`;
+}
+
 
 
 function closeTaskDetail() {
@@ -408,6 +455,46 @@ async function fetchTaskById(taskId) {
 }
 
 
+async function fetchTaskById(taskId) {
+    try {
+        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
+        if (!response.ok) {
+            throw new Error("Fehler beim Laden der Task-Daten");
+        }
+
+        const taskData = await response.json();
+        if (!taskData) {
+            throw new Error("Keine Task-Daten gefunden");
+        }
+
+        return {
+            id: taskId,
+            title: taskData.title || "Kein Titel",
+            description: taskData.description || "Keine Beschreibung",
+            category: taskData.category || "General",
+            categoryColor: taskData.categoryColor || "#ccc",
+            dueDate: taskData.dueDate || "Kein Datum",
+            priority: taskData.priority || { text: "Keine Priorität", image: "" },
+            assignedTo: Array.isArray(taskData.assignedTo)
+                ? taskData.assignedTo.map(user => ({
+                    name: user.name || "Unbekannter Benutzer",
+                    avatar: user.avatar || { bgcolor: "#ccc", initials: "?" }
+                }))
+                : [],
+            subtasks: Array.isArray(taskData.subtasks)
+                ? taskData.subtasks.map(subtask => ({
+                    text: subtask.text || subtask, // Falls es als String gespeichert ist
+                    completed: subtask.completed || false
+                }))
+                : []
+        };
+    } catch (error) {
+        console.error("❌ Fehler beim Laden der Task:", error);
+        return null;
+    }
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
     initTaskDetailOverlay();
     initTaskCardClickEvents();
@@ -426,3 +513,251 @@ function formatDate(dueDate) {
 
     return `${day}/${month}/${year}`;
 }
+
+
+async function deleteTask(taskId) {
+    try {
+        // 📌 Task aus der Datenbank löschen
+        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+            method: "DELETE"
+        });
+
+        // 📌 Task-Card aus dem Board entfernen
+        const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
+        if (taskElement) {
+            taskElement.remove();
+        }
+
+        // 📌 Task-Detail-Modal schließen
+        closeTaskDetail();
+
+        // 📌 Bestätigung anzeigen
+        showDeleteConfirmation();
+
+    } catch (error) {
+        console.error("❌ Fehler beim Löschen der Task:", error);
+    }
+}
+
+
+function showDeleteConfirmation() {
+    const confirmationDiv = document.createElement("div");
+    confirmationDiv.classList.add("task-delete-confirmation");
+    confirmationDiv.innerText = "Task successfully deleted";
+
+    document.body.appendChild(confirmationDiv);
+
+    // 📌 Animation starten (von unten nach oben)
+    setTimeout(() => {
+        confirmationDiv.classList.add("show");
+    }, 10);
+
+    // 📌 Nach 2 Sekunden ausblenden & entfernen
+    setTimeout(() => {
+        confirmationDiv.classList.remove("show");
+        setTimeout(() => {
+            confirmationDiv.remove();
+        }, 500); // Warte, bis die Animation abgeschlossen ist
+    }, 2000);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async function editTask(taskId) {
+    try {
+        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
+        const task = await response.json();
+
+        if (!task) {
+            console.error("❌ Task nicht gefunden!");
+            return;
+        }
+
+        // 📌 Modal und Overlay aktivieren
+        const overlay = document.getElementById("edit-task-overlay");
+        const modal = document.getElementById("editTaskModal");
+        overlay.classList.add("active");
+        modal.classList.remove("hidden");
+
+        // 📌 Task-Daten in die Felder setzen
+        document.getElementById("edit-task-title").value = task.title || "";
+        document.getElementById("edit-task-description").value = task.description || "";
+        document.getElementById("edit-due-date").value = task.dueDate || "";
+
+        // 📌 Priorität setzen
+        setEditPriority(task.priority?.text || "Medium");
+
+        // 📌 Assigned Contacts setzen
+        setEditAssignedContacts(task.assignedTo || []);
+
+        // 📌 Subtasks setzen
+        setEditSubtasks(task.subtasks || []);
+
+        // 📌 OK-Button EventListener setzen
+        const saveButton = document.querySelector(".edit-save-btn");
+        saveButton.onclick = function (event) {
+            event.preventDefault();
+            saveTaskChanges(taskId);
+        };
+
+    } catch (error) {
+        console.error("❌ Fehler beim Laden der Task-Daten:", error);
+    }
+}
+
+
+
+
+function setEditPriority(priority) {
+    document.querySelectorAll(".btn-switch").forEach(button => {
+        button.classList.remove("active");
+    });
+    document.getElementById(priority.toLowerCase()).classList.add("active");
+}
+
+
+
+function setEditAssignedContacts(contacts) {
+    const container = document.getElementById("edit-selected-contacts-container");
+    container.innerHTML = contacts.map(contact =>
+        `<div class="avatar-board-card" style="background-color: ${contact.avatar.bgcolor};">${contact.avatar.initials}</div>`
+    ).join("");
+}
+
+
+
+function setEditSubtasks(subtasks) {
+    const list = document.getElementById("edit-subtask-list");
+    list.innerHTML = subtasks.map(subtask =>
+        `<li><input type="checkbox" ${subtask.completed ? "checked" : ""}> ${subtask.text}</li>`
+    ).join("");
+}
+
+
+
+
+async function saveTaskChanges(taskId) {
+    const updatedTask = {
+        title: document.getElementById("edit-task-title").value.trim(),
+        description: document.getElementById("edit-task-description").value.trim(),
+        dueDate: document.getElementById("edit-due-date").value,
+        priority: { text: getSelectedEditPriority() },
+        assignedTo: getEditAssignedContacts(),
+        subtasks: getEditSubtasks()
+    };
+
+    try {
+        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedTask)
+        });
+
+        // 📌 Modal schließen und UI aktualisieren
+        closeEditModal();
+        updateTaskCard(taskId, updatedTask);
+        showEditConfirmation();
+
+    } catch (error) {
+        console.error("❌ Fehler beim Speichern der Änderungen:", error);
+    }
+}
+
+
+function closeEditModal() {
+    const overlay = document.getElementById("edit-task-overlay");
+    const modal = document.getElementById("editTaskModal");
+
+    overlay.classList.remove("active");
+    modal.classList.add("hidden");
+}
+
+
+
+function setPriority(priority) {
+    document.querySelectorAll(".btn-switch").forEach(button => {
+        button.classList.remove("active");
+    });
+    document.getElementById(priority.toLowerCase()).classList.add("active");
+}
+
+
+function getSelectedPriority() {
+    return document.querySelector(".btn-switch.active")?.id || "Medium";
+}
+
+
+function getSelectedEditPriority() {
+    return document.querySelector(".btn-switch.active")?.id || "Medium";
+}
+
+
+
+function setAssignedContacts(contacts) {
+    const container = document.getElementById("selected-contacts-container");
+    container.innerHTML = contacts.map(contact =>
+        `<div class="avatar-board-card" style="background-color: ${contact.avatar.bgcolor};">${contact.avatar.initials}</div>`
+    ).join("");
+}
+
+
+function setSubtasks(subtasks) {
+    const list = document.getElementById("subtask-list");
+    list.innerHTML = subtasks.map(subtask =>
+        `<li><input type="checkbox" ${subtask.completed ? "checked" : ""}> ${subtask.text}</li>`
+    ).join("");
+}
+
+
+function getSubtasks() {
+    return Array.from(document.querySelectorAll("#subtask-list li")).map(item => ({
+        text: item.textContent.trim(),
+        completed: item.querySelector("input").checked
+    }));
+}
+
+
+function showEditConfirmation() {
+    const confirmationDiv = document.createElement("div");
+    confirmationDiv.classList.add("task-edit-confirmation");
+    confirmationDiv.innerText = "Task successfully updated";
+
+    document.body.appendChild(confirmationDiv);
+
+    // 📌 Animation starten
+    setTimeout(() => {
+        confirmationDiv.classList.add("show");
+    }, 10);
+
+    // 📌 Nach 2 Sekunden ausblenden
+    setTimeout(() => {
+        confirmationDiv.classList.remove("show");
+        setTimeout(() => {
+            confirmationDiv.remove();
+        }, 500);
+    }, 2000);
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const closeButton = document.getElementById("edit-close-modal");
+    if (closeButton) {
+        closeButton.addEventListener("click", closeEditModal);
+    }
+});
