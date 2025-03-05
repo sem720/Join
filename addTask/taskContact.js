@@ -6,7 +6,10 @@ let contactsContainer;
 const icon = document.getElementById("dropdown-icon");
 const selectedContactsContainer = document.getElementById("selected-contacts-container");
 
-
+/**
+ * Initializes the task contact management by setting up the necessary DOM elements
+ * and fetching the contacts data. It also adds a listener for outside keydown events.
+ */
 function initAddTaskContacts() {
     contactsContainer = document.getElementById('contacts-container');
     assignmentButton = document.getElementById('assignment-btn');
@@ -17,6 +20,12 @@ function initAddTaskContacts() {
     document.addEventListener("keydown", handleKeydownOutsideAssignment);
 }
 
+/**
+ * Handles keydown events when the focus is outside the assignment button or contact field.
+ * Prevents opening the contacts list when Enter is pressed.
+ * 
+ * @param {KeyboardEvent} event - The keydown event triggered by pressing a key.
+ */
 function handleKeydownOutsideAssignment(event) {
     // Wenn Enter gedrückt wird, und der Fokus nicht auf dem Assignment-Button oder einem Kontaktfeld ist,
     // verhindern wir das Öffnen der Kontakte-Liste
@@ -25,7 +34,12 @@ function handleKeydownOutsideAssignment(event) {
     }
 }
 
-
+/**
+ * Toggles the visibility of the contacts container. It opens the contacts list if it's closed
+ * and closes it if it's open.
+ * 
+ * @param {MouseEvent} event - The click event triggered when the user clicks the toggle button.
+ */
 function toggleContacts(event) {
     event.preventDefault();
     
@@ -42,8 +56,13 @@ function toggleContacts(event) {
     }
 }
 
-
-function manageOutsideClick(enable){
+/**
+ * Manages the outside click event listener. If enabled, the listener will close the contacts
+ * list when a click occurs outside of the assignment container.
+ * 
+ * @param {boolean} enable - Determines whether the outside click listener should be enabled or disabled.
+ */
+function manageOutsideClick(enable) {
     if (enable) {
         document.addEventListener("click", closeOnOutsideClick);
     } else {
@@ -51,25 +70,35 @@ function manageOutsideClick(enable){
     }
 }
 
-
+/**
+ * Closes the contacts list if a click happens outside of the assignment container.
+ * 
+ * @param {MouseEvent} event - The click event triggered by a user interaction.
+ */
 function closeOnOutsideClick(event) {
     const assignmentContainer = document.querySelector(".assignment-container");
 
     if (!assignmentContainer.contains(event.target)) {
         closeContacts();
-
         updateDropdownIcon(false);
     }
 }
 
-
+/**
+ * Updates the dropdown icon to indicate whether the contacts list is open or closed.
+ * 
+ * @param {boolean} isOpen - If true, the icon indicates that the contacts list is open; otherwise, it indicates closed.
+ */
 function updateDropdownIcon(isOpen) {
     if (icon) {
         icon.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
     }
 }
 
-
+/**
+ * Opens the contacts list by adding the "visible" class and removing the "hidden" class.
+ * It also updates the dropdown icon and manages outside click behavior.
+ */
 function openContacts() {
     const contactsContainer = document.getElementById('contacts-container');
     const contactsList = document.getElementById("contacts-list");
@@ -85,7 +114,10 @@ function openContacts() {
     updateSelectedContactsDisplay(); // Aktiviert das Schließen bei Klick außerhalb
 }
 
-
+/**
+ * Closes the contacts list by adding the "hidden" class and removing the "visible" class.
+ * It also updates the dropdown icon and disables outside click behavior.
+ */
 function closeContacts() {
     const contactsContainer = document.getElementById('contacts-container');
     const contactsList = document.getElementById("contacts-list");
@@ -101,7 +133,11 @@ function closeContacts() {
     updateSelectedContactsDisplay(); // Deaktiviert das Schließen bei Klick außerhalb
 }
 
-
+/**
+ * Fetches the contacts data from an external source and processes it into a usable format.
+ * 
+ * @throws {Error} Throws an error if the HTTP request fails or the data is invalid.
+ */
 async function fetchContacts() {
     const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
   
@@ -115,7 +151,11 @@ async function fetchContacts() {
     await renderContactsList();
 }
 
-
+/**
+ * Processes the raw contacts data and stores it in the `allContacts` map.
+ * 
+ * @param {Object} data - The raw contacts data.
+ */
 function processContactsData(data) {
     allContacts.clear();
     console.log("✅ Processed Contacts:", data);
@@ -127,21 +167,29 @@ function processContactsData(data) {
     }); 
 }
 
-
+/**
+ * Renders the list of contacts in the contacts container by creating HTML elements for each contact.
+ */
 async function renderContactsList() {
     const contactsList = document.getElementById('contacts-list');
     contactsList.innerHTML = '';
 
     allContacts.forEach(({ name, bgcolor }) => {
         contactsList.appendChild(createContactElement(name, bgcolor));
-    })
+    });
 }
 
-
+/**
+ * Creates a contact element to be displayed in the contacts list.
+ * 
+ * @param {string} name - The name of the contact.
+ * @param {string} bgcolor - The background color associated with the contact.
+ * @returns {HTMLElement} The contact element.
+ */
 function createContactElement(name, bgcolor) {
     const contactDiv = createElement("div", "contact-item");
     contactDiv.appendChild(createAvatar(name, bgcolor)); 
-        
+    
     const nameSpan = createElement("span", "contact-name", name);
     contactDiv.appendChild(nameSpan); 
     
@@ -151,7 +199,9 @@ function createContactElement(name, bgcolor) {
     return contactDiv; 
 }
 
-
+/**
+ * Updates the display of selected contacts in the selected contacts container.
+ */
 function updateSelectedContactsDisplay() {
     selectedContactsContainer.innerHTML = ""; 
 
@@ -161,7 +211,12 @@ function updateSelectedContactsDisplay() {
     });
 }
 
-
+/**
+ * Toggles the selection state of a contact and updates the display of selected contacts.
+ * 
+ * @param {string} name - The name of the contact.
+ * @param {boolean} isChecked - The new selection state of the contact (true if selected, false if deselected).
+ */
 function toggleContactSelection(name, isChecked) {
     const contact = allContacts.get(name);
     if (!contact) return;
@@ -169,7 +224,7 @@ function toggleContactSelection(name, isChecked) {
     if (isChecked) {
         selectedContacts.add(contact);
     } else {
-        selectedContacts.forEach(c=> {
+        selectedContacts.forEach(c => {
             if (c.name === name) {
                 selectedContacts.delete(c);
             }
@@ -177,5 +232,3 @@ function toggleContactSelection(name, isChecked) {
     }
     updateSelectedContactsDisplay();
 }
-
-
