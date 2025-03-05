@@ -1,9 +1,37 @@
+/**
+ * The selectedCategory element that holds the current selected category value.
+ * @type {HTMLInputElement}
+ */
 const selectedCategory = document.getElementById('selected-category');
+
+/**
+ * The dropdown button element that toggles the dropdown visibility.
+ * @type {HTMLElement}
+ */
 const dropdownBtn = document.querySelector('.dropdown-btn');
+
+/**
+ * The dropdown list element containing all available options.
+ * @type {HTMLUListElement}
+ */
 const dropdownList = document.getElementById('dropdown-list');
+
+/**
+ * The container that wraps the dropdown and controls its visibility.
+ * @type {HTMLElement}
+ */
 const dropdownContainer = document.querySelector('.dropdown-container');
+
+/**
+ * The default placeholder text shown when no category is selected.
+ * @type {string}
+ */
 const defaultText = "Select task category";
 
+/**
+ * Toggles the visibility of the dropdown list and updates the dropdown button icon.
+ * When the dropdown is opened, it resets the selected category.
+ */
 function toggleDropdown() {
     const isOpen = dropdownContainer.classList.toggle("open");
     dropdownList.style.display = isOpen ? "block" : "none";
@@ -13,7 +41,14 @@ function toggleDropdown() {
       resetDropdown();
     }
 }
-    
+
+
+/**
+ * Handles the selection of a category from the dropdown.
+ * Updates the dropdown button text and the selected category value.
+ * 
+ * @param {HTMLElement} option - The selected option element from the dropdown list.
+ */
 function selectCategory(option) {
     const selectedText = option.textContent;
     const selectedValue = option.getAttribute("data-value");
@@ -25,11 +60,15 @@ function selectCategory(option) {
     dropdownContainer.classList.remove("open");
     dropdownList.style.display = "none";
 
-    console.log("✅ Selected Category Updated:", selectedCategory); 
-  
     clearError("#selected-category");
 }
 
+
+/**
+ * Updates the dropdown button's inner HTML to display the selected category.
+ * 
+ * @param {string} selectedText - The text of the selected category option.
+ */
 function updateDropdownHTML(selectedText) {
   dropdownBtn.innerHTML = `
     ${selectedText}
@@ -39,6 +78,10 @@ function updateDropdownHTML(selectedText) {
   `;
 }
   
+
+/**
+ * Resets the dropdown to its default state, showing the default text and clearing the selected category.
+ */
 function resetDropdown() {
     dropdownBtn.innerHTML = `
       ${defaultText}
@@ -48,6 +91,3 @@ function resetDropdown() {
     `;
     selectedCategory.value = "";
 }
-  
-  
-  
