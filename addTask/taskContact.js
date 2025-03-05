@@ -24,8 +24,28 @@ function toggleContacts(event) {
     const isOpen = toggleVisibility(contactsContainer, contactsList);
     updateDropdownIcon(isOpen);
 
+    if (isOpen) {
+        document.addEventListener("click", closeOnOutsideClick);
+    } else {
+        document.removeEventListener("click", closeOnOutsideClick);
+    }
+
     if (!isOpen) updateSelectedContactsDisplay();
 }
+
+function closeOnOutsideClick(event) {
+    const assignmentContainer = document.querySelector(".assignment-container");
+    const contactsContainer = document.getElementById('contacts-container');
+
+    if (!assignmentContainer.contains(event.target)) {
+        contactsContainer.classList.add("hidden");
+        contactsContainer.classList.remove("visible");
+
+        document.removeEventListener("click", closeOnOutsideClick);
+        updateDropdownIcon(false);
+    }
+}
+
 
 function toggleVisibility(contactsContainer, contactsList) {
     const isHidden = contactsContainer.classList.contains("hidden");

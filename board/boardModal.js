@@ -13,6 +13,7 @@ async function openAddTaskModal() {
     renderContactsList();
     setupAddSubtaskButton();
     dateInput();
+    initialDefaultPriority();
 }
 
 function closeModal() {
