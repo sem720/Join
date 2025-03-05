@@ -6,11 +6,8 @@
 function dateInput() {
     const dateInput = document.getElementById("due-date");
   
-    if (!dateInput) {
-      console.error("Element with ID 'due-date' not found.");
-      return; 
-    }
-  
+    if (!dateInput) return console.error("Element with ID 'due-date' not found.");
+      
     dateInput.addEventListener("input", function () {
       if (dateInput.value) {
         dateInput.classList.add("has-value"); 
