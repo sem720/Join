@@ -1,36 +1,153 @@
 const allContacts = new Map();
 const selectedContacts = new Set();
 
-let contactsContainer;
 let assignmentButton;
+let contactsContainer;
+const icon = document.getElementById("dropdown-icon");
 const selectedContactsContainer = document.getElementById("selected-contacts-container");
 
+/**
+ * Initializes the task contact management by setting up the necessary DOM elements
+ * and fetching the contacts data. It also adds a listener for outside keydown events.
+ */
 function initAddTaskContacts() {
     contactsContainer = document.getElementById('contacts-container');
     assignmentButton = document.getElementById('assignment-btn');
+    subtasksInput = document.getElementById('subtasks');
 
     fetchContacts();
+
+    document.addEventListener("keydown", handleKeydownOutsideAssignment);
 }
+
+
+/**
+ * Handles keydown events when the focus is outside the assignment button or contact field.
+ * Prevents opening the contacts list when Enter is pressed.
+ * 
+ * @param {KeyboardEvent} event - The keydown event triggered by pressing a key.
+ */
+function handleKeydownOutsideAssignment(event) {
+    // Wenn Enter gedrückt wird, und der Fokus nicht auf dem Assignment-Button oder einem Kontaktfeld ist,
+    // verhindern wir das Öffnen der Kontakte-Liste
+    if (event.key === "Enter") {
+        event.preventDefault();
+    }
+}
+
+
+/**
+ * Toggles the visibility of the contacts container. It opens the contacts list if it's closed
+ * and closes it if it's open.
+ * 
+ * @param {MouseEvent} event - The click event triggered when the user clicks the toggle button.
+ */
+
 
 function toggleContacts(event) {
     event.preventDefault();
+    
+    const contactsContainer = document.getElementById('contacts-container');
     const contactsList = document.getElementById("contacts-list");
-    const icon = document.getElementById("dropdown-icon");
-    
     if (!contactsList) return console.error("❌ Element #contacts-list not found!");
-        
-    contactsList.classList.toggle("hidden");
-    contactsList.classList.toggle("visible");
 
-    const contactsContainer = contactsList.parentElement; // Adjust as needed
-    if (contactsContainer) contactsContainer.classList.toggle("hidden");
-    
-    const isOpen = contactsList.classList.contains("visible");
-    if (icon) icon.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
-    
-    if (!isOpen) updateSelectedContactsDisplay();
+    const isOpen = contactsContainer.classList.contains("visible");
+
+    if (isOpen) {
+        closeContacts();
+    } else {
+        openContacts();
+    }
 }
 
+
+/**
+ * Manages the outside click event listener. If enabled, the listener will close the contacts
+ * list when a click occurs outside of the assignment container.
+ * 
+ * @param {boolean} enable - Determines whether the outside click listener should be enabled or disabled.
+ */
+function manageOutsideClick(enable) {
+    if (enable) {
+        document.addEventListener("click", closeOnOutsideClick);
+    } else {
+        document.removeEventListener("click", closeOnOutsideClick);
+    }
+}
+
+
+/**
+ * Closes the contacts list if a click happens outside of the assignment container.
+ * 
+ * @param {MouseEvent} event - The click event triggered by a user interaction.
+ */
+function closeOnOutsideClick(event) {
+    const assignmentContainer = document.querySelector(".assignment-container");
+
+    if (!assignmentContainer.contains(event.target)) {
+        closeContacts();
+        updateDropdownIcon(false);
+    }
+}
+
+
+/**
+ * Updates the dropdown icon to indicate whether the contacts list is open or closed.
+ * 
+ * @param {boolean} isOpen - If true, the icon indicates that the contacts list is open; otherwise, it indicates closed.
+ */
+function updateDropdownIcon(isOpen) {
+    if (icon) {
+        icon.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
+    }
+}
+
+
+/**
+ * Opens the contacts list by adding the "visible" class and removing the "hidden" class.
+ * It also updates the dropdown icon and manages outside click behavior.
+ */
+function openContacts() {
+    const contactsContainer = document.getElementById('contacts-container');
+    const contactsList = document.getElementById("contacts-list");
+
+    contactsContainer.classList.add("visible");
+    contactsContainer.classList.remove("hidden");
+
+    contactsList.classList.add("visible");
+    contactsList.classList.remove("hidden");
+
+    updateDropdownIcon(true);
+    manageOutsideClick(true);
+    updateSelectedContactsDisplay(); // Aktiviert das Schließen bei Klick außerhalb
+}
+
+
+/**
+ * Closes the contacts list by adding the "hidden" class and removing the "visible" class.
+ * It also updates the dropdown icon and disables outside click behavior.
+ */
+function closeContacts() {
+    const contactsContainer = document.getElementById('contacts-container');
+    const contactsList = document.getElementById("contacts-list");
+
+    contactsContainer.classList.add("hidden");
+    contactsContainer.classList.remove("visible");
+
+    contactsList.classList.add("hidden");
+    contactsList.classList.remove("visible");
+
+    updateDropdownIcon(false);
+    manageOutsideClick(false);
+    updateSelectedContactsDisplay(); // Deaktiviert das Schließen bei Klick außerhalb
+}
+
+
+/**
+ * Fetches the contacts data from an external source and processes it into a usable format.
+ * 
+ * @throws {Error} Throws an error if the HTTP request fails or the data is invalid.
+ */
 async function fetchContacts() {
     const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
   
@@ -41,9 +158,15 @@ async function fetchContacts() {
     if (!data) return console.error("Keine Nutzerdaten gefunden.");
         
     processContactsData(data); 
-    renderContactsList();
+    await renderContactsList();
 }
 
+
+/**
+ * Processes the raw contacts data and stores it in the `allContacts` map.
+ * 
+ * @param {Object} data - The raw contacts data.
+ */
 function processContactsData(data) {
     allContacts.clear();
     console.log("✅ Processed Contacts:", data);
@@ -55,19 +178,31 @@ function processContactsData(data) {
     }); 
 }
 
-function renderContactsList() {
+
+/**
+ * Renders the list of contacts in the contacts container by creating HTML elements for each contact.
+ */
+async function renderContactsList() {
     const contactsList = document.getElementById('contacts-list');
     contactsList.innerHTML = '';
-    console.log("🔹 Contacts to render:", contactsList);
+
     allContacts.forEach(({ name, bgcolor }) => {
         contactsList.appendChild(createContactElement(name, bgcolor));
-    })
+    });
 }
 
+
+/**
+ * Creates a contact element to be displayed in the contacts list.
+ * 
+ * @param {string} name - The name of the contact.
+ * @param {string} bgcolor - The background color associated with the contact.
+ * @returns {HTMLElement} The contact element.
+ */
 function createContactElement(name, bgcolor) {
     const contactDiv = createElement("div", "contact-item");
     contactDiv.appendChild(createAvatar(name, bgcolor)); 
-        
+    
     const nameSpan = createElement("span", "contact-name", name);
     contactDiv.appendChild(nameSpan); 
     
@@ -77,6 +212,10 @@ function createContactElement(name, bgcolor) {
     return contactDiv; 
 }
 
+
+/**
+ * Updates the display of selected contacts in the selected contacts container.
+ */
 function updateSelectedContactsDisplay() {
     selectedContactsContainer.innerHTML = ""; 
 
@@ -86,6 +225,13 @@ function updateSelectedContactsDisplay() {
     });
 }
 
+
+/**
+ * Toggles the selection state of a contact and updates the display of selected contacts.
+ * 
+ * @param {string} name - The name of the contact.
+ * @param {boolean} isChecked - The new selection state of the contact (true if selected, false if deselected).
+ */
 function toggleContactSelection(name, isChecked) {
     const contact = allContacts.get(name);
     if (!contact) return;
@@ -93,7 +239,7 @@ function toggleContactSelection(name, isChecked) {
     if (isChecked) {
         selectedContacts.add(contact);
     } else {
-        selectedContacts.forEach(c=> {
+        selectedContacts.forEach(c => {
             if (c.name === name) {
                 selectedContacts.delete(c);
             }
@@ -101,5 +247,3 @@ function toggleContactSelection(name, isChecked) {
     }
     updateSelectedContactsDisplay();
 }
-
-

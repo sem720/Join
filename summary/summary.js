@@ -3,6 +3,11 @@ function initSum() {
   getGreeting();
   countTasks();
   countUrgentTasks();
+  countToDoTasks();
+  countDone();
+  countProgress();
+  countAwait();
+  getClosestDueDate();
 }
 
 function displayInfo() {
@@ -56,12 +61,137 @@ async function countUrgentTasks() {
 
     if (data) {
       urgentCount = Object.values(data).filter(
-        (task) => task.priority === "Urgent"
+        (task) => task.priority.text === "Urgent"
       ).length;
     }
 
     document.getElementById("urgentTasks").innerText = `${urgentCount}`;
   } catch (error) {
     document.getElementById("urgentTasks").innerText = "-";
+  }
+}
+
+async function countToDoTasks() {
+  const url =
+    "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    let todoCount = 0;
+
+    if (data) {
+      todoCount = Object.values(data).filter(
+        (task) => task.mainCategory === "To do"
+      ).length;
+    }
+
+    document.getElementById("render-todo").innerText = `${todoCount}`;
+  } catch (error) {
+    document.getElementById("render-todo").innerText = "-";
+  }
+}
+
+async function countDone() {
+  const url =
+    "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    let doneCount = 0;
+
+    if (data) {
+      doneCount = Object.values(data).filter(
+        (task) => task.mainCategory === "Done"
+      ).length;
+    }
+
+    document.getElementById("render-done").innerText = `${doneCount}`;
+  } catch (error) {
+    document.getElementById("render-done").innerText = "-";
+  }
+}
+
+async function countProgress() {
+  const url =
+    "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    let progressCount = 0;
+
+    if (data) {
+      progressCount = Object.values(data).filter(
+        (task) => task.mainCategory === "In progress"
+      ).length;
+    }
+
+    document.getElementById("render-progress").innerText = `${progressCount}`;
+  } catch (error) {
+    document.getElementById("render-progress").innerText = "-";
+  }
+}
+
+async function countAwait() {
+  const url =
+    "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    let awaitCount = 0;
+
+    if (data) {
+      awaitCount = Object.values(data).filter(
+        (task) => task.mainCategory === "Await feedback"
+      ).length;
+    }
+
+    document.getElementById("render-await").innerText = `${awaitCount}`;
+  } catch (error) {
+    document.getElementById("render-await").innerText = "-";
+  }
+}
+
+// Date function
+
+function parseFirebaseDate(firebaseDate) {
+  const parts = firebaseDate.split("/");
+  return new Date(parts[2], parts[1] - 1, parts[0]);
+}
+
+async function getClosestDueDate() {
+  const url =
+    "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let closestDate = null;
+
+    if (data) {
+      Object.values(data).forEach((task) => {
+        if (task.dueDate) {
+          const taskDate = parseFirebaseDate(task.dueDate);
+          taskDate.setHours(0, 0, 0, 0);
+
+          if (taskDate >= today) {
+            if (!closestDate || taskDate < closestDate) {
+              closestDate = taskDate;
+            }
+          }
+        }
+      });
+    }
+
+    const options = { day: "2-digit", month: "long", year: "numeric" };
+    const formattedDate = closestDate
+      ? closestDate
+          .toLocaleDateString("en-GB", options)
+          .replace(/ (\d{4})$/, ", $1")
+      : "-";
+    document.getElementById("render-due-date").innerText = formattedDate;
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    document.getElementById("render-due-date").innerText = "-";
   }
 }

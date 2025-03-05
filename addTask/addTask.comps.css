@@ -1,7 +1,14 @@
-input::placeholder, 
-textarea::placeholder {
+#task-name::placeholder, 
+textarea::placeholder,
+#subtasks::placeholder {
     color: #D7D7D7;
-    opacity: 1;
+    font-size: 18px;
+}
+
+#task-name,
+textarea,
+#subtasks {
+    font-size: 16px;
 }
 
 input:focus,
@@ -108,7 +115,7 @@ select:hover, .dropdown-btn:hover {
 }
 
 .dropdown-options > li:hover {
-    background-color: hsl(210, 12%, 97%);
+    background-color: #f0f0f0;
 }
 
 .subtask-item:hover .li-actions {
@@ -261,4 +268,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 #task-name, #due-date, #category-container {
     position: relative;
+}
+
+.contact-item:hover{
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    transform: translateX(-1px);
+}
+
+.visible {
+    display: block;
 }

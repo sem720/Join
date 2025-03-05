@@ -1,30 +1,32 @@
-function openAddTaskModal() {
+async function openAddTaskModal() {
     const overlay = document.getElementById("task-overlay");
     const modal = document.getElementById("addTaskModal");
 
     overlay.classList.add("active");
-    overlay.classList.remove("closing");
-    modal.classList.remove("closing-to-right");
+    modal.classList.remove("hidden");
 
-    modal.addEventListener("click", (e) => {
-        e.stopPropagation();
-    });
+    setTimeout(() => {
+        modal.classList.add("show");
+    }, 10);
+
+    await fetchContacts();
+    renderContactsList();
+    setupAddSubtaskButton();
+    dateInput();
+    initialDefaultPriority();
 }
-
 
 function closeModal() {
     const overlay = document.getElementById("task-overlay");
     const modal = document.getElementById("addTaskModal");
 
-    overlay.classList.add("closing");
-    modal.classList.add("closing-to-right");
+    modal.classList.remove("show");
 
     setTimeout(() => {
-        overlay.classList.remove("active", "closing");
-        modal.classList.remove("closing-to-right");
-    }, 500);
+        modal.classList.add("hidden");
+        overlay.classList.remove("active");
+    }, 400);
 }
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("addTaskModal");
