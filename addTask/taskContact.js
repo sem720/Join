@@ -6,66 +6,101 @@ let contactsContainer;
 const icon = document.getElementById("dropdown-icon");
 const selectedContactsContainer = document.getElementById("selected-contacts-container");
 
+
 function initAddTaskContacts() {
     contactsContainer = document.getElementById('contacts-container');
     assignmentButton = document.getElementById('assignment-btn');
+    subtasksInput = document.getElementById('subtasks');
 
     fetchContacts();
+
+    document.addEventListener("keydown", handleKeydownOutsideAssignment);
 }
+
+function handleKeydownOutsideAssignment(event) {
+    // Wenn Enter gedrückt wird, und der Fokus nicht auf dem Assignment-Button oder einem Kontaktfeld ist,
+    // verhindern wir das Öffnen der Kontakte-Liste
+    if (event.key === "Enter") {
+        event.preventDefault();
+    }
+}
+
 
 function toggleContacts(event) {
     event.preventDefault();
-
+    
     const contactsContainer = document.getElementById('contacts-container');
     const contactsList = document.getElementById("contacts-list");
-
     if (!contactsList) return console.error("❌ Element #contacts-list not found!");
 
-    const isOpen = toggleVisibility(contactsContainer, contactsList);
-    updateDropdownIcon(isOpen);
+    const isOpen = contactsContainer.classList.contains("visible");
 
     if (isOpen) {
+        closeContacts();
+    } else {
+        openContacts();
+    }
+}
+
+
+function manageOutsideClick(enable){
+    if (enable) {
         document.addEventListener("click", closeOnOutsideClick);
     } else {
         document.removeEventListener("click", closeOnOutsideClick);
     }
-
-    if (!isOpen) updateSelectedContactsDisplay();
 }
+
 
 function closeOnOutsideClick(event) {
     const assignmentContainer = document.querySelector(".assignment-container");
-    const contactsContainer = document.getElementById('contacts-container');
 
     if (!assignmentContainer.contains(event.target)) {
-        contactsContainer.classList.add("hidden");
-        contactsContainer.classList.remove("visible");
+        closeContacts();
 
-        document.removeEventListener("click", closeOnOutsideClick);
         updateDropdownIcon(false);
     }
 }
 
-
-function toggleVisibility(contactsContainer, contactsList) {
-    const isHidden = contactsContainer.classList.contains("hidden");
-
-    contactsContainer.classList.toggle("hidden", !isHidden);
-    contactsContainer.classList.toggle("visible", isHidden);
-
-    contactsList.classList.toggle("hidden", !isHidden);
-    contactsList.classList.toggle("visible", isHidden);
-
-    console.log("After toggle:", contactsContainer.classList, contactsList.classList);
-
-    return contactsList.classList.contains("visible"); // Return new state
-}
 
 function updateDropdownIcon(isOpen) {
     if (icon) {
         icon.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
     }
 }
+
+
+function openContacts() {
+    const contactsContainer = document.getElementById('contacts-container');
+    const contactsList = document.getElementById("contacts-list");
+
+    contactsContainer.classList.add("visible");
+    contactsContainer.classList.remove("hidden");
+
+    contactsList.classList.add("visible");
+    contactsList.classList.remove("hidden");
+
+    updateDropdownIcon(true);
+    manageOutsideClick(true);
+    updateSelectedContactsDisplay(); // Aktiviert das Schließen bei Klick außerhalb
+}
+
+
+function closeContacts() {
+    const contactsContainer = document.getElementById('contacts-container');
+    const contactsList = document.getElementById("contacts-list");
+
+    contactsContainer.classList.add("hidden");
+    contactsContainer.classList.remove("visible");
+
+    contactsList.classList.add("hidden");
+    contactsList.classList.remove("visible");
+
+    updateDropdownIcon(false);
+    manageOutsideClick(false);
+    updateSelectedContactsDisplay(); // Deaktiviert das Schließen bei Klick außerhalb
+}
+
 
 async function fetchContacts() {
     const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
@@ -80,6 +115,7 @@ async function fetchContacts() {
     await renderContactsList();
 }
 
+
 function processContactsData(data) {
     allContacts.clear();
     console.log("✅ Processed Contacts:", data);
@@ -91,6 +127,7 @@ function processContactsData(data) {
     }); 
 }
 
+
 async function renderContactsList() {
     const contactsList = document.getElementById('contacts-list');
     contactsList.innerHTML = '';
@@ -99,6 +136,7 @@ async function renderContactsList() {
         contactsList.appendChild(createContactElement(name, bgcolor));
     })
 }
+
 
 function createContactElement(name, bgcolor) {
     const contactDiv = createElement("div", "contact-item");
@@ -113,6 +151,7 @@ function createContactElement(name, bgcolor) {
     return contactDiv; 
 }
 
+
 function updateSelectedContactsDisplay() {
     selectedContactsContainer.innerHTML = ""; 
 
@@ -121,6 +160,7 @@ function updateSelectedContactsDisplay() {
         selectedContactsContainer.appendChild(avatar);
     });
 }
+
 
 function toggleContactSelection(name, isChecked) {
     const contact = allContacts.get(name);
