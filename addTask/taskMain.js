@@ -21,5 +21,6 @@ function init() {
     setupDateReset(),
     setupAddSubtaskButton(),
     initEventListeners(),
+    setupCalendarIcon(),
     clearTask();
 }
