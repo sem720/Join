@@ -100,9 +100,9 @@ function showError(selector, message) {
     let field = document.querySelector(selector);
     if (!field) return;
 
-    let errorMsg = field.nextElementSibling; // Die Fehlermeldung kommt direkt nach dem Eingabefeld
-    errorMsg?.classList.contains("error-message") && (errorMsg.textContent = message, errorMsg.style.display = "block");
- 
+    let errorMsg = document.querySelector(`.error-message[data-error-for="${field.id}"]`);
+    errorMsg && (errorMsg.textContent = message, errorMsg.style.display = "block");
+
     const elementToHighlight = selector === "#selected-category" ? document.querySelector(".dropdown-btn") : field;
     elementToHighlight.classList.add("error");
 
@@ -119,10 +119,11 @@ function clearError(selector) {
     let field = document.querySelector(selector);
     if (!field) return;
 
-    let errorMsg = field.nextElementSibling; // Die Fehlermeldung kommt direkt nach dem Eingabefeld
+    let errorMsg = document.querySelector(`.error-message[data-error-for="${field.id}"]`);
     errorMsg?.classList.contains("error-message") && (errorMsg.style.display = "none");
 
-    (selector === "#selected-category" ? document.querySelector(".dropdown-btn") : field).classList.remove("error");
+    const elementToHighlight = selector === "#selected-category" ? document.querySelector(".dropdown-btn") : field;
+    elementToHighlight.classList.remove("error");
 }
 
 /**
