@@ -201,12 +201,14 @@ async function renderContactsList() {
  */
 function createContactElement(name, bgcolor) {
     const contactDiv = createElement("div", "contact-item");
+
     contactDiv.appendChild(createAvatar(name, bgcolor)); 
     
     const nameSpan = createElement("span", "contact-name", name);
     contactDiv.appendChild(nameSpan); 
     
     const checkbox = createCheckbox(name);
+
     contactDiv.appendChild(checkbox); 
     
     return contactDiv; 
@@ -247,3 +249,40 @@ function toggleContactSelection(name, isChecked) {
     }
     updateSelectedContactsDisplay();
 }
+
+function handleCheckboxChange(checkbox, img, name) {
+    checkbox.addEventListener("change", () => {
+        toggleContactSelection(name, checkbox.checked);
+        
+        if (checkbox.checked) {
+            img.style.display = "block";  // Show the image when checked
+            checkbox.style.display = "none";  // Hide the checkbox when checked
+        } else {
+            img.style.display = "none";  // Hide the image when unchecked
+            checkbox.style.display = "block";  // Show the checkbox when unchecked
+        }
+    });
+
+      // Ensure clicking the image returns to the checkbox
+      img.addEventListener("click", () => {
+        checkbox.checked = false;  // Uncheck the checkbox
+        img.style.display = "none";  // Hide the image
+        checkbox.style.display = "block";  // Show the checkbox again
+    });
+}
+
+// Function to create the checkbox with image logic
+function createCheckbox(name, avatar) {
+    const container = createElement("div", "contact-checkbox-container");
+
+    const checkbox = createCheckboxElement(name, avatar);
+    const img = createImageElement();
+
+    container.appendChild(checkbox);
+    container.appendChild(img);
+
+    handleCheckboxChange(checkbox, img, name);
+
+    return container;
+}
+
