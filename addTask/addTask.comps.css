@@ -260,6 +260,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 #selected-contacts-container {
     display: flex;
+    padding-top: 4px;
 }
 
 #selected-contacts-container > div {
