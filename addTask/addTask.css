@@ -426,6 +426,7 @@ ul {
     align-items: center;
     width: 20px;
     height: 20px;
+    padding-right: 8px;
 }
 
 .contact-checkbox-container input[type="checkbox"] {
@@ -459,16 +460,25 @@ ul {
     position: relative;
 }
 
-.bgc-darkblue {
+.contact-item.selected {
     background-color: #091931 !important;
     border-radius: 8px;
-}
-
-.border-white {
-    border: 2px solid var(--col-white) !important;
 }
 
 .checkbox-image-small {
     width: 20px;
     height: 20px;
 }
+
+.selected-avatar {
+    border: 2px solid white;
+}
+
+.selected-name {
+    color: white;
+}
+
+.selected-checkbox-image {
+    filter: invert(1);
+}
+
