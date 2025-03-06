@@ -1,6 +1,7 @@
 #task-name::placeholder, 
 textarea::placeholder,
-#subtasks::placeholder {
+#subtasks::placeholder,
+#due-date::placeholder {
     color: #D7D7D7;
     font-size: 18px;
 }
