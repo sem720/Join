@@ -97,6 +97,7 @@ body {
     position: sticky;
     top: 0;
     background-color: #f6f7f8;
+    z-index: 29;
 }
 
 .plus-button {
@@ -132,7 +133,7 @@ body {
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
     border-radius: 24px;
     padding: 16px;
-    cursor: grab;
+    cursor: pointer;
 }
 
 .task-card:active {
@@ -290,39 +291,29 @@ body {
     display: none !important;
 }
 
-.edit-modal {
-    background: white;
-    border-radius: 24px;
-    padding: 32px 40px;
-    width: 500px;
-    min-height: 700px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-    transform: translateY(0);
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-}
-
-.edit-modal.active {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.edit-modal.hidden {
-    opacity: 0;
-    transform: translateY(-20px);
-    pointer-events: none;
-}
-
-.edit-modal-container {
-    max-height: 600px;
-    overflow-y: auto;
-    margin-top: 56px;
-    margin-bottom: 16px;
-}
-
 #edit-selected-contacts-container {
     margin-top: 8px;
     margin-left: 12px;
     display: flex;
+}
+
+#taskDetailOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    visibility: hidden;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 50;
+}
+
+#taskDetailOverlay.active {
+    visibility: visible;
+    opacity: 1;
 }
