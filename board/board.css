@@ -87,6 +87,7 @@ body {
     overflow: auto;
     scrollbar-width: none;
     position: relative;
+    margin-bottom: 16px;
 }
 
 .column-header {
@@ -316,4 +317,25 @@ body {
 #taskDetailOverlay.active {
     visibility: visible;
     opacity: 1;
+}
+
+.editTask-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 30px;
+    height: 30px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s ease-in-out;
+}
+
+.editTask-close-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
 }
