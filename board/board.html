@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,252 +24,137 @@
   <div w3-include-html="/comp/sidebar/sidebar.html"></div>
 
   <!-- Modal und Overlay -->
-  <div id="task-overlay" class="modal-overlay" onclick="closeModal()"></div>
-  <div id="addTaskModal" class="modal hidden">
-       <button id="close-modal" class="close-btn no-loading" onclick="closeModal()">
-         &times;
-       </button>
+  <div id="task-overlay" class="modal-overlay" onclick="closeModal()">
+    <div id="addTaskModal" class="modal hidden">
+      <button id="close-modal" class="close-btn no-loading" onclick="closeModal()">
+        &times;
+      </button>
 
       <div id="modal-body">
         <div class="modal-addTask-container">
           <h1 class="h1-addTask">Add Task</h1>
-            <main class="main-addTask">
-              <form onsubmit="createTask(event)">
-                <div class="left-container">
-                  <label for="task-name">Title <span class="required">*</span></label>
-                  <input 
-                    id="task-name" 
-                    class="input-standard" 
-                    type="text" name="task-name" 
-                    placeholder="Enter a title" 
-                    required 
-                  />
-                  <div class="error-message" style="display: none"></div>
+          <main class="main-addTask">
+            <form onsubmit="createTask(event)">
+              <div class="left-container">
+                <label for="task-name">Title <span class="required">*</span></label>
+                <input id="task-name" class="input-standard" type="text" name="task-name" placeholder="Enter a title"
+                  required />
+                <div class="error-message" style="display: none"></div>
 
-                  <label for="description">Description</label>
-                  <textarea i
-                    id="description" 
-                    name="description" 
-                    placeholder="Enter a Description"
-                  ></textarea>
+                <label for="description">Description</label>
+                <textarea i id="description" name="description" placeholder="Enter a Description"></textarea>
 
-                  <label id="assignment-label">Assigned to</label>
-                  <div class="assignment-container">
-                    <button class="assignment-btn no-loading" id="assignment-btn"  onclick="toggleContacts(event)">
-                      Select contacts to assign
-                      <span class="icon-container">
-                        <img 
-                          src="/assets/imgs/dropdown-black.png" 
-                          alt="Dropdown Icon" 
-                          id="dropdown-icon"
-                        />
-                      </span>
-                    </button>
-                    <div 
-                      id="selected-contacts-container" 
-                      class="selected-contacts">
-                    </div>
-                    <div id="contacts-container" class="hidden">
-                      <div id="contacts-list"></div>
-                    </div>
-                  </div>
-                </div> <!-- END left-container -->
-
-                <div class="right-container">
-                  <label for="due-date"
-                    >Due Date <span class="required">*</span></label
-                  >
-                  <input 
-                    type="date" 
-                    class="input-standard" 
-                    id="due-date" 
-                    name="due-date" 
-                    required 
-                  />
-                  <div class="error-message" style="display: none"></div>
-
-                  <label>Prio</label>
-                  <div class="button-container">
-                    <button 
-                    class="btn-switch" 
-                    id="urgent" 
-                    type="button" 
-                    onclick="toggleButtons(this)"
-                    >
-                      Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
-                    </button>
-                    <button 
-                      class="btn-switch" 
-                      id="medium" 
-                      type="button" 
-                      onclick="toggleButtons(this)"
-                    >
-                      Medium <img src="/assets/imgs/medium.png" alt="medium-icon" />
-                    </button>
-                    <button 
-                      class="btn-switch" 
-                      id="low" 
-                      type="button" 
-                      onclick="toggleButtons(this)"
-                    >
-                      Low <img src="/assets/imgs/low.png" alt="low-icon" />
-                    </button>
-                  </div>
-
-                  <label id="category"
-                    >Category <span class="required">*</span></label
-                  >
-                  <div class="dropdown-container">
-                    <button class="dropdown-btn no-loading" onclick="toggleDropdown()">Select task category
-                      <span class="icon-container">
-                        <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
-                      </span>
-                    </button>
-                    <div class="dropdown-options" id="dropdown-list">
-                      <li onclick="selectCategory(this)" data-value="technical_task" class="no-loading">Technical Task</li>
-                      <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
-                    </div>
-                  </div>
-                  <input 
-                    type="hidden" 
-                    id="selected-category" 
-                    name="selected-category" 
-                  />
-                  <div class="error-message" style="display: none"></div>
-
-                  <label for="subtasks">Subtasks</label>
-                  <div class="subtask-input-wrapper">
-                    <input 
-                      type="text" 
-                      class="input-standard" 
-                      id="subtasks" 
-                      name="subtasks" 
-                      placeholder="Add new subtask" 
-                      autocomplete="off"
-                    />
-                    <img 
-                      src="/assets/imgs/add-subtask.png" 
-                      alt="addSubtask-icon" 
-                      class="add-subtask-icon" 
-                    />
-                  </div>
-                  <ul id="subtask-list"></ul>
-                </div> <!-- END right-container -->
-
-                <div class="text resp" style="display: none">
-                  <span class="required"> *</span> This field is required.
-                </div>
-              </form>
-
-              <section class="footer">
-                <div class="text">
-                  <span class="required">*</span>This field is required.
-                </div>
-                <div class="btn-div-footer">
-                  <button 
-                    class="btn-bright clear-btn no-loading" 
-                    onclick="clearTask()"
-                    >Clear
-                    <span class="clear-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="10"
-                  height="10"
-                  viewBox="0 0 30 30"
-                >
-                  <line x1="0" y1="0" x2="30" y2="30" stroke-width="3" />
-                  <line x1="30" y1="0" x2="0" y2="30" stroke-width="3" />
-                </svg>
-              </span>
+                <label id="assignment-label">Assigned to</label>
+                <div class="assignment-container">
+                  <button class="assignment-btn no-loading" id="assignment-btn" onclick="toggleContacts(event)">
+                    Select contacts to assign
+                    <span class="icon-container">
+                      <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon" />
+                    </span>
                   </button>
-                  <button 
-                    class="btn-dark create-btn no-loading" 
-                    onclick="createTask(event)"
-                    >Create Task 
-                    <img src="/assets/imgs/check-white.png" alt="check-icon" 
-                    />
+                  <div id="selected-contacts-container" class="selected-contacts">
+                  </div>
+                  <div id="contacts-container" class="hidden">
+                    <div id="contacts-list"></div>
+                  </div>
+                </div>
+              </div> <!-- END left-container -->
+
+              <div class="right-container">
+                <label for="due-date">Due Date <span class="required">*</span></label>
+                <input type="date" class="input-standard" id="due-date" name="due-date" required />
+                <div class="error-message" style="display: none"></div>
+
+                <label>Prio</label>
+                <div class="button-container">
+                  <button class="btn-switch" id="urgent" type="button" onclick="toggleButtons(this)">
+                    Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
+                  </button>
+                  <button class="btn-switch" id="medium" type="button" onclick="toggleButtons(this)">
+                    Medium <img src="/assets/imgs/medium.png" alt="medium-icon" />
+                  </button>
+                  <button class="btn-switch" id="low" type="button" onclick="toggleButtons(this)">
+                    Low <img src="/assets/imgs/low.png" alt="low-icon" />
                   </button>
                 </div>
-              </section>
-            </main>
-            <div id="task-added-popup" class="task-popup btn-dark">
-              Task added to board
-              <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
+
+                <label id="category">Category <span class="required">*</span></label>
+                <div class="dropdown-container">
+                  <button class="dropdown-btn no-loading" onclick="toggleDropdown()">Select task category
+                    <span class="icon-container">
+                      <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                    </span>
+                  </button>
+                  <div class="dropdown-options" id="dropdown-list">
+                    <li onclick="selectCategory(this)" data-value="technical_task" class="no-loading">Technical Task
+                    </li>
+                    <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
+                  </div>
+                </div>
+                <input type="hidden" id="selected-category" name="selected-category" />
+                <div class="error-message" style="display: none"></div>
+
+                <label for="subtasks">Subtasks</label>
+                <div class="subtask-input-wrapper">
+                  <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask"
+                    autocomplete="off" />
+                  <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
+                </div>
+                <ul id="subtask-list"></ul>
+              </div> <!-- END right-container -->
+
+              <div class="text resp" style="display: none">
+                <span class="required"> *</span> This field is required.
+              </div>
+            </form>
+
+            <section class="footer">
+              <div class="text">
+                <span class="required">*</span>This field is required.
+              </div>
+              <div class="btn-div-footer">
+                <button class="btn-bright clear-btn no-loading" onclick="clearTask()">Clear
+                  <span class="clear-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 30 30">
+                      <line x1="0" y1="0" x2="30" y2="30" stroke-width="3" />
+                      <line x1="30" y1="0" x2="0" y2="30" stroke-width="3" />
+                    </svg>
+                  </span>
+                </button>
+                <button class="btn-dark create-btn no-loading" onclick="createTask(event)">Create Task
+                  <img src="/assets/imgs/check-white.png" alt="check-icon" />
+                </button>
+              </div>
+            </section>
+          </main>
+          <div id="task-added-popup" class="task-popup btn-dark">
+            Task added to board
+            <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
           </div>
         </div> <!-- END modal-addTask-container -->
       </div> <!-- END modal-body -->
     </div> <!-- END addTaskModal -->
-  
+  </div>
 
   <!-- Overlay für Task-Details -->
   <div id="taskDetailOverlay">
     <div id="taskDetailModal">
-      <button id="closeTaskDetail">&times;</button>
+      <button id="closeTaskDetail" onclick="closeTaskDetail()">&times;</button>
       <div id="taskDetailContent"></div>
     </div>
-  </div>
 
-  <!-- Edit Task Modal & Overlay -->
-  <div id="edit-task-overlay" class="edit-task-overlay" onclick="closeEditModal()">
-    <div id="editTaskModal" class="edit-modal">
-      <button id="edit-close-modal" class="close-btn" onclick="closeEditModal()">
-        &times;
-      </button>
-
-      <form class="edit-modal-container" onsubmit="saveTaskChanges(event)">
-        <div class="form-content">
-          <label for="edit-task-title">Title</label>
-          <input id="edit-task-title" class="edit-input-board" type="text" placeholder="Enter a title" required />
-        </div>
-
-        <div class="form-content">
-          <label for="edit-task-description">Description</label>
-          <textarea id="edit-task-description" placeholder="Enter a Description"></textarea>
-        </div>
-
-        <div class="form-content">
-          <label for="edit-due-date">Due Date</label>
-          <input type="date" class="edit-input-board" id="edit-due-date" required />
-        </div>
-
-        <label>Priority</label>
-        <div class="button-container">
-          <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
-            Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
-          </button>
-          <button class="btn-switch" id="medium" name="medium" type="button" onclick="toggleButtons(this)">
-            Medium <img src="/assets/imgs/medium.png" alt="medium-icon" />
-          </button>
-          <button class="btn-switch" id="low" name="low" type="button" onclick="toggleButtons(this)">
-            Low <img src="/assets/imgs/low.png" alt="low-icon" />
-          </button>
-        </div>
-
-        <div class="form-content">
-          <label>Assigned to</label>
-          <div class="edit-assignment-container">
-            <button class="assignment-btn">
-              Select contacts to assign
-            </button>
-            <div id="edit-selected-contacts-container"></div>
-          </div>
-        </div>
-
-        <div class="form-content">
-          <label>Subtasks</label>
-          <input type="text" class="edit-input-board" id="edit-subtasks" placeholder="Add new subtask" />
-          <ul id="edit-subtask-list"></ul>
-        </div>
-      </form>
-
-      <div class="edit-modal-footer">
-        <button class="edit-save-btn btn-dark">
-          OK
-          <img src="/assets/imgs/check-white.png" alt="">
-        </button>
+    <div id="editTaskModal" class="edit-modal hidden">
+      <div id="edit-modal-content" class="edit-modal-content">
+        <!-- Hier wird editTaskTempl() geladen -->
       </div>
     </div>
   </div>
+
+
+  <!-- Edit Task Modal & Overlay -->
+  <!-- <div id="edit-task-overlay" class="edit-task-overlay" onclick="closeEditModal()">
+
+  </div> -->
 
   <!-- Haupt-Board -->
   <div class="board-wrap">
@@ -340,6 +226,7 @@
   <script src="/addTask/taskMain.js"></script>
   <script src="/board/boardModal.js"></script>
   <script src="/board/board.js"></script>
+  <script src="/board/boardTemp.js"></script>
   <script src="/comp/navbar/navbar.js"></script>
   <script src="https://www.w3schools.com/lib/w3.js"></script>
   <script src="/root.js"></script>

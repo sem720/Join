@@ -183,11 +183,6 @@
     opacity: 1;
 }
 
-
-
-
-
-
 .edit-modal-overlay {
     position: fixed;
     top: 0;
@@ -250,10 +245,6 @@
     justify-content: end;
 }
 
-
-
-
-
 .edit-priority-container {
     display: flex;
     gap: 8px;
@@ -268,22 +259,6 @@
     font-weight: bold;
 }
 
-#edit-urgent {
-    background: #ff3b30;
-    color: white;
-}
-
-#edit-medium {
-    background: #ffcc00;
-    color: black;
-}
-
-#edit-low {
-    background: #34c759;
-    color: white;
-}
-
-
 .edit-prio-btn.active {
     border: 2px solid black;
 }
@@ -294,4 +269,45 @@
     padding: 16px;
     justify-content: space-between;
     flex-wrap: wrap;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#taskDetailOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    visibility: hidden;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 50;
+}
+
+#taskDetailOverlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+#taskDetailModal,
+#editTaskModal {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+}
+
+#taskDetailOverlay.active #taskDetailModal,
+#taskDetailOverlay.active #editTaskModal {
+    transform: scale(1);
 }
