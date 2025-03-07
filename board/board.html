@@ -191,9 +191,10 @@
           <input name="findTask" id="findTask" class="input-standard" placeholder="Find Task" />
           <div class="search-divider"></div>
           <div class="search-icon">
-            <img src="/assets/imgs/search.png" alt="search" onclick="findTask()" />
+            <img src="/assets/imgs/search.png" alt="search" id="search-icon" onclick="findTask()" />
           </div>
         </div>
+        <p id="no-results" style="display: none;">No tasks found.</p>
 
         <button id="addTask" class="btn-dark no-loading" onclick="openAddTaskModal()">
           Add Task
@@ -252,6 +253,7 @@
   <script src="/addTask/taskMain.js"></script>
   <script src="/board/boardModal.js"></script>
   <script src="/board/board.js"></script>
+  <script src="/board/searchlogic.js"></script>
   <script src="/board/boardTemp.js"></script>
   <script src="/comp/navbar/navbar.js"></script>
   <script src="https://www.w3schools.com/lib/w3.js"></script>
