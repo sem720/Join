@@ -79,15 +79,25 @@ function createAvatar(name, bgcolor) {
  * @param {string} avatar - The avatar of the contact, used as a data attribute.
  * @returns {HTMLElement} The checkbox input element.
  */
-function createCheckbox(name, avatar) {
+function createCheckboxElement(name, avatar) {
     const checkbox = createElement("input", "contact-checkbox");
     checkbox.type = "checkbox";
-
     checkbox.dataset.contactName = name;
     checkbox.dataset.contactAvatar = avatar;
-    checkbox.addEventListener("change", () => toggleContactSelection(name, checkbox.checked));
+    
     return checkbox;
 }
+
+
+function createImageElement() {
+    const img = createElement("img", "checkbox-image");
+    img.src = "/assets/imgs/check-mark.png"; // Default image (unchecked state)
+    img.alt = "Checkbox image";
+    img.classList.add("checkbox-image-small");
+    img.style.display = "none";
+    return img;
+}
+
 
 /**
  * Displays an error message next to the input field identified by the selector.
@@ -100,9 +110,9 @@ function showError(selector, message) {
     let field = document.querySelector(selector);
     if (!field) return;
 
-    let errorMsg = field.nextElementSibling; // Die Fehlermeldung kommt direkt nach dem Eingabefeld
-    errorMsg?.classList.contains("error-message") && (errorMsg.textContent = message, errorMsg.style.display = "block");
- 
+    let errorMsg = document.querySelector(`.error-message[data-error-for="${field.id}"]`);
+    errorMsg && (errorMsg.textContent = message, errorMsg.style.display = "block");
+
     const elementToHighlight = selector === "#selected-category" ? document.querySelector(".dropdown-btn") : field;
     elementToHighlight.classList.add("error");
 
@@ -119,10 +129,11 @@ function clearError(selector) {
     let field = document.querySelector(selector);
     if (!field) return;
 
-    let errorMsg = field.nextElementSibling; // Die Fehlermeldung kommt direkt nach dem Eingabefeld
+    let errorMsg = document.querySelector(`.error-message[data-error-for="${field.id}"]`);
     errorMsg?.classList.contains("error-message") && (errorMsg.style.display = "none");
 
-    (selector === "#selected-category" ? document.querySelector(".dropdown-btn") : field).classList.remove("error");
+    const elementToHighlight = selector === "#selected-category" ? document.querySelector(".dropdown-btn") : field;
+    elementToHighlight.classList.remove("error");
 }
 
 /**

@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="/addTask/addTask.comps.css" />
   <link rel="stylesheet" href="/addTask/addTask.responsive.css" />
   <link rel="stylesheet" href="./taskDetails.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link id="favicon-light" rel="icon" href="../assets/imgs/logo-black.png" media="(prefers-color-scheme: light)" />
   <link id="favicon-dark" rel="icon" href="../assets/imgs/logo-white-blue.png" media="(prefers-color-scheme: dark)" />
 </head>
@@ -39,7 +40,7 @@
                 <label for="task-name">Title <span class="required">*</span></label>
                 <input id="task-name" class="input-standard" type="text" name="task-name" placeholder="Enter a title"
                   required />
-                <div class="error-message" style="display: none"></div>
+                <div class="error-message" data-error-for="task-name" style="display: none"></div>
 
                 <label for="description">Description</label>
                 <textarea i id="description" name="description" placeholder="Enter a Description"></textarea>
@@ -62,50 +63,75 @@
 
               <div class="right-container">
                 <label for="due-date">Due Date <span class="required">*</span></label>
-                <input type="date" class="input-standard" id="due-date" name="due-date" required />
-                <div class="error-message" style="display: none"></div>
-
-                <label>Prio</label>
-                <div class="button-container">
-                  <button class="btn-switch" id="urgent" type="button" onclick="toggleButtons(this)">
-                    Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
-                  </button>
-                  <button class="btn-switch" id="medium" type="button" onclick="toggleButtons(this)">
-                    Medium <img src="/assets/imgs/medium.png" alt="medium-icon" />
-                  </button>
-                  <button class="btn-switch" id="low" type="button" onclick="toggleButtons(this)">
-                    Low <img src="/assets/imgs/low.png" alt="low-icon" />
-                  </button>
+                <div class="date-container">
+                  <input type="date" class="input-standard" id="due-date" name="due-date" placeholder="dd/mm/yyyy"
+                    required />
+                  <img src="/assets/imgs/calendar.png" id="calendar-icon" alt="Kalender Icon" />
                 </div>
+                <div class="error-message" data-error-for="due-date" style="display: none"></div>
 
-                <label id="category">Category <span class="required">*</span></label>
-                <div class="dropdown-container">
-                  <button class="dropdown-btn no-loading" onclick="toggleDropdown()">Select task category
+                <label id="assignment-label">Assigned to</label>
+                <div class="assignment-container">
+                  <button class="assignment-btn no-loading" id="assignment-btn" onclick="toggleContacts(event)">
+                    Select contacts to assign
                     <span class="icon-container">
-                      <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                      <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon" />
                     </span>
                   </button>
-                  <div class="dropdown-options" id="dropdown-list">
-                    <li onclick="selectCategory(this)" data-value="technical_task" class="no-loading">Technical Task
-                    </li>
-                    <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
+                  <div id="selected-contacts-container" class="selected-contacts">
                   </div>
-                </div>
-                <input type="hidden" id="selected-category" name="selected-category" />
-                <div class="error-message" style="display: none"></div>
+                  <div id="contacts-container" class="hidden">
+                    <div id="contacts-list"></div>
+                  </div>
+                  <input type="hidden" id="selected-category" name="selected-category" />
+                  <div class="error-message" data-error-for="selected-category" style="display: none"></div>
 
-                <label for="subtasks">Subtasks</label>
-                <div class="subtask-input-wrapper">
-                  <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask"
-                    autocomplete="off" />
-                  <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
-                </div>
-                <ul id="subtask-list"></ul>
-              </div> <!-- END right-container -->
+                  <div class="right-container">
+                    <label for="due-date">Due Date <span class="required">*</span></label>
+                    <input type="date" class="input-standard" id="due-date" name="due-date" required />
+                    <div class="error-message" style="display: none"></div>
 
-              <div class="text resp" style="display: none">
-                <span class="required"> *</span> This field is required.
-              </div>
+                    <label>Prio</label>
+                    <div class="button-container">
+                      <button class="btn-switch" id="urgent" type="button" onclick="toggleButtons(this)">
+                        Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
+                      </button>
+                      <button class="btn-switch" id="medium" type="button" onclick="toggleButtons(this)">
+                        Medium <img src="/assets/imgs/medium.png" alt="medium-icon" />
+                      </button>
+                      <button class="btn-switch" id="low" type="button" onclick="toggleButtons(this)">
+                        Low <img src="/assets/imgs/low.png" alt="low-icon" />
+                      </button>
+                    </div>
+
+                    <label id="category">Category <span class="required">*</span></label>
+                    <div class="dropdown-container">
+                      <button class="dropdown-btn no-loading" onclick="toggleDropdown()">Select task category
+                        <span class="icon-container">
+                          <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                        </span>
+                      </button>
+                      <div class="dropdown-options" id="dropdown-list">
+                        <li onclick="selectCategory(this)" data-value="technical_task" class="no-loading">Technical Task
+                        </li>
+                        <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
+                      </div>
+                    </div>
+                    <input type="hidden" id="selected-category" name="selected-category" />
+                    <div class="error-message" style="display: none"></div>
+
+                    <label for="subtasks">Subtasks</label>
+                    <div class="subtask-input-wrapper">
+                      <input type="text" class="input-standard" id="subtasks" name="subtasks"
+                        placeholder="Add new subtask" autocomplete="off" />
+                      <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
+                    </div>
+                    <ul id="subtask-list"></ul>
+                  </div> <!-- END right-container -->
+
+                  <div class="text resp" style="display: none">
+                    <span class="required"> *</span> This field is required.
+                  </div>
             </form>
 
             <section class="footer">
@@ -274,6 +300,14 @@
         console.error("Fehler beim Speichern des Tasks:", error);
       }
     };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    flatpickr("#due-date", {
+      dateFormat: "d/m/Y",
+      allowInput: true,
+      placeholder: "dd/mm/yyyy"
+    });
   </script>
 </body>
 

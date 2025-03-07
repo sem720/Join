@@ -17,8 +17,8 @@ async function openAddTaskModal() {
     await fetchContacts();
     renderContactsList();
     setupAddSubtaskButton();
-    dateInput();
     initialDefaultPriority();
+    init();
 }
 
 

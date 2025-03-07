@@ -28,8 +28,6 @@ function initAddTaskContacts() {
  * @param {KeyboardEvent} event - The keydown event triggered by pressing a key.
  */
 function handleKeydownOutsideAssignment(event) {
-    // Wenn Enter gedrückt wird, und der Fokus nicht auf dem Assignment-Button oder einem Kontaktfeld ist,
-    // verhindern wir das Öffnen der Kontakte-Liste
     if (event.key === "Enter") {
         event.preventDefault();
     }
@@ -199,15 +197,16 @@ async function renderContactsList() {
  * @param {string} bgcolor - The background color associated with the contact.
  * @returns {HTMLElement} The contact element.
  */
-function createContactElement(name, bgcolor) {
+function createContactElement(name, bgcolor, avatar) {
     const contactDiv = createElement("div", "contact-item");
-    contactDiv.appendChild(createAvatar(name, bgcolor)); 
-    
     const nameSpan = createElement("span", "contact-name", name);
-    contactDiv.appendChild(nameSpan); 
-    
     const checkbox = createCheckbox(name);
+
+    contactDiv.appendChild(createAvatar(name, bgcolor)); 
+    contactDiv.appendChild(nameSpan); 
     contactDiv.appendChild(checkbox); 
+
+    handleContactClick(contactDiv, avatar, checkbox);
     
     return contactDiv; 
 }
@@ -246,4 +245,51 @@ function toggleContactSelection(name, isChecked) {
         });
     }
     updateSelectedContactsDisplay();
+}
+
+
+function handleCheckboxChange(checkbox, img, name) {
+    checkbox.addEventListener("change", () => {
+        toggleContactSelection(name, checkbox.checked);
+        
+        img.style.display = checkbox.checked ? "block" : "none";
+        checkbox.style.display = checkbox.checked ? "none" : "block";
+    });
+      // Ensure clicking the image returns to the checkbox
+      img.addEventListener("click", () => {
+        checkbox.checked = false;  // Uncheck the checkbox
+        img.style.display = "none";  // Hide the image
+        checkbox.style.display = "block";  // Show the checkbox again
+    });
+}
+
+// Function to create the checkbox with image logic
+function createCheckbox(name, avatar) {
+    const container = createElement("div", "contact-checkbox-container");
+
+    const checkbox = createCheckboxElement(name, avatar);
+    const img = createImageElement();
+
+    container.appendChild(checkbox);
+    container.appendChild(img);
+
+    handleCheckboxChange(checkbox, img, name);
+
+    return container;
+}
+
+
+function handleContactClick(contactItem) {
+    contactItem.addEventListener("click", (event) => {
+        contactItem.classList.toggle("selected");
+        const avatar = contactItem.querySelector(".avatar");
+        if (avatar) avatar.classList.toggle("selected-avatar");
+
+        const nameSpan = contactItem.querySelector(".contact-name");
+        if (nameSpan) nameSpan.classList.toggle("selected-name");
+
+        const checkboxImg = contactItem.querySelector(".checkbox-image");
+        if (checkboxImg) checkboxImg.classList.toggle("selected-checkbox-image");
+        
+    })
 }

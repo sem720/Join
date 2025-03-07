@@ -1,6 +1,7 @@
 #task-name::placeholder, 
 textarea::placeholder,
-#subtasks::placeholder {
+#subtasks::placeholder,
+#due-date::placeholder {
     color: #D7D7D7;
     font-size: 18px;
 }
@@ -105,7 +106,7 @@ select:hover, .dropdown-btn:hover {
 
 #subtask-list li:hover {
     background-color: hsla(210, 8%, 95%, 0.878);
-    border-radius: 8px;
+    border-radius: 8px !important;
     margin-top: 3px;
 }
 
@@ -115,7 +116,8 @@ select:hover, .dropdown-btn:hover {
 }
 
 .dropdown-options > li:hover {
-    background-color: #f0f0f0;
+    background-color: #F6F7F8;
+    border-radius: 8px;
 }
 
 .subtask-item:hover .li-actions {
@@ -258,6 +260,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 #selected-contacts-container {
     display: flex;
+    padding-top: 4px;
 }
 
 #selected-contacts-container > div {
@@ -271,9 +274,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .contact-item:hover{
-    background-color: #f0f0f0;
+    background-color: #F6F7F8;
     border-radius: 8px;
     transform: translateX(-1px);
+    cursor: pointer;
 }
 
 .visible {

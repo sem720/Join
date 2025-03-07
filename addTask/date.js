@@ -5,8 +5,9 @@
  */
 function dateInput() {
     const dateInput = document.getElementById("due-date");
+    const calendarIcon = document.getElementById("calendar-icon");
   
-    if (!dateInput) return console.error("Element with ID 'due-date' not found.");
+    if (!dateInput || !calendarIcon) return console.error("Date input or calendar icon not found.");
       
     dateInput.addEventListener("input", function () {
       if (dateInput.value) {
@@ -15,6 +16,21 @@ function dateInput() {
         dateInput.classList.remove("has-value"); 
       }
     });
+}
+
+function setupCalendarIcon() {
+  const dateInput = document.getElementById("due-date");
+  const calendarIcon = document.getElementById("calendar-icon");
+
+  if (!dateInput || !calendarIcon) return console.error("Date input or calendar icon not found.");
+  
+  if (dateInput._flatpickr) {
+    calendarIcon.addEventListener("click", function () {
+        dateInput._flatpickr.open(); // Open Flatpickr when the icon is clicked
+    });
+  } else {
+    console.error("Flatpickr is not initialized on #due-date.");
+  }
 }
 
 
