@@ -13,14 +13,16 @@ async function fetchTasks() {
             ...data[taskId]
         }));
 
+        // console.log("📌 Debugging: Geladene Tasks:", tasks); 
+
         renderTasks(tasks);
-        initTaskCardClickEvents();
         setupDragAndDrop();
 
     } catch (error) {
         console.error("❌ Fehler beim Laden der Tasks:", error);
     }
 }
+
 
 
 function renderTasks(tasks) {
@@ -77,35 +79,9 @@ function createTaskElement(task) {
     taskDiv.classList.add("task-card");
     taskDiv.setAttribute("data-id", task.id);
 
-    // **Hier wird die Template-Funktion aufgerufen**
     taskDiv.innerHTML = taskCardTemplate(task, categoryColor, progressPercent, completedSubtasks, totalSubtasks, avatarsHTML);
 
     return taskDiv;
-}
-
-
-function addTaskToBoard(task) {
-    const columnId = "todo-column";
-    const taskElement = createTaskElement(task);
-    document.getElementById(columnId).appendChild(taskElement);
-}
-
-
-function getColumnBody(category) {
-    const columnMap = {
-        "To do": "todo-column",
-        "In progress": "in-progress-column",
-        "Await feedback": "await-feedback-column",
-        "Done": "done-column"
-    };
-
-    const columnId = columnMap[category];
-    if (!columnId) {
-        console.warn(`No column mapping found for category: ${category}`);
-        return null;
-    }
-
-    return document.getElementById(columnMap[category]);
 }
 
 
@@ -168,45 +144,84 @@ function handleDrop(event) {
     event.currentTarget.classList.remove("drag-over");
 
     if (draggedTask) {
-        const newColumn = event.currentTarget;
+        const newColumn = event.target.closest(".column-body");
+        const newColumnId = newColumn.parentElement.id;
+        console.log("newColumnId:", newColumnId);
         newColumn.appendChild(draggedTask);
-        updateTaskCategory(draggedTask, newColumn.id);
+        updateTaskCategory(draggedTask, newColumnId);
         updateNoTaskVisibility();
     }
 }
 
 
 async function updateTaskCategory(taskElement, newColumnId) {
+    console.log("Neue Spalten-ID:", newColumnId);
+
     const taskId = taskElement.dataset.id;
     const newCategory = mapColumnIdToCategory(newColumnId);
 
-    if (!taskId || !newCategory) return;
+    if (!taskId) {
+        console.error("❌ Fehler: Keine Task-ID gefunden!");
+        return;
+    }
+
+    if (!newCategory) {
+        console.error(`❌ Fehler: Ungültige Spalte (${newColumnId}) für Task ${taskId}.`);
+        return;
+    }
 
     try {
+        // Task-Daten aus der Datenbank abrufen
+        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
+        let taskData = await response.json();
+
+        if (!taskData) {
+            throw new Error("❌ Keine Task-Daten gefunden!");
+        }
+
+        // Falls `mainCategory` nicht existiert, erstellen wir es
+        if (!taskData.hasOwnProperty('mainCategory')) {
+            taskData.mainCategory = "";
+        }
+
+        // Die `mainCategory` aktualisieren
+        taskData.mainCategory = newCategory;
+
+        // Änderungen im Backend speichern
         await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ mainCategory: newCategory })
+            body: JSON.stringify({ mainCategory: newCategory }) // Nur das Feld `mainCategory` aktualisieren
         });
 
-        console.log(`Task ${taskId} wurde in "${newCategory}" verschoben.`);
+        console.log(`✅ Task ${taskId} wurde erfolgreich in "${newCategory}" verschoben und gespeichert.`);
+
     } catch (error) {
-        console.error("Fehler beim Aktualisieren der Task-Kategorie:", error);
+        console.error("❌ Fehler beim Aktualisieren der Task-Kategorie:", error);
     }
 }
 
 
 function mapColumnIdToCategory(columnId) {
     const columnMap = {
+        "to-do": "To do",
         "to-do-body": "To do",
+        "in-progress": "In progress",
         "in-progress-body": "In progress",
+        "awaitFeedback": "Await feedback",
         "awaitFeedback-body": "Await feedback",
+        "done": "Done",
         "done-body": "Done"
     };
-    return columnMap[columnId] || null;
-}
-document.addEventListener("DOMContentLoaded", setupDragAndDrop);
 
+    if (!columnMap[columnId]) {
+        console.warn(`⚠️ Unbekannte Spalten-ID: ${columnId}. Standardwert "To do" wird gesetzt.`);
+    }
+
+    return columnMap[columnId] || "To do";  // Fallback auf "To do"
+}
+
+document.addEventListener("DOMContentLoaded", setupDragAndDrop);
 
 
 async function toggleSubtask(taskId, subtaskIndex) {
@@ -240,6 +255,23 @@ async function toggleSubtask(taskId, subtaskIndex) {
 
 
 
+// function updateTaskCard(taskId, task) {
+//     const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
+//     if (!taskElement) {
+//         console.warn(`⚠️ Task-Card für Task ${taskId} nicht gefunden.`);
+//         return;
+//     }
+
+//     let totalSubtasks = task.subtasks.length;
+//     let completedSubtasks = task.subtasks.filter(st => st.completed).length;
+//     let progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
+
+//     // 📌 Fortschrittsbalken aktualisieren
+//     taskElement.querySelector(".subtask-bar-prog-blue").style.width = `${progressPercent}%`;
+
+//     // 📌 Subtask-Text aktualisieren
+//     taskElement.querySelector(".subtask-checked").textContent = `${completedSubtasks}/${totalSubtasks} Subtasks`;
+// }
 function updateTaskCard(taskId, task) {
     const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
     if (!taskElement) {
@@ -247,15 +279,10 @@ function updateTaskCard(taskId, task) {
         return;
     }
 
-    let totalSubtasks = task.subtasks.length;
-    let completedSubtasks = task.subtasks.filter(st => st.completed).length;
-    let progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
-
-    // 📌 Fortschrittsbalken aktualisieren
-    taskElement.querySelector(".subtask-bar-prog-blue").style.width = `${progressPercent}%`;
-
-    // 📌 Subtask-Text aktualisieren
-    taskElement.querySelector(".subtask-checked").textContent = `${completedSubtasks}/${totalSubtasks} Subtasks`;
+    taskElement.querySelector(".task-title").textContent = task.title;
+    taskElement.querySelector(".task-description").textContent = task.description;
+    taskElement.querySelector(".subtask-checked").textContent =
+        `${task.subtasks.filter(st => st.completed).length}/${task.subtasks.length} Subtasks`;
 }
 
 
@@ -264,13 +291,13 @@ function initTaskDetailOverlay() {
     const closeBtn = document.getElementById("closeTaskDetail");
 
     if (closeBtn) {
-        closeBtn.addEventListener("click", closeTaskDetail);
+        closeBtn.addEventListener("click", closeTaskDetailModal);
     }
 
     if (overlay) {
         overlay.addEventListener("click", (e) => {
             if (e.target === overlay) {
-                closeTaskDetail();
+                closeTaskDetailModal();
             }
         });
     }
@@ -281,6 +308,7 @@ function initTaskCardClickEvents() {
     document.querySelectorAll(".task-card").forEach(taskCard => {
         taskCard.addEventListener("click", async function () {
             const taskId = this.dataset.id;
+            console.log(taskId);
             if (!taskId) {
                 console.error("⚠️ Task ID fehlt!");
                 return;
@@ -288,7 +316,7 @@ function initTaskCardClickEvents() {
 
             const task = await fetchTaskById(taskId);
             if (task) {
-                openTaskDetail(task);
+                openTaskDetailModal(task);
             }
         });
     });
@@ -297,17 +325,16 @@ function initTaskCardClickEvents() {
 
 async function fetchTaskById(taskId) {
     try {
+        // 📌 Task aus der Datenbank abrufen
         const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
-        if (!response.ok) {
-            throw new Error("Fehler beim Laden der Task-Daten");
-        }
-
         const taskData = await response.json();
+        // console.log("Task-Daten:", taskData);
+
         if (!taskData) {
             throw new Error("Keine Task-Daten gefunden");
         }
 
-        return {
+        const task = {
             id: taskId,
             title: taskData.title || "Kein Titel",
             description: taskData.description || "Keine Beschreibung",
@@ -323,19 +350,23 @@ async function fetchTaskById(taskId) {
                 : [],
             subtasks: Array.isArray(taskData.subtasks)
                 ? taskData.subtasks.map(subtask => ({
-                    text: subtask.text || subtask, // Falls es als String gespeichert ist
+                    text: subtask.text || subtask,
                     completed: subtask.completed || false
                 }))
                 : []
         };
+
+        // Hier wird die Funktion openTaskDetailModal aufgerufen, nachdem die Daten geladen sind
+        openTaskDetailModal(task);
+
     } catch (error) {
         console.error("❌ Fehler beim Laden der Task:", error);
-        return null;
     }
 }
 
 
 document.addEventListener("DOMContentLoaded", function () {
+    fetchTasks();
     initTaskDetailOverlay();
     initTaskCardClickEvents();
 });
@@ -369,7 +400,7 @@ async function deleteTask(taskId) {
         }
 
         // 📌 Task-Detail-Modal schließen
-        closeTaskDetail();
+        closeTaskDetailModal();
 
         // 📌 Bestätigung anzeigen
         showDeleteConfirmation();
@@ -422,16 +453,58 @@ function showDeleteConfirmation() {
 
 
 
-
-
-
 function setEditPriority(priority) {
-    document.querySelectorAll(".btn-switch").forEach(button => {
-        button.classList.remove("active");
+    document.querySelectorAll(".btn-switch").forEach(btn => {
+        btn.classList.remove("active");
     });
-    document.getElementById(priority.toLowerCase()).classList.add("active");
+
+    if (!priority || !priority.text) {
+        console.warn("⚠️ Keine gültige Priorität gefunden. Standardwert wird gesetzt.");
+        return;
+    }
+
+    let priorityText = priority.text.toLowerCase(); // Sicherstellen, dass `priority.text` ein String ist
+
+    const button = document.getElementById(priorityText);
+    if (button) {
+        button.classList.add("active");
+    } else {
+        console.warn(`⚠️ Unbekannte Priorität: ${priorityText}`);
+    }
 }
 
+
+
+// function toggleButtons(button) {
+//     // Alle Buttons zurücksetzen
+//     document.querySelectorAll(".btn-switch").forEach(btn => {
+//         btn.classList.remove("active");
+//         btn.style.backgroundColor = ""; // Hintergrundfarbe zurücksetzen
+//         btn.style.color = "#000000"; // Standard-Textfarbe Schwarz
+//     });
+
+//     // Gewählten Button aktivieren
+//     button.classList.add("active");
+
+//     // 🔹 Hintergrundfarbe setzen
+//     let priority = button.id;
+//     switch (priority) {
+//         case "urgent":
+//             button.style.backgroundColor = "#ff3b30"; // Rot
+//             break;
+//         case "medium":
+//             button.style.backgroundColor = "#ffcc00"; // Gelb
+//             break;
+//         case "low":
+//             button.style.backgroundColor = "#34c759"; // Grün
+//             break;
+//         default:
+//             console.warn("⚠️ Unbekannte Priorität:", priority);
+//     }
+
+//     // 🔹 Textfarbe auf Weiß setzen (nur für den aktiven Button)
+//     button.style.color = "#ffffff";
+// }
 
 
 function setEditAssignedContacts(contacts) {
@@ -442,47 +515,31 @@ function setEditAssignedContacts(contacts) {
 }
 
 
-
 function setEditSubtasks(subtasks) {
     const list = document.getElementById("edit-subtask-list");
-    list.innerHTML = subtasks.map(subtask =>
-        `<li><input type="checkbox" ${subtask.completed ? "checked" : ""}> ${subtask.text}</li>`
+    list.innerHTML = subtasks.map((subtask, index) =>
+        `<li>
+            <input type="checkbox" id="edit-subtask-${index}" ${subtask.completed ? "checked" : ""}>
+            <label for="edit-subtask-${index}">${subtask.text}</label>
+        </li>`
     ).join("");
 }
 
 
-
-
-
-
-
-function closeEditModal() {
-    const overlay = document.getElementById("edit-task-overlay");
-    const modal = document.getElementById("editTaskModal");
-
-    overlay.classList.remove("active");
-    modal.classList.add("hidden");
+function getEditedAssignedContacts() {
+    return Array.from(document.querySelectorAll("#edit-selected-contacts-container .avatar-board-card")).map(contact => ({
+        name: contact.textContent,
+        avatar: { bgcolor: contact.style.backgroundColor, initials: contact.textContent }
+    }));
 }
 
 
-
-function setPriority(priority) {
-    document.querySelectorAll(".btn-switch").forEach(button => {
-        button.classList.remove("active");
-    });
-    document.getElementById(priority.toLowerCase()).classList.add("active");
+function getEditedSubtasks() {
+    return Array.from(document.querySelectorAll("#edit-subtask-list li")).map(li => ({
+        text: li.querySelector("label").textContent,
+        completed: li.querySelector("input").checked
+    }));
 }
-
-
-function getSelectedPriority() {
-    return document.querySelector(".btn-switch.active")?.id || "Medium";
-}
-
-
-function getSelectedEditPriority() {
-    return document.querySelector(".btn-switch.active")?.id || "Medium";
-}
-
 
 
 function setAssignedContacts(contacts) {
@@ -539,19 +596,7 @@ function showEditConfirmation() {
 }
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    const closeButton = document.getElementById("edit-close-modal");
-    if (closeButton) {
-        closeButton.addEventListener("click", closeEditModal);
-    }
-});
-
-
-
-
-
-
-function openTaskDetail(task) {
+function openTaskDetailModal(task) {
     if (!task) {
         console.error("Keine Task-Daten vorhanden!");
         return;
@@ -560,26 +605,15 @@ function openTaskDetail(task) {
     const overlay = document.getElementById("taskDetailOverlay");
     const taskDetailContent = document.getElementById("taskDetailContent");
 
-    let subtasksHTML = task.subtasks && task.subtasks.length > 0
-        ? task.subtasks.map((subtask, index) => `
-            <div class="subtasks-content">
-                <input type="checkbox" id="subtask-${task.id}-${index}" 
-                    ${subtask.completed ? "checked" : ""} 
-                    onchange="toggleSubtask('${task.id}', ${index})">
-                <label for="subtask-${task.id}-${index}">${subtask.text}</label>
-            </div>
-        `).join("")
-        : `<p>No subtasks available</p>`;
+    let subtasksHTML = generateSubtasksTemplate(task);
 
-    // **Hier wird die Template-Funktion aufgerufen**
     taskDetailContent.innerHTML = taskDetailTemplate(task, subtasksHTML);
 
     overlay.classList.add("active");
 }
 
 
-
-function closeTaskDetail() {
+function closeTaskDetailModal() {
     const overlay = document.getElementById("taskDetailOverlay");
     const taskDetailModal = document.getElementById("taskDetailModal");
     const editTaskModal = document.getElementById("editTaskModal");
@@ -602,28 +636,124 @@ function closeTaskDetail() {
     }, 300);
 }
 
-function closeEditTaskModal() {
-    const editTaskModal = document.getElementById("editTaskModal");
 
-    // Nur das Edit-Modal schließen
-    editTaskModal.classList.add("hidden");
+async function openEditTaskModal(taskId) {
+    try {
+        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
+        const taskData = await response.json();
 
-    // Prüfen, ob Overlay nicht mehr aktiv ist -> `taskDetailModal` wieder sichtbar machen
-    setTimeout(() => {
-        const overlay = document.getElementById("taskDetailOverlay");
-        const taskDetailModal = document.getElementById("taskDetailModal");
-        if (!overlay.classList.contains("active")) {
-            taskDetailModal.classList.remove("hidden");
+        if (!taskData) {
+            throw new Error("❌ Keine Task-Daten gefunden!");
         }
-    }, 300);
+
+        // 🟢 TaskDetailModal verstecken
+        document.getElementById("taskDetailModal").classList.add("hidden");
+
+        // 🟢 Lade das Template in das Modal
+        const modalContent = document.getElementById("edit-modal-content");
+        modalContent.innerHTML = editTaskTempl();
+
+        // 🟢 Sicherstellen, dass jetzt die Elemente existieren
+        const titleField = document.getElementById("edit-task-title");
+        const descField = document.getElementById("edit-task-description");
+        const dateField = document.getElementById("edit-due-date");
+
+        if (!titleField || !descField || !dateField) {
+            throw new Error("❌ Edit Task Modal Elemente fehlen im HTML!");
+        }
+
+        // 🟢 Felder mit Task-Daten befüllen
+        titleField.value = taskData.title || "";
+        descField.value = taskData.description || "";
+        dateField.value = taskData.dueDate || "";
+
+        // 🟢 Priorität, Kontakte und Subtasks setzen
+        setEditPriority(taskData.priority);
+        setEditAssignedContacts(taskData.assignedTo || []);
+        setEditSubtasks(taskData.subtasks || []);
+
+        // 🟢 Edit Task Modal anzeigen
+        document.getElementById("editTaskModal").classList.remove("hidden");
+
+    } catch (error) {
+        console.error("❌ Fehler beim Laden der Task-Daten:", error);
+    }
 }
 
-// **Event-Handling für das Overlay**
+
+
+function closeEditTaskModal() {
+    const editTaskModal = document.getElementById("editTaskModal");
+    const taskDetailModal = document.getElementById("taskDetailModal");
+    const overlay = document.getElementById("taskDetailOverlay");
+
+    // ❗ Falls das Edit-Modal noch offen ist, schließe NUR das Edit-Modal
+    if (!editTaskModal.classList.contains("hidden")) {
+        editTaskModal.classList.add("hidden");
+
+        // 🟢 Prüfe, ob das TaskDetailModal zuvor sichtbar war
+        if (taskDetailModal && !taskDetailModal.classList.contains("hidden")) {
+            taskDetailModal.classList.remove("hidden"); // Task-Detail wieder anzeigen
+        } else {
+            overlay.classList.remove("active"); // Falls TaskDetailModal auch zu ist → Overlay schließen
+        }
+
+        return; // ⛔ Stoppe die Funktion hier, damit das Overlay nicht sofort verschwindet
+    }
+
+    // ❗ Falls das Edit-Modal bereits geschlossen ist, dann schließe das Overlay und das Task-Detail-Modal
+    overlay.classList.remove("active");
+    taskDetailModal.classList.add("hidden");
+}
+
+
+
+async function saveTaskChanges(event) {
+    event.preventDefault(); // Verhindert das Neuladen der Seite
+
+    const taskId = document.getElementById("edit-task-id")?.value;
+    if (!taskId) {
+        console.error("❌ Fehler: Keine Task-ID gefunden!");
+        return;
+    }
+
+    const updatedTask = {
+        title: document.getElementById("edit-task-title").value,
+        description: document.getElementById("edit-task-description").value,
+        dueDate: document.getElementById("edit-due-date").value,
+        priority: getSelectedPriority(), // Priorität auslesen
+        assignedTo: getEditedAssignedContacts(), // Kontakte auslesen
+        subtasks: getEditedSubtasks() // Subtasks auslesen
+    };
+
+    try {
+        // 🔹 Änderungen im Backend speichern
+        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedTask)
+        });
+
+        // 🔹 Änderungen auf der Task-Card sofort aktualisieren
+        updateTaskCard(taskId, updatedTask);
+
+        // 🔹 Edit-Modal schließen
+        closeEditTaskModal();
+
+        console.log(`✅ Task ${taskId} wurde erfolgreich aktualisiert.`);
+    } catch (error) {
+        console.error("❌ Fehler beim Speichern der Änderungen:", error);
+    }
+}
+
+
+
 document.getElementById("taskDetailOverlay").addEventListener("click", (event) => {
     if (event.target === document.getElementById("taskDetailOverlay")) {
-        closeTaskDetail();
+        closeEditTaskModal();
     }
 });
 
-// **Sicherstellen, dass der Close-Button `taskDetailModal` richtig schließt**
-document.getElementById("closeTaskDetail").addEventListener("click", closeTaskDetail);
+
+
+

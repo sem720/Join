@@ -31,6 +31,22 @@ function taskCardTemplate(task) {
 }
 
 
+function generateSubtasksTemplate(task) {
+    if (!task.subtasks || task.subtasks.length === 0) {
+        return `<p>No subtasks available</p>`;
+    }
+
+    return task.subtasks.map((subtask, index) => `
+        <div class="subtasks-content">
+            <input type="checkbox" id="subtask-${task.id}-${index}" 
+                ${subtask.completed ? "checked" : ""} 
+                onchange="toggleSubtask('${task.id}', ${index})">
+            <label for="subtask-${task.id}-${index}">${subtask.text}</label>
+        </div>
+    `).join("");
+}
+
+
 function taskDetailTemplate(task, subtasksHTML) {
     let categoryColor = task.category === "User Story" ? "#0039fe" : "#1fd7c1";
 
@@ -67,7 +83,7 @@ function taskDetailTemplate(task, subtasksHTML) {
                 Delete
             </button>
             <div class="line"></div>
-            <button onclick="editTask('${task.id}')" class="btn-edit">
+            <button onclick="openEditTaskModal('${task.id}')" class="btn-edit">
                 <img src="../assets/imgs/edit.svg" alt="" class="edit-icon" style="width: 18px; height: 18px;">
                 Edit
             </button>
@@ -78,7 +94,7 @@ function taskDetailTemplate(task, subtasksHTML) {
 
 function editTaskTempl() {
     return `
-    <button id="edit-close-modal" class="close-btn" onclick="closeEditModal()">
+    <button id="editTask-close-btn" class="editTask-close-btn" onclick="closeEditTaskModal()">
         &times;
     </button>
 
@@ -98,17 +114,22 @@ function editTaskTempl() {
             <input type="date" class="edit-input-board" id="edit-due-date" required />
         </div>
 
-        <label>Priority</label>
-        <div class="button-container">
-            <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
-            Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
-            </button>
-            <button class="btn-switch" id="medium" name="medium" type="button" onclick="toggleButtons(this)">
-            Medium <img src="/assets/imgs/medium.png" alt="medium-icon" />
-            </button>
-            <button class="btn-switch" id="low" name="low" type="button" onclick="toggleButtons(this)">
-            Low <img src="/assets/imgs/low.png" alt="low-icon" />
-            </button>
+        <div class="form-content">
+            <label>Priority</label>
+            <div class="button-container">
+                <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
+                    Urgent 
+                    <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
+                </button>
+                <button class="btn-switch" id="medium" name="medium" type="button" onclick="toggleButtons(this)">
+                    Medium 
+                    <img src="/assets/imgs/medium.png" alt="medium-icon" />
+                </button>
+                <button class="btn-switch" id="low" name="low" type="button" onclick="toggleButtons(this)">
+                    Low 
+                    <img src="/assets/imgs/low.png" alt="low-icon" />
+                </button>
+            </div>
         </div>
 
         <div class="form-content">

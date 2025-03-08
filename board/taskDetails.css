@@ -1,3 +1,15 @@
+#subtask-list {
+    width: 100%;
+}
+
+#due-date {
+    color: #d7d7d7;
+}
+
+#due-date.has-value {
+    color: black;
+}
+
 #taskDetailModal p {
     padding: 16px 0;
 }
@@ -102,7 +114,6 @@ li {
 
 .task-detail-content {
     margin-top: 16px;
-    /* margin-bottom: 16px; */
     font-size: 16px;
 }
 
@@ -166,6 +177,195 @@ li {
 .btn-edit:hover {
     filter: brightness(0) saturate(100%) invert(57%) sepia(60%) saturate(583%) hue-rotate(154deg) brightness(90%) contrast(96%);
     scale: 1.15;
+}
+
+.task-delete-confirmation {
+    position: fixed;
+    left: 50%;
+    bottom: -100px;
+    transform: translateX(-50%);
+    background: #091931;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: bottom 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+.task-delete-confirmation.show {
+    bottom: 50%;
+    opacity: 1;
+}
+
+.task-edit-confirmation {
+    position: fixed;
+    left: 50%;
+    bottom: -100px;
+    transform: translateX(-50%);
+    background: #091931;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: bottom 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+.task-edit-confirmation.show {
+    bottom: 50%;
+    opacity: 1;
+}
+
+.edit-modal {
+    background: white;
+    border-radius: 24px;
+    padding: 32px 40px;
+    width: 500px;
+    min-height: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.edit-modal.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.edit-modal.hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+}
+
+.edit-modal-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-height: 600px;
+    overflow-y: auto;
+    margin-top: 56px;
+    margin-bottom: 16px;
+
+    input,
+    textarea {
+        width: 97%;
+    }
+}
+
+.edit-save-btn {
+    text-align: right;
+}
+
+.edit-modal-footer {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+.edit-priority-container {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-prio-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.edit-prio-btn.active {
+    border: 2px solid black;
+}
+
+.board-container {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#taskDetailOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    visibility: hidden;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 50;
+}
+
+#taskDetailOverlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* #taskDetailModal, */
+#editTaskModal {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+}
+
+#taskDetailOverlay.active #taskDetailModal,
+#taskDetailOverlay.active #editTaskModal {
+    transform: scale(1);
+}
+
+#edit-subtask-list {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    padding: 8px 12px;
+
+
+    label {
+        margin-bottom: 0;
+    }
+
+    input {
+        width: fit-content;
+        height: 16px;
+        box-shadow: none;
+        cursor: auto;
+    }
+}
+
+#edit-subtask-list li:hover {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    cursor: default;
+}
+
+.button-container {
+    margin-bottom: 0 !important;
+    width: 97%;
+}
+
+.assignment-btn {
+    margin-bottom: 0 !important;
+    width: 97% !important;
 }
 
 ::-webkit-scrollbar-button {

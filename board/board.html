@@ -20,7 +20,7 @@
   <link id="favicon-dark" rel="icon" href="../assets/imgs/logo-white-blue.png" media="(prefers-color-scheme: dark)" />
 </head>
 
-<body onload="initNavbar(), fetchTasks();">
+<body onload="initNavbar()">
   <div class="navbar-wrap" w3-include-html="/comp/navbar/navbar.html"></div>
   <div w3-include-html="/comp/sidebar/sidebar.html"></div>
 
@@ -141,10 +141,10 @@
     </div> <!-- END addTaskModal -->
   </div>
 
-  <!-- Overlay für Task-Details -->
+  <!-- Overlay for Task-Details and Edit Task Modal  -->
   <div id="taskDetailOverlay">
     <div id="taskDetailModal">
-      <button id="closeTaskDetail" onclick="closeTaskDetail()">&times;</button>
+      <button id="closeTaskDetail" onclick="closeTaskDetailModal()">&times;</button>
       <div id="taskDetailContent"></div>
     </div>
 
@@ -154,12 +154,6 @@
       </div>
     </div>
   </div>
-
-
-  <!-- Edit Task Modal & Overlay -->
-  <!-- <div id="edit-task-overlay" class="edit-task-overlay" onclick="closeEditModal()">
-
-  </div> -->
 
   <!-- Haupt-Board -->
   <div class="board-wrap">
