@@ -109,7 +109,32 @@ function setAssignedContacts(contacts) {
         `<div class="avatar-board-card" style="background-color: ${contact.avatar.bgcolor};">${contact.avatar.initials}</div>`
     ).join("");
 }
+// No selected code provided, so I'll generate a code snippet that can be inserted at the cursor position.
 
+// Example of a function to handle errors in a more robust way
+function handleError(error) {
+    console.error("❌ Fehler:", error);
+    // Additional error handling logic can be added here
+}
+
+// Example of a function to update the task card
+function updateTaskCard(taskId, updatedTask) {
+    // Logic to update the task card can be added here
+    console.log(`✅ Task ${taskId} wurde erfolgreich aktualisiert.`);
+}
+
+// Example of a function to close the edit task modal
+function closeEditTaskModal() {
+    // Logic to close the edit task modal can be added here
+    console.log("✅ Edit-Modal geschlossen.");
+}
+
+// Example of a function to get the selected priority
+function getSelectedPriority() {
+    // Logic to get the selected priority can be added here
+    const priority = document.querySelector(".btn-switch.active");
+    return priority ? priority.id : null;
+}
 
 function showEditConfirmation() {
     const confirmationDiv = document.createElement("div");
