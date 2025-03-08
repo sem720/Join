@@ -113,7 +113,7 @@ function editTaskTempl() {
 
         <div class="form-content">
             <label>Priority</label>
-            <div class="button-container">
+            <div class="button-container" small-button-container">
                 <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
                     Urgent 
                     <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
