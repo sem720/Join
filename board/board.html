@@ -95,22 +95,21 @@
                     </li>
                     <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
                   </div>
-                </div>
-                <input type="hidden" id="selected-category" name="selected-category" />
-                <div class="error-message" style="display: none"></div>
+                  <input type="hidden" id="selected-category" name="selected-category" />
+                  <div class="error-message" data-error-for="selected-category" style="display: none"></div>
 
-                <label for="subtasks">Subtasks</label>
-                <div class="subtask-input-wrapper">
-                  <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask"
-                    autocomplete="off" />
-                  <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
-                </div>
-                <ul id="subtask-list"></ul>
-              </div> <!-- END right-container -->
+                  <label for="subtasks">Subtasks</label>
+                  <div class="subtask-input-wrapper">
+                    <input type="text" class="input-standard" id="subtasks" name="subtasks"
+                      placeholder="Add new subtask" autocomplete="off" />
+                    <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
+                  </div>
+                  <ul id="subtask-list"></ul>
+                </div> <!-- END right-container -->
 
-              <div class="text resp" style="display: none">
-                <span class="required"> *</span> This field is required.
-              </div>
+                <div class="text resp" style="display: none">
+                  <span class="required"> *</span> This field is required.
+                </div>
             </form>
 
             <section class="footer">
