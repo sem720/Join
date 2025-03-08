@@ -79,6 +79,14 @@ function setEditSubtasks(subtasks) {
 }
 
 
+function setEditAssignedContacts(contacts) {
+    const container = document.getElementById("edit-selected-contacts-container");
+    container.innerHTML = contacts.map(contact =>
+        `<div class="avatar-board-card" style="background-color: ${contact.avatar.bgcolor};">${contact.avatar.initials}</div>`
+    ).join("");
+}
+
+
 function getEditedAssignedContacts() {
     return Array.from(document.querySelectorAll("#edit-selected-contacts-container .avatar-board-card")).map(contact => ({
         name: contact.textContent,

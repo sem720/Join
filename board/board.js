@@ -8,18 +8,42 @@ async function fetchTasks() {
             return;
         }
 
-        const tasks = Object.keys(data).map(taskId => ({
-            id: taskId,
-            ...data[taskId]
-        }));
+        const tasks = Object.keys(data).map(taskId => {
+            let task = { id: taskId, ...data[taskId] };
 
-        // console.log("📌 Debugging: Geladene Tasks:", tasks); 
+            // 🟢 Falls `mainCategory` "to do" ist, ändere es zu "To do"
+            if (task.mainCategory && task.mainCategory.toLowerCase() === "to do") {
+                console.log(`🛠️ Fix: mainCategory für Task ${task.id} geändert von "to do" zu "To do"`);
+                task.mainCategory = "To do";
+
+                // 🟢 Speichere die Korrektur im Backend
+                updateMainCategoryInBackend(task.id, "To do");
+            }
+
+            return task;
+        });
 
         renderTasks(tasks);
         setupDragAndDrop();
 
     } catch (error) {
         console.error("❌ Fehler beim Laden der Tasks:", error);
+    }
+}
+
+
+async function updateMainCategoryInBackend(taskId, newCategory) {
+    try {
+        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mainCategory: newCategory })
+        });
+
+        console.log(`✅ Task ${taskId} erfolgreich im Backend aktualisiert: mainCategory = "${newCategory}"`);
+
+    } catch (error) {
+        console.error(`❌ Fehler beim Aktualisieren der mainCategory für Task ${taskId}:`, error);
     }
 }
 
