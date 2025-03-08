@@ -291,6 +291,7 @@ function handleContactClick(contactItem) {
     })
 }
 
+
 function initOutsideClick() {
     const modal = document.getElementById("addTaskModal");
     const contactsContainer = document.getElementById("contacts-container");
