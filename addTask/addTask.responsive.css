@@ -13,11 +13,11 @@
      }
 
     .h1-addTask {
-        font-size: 3rem;
+        font-size: 2.8rem;
         display: block;
-        line-height: 1.2;
+        line-height: 1;
         padding-top: 20px;
-        padding-bottom: 50px;
+        padding-bottom: 70px;
         margin: 0 !important;
      }
 
@@ -74,18 +74,21 @@
      }
 
      .footer {
-       position: fixed;
-       justify-content: flex-end;
-       bottom: clamp(0px, 11vh, 100px);
-       z-index: 100;
-       max-width: 678px;
-       
-     
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      z-index: 100;
+      height: 60px;
+      width: 100%;
      }
 
      .btn-div-footer {
-       gap: clamp(10px, 2vw, 24px);
-       
+      position: fixed;
+      bottom: clamp(0px, 2vh, 100px);
+      z-index: 100;
+      right: 4%;
+      width:max-content;
+     
       }
 
      ::placeholder, #task-name {
@@ -111,7 +114,8 @@
      .contact-item {
         white-space: nowrap;
         gap: 10px;
-        width: 90%;
+        width: 95%;
+        height: 32px;
      }
 
      .contact-item > .contact-name {
@@ -121,6 +125,7 @@
      .contact-name {
         font-size: 14px;
         flex-grow: 1;
+        padding-left: 16px;
      }
 
      .avatar {
@@ -134,7 +139,11 @@
      }
 
      #contacts-container {
-        padding: 0;
+        padding: 4px;
+     }
+
+     #contacts-list {
+        padding: 4px 0 4px 0;
      }
 
      .contact-checkbox:focus {
@@ -174,9 +183,8 @@
          margin-bottom: 28px;
      }
 
-     .footer {
-         bottom: 10px;
-         padding: 12px 0 12px 0px;
+     .footer, .btn-div-footer {
+        padding-right: 0 !important;
      }   
      
      #addTask-wrap {
@@ -206,14 +214,64 @@
          width: 100%;
      }
 
-     .footer {
-         padding: 0;
-         width: 100%;
+   .footer {
+      padding-right: 0;
+      width: 100%;
      }
 
-     .h1-addTask {
-         margin: 0 !important;
-         padding-top: 20px;
-         padding-bottom: 40px;
-     }
+   .btn-div-footer {
+      gap: 24px;
+      justify-content: flex-end;
+      width: 100%;
+   }
+
+   .h1-addTask {
+      margin: 0 !important;
+      padding-bottom: 20px;
+   }
 }
+
+
+@media only screen  and (max-width: 420px) {
+   .footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      z-index: 100;
+      height: 60px;
+      width: 100%;
+     }
+
+     .btn-div-footer {
+      position: fixed;
+      bottom: clamp(0px, 10.5vh, 100px);
+      z-index: 100;
+      right: 3%;
+      width:max-content;
+   }
+}
+
+
+@media only screen and (min-width: 421px) and (max-width: 670px) {
+   .footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      z-index: 100;
+      height: 60px;
+      width: 100%;
+     }
+
+     .btn-div-footer {
+      position: fixed;
+      bottom: clamp(0px, 10.5vh, 100px);
+      z-index: 100;
+      right: 3%;
+      width:max-content;
+   }
+
+   #addTask-wrap {
+      padding-bottom: 0;
+   }
+}
+
