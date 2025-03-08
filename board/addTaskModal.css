@@ -1,5 +1,5 @@
 .modal-addTask-container {
-    padding: 30px;
+    padding: 20px;
 }
 
 .modal-addTask-container .left-container {
@@ -13,6 +13,7 @@
 .modal-addTask-container .right-container {
     align-items: flex-start;
     width: 50%;
+   
 }
 
 .modal-addTask-container .footer {
@@ -31,10 +32,6 @@
 
 .icon-container {
     margin-right: 4px;
-}
-
-.contact-item {
-    padding: 8px 4px 8px 4px !important;
 }
 
 .modal-overlay {
@@ -83,7 +80,7 @@
 
 .close-btn {
     position: absolute;
-    top: 40px;
+    top: 70px;
     right: 40px;
     font-size: 28px;
     width: 30px;
@@ -132,7 +129,19 @@
     display: none;
 }
 
-.contacts-container {
+#contacts-container {
    width: 100%;
-   padding: 4px;
+   max-height: 180px;
+}
+
+#contacts-list {
+    padding-right: 8px;
+}
+
+.assignment-btn {
+    width: 100% !important;
+}
+
+.contact-checkbox-container {
+    padding-right: 0 !important;
 }
