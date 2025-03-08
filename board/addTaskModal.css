@@ -16,7 +16,6 @@
 }
 
 .modal-addTask-container .footer {
-    min-width: 800px;
     max-width: 900px;
 }
 
@@ -130,5 +129,10 @@
 }
 
 .hidden {
-    display: none !important;
+    display: none;
+}
+
+.contacts-container {
+   width: 100%;
+   padding: 4px;
 }

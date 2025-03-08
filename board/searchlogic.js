@@ -1,15 +1,15 @@
 const searchInput = document.getElementById('findTask');
 const taskCards = document.querySelectorAll('.task-card');
 const noResultsMessage = document.getElementById('no-results');
-const searchIcon = document.getElementById('search-icon');
+const searchIcon = document.querySelector('.search-icon');
 
 
 function filterTaskCards(searchQuery) {
     setTimeout(() => {
-      const taskCards = document.querySelectorAll('.task-card');  // Refresh task cards after rendering
+      const taskCards = document.querySelectorAll('.task-card');  
       const resultsFound = processTaskCards(taskCards, searchQuery);
-      updateNoResultsMessage(resultsFound); // Update the no results message based on the results found
-    }, 200); // Wait 200ms after rendering before starting filtering
+      updateNoResultsMessage(resultsFound); 
+    }, 200); 
 }
 
 
@@ -41,7 +41,9 @@ function findTask() {
     // If input is cleared, reset search
     if (searchQuery === '') {
         console.log('Search input cleared, showing all tasks'); 
-        resetSearch(); // Reset instead of manually looping
+        const taskCards = document.querySelectorAll('.task-card');
+        taskCards.forEach(card => card.style.display = 'block');
+        noResultsMessage.style.display = 'none';
         return;
     }
 
@@ -50,18 +52,23 @@ function findTask() {
 
 
 function setupSearchEventListeners() {
-    // Event listener to handle input changes in real-time
-  searchInput.addEventListener('input', () => {
-    console.log("Input Event Triggered"); // Debugging
-    findTask(); // Call findTask() to filter tasks as the user types
-  });
+    const searchIcon = document.getElementById('search-icon');
+    if (!searchIcon) {
+        console.error("❌ searchIcon not found!"); // Debugging log
+        return;
+    }
 
-  searchIcon.addEventListener('click', resetSearch);  
-  console.log(resetSearch, "happening");
+    console.log("✅ searchIcon found! Adding click event listener...");
+    
+    searchIcon.addEventListener('click', () => {
+        console.log("🖱️ Search icon clicked! Calling resetSearch...");
+        resetSearch();
+    });
 }
 
 
 function resetSearch() {
+    console.log("✅ resetSearch function is running..."); // Debugging log
     searchInput.value = '';
     const taskCards = document.querySelectorAll('.task-card');
     taskCards.forEach(card => card.style.display = 'block');
@@ -69,4 +76,4 @@ function resetSearch() {
 }
   
   // Call the function to set up event listeners
-  setupSearchEventListeners();
+setupSearchEventListeners();

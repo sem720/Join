@@ -35,6 +35,7 @@ body {
     justify-content: flex-end;
     gap: 24px;
     flex-shrink: 0;
+    position: relative;
 }
 
 .search-divider {
@@ -78,7 +79,7 @@ body {
     display: flex;
     gap: 32px;
     flex: 1;
-    margin-top: 30px;
+    margin-top: 40px;
     overflow-y: auto;
     max-height: calc(100vh - 200px);
 }
@@ -340,4 +341,12 @@ body {
 .editTask-close-btn:hover {
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 50%;
+}
+
+#no-results {
+    position: absolute;
+    right: 75%;
+    bottom: -44%;
+    font-size: 14px;
+    color: red;
 }
