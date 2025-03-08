@@ -36,13 +36,21 @@ function getTaskFormData() {
         dueDate: getValue("#due-date"),
         priority: getSelectedPriority(),
         category: getSelectedCategory(),
-        subtasks: getSubtasks()
+        subtasks: getSubtasks(),
+        mainCategory: getMainCategory()
     };
 }
+
+
+function getMainCategory() {
+    return "to do";
+}
+
 
 function getValue(selector) {
     return formatText(document.querySelector(selector)?.value.trim() || "");
 }
+
 
 function clearTask() {
     ["task-name", "description", "subtasks"].forEach(id => document.getElementById(id).value = "");
