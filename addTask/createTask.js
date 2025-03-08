@@ -43,7 +43,7 @@ function getTaskFormData() {
 
 
 function getMainCategory() {
-    return "to do";
+    return "to Do";
 }
 
 
