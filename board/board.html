@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="/addTask/addTask.comps.css" />
   <link rel="stylesheet" href="/addTask/addTask.responsive.css" />
   <link rel="stylesheet" href="./taskDetails.css">
+  <link rel="stylesheet" href="./addTaskModal.responsive.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link id="favicon-light" rel="icon" href="../assets/imgs/logo-black.png" media="(prefers-color-scheme: light)" />
   <link id="favicon-dark" rel="icon" href="../assets/imgs/logo-white-blue.png" media="(prefers-color-scheme: dark)" />
@@ -94,8 +95,9 @@
                   <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
                 </div>
                 <input type="hidden" id="selected-category" name="selected-category" />
-                <div class="error-message" data-error-for="selected-category" style="display: none"></div>
               </div>
+                <div class="error-message" data-error-for="selected-category" style="display: none"></div>
+             
 
               <label for="subtasks">Subtasks</label>
               <div class="subtask-input-wrapper">
