@@ -17,9 +17,8 @@ body {
 }
 
 #addTask-wrap {
-    max-height: 85vh;
-    padding: 100px 0 0 100px;
-    overflow: hidden;
+    max-height: 90vh;
+    padding: 60px 60px 0 60px;
 }
 
 .required {
@@ -31,6 +30,10 @@ body {
 
 .main-addTask {
     max-width: 900px;
+}
+
+form {
+    margin-bottom: 32px;
 }
 
 .main-addTask form {
@@ -61,12 +64,6 @@ body {
     flex: 1;
 }
 
-.h1-addTask {
-    margin-bottom: 16px !important;
-    font-weight: 700;
-    margin-block-end: 0;
-    width: 300px;
-}
 
 label {
     display: block;
@@ -136,9 +133,9 @@ select {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+    width: inherit;
+    max-width: none;
+    min-width: 300px;
 }
 
 .text {
