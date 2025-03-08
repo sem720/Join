@@ -32,10 +32,6 @@ function taskCardTemplate(task) {
 
 
 function generateSubtasksTemplate(task) {
-    if (!task.subtasks || task.subtasks.length === 0) {
-        return `<p>No subtasks available</p>`;
-    }
-
     return task.subtasks.map((subtask, index) => `
         <div class="subtasks-content">
             <input type="checkbox" id="subtask-${task.id}-${index}" 
@@ -45,6 +41,7 @@ function generateSubtasksTemplate(task) {
         </div>
     `).join("");
 }
+
 
 
 function taskDetailTemplate(task, subtasksHTML) {
@@ -111,7 +108,7 @@ function editTaskTempl() {
 
         <div class="form-content">
             <label for="edit-due-date">Due Date</label>
-            <input type="date" class="edit-input-board" id="edit-due-date" required />
+            <input type="text" class="edit-input-board" id="edit-due-date" placeholder="TT/MM/YYYY" required />
         </div>
 
         <div class="form-content">

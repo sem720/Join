@@ -83,34 +83,34 @@
                   </button>
                 </div>
 
-                  <label id="category">Category <span class="required">*</span></label>
-                  <div class="dropdown-container">
-                    <button class="dropdown-btn no-loading" onclick="toggleDropdown()">Select task category
-                      <span class="icon-container">
-                          img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
-                      </span>
-                    </button>
-                    <div class="dropdown-options" id="dropdown-list">
-                      <li onclick="selectCategory(this)" data-value="technical_task" class="no-loading">Technical Task
-                      </li>
-                      <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
-                    </div>
+                <label id="category">Category <span class="required">*</span></label>
+                <div class="dropdown-container">
+                  <button class="dropdown-btn no-loading" onclick="toggleDropdown()">Select task category
+                    <span class="icon-container">
+                      img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon">
+                    </span>
+                  </button>
+                  <div class="dropdown-options" id="dropdown-list">
+                    <li onclick="selectCategory(this)" data-value="technical_task" class="no-loading">Technical Task
+                    </li>
+                    <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
                   </div>
-                  <input type="hidden" id="selected-category" name="selected-category" />
-                  <div class="error-message" style="display: none"></div>
-
-                  <label for="subtasks">Subtasks</label>
-                  <div class="subtask-input-wrapper">
-                    <input type="text" class="input-standard" id="subtasks" name="subtasks"
-                      placeholder="Add new subtask" autocomplete="off" />
-                    <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
-                   </div>
-                  <ul id="subtask-list"></ul>
-                </div> <!-- END right-container -->
-
-                <div class="text resp" style="display: none">
-                  <span class="required"> *</span> This field is required.
                 </div>
+                <input type="hidden" id="selected-category" name="selected-category" />
+                <div class="error-message" style="display: none"></div>
+
+                <label for="subtasks">Subtasks</label>
+                <div class="subtask-input-wrapper">
+                  <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask"
+                    autocomplete="off" />
+                  <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
+                </div>
+                <ul id="subtask-list"></ul>
+              </div> <!-- END right-container -->
+
+              <div class="text resp" style="display: none">
+                <span class="required"> *</span> This field is required.
+              </div>
             </form>
 
             <section class="footer">
@@ -228,6 +228,8 @@
   <script src="/board/board.js"></script>
   <script src="/board/searchlogic.js"></script>
   <script src="/board/boardTemp.js"></script>
+  <script src="/board/taskDetail.js"></script>
+  <script src="/board/editTask.js"></script>
   <script src="/comp/navbar/navbar.js"></script>
   <script src="https://www.w3schools.com/lib/w3.js"></script>
   <script src="/root.js"></script>
