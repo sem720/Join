@@ -361,14 +361,14 @@ li {
     cursor: default;
 }
 
-.button-container {
+.small-button-container {
     width: 97%;
     margin-left: 4px;
 }
 
 .assignment-btn {
     margin-bottom: 0 !important;
-    width: 97% !important;
+    width: 97%;
 }
 
 ::-webkit-scrollbar-button {
