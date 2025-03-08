@@ -72,9 +72,10 @@ select:hover, .dropdown-btn:hover {
 
 .btn-div-footer {
     display: flex;
+    justify-content: flex-end;
+    right: 0;
     gap: 16px;
     box-sizing: border-box;
-   
 }
 
 .btn-bright:hover svg {
