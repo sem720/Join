@@ -145,3 +145,65 @@ function closeEditTaskModal() {
     overlay.classList.remove("active");
     taskDetailModal.classList.add("hidden");
 }
+
+
+async function deleteTask(taskId) {
+    try {
+        // 📌 Task aus der Datenbank löschen
+        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+            method: "DELETE"
+        });
+
+        // 📌 Task-Card aus dem Board entfernen
+        const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
+        if (taskElement) {
+            taskElement.remove();
+        }
+
+        // 📌 Task-Detail-Modal schließen
+        closeTaskDetailModal();
+
+        // 📌 Bestätigung anzeigen
+        showDeleteConfirmation();
+
+    } catch (error) {
+        console.error("❌ Fehler beim Löschen der Task:", error);
+    }
+}
+
+
+function showDeleteConfirmation() {
+    const confirmationDiv = document.createElement("div");
+    confirmationDiv.classList.add("task-delete-confirmation");
+    confirmationDiv.innerText = "Task successfully deleted";
+
+    document.body.appendChild(confirmationDiv);
+
+    // 📌 Animation starten (von unten nach oben)
+    setTimeout(() => {
+        confirmationDiv.classList.add("show");
+    }, 10);
+
+    // 📌 Nach 2 Sekunden ausblenden & entfernen
+    setTimeout(() => {
+        confirmationDiv.classList.remove("show");
+        setTimeout(() => {
+            confirmationDiv.remove();
+        }, 500); // Warte, bis die Animation abgeschlossen ist
+    }, 2000);
+}
+
+
+function getSubtasks() {
+    const subtaskElements = document.querySelectorAll("#subtask-list input[type='checkbox']");
+
+    if (!subtaskElements || subtaskElements.length === 0) {
+        console.warn("⚠️ Keine Subtasks gefunden. Rückgabe: []");
+        return []; // Falls keine Subtasks vorhanden sind, leere Liste zurückgeben
+    }
+
+    return Array.from(subtaskElements).map((checkbox) => ({
+        text: checkbox.nextElementSibling ? checkbox.nextElementSibling.innerText.trim() : "Unbenannte Subtask",
+        checked: checkbox.checked
+    }));
+}

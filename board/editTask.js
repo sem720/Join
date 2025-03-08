@@ -1,50 +1,3 @@
-async function deleteTask(taskId) {
-    try {
-        // 📌 Task aus der Datenbank löschen
-        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
-            method: "DELETE"
-        });
-
-        // 📌 Task-Card aus dem Board entfernen
-        const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
-        if (taskElement) {
-            taskElement.remove();
-        }
-
-        // 📌 Task-Detail-Modal schließen
-        closeTaskDetailModal();
-
-        // 📌 Bestätigung anzeigen
-        showDeleteConfirmation();
-
-    } catch (error) {
-        console.error("❌ Fehler beim Löschen der Task:", error);
-    }
-}
-
-
-function showDeleteConfirmation() {
-    const confirmationDiv = document.createElement("div");
-    confirmationDiv.classList.add("task-delete-confirmation");
-    confirmationDiv.innerText = "Task successfully deleted";
-
-    document.body.appendChild(confirmationDiv);
-
-    // 📌 Animation starten (von unten nach oben)
-    setTimeout(() => {
-        confirmationDiv.classList.add("show");
-    }, 10);
-
-    // 📌 Nach 2 Sekunden ausblenden & entfernen
-    setTimeout(() => {
-        confirmationDiv.classList.remove("show");
-        setTimeout(() => {
-            confirmationDiv.remove();
-        }, 500); // Warte, bis die Animation abgeschlossen ist
-    }, 2000);
-}
-
-
 
 function setEditPriority(priority) {
     setTimeout(() => { // 🕒 Warten, bis das Modal vollständig geladen ist
@@ -108,19 +61,18 @@ function setEditPriority(priority) {
 }
 
 
-function setEditAssignedContacts(contacts) {
-    const container = document.getElementById("edit-selected-contacts-container");
-    container.innerHTML = contacts.map(contact =>
-        `<div class="avatar-board-card" style="background-color: ${contact.avatar.bgcolor};">${contact.avatar.initials}</div>`
-    ).join("");
-}
+
+
+
+
+
+
 
 
 function setEditSubtasks(subtasks) {
     const list = document.getElementById("edit-subtask-list");
     list.innerHTML = subtasks.map((subtask, index) =>
         `<li>
-            <input type="checkbox" id="edit-subtask-${index}" ${subtask.completed ? "checked" : ""}>
             <label for="edit-subtask-${index}">${subtask.text}</label>
         </li>`
     ).join("");
@@ -151,30 +103,6 @@ function setAssignedContacts(contacts) {
 }
 
 
-function setSubtasks(subtasks) {
-    const list = document.getElementById("subtask-list");
-    list.innerHTML = subtasks.map(subtask =>
-        `<li><input type="checkbox" ${subtask.completed ? "checked" : ""}> ${subtask.text}</li>`
-    ).join("");
-}
-
-
-function getSubtasks() {
-    const subtaskElements = document.querySelectorAll("#subtask-list input[type='checkbox']");
-
-    if (!subtaskElements || subtaskElements.length === 0) {
-        console.warn("⚠️ Keine Subtasks gefunden. Rückgabe: []");
-        return []; // Falls keine Subtasks vorhanden sind, leere Liste zurückgeben
-    }
-
-    return Array.from(subtaskElements).map((checkbox) => ({
-        text: checkbox.nextElementSibling ? checkbox.nextElementSibling.innerText.trim() : "Unbenannte Subtask",
-        checked: checkbox.checked
-    }));
-}
-
-
-
 function showEditConfirmation() {
     const confirmationDiv = document.createElement("div");
     confirmationDiv.classList.add("task-edit-confirmation");
@@ -197,7 +125,6 @@ function showEditConfirmation() {
 }
 
 
-
 function formatDateForInput(dueDate) {
     if (!dueDate) return ""; // Falls kein Datum vorhanden ist
 
@@ -216,6 +143,15 @@ function formatDateForInput(dueDate) {
 
     return `${day}/${month}/${year}`;
 }
+
+
+
+
+
+
+
+
+
 
 
 
