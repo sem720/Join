@@ -1,4 +1,8 @@
 @media (max-width: 1300px) {
+    .board-wrap {
+        margin-bottom: 24px;
+    }
+
     .board-main {
         flex-direction: column;
         overflow-y: visible;
@@ -6,6 +10,7 @@
 
     .task-card {
         height: 230px;
+        max-width: 200px;
     }
 
     .column-body {

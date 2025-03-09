@@ -49,6 +49,7 @@ h3 {
     display: flex;
     align-items: center;
     height: 50vh;
+    min-height: 440px;
     z-index: 100;
     overflow: hidden;
     border-radius: 32px;
