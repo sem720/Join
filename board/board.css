@@ -346,3 +346,29 @@ body {
     font-size: 14px;
     color: red;
 }
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #a9a9a9;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #a9a9a9 transparent;
+}
