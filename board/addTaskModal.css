@@ -16,8 +16,10 @@
    
 }
 
-.modal-addTask-container .footer {
-    max-width: 900px;
+.footer-modal {
+    max-width: 900px !important;
+    width: 100%;
+    bottom: 0;
 }
 
 .modal-addTask-container .clear-btn {
@@ -145,3 +147,4 @@
 .contact-checkbox-container {
     padding-right: 0 !important;
 }
+
