@@ -386,7 +386,7 @@ async function fetchTaskById(taskId) {
 }
 
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function (event) {
     fetchTasks();
     initTaskDetailOverlay();
     initTaskCardClickEvents();

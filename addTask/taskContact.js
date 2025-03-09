@@ -51,11 +51,7 @@ function toggleContacts(event) {
 
     const isOpen = contactsContainer.classList.contains("visible");
 
-    if (isOpen) {
-        closeContacts();
-    } else {
-        openContacts();
-    }
+    isOpen ? closeContacts() : openContacts();
 }
 
 
@@ -263,6 +259,7 @@ function handleCheckboxChange(checkbox, img, name) {
     });
 }
 
+
 // Function to create the checkbox with image logic
 function createCheckbox(name, avatar) {
     const container = createElement("div", "contact-checkbox-container");
@@ -280,7 +277,7 @@ function createCheckbox(name, avatar) {
 
 
 function handleContactClick(contactItem) {
-    contactItem.addEventListener("click", (event) => {
+    contactItem.addEventListener("click", () => {
         contactItem.classList.toggle("selected");
         const avatar = contactItem.querySelector(".avatar");
         if (avatar) avatar.classList.toggle("selected-avatar");
@@ -292,4 +289,18 @@ function handleContactClick(contactItem) {
         if (checkboxImg) checkboxImg.classList.toggle("selected-checkbox-image");
         
     })
+}
+
+
+function initOutsideClick() {
+    const modal = document.getElementById("addTaskModal");
+    const contactsContainer = document.getElementById("contacts-container");
+    const assignmentButton = document.getElementById("assignment-btn");
+
+    modal.addEventListener("click", (event) => {
+        if (!contactsContainer.contains(event.target) && !assignmentButton.contains(event.target)) {
+            closeContacts();
+            updateDropdownIcon(false);
+        }
+    });
 }
