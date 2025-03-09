@@ -1,3 +1,16 @@
+/**
+ * Erstellt eine HTML-Vorlage für eine Aufgabenkarte.
+ * @param {Object} task - Das Aufgabenobjekt.
+ * @param {string} task.category - Die Kategorie der Aufgabe.
+ * @param {string} task.title - Der Titel der Aufgabe.
+ * @param {string} task.description - Die Beschreibung der Aufgabe.
+ * @param {Array} task.subtasks - Eine Liste der Unteraufgaben.
+ * @param {Array} task.assignedTo - Eine Liste der zugewiesenen Benutzer.
+ * @param {Object} task.priority - Das Prioritätsobjekt der Aufgabe.
+ * @param {string} task.priority.text - Der Text der Priorität.
+ * @param {string} task.priority.image - Das Bild der Priorität.
+ * @returns {string} - Die HTML-Vorlage für die Aufgabenkarte.
+ */
 function taskCardTemplate(task) {
     let categoryColor = task.category === "User Story" ? "#0039fe" : "#1fd7c1";
 
@@ -31,6 +44,12 @@ function taskCardTemplate(task) {
 }
 
 
+/**
+ * Generiert eine HTML-Vorlage für die Unteraufgaben einer Aufgabe.
+ * @param {Object} task - Das Aufgabenobjekt.
+ * @param {Array} task.subtasks - Eine Liste der Unteraufgaben.
+ * @returns {string} - Die HTML-Vorlage für die Unteraufgaben.
+ */
 function generateSubtasksTemplate(task) {
     return task.subtasks.map((subtask, index) => `
         <div class="subtasks-content">
@@ -43,6 +62,21 @@ function generateSubtasksTemplate(task) {
 }
 
 
+/**
+ * Erstellt eine HTML-Vorlage für die Detailansicht einer Aufgabe.
+ * @param {Object} task - Das Aufgabenobjekt.
+ * @param {string} task.category - Die Kategorie der Aufgabe.
+ * @param {string} task.title - Der Titel der Aufgabe.
+ * @param {string} task.description - Die Beschreibung der Aufgabe.
+ * @param {string} task.dueDate - Das Fälligkeitsdatum der Aufgabe.
+ * @param {Object} task.priority - Das Prioritätsobjekt der Aufgabe.
+ * @param {string} task.priority.text - Der Text der Priorität.
+ * @param {string} task.priority.image - Das Bild der Priorität.
+ * @param {Array} task.assignedTo - Eine Liste der zugewiesenen Benutzer.
+ * @param {Array} task.subtasks - Eine Liste der Unteraufgaben.
+ * @param {string} subtasksHTML - Die HTML-Vorlage für die Unteraufgaben.
+ * @returns {string} - Die HTML-Vorlage für die Detailansicht der Aufgabe.
+ */
 function taskDetailTemplate(task, subtasksHTML) {
     let categoryColor = task.category === "User Story" ? "#0039fe" : "#1fd7c1";
 
@@ -88,6 +122,10 @@ function taskDetailTemplate(task, subtasksHTML) {
 }
 
 
+/**
+ * Erstellt eine HTML-Vorlage für das Bearbeiten einer Aufgabe.
+ * @returns {string} - Die HTML-Vorlage für das Bearbeiten einer Aufgabe.
+ */
 function editTaskTempl() {
     return `
     <button id="editTask-close-btn" class="editTask-close-btn" onclick="closeEditTaskModal()">
