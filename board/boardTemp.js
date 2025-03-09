@@ -43,7 +43,6 @@ function generateSubtasksTemplate(task) {
 }
 
 
-
 function taskDetailTemplate(task, subtasksHTML) {
     let categoryColor = task.category === "User Story" ? "#0039fe" : "#1fd7c1";
 
@@ -113,16 +112,16 @@ function editTaskTempl() {
 
         <div class="form-content">
             <label>Priority</label>
-            <div class="button-container" small-button-container">
-                <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
+            <div class="button-container small-button-container">
+                <button class="btn-switch" id="edit-urgent" name="urgent" type="button" onclick="toggleEditButtons(this)">
                     Urgent 
                     <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
                 </button>
-                <button class="btn-switch" id="medium" name="medium" type="button" onclick="toggleButtons(this)">
+                <button class="btn-switch" id="edit-medium" name="medium" type="button" onclick="toggleEditButtons(this)">
                     Medium 
                     <img src="/assets/imgs/medium.png" alt="medium-icon" />
                 </button>
-                <button class="btn-switch" id="low" name="low" type="button" onclick="toggleButtons(this)">
+                <button class="btn-switch" id="edit-low" name="low" type="button" onclick="toggleEditButtons(this)">
                     Low 
                     <img src="/assets/imgs/low.png" alt="low-icon" />
                 </button>

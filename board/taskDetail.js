@@ -73,6 +73,54 @@ function closeTaskDetailModal() {
 }
 
 
+// async function openEditTaskModal(taskId) {
+//     try {
+//         const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
+//         const taskData = await response.json();
+
+//         if (!taskData) {
+//             throw new Error("❌ Keine Task-Daten gefunden!");
+//         }
+//         console.log(taskData);
+
+//         // 🟢 TaskDetailModal verstecken
+//         document.getElementById("taskDetailModal").classList.add("hidden");
+
+//         // 🟢 Lade das Template in das Modal
+//         const modalContent = document.getElementById("edit-modal-content");
+//         modalContent.innerHTML = editTaskTempl();
+
+//         // 🟢 Sicherstellen, dass die Elemente existieren
+//         setTimeout(() => {
+//             const titleField = document.getElementById("edit-task-title");
+//             const descField = document.getElementById("edit-task-description");
+//             const dateField = document.getElementById("edit-due-date");
+
+//             if (!titleField || !descField || !dateField) {
+//                 throw new Error("❌ Edit Task Modal Elemente fehlen im HTML!");
+//             }
+
+//             // 🟢 Felder mit Task-Daten befüllen
+//             titleField.value = taskData.title || "";
+//             descField.value = taskData.description || "";
+//             dateField.value = formatDateForInput(taskData.dueDate);
+
+//             // 🟢 Priorität setzen (richtigen Button aktivieren & stylen)
+//             setEditPriority(taskData.priority);
+
+//             // 🟢 Kontakte & Subtasks setzen
+//             setEditAssignedContacts(taskData.assignedTo || []);
+//             setEditSubtasks(taskData.subtasks || []);
+//         }, 50); // ⏳ Warten, bis das HTML geladen ist
+
+//         // 🟢 Edit Task Modal anzeigen
+//         document.getElementById("editTaskModal").classList.remove("hidden");
+
+//     } catch (error) {
+//         console.error("❌ Fehler beim Laden der Task-Daten:", error);
+//     }
+// }
+// taskDetail.js - openEditTaskModal Funktion
 async function openEditTaskModal(taskId) {
     try {
         const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
@@ -81,7 +129,7 @@ async function openEditTaskModal(taskId) {
         if (!taskData) {
             throw new Error("❌ Keine Task-Daten gefunden!");
         }
-        console.log(taskData);
+
         // 🟢 TaskDetailModal verstecken
         document.getElementById("taskDetailModal").classList.add("hidden");
 
@@ -105,7 +153,7 @@ async function openEditTaskModal(taskId) {
             dateField.value = formatDateForInput(taskData.dueDate);
 
             // 🟢 Priorität setzen (richtigen Button aktivieren & stylen)
-            setEditPriority(taskData.priority);
+            setEditPriority(taskData.priority); // Hier wird die Priorität gesetzt
 
             // 🟢 Kontakte & Subtasks setzen
             setEditAssignedContacts(taskData.assignedTo || []);
@@ -119,7 +167,6 @@ async function openEditTaskModal(taskId) {
         console.error("❌ Fehler beim Laden der Task-Daten:", error);
     }
 }
-
 
 
 function closeEditTaskModal() {
@@ -206,4 +253,35 @@ function getSubtasks() {
         text: checkbox.nextElementSibling ? checkbox.nextElementSibling.innerText.trim() : "Unbenannte Subtask",
         checked: checkbox.checked
     }));
+}
+
+
+// editTask.js - Eigene Funktion für das Edit-Modal
+function toggleEditButtons(clickedButton) {
+    // Nur Buttons im EDIT-Modal zurücksetzen
+    const buttons = document.querySelectorAll("#editTaskModal .btn-switch");
+    buttons.forEach(btn => {
+        btn.classList.remove("active");
+        btn.style.backgroundColor = "";
+        btn.style.color = "#000";
+    });
+
+    // Aktivierten Button stylen
+    clickedButton.classList.add("active");
+    const priority = clickedButton.id.replace("edit-", ""); // "urgent", "medium", "low"
+
+    switch (priority) {
+        case "urgent":
+            clickedButton.style.backgroundColor = "#ff3b30";
+            clickedButton.style.color = "#fff";
+            break;
+        case "medium":
+            clickedButton.style.backgroundColor = "#ffcc00";
+            clickedButton.style.color = "#000";
+            break;
+        case "low":
+            clickedButton.style.backgroundColor = "#34c759";
+            clickedButton.style.color = "#fff";
+            break;
+    }
 }

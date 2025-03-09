@@ -108,7 +108,7 @@ li {
 }
 
 .task-detail-title {
-    font-size: 72px;
+    font-size: 52px;
     font-weight: bold;
     margin-top: 32px;
     overflow: hidden;
@@ -342,7 +342,6 @@ li {
     width: fit-content;
     padding: 8px 12px;
 
-
     label {
         margin-bottom: 0;
     }
@@ -395,4 +394,50 @@ li {
 * {
     scrollbar-width: thin;
     scrollbar-color: #a9a9a9 transparent;
+}
+
+#editTaskModal .btn-switch {
+    width: 140px;
+    height: 44px;
+    box-sizing: border-box;
+    border: 1px solid #D7D7D7;
+    font-family: inherit;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 300;
+    background-color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+#editTaskModal .btn-switch img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    transition: filter 0.2s ease-in-out;
+}
+
+#editTaskModal #edit-urgent.active {
+    background-color: rgb(255, 61, 0) !important;
+    color: white !important;
+}
+
+#editTaskModal #edit-medium.active {
+    background-color: rgb(255, 168, 0) !important;
+    color: white !important;
+}
+
+#editTaskModal #edit-low.active {
+    background-color: rgb(122, 226, 41) !important;
+    color: white !important;
+}
+
+#editTaskModal #edit-low.active img,
+#editTaskModal #edit-urgent.active img,
+#editTaskModal #edit-medium.active img {
+    filter: brightness(0) invert(1);
 }
