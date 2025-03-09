@@ -16,6 +16,10 @@ body {
     gap: 20px;
 }
 
+.add-mobile {
+    display: none;
+}
+
 .board-wrap {
     padding: 70px 50px 0 70px;
     flex: 1;

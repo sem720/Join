@@ -34,9 +34,21 @@
         display: none;
     }
 
+    .board-header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
     .board-header {
         flex-direction: column;
         align-items: center;
+    }
+
+    .add-mobile {
+        display: block;
+        cursor: pointer;
     }
 
     #findTask,
