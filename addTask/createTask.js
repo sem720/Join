@@ -53,12 +53,15 @@ function getValue(selector) {
 
 
 function clearTask() {
+    const selectedContacts = new Set();
+
     ["task-name", "description", "subtasks"].forEach(id => document.getElementById(id).value = "");
-      
     resetDateInput(document.getElementById("due-date"));
+
     document.querySelector(".dropdown-btn").innerHTML = `Select task category <span class="icon-container"><img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon"></span>`;
     document.getElementById("selected-contacts-container").innerHTML = "";
-  
+    selectedContacts.clear();
+    
     document.querySelectorAll(".error-message").forEach((error) => {error.style.display = "none";});
     document.querySelectorAll(".error").forEach((el) => {el.classList.remove("error");});
 }
@@ -182,6 +185,6 @@ function showTaskPopup() {
     setTimeout(() => window.location.href = "/board/board.html", 1500);
 }
 
-  
+
   
   
