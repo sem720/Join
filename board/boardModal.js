@@ -14,10 +14,6 @@ async function openAddTaskModal() {
     });
     
     await fetchContacts();
-    renderContactsList();
-    setupAddSubtaskButton();
-    initialDefaultPriority();
-    init();
     initOutsideClick();
 }
 
@@ -34,9 +30,19 @@ function closeModal() {
     }, 400);
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    renderContactsList();
+    setupAddSubtaskButton();
+    initialDefaultPriority();
+    init();
+    
+});
 
+function clearTask(event) {
+    event.stopPropagation();
+    document.querySelector(".selected-contacts").innerHTML = "";
+}
 
-  
 
 
 
