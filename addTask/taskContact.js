@@ -150,7 +150,7 @@ async function fetchContacts() {
     }
     const data = await response.json();
     if (!data) return console.error("Keine Nutzerdaten gefunden.");
-        
+
     processContactsData(data); 
     await renderContactsList();
 }
@@ -292,15 +292,3 @@ function handleContactClick(contactItem) {
 }
 
 
-function initOutsideClick() {
-    const modal = document.getElementById("addTaskModal");
-    const contactsContainer = document.getElementById("contacts-container");
-    const assignmentButton = document.getElementById("assignment-btn");
-
-    modal.addEventListener("click", (event) => {
-        if (!contactsContainer.contains(event.target) && !assignmentButton.contains(event.target)) {
-            closeContacts();
-            updateDropdownIcon(false);
-        }
-    });
-}
