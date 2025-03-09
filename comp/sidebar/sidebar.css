@@ -131,3 +131,13 @@
     background: #314663;
   }
 }
+
+@media (max-height: 710px) {
+  .div-links {
+    bottom: 20px;
+  }
+
+  .div-join-logo {
+    margin-bottom: 0px;
+  }
+}
