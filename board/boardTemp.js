@@ -43,7 +43,6 @@ function generateSubtasksTemplate(task) {
 }
 
 
-
 function taskDetailTemplate(task, subtasksHTML) {
     let categoryColor = task.category === "User Story" ? "#0039fe" : "#1fd7c1";
 

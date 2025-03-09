@@ -82,6 +82,7 @@ async function openEditTaskModal(taskId) {
             throw new Error("❌ Keine Task-Daten gefunden!");
         }
         console.log(taskData);
+
         // 🟢 TaskDetailModal verstecken
         document.getElementById("taskDetailModal").classList.add("hidden");
 
@@ -119,7 +120,6 @@ async function openEditTaskModal(taskId) {
         console.error("❌ Fehler beim Laden der Task-Daten:", error);
     }
 }
-
 
 
 function closeEditTaskModal() {
@@ -207,3 +207,4 @@ function getSubtasks() {
         checked: checkbox.checked
     }));
 }
+

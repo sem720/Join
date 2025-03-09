@@ -1,0 +1,60 @@
+@media (max-width: 1300px) {
+    .board-main {
+        flex-direction: column;
+        overflow-y: visible;
+    }
+
+    .task-card {
+        height: 230px;
+    }
+
+    .column-body {
+        min-height: fit-content;
+        flex-direction: row;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .column {
+        min-height: fit-content;
+        margin-bottom: 0;
+        width: 100%;
+        max-width: 100%;
+        overflow: visible;
+    }
+}
+
+@media (max-width: 1000px) {
+    #addTask {
+        display: none;
+    }
+
+    .board-header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #findTask,
+    .header-part-search,
+    .search-input-board {
+        width: 100% !important;
+    }
+
+    .edit-modal-container {
+        scrollbar-width: none;
+    }
+
+    .board-wrap {
+        padding: 40px 24px 0 24px
+    }
+}
+
+@media (max-width:670px) {
+    .column {
+        z-index: 0;
+    }
+
+    #editTaskModal {
+        margin: 0 14px;
+    }
+}

@@ -19,6 +19,7 @@ function setEditPriority(priority) {
 
         // Finde den passenden Button
         const button = document.getElementById(priorityText);
+        console.log(button);
         if (button) {
             console.log(`✅ Button "${priorityText}" gefunden, setze active-Klasse.`);
 
@@ -28,14 +29,17 @@ function setEditPriority(priority) {
             // 🟢 Hintergrundfarbe & Textfarbe setzen
             switch (priorityText) {
                 case "urgent":
+                    console.log("urgent: ", button);
                     button.style.backgroundColor = "#ff3b30"; // Rot für Urgent
                     button.style.color = "#fff"; // Weiße Schrift
                     break;
                 case "medium":
+                    console.log("medium: ", button);
                     button.style.backgroundColor = "#ffcc00"; // Gelb für Medium
                     button.style.color = "#000"; // Schwarze Schrift
                     break;
                 case "low":
+                    console.log("low: ", button);
                     button.style.backgroundColor = "#34c759"; // Grün für Low
                     button.style.color = "#fff"; // Weiße Schrift
                     break;
@@ -44,12 +48,12 @@ function setEditPriority(priority) {
             }
 
             // 💡 Sicherstellen, dass die Klasse nicht verloren geht
-            setTimeout(() => {
-                if (!button.classList.contains("active")) {
-                    console.warn(`⚠️ Klasse 'active' wurde entfernt! Erneutes Setzen für ${priorityText}.`);
-                    button.classList.add("active");
-                }
-            }, 200);
+            // setTimeout(() => {
+            //     if (!button.classList.contains("active")) {
+            //         console.warn(`⚠️ Klasse 'active' wurde entfernt! Erneutes Setzen für ${priorityText}.`);
+            //         button.classList.add("active");
+            //     }
+            // }, 200);
         } else {
             console.warn(`⚠️ Kein Button für Priorität "${priorityText}" gefunden.`);
         }
@@ -124,10 +128,10 @@ function updateTaskCard(taskId, updatedTask) {
 }
 
 // Example of a function to close the edit task modal
-function closeEditTaskModal() {
-    // Logic to close the edit task modal can be added here
-    console.log("✅ Edit-Modal geschlossen.");
-}
+// function closeEditTaskModal() {
+//     // Logic to close the edit task modal can be added here
+//     console.log("✅ Edit-Modal geschlossen.");
+// }
 
 // Example of a function to get the selected priority
 function getSelectedPriority() {
