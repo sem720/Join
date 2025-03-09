@@ -35,22 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
     setupAddSubtaskButton();
     initialDefaultPriority();
     init();
-    
+
 });
-
-function clearTask(event) {
-    event.stopPropagation();
-    document.querySelector(".selected-contacts").innerHTML = "";
-}
-
-
-
-
-
-
-
-
-
 
 
 
