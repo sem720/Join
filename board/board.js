@@ -261,22 +261,28 @@ function generateSubtasks(task) {
 
 async function toggleSubtask(taskId, subtaskIndex) {
     try {
-        // 📌 Task aus der Datenbank abrufen
         const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
         const task = await response.json();
 
-        if (!task || !task.subtasks || subtaskIndex >= task.subtasks.length) {
-            console.error("❌ Subtask nicht gefunden!");
-            return;
-        }
+        if (!task?.subtasks || subtaskIndex >= task.subtasks.length) return;
 
-        // 📌 Status des Subtasks umkehren (lokal)
+        // Status umkehren
         task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
 
-        // 📌 Task-Card-Snackbar sofort aktualisieren
-        updateTaskCard(taskId, task);
+        // 🔴 Fortschrittsdaten direkt berechnen
+        const totalSubtasks = task.subtasks.length;
+        const completedSubtasks = task.subtasks.filter(st => st.completed).length;
+        const progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
 
-        // 📌 Backend mit neuem Status aktualisieren (asynchron)
+        // 🔴 DOM-Elemente direkt aktualisieren
+        const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
+        if (taskElement) {
+            taskElement.querySelector(".subtask-bar-prog-blue").style.width = `${progressPercent}%`;
+            taskElement.querySelector(".subtask-checked").textContent =
+                `${completedSubtasks}/${totalSubtasks} Subtasks`;
+        }
+
+        // Backend aktualisieren
         await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -284,7 +290,7 @@ async function toggleSubtask(taskId, subtaskIndex) {
         });
 
     } catch (error) {
-        console.error("❌ Fehler beim Aktualisieren des Subtasks:", error);
+        console.error("Fehler beim Aktualisieren des Subtasks:", error);
     }
 }
 
