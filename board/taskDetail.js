@@ -72,55 +72,6 @@ function closeTaskDetailModal() {
     }, 300);
 }
 
-
-// async function openEditTaskModal(taskId) {
-//     try {
-//         const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
-//         const taskData = await response.json();
-
-//         if (!taskData) {
-//             throw new Error("❌ Keine Task-Daten gefunden!");
-//         }
-//         console.log(taskData);
-
-//         // 🟢 TaskDetailModal verstecken
-//         document.getElementById("taskDetailModal").classList.add("hidden");
-
-//         // 🟢 Lade das Template in das Modal
-//         const modalContent = document.getElementById("edit-modal-content");
-//         modalContent.innerHTML = editTaskTempl();
-
-//         // 🟢 Sicherstellen, dass die Elemente existieren
-//         setTimeout(() => {
-//             const titleField = document.getElementById("edit-task-title");
-//             const descField = document.getElementById("edit-task-description");
-//             const dateField = document.getElementById("edit-due-date");
-
-//             if (!titleField || !descField || !dateField) {
-//                 throw new Error("❌ Edit Task Modal Elemente fehlen im HTML!");
-//             }
-
-//             // 🟢 Felder mit Task-Daten befüllen
-//             titleField.value = taskData.title || "";
-//             descField.value = taskData.description || "";
-//             dateField.value = formatDateForInput(taskData.dueDate);
-
-//             // 🟢 Priorität setzen (richtigen Button aktivieren & stylen)
-//             setEditPriority(taskData.priority);
-
-//             // 🟢 Kontakte & Subtasks setzen
-//             setEditAssignedContacts(taskData.assignedTo || []);
-//             setEditSubtasks(taskData.subtasks || []);
-//         }, 50); // ⏳ Warten, bis das HTML geladen ist
-
-//         // 🟢 Edit Task Modal anzeigen
-//         document.getElementById("editTaskModal").classList.remove("hidden");
-
-//     } catch (error) {
-//         console.error("❌ Fehler beim Laden der Task-Daten:", error);
-//     }
-// }
-// taskDetail.js - openEditTaskModal Funktion
 async function openEditTaskModal(taskId) {
     try {
         const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
@@ -158,7 +109,7 @@ async function openEditTaskModal(taskId) {
             // 🟢 Kontakte & Subtasks setzen
             setEditAssignedContacts(taskData.assignedTo || []);
             setEditSubtasks(taskData.subtasks || []);
-        }, 50); // ⏳ Warten, bis das HTML geladen ist
+        }, 10); // ⏳ Warten, bis das HTML geladen ist
 
         // 🟢 Edit Task Modal anzeigen
         document.getElementById("editTaskModal").classList.remove("hidden");

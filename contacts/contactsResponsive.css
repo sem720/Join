@@ -114,6 +114,7 @@
         justify-content: center;
         width: 500px;
         height: 700px;
+        max-height: 95vh;
     }
 
     .addContact-titles,

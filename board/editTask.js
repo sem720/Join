@@ -39,7 +39,7 @@ function setEditPriority(priority) {
                     break;
             }
         }
-    }, 100);
+    }, 10);
 }
 
 
