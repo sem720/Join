@@ -13,7 +13,7 @@ async function fetchTasks() {
 
             // 🟢 Falls `mainCategory` "to do" ist, ändere es zu "To do"
             if (task.mainCategory && task.mainCategory.toLowerCase() === "to do") {
-                console.log(`🛠️ Fix: mainCategory für Task ${task.id} geändert von "to do" zu "To do"`);
+                // console.log(`🛠️ Fix: mainCategory für Task ${task.id} geändert von "to do" zu "To do"`);
                 task.mainCategory = "To do";
 
                 // 🟢 Speichere die Korrektur im Backend
@@ -40,7 +40,7 @@ async function updateMainCategoryInBackend(taskId, newCategory) {
             body: JSON.stringify({ mainCategory: newCategory })
         });
 
-        console.log(`✅ Task ${taskId} erfolgreich im Backend aktualisiert: mainCategory = "${newCategory}"`);
+        // console.log(`✅ Task ${taskId} erfolgreich im Backend aktualisiert: mainCategory = "${newCategory}"`);
 
     } catch (error) {
         console.error(`❌ Fehler beim Aktualisieren der mainCategory für Task ${taskId}:`, error);

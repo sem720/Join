@@ -1,67 +1,45 @@
 
+// editTask.js - setEditPriority()
 function setEditPriority(priority) {
-    setTimeout(() => { // 🕒 Warten, bis das Modal vollständig geladen ist
+    setTimeout(() => {
         if (!priority || !priority.text) {
-            console.warn("⚠️ Keine gültige Priorität gefunden. Kein Button wird gesetzt.");
+            console.warn("⚠️ Keine gültige Priorität gefunden.");
             return;
         }
 
-        let priorityText = priority.text.toLowerCase().trim(); // "urgent", "medium", "low"
+        const priorityText = priority.text.toLowerCase().trim(); // "urgent", "medium", "low"
+        const buttonId = `edit-${priorityText}`; // 🔴 Neue ID: edit-urgent, edit-medium, edit-low
 
-        console.log(`🔄 Setze Priorität: ${priorityText}`); // Debugging
-
-        // Alle Buttons zurücksetzen
-        document.querySelectorAll(".btn-switch").forEach(btn => {
+        // Alle Buttons im Modal zurücksetzen
+        document.querySelectorAll("#editTaskModal .btn-switch").forEach(btn => {
             btn.classList.remove("active");
-            btn.style.backgroundColor = ""; // Standard-Hintergrundfarbe entfernen
-            btn.style.color = "#000"; // Standard-Textfarbe setzen
+            btn.style.backgroundColor = "";
+            btn.style.color = "#000";
         });
 
-        // Finde den passenden Button
-        const button = document.getElementById(priorityText);
-        console.log(button);
+        // Richtigen Button im Modal finden
+        const button = document.getElementById(buttonId);
         if (button) {
-            console.log(`✅ Button "${priorityText}" gefunden, setze active-Klasse.`);
+            button.classList.add("active");
+            button.setAttribute("data-active", "true");
 
-            button.classList.add("active"); // Setzt den Button als aktiv
-            button.setAttribute("data-active", "true"); // Sicherstellen, dass kein anderes Skript es entfernt
-
-            // 🟢 Hintergrundfarbe & Textfarbe setzen
+            // Stile setzen
             switch (priorityText) {
                 case "urgent":
-                    console.log("urgent: ", button);
-                    button.style.backgroundColor = "#ff3b30"; // Rot für Urgent
-                    button.style.color = "#fff"; // Weiße Schrift
+                    button.style.backgroundColor = "#ff3b30";
+                    button.style.color = "#fff";
                     break;
                 case "medium":
-                    console.log("medium: ", button);
-                    button.style.backgroundColor = "#ffcc00"; // Gelb für Medium
-                    button.style.color = "#000"; // Schwarze Schrift
+                    button.style.backgroundColor = "#ffcc00";
+                    button.style.color = "#000";
                     break;
                 case "low":
-                    console.log("low: ", button);
-                    button.style.backgroundColor = "#34c759"; // Grün für Low
-                    button.style.color = "#fff"; // Weiße Schrift
+                    button.style.backgroundColor = "#34c759";
+                    button.style.color = "#fff";
                     break;
-                default:
-                    console.warn(`⚠️ Unbekannte Priorität: ${priorityText}`);
             }
-
-            // 💡 Sicherstellen, dass die Klasse nicht verloren geht
-            // setTimeout(() => {
-            //     if (!button.classList.contains("active")) {
-            //         console.warn(`⚠️ Klasse 'active' wurde entfernt! Erneutes Setzen für ${priorityText}.`);
-            //         button.classList.add("active");
-            //     }
-            // }, 200);
-        } else {
-            console.warn(`⚠️ Kein Button für Priorität "${priorityText}" gefunden.`);
         }
-
-        // 🔹 Prüfen, ob `.active` gesetzt wurde
-        console.log("🔎 CSS-Klasse `active` vorhanden:", button?.classList.contains("active"));
-        console.log("🔎 Button-Styles:", button?.style.backgroundColor, button?.style.color);
-    }, 100); // ⏳ 100ms Warten, damit das HTML sicher geladen ist
+    }, 100);
 }
 
 
