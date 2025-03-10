@@ -23,4 +23,6 @@ function init() {
     initEventListeners(),
     setupCalendarIcon(),
     clearTask();
+    initAddTaskContacts();
+
 }
