@@ -1,6 +1,5 @@
 const allContacts = new Map();
 const selectedContacts = new Set();
-
 let assignmentButton;
 let contactsContainer;
 const icon = document.getElementById("dropdown-icon");
@@ -15,7 +14,7 @@ function initAddTaskContacts() {
     assignmentButton = document.getElementById('assignment-btn');
     subtasksInput = document.getElementById('subtasks');
 
-    fetchContacts();
+    fetchAndRenderContacts();
 
     document.addEventListener("keydown", handleKeydownOutsideAssignment);
 }
@@ -45,12 +44,7 @@ function handleKeydownOutsideAssignment(event) {
 function toggleContacts(event) {
     event.preventDefault();
     
-    const contactsContainer = document.getElementById('contacts-container');
-    const contactsList = document.getElementById("contacts-list");
-    if (!contactsList) return console.error("❌ Element #contacts-list not found!");
-
     const isOpen = contactsContainer.classList.contains("visible");
-
     isOpen ? closeContacts() : openContacts();
 }
 
@@ -142,12 +136,10 @@ function closeContacts() {
  * 
  * @throws {Error} Throws an error if the HTTP request fails or the data is invalid.
  */
-async function fetchContacts() {
+async function fetchAndRenderContacts() {
     const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
-  
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+    if (!response.ok) return console.error(`HTTP error! Status: ${response.status}`);
+    
     const data = await response.json();
     if (!data) return console.error("Keine Nutzerdaten gefunden.");
 
@@ -163,11 +155,9 @@ async function fetchContacts() {
  */
 function processContactsData(data) {
     allContacts.clear();
-    console.log("✅ Processed Contacts:", data);
     Object.values(data).forEach(user => {
         let name = capitalizeName(user.name);
         let bgcolor = user.bgcolor;
-
         allContacts.set(name, { name, bgcolor }); 
     }); 
 }
@@ -193,7 +183,7 @@ async function renderContactsList() {
  * @param {string} bgcolor - The background color associated with the contact.
  * @returns {HTMLElement} The contact element.
  */
-function createContactElement(name, bgcolor, avatar) {
+function createContactElement(name, bgcolor) {
     const contactDiv = createElement("div", "contact-item");
     const nameSpan = createElement("span", "contact-name", name);
     const checkbox = createCheckbox(name);
@@ -202,8 +192,8 @@ function createContactElement(name, bgcolor, avatar) {
     contactDiv.appendChild(nameSpan); 
     contactDiv.appendChild(checkbox); 
 
-    handleContactClick(contactDiv, avatar, checkbox);
-    
+    contactDiv.addEventListener("click", () => handleContactClick(contactDiv));
+
     return contactDiv; 
 }
 
@@ -218,6 +208,7 @@ function updateSelectedContactsDisplay() {
         const avatar = createAvatar(name, bgcolor);
         selectedContactsContainer.appendChild(avatar);
     });
+    
 }
 
 
@@ -234,28 +225,24 @@ function toggleContactSelection(name, isChecked) {
     if (isChecked) {
         selectedContacts.add(contact);
     } else {
-        selectedContacts.forEach(c => {
-            if (c.name === name) {
-                selectedContacts.delete(c);
-            }
-        });
+        selectedContacts.delete(contact);
     }
+    
     updateSelectedContactsDisplay();
 }
 
 
 function handleCheckboxChange(checkbox, img, name) {
     checkbox.addEventListener("change", () => {
-        toggleContactSelection(name, checkbox.checked);
+        console.log(`Checkbox changed: ${name}, Checked: ${checkbox.checked}`);
         
-        img.style.display = checkbox.checked ? "block" : "none";
-        checkbox.style.display = checkbox.checked ? "none" : "block";
+        toggleContactSelection(name, checkbox.checked);
+        toggleCheckboxVisibility(checkbox, img, checkbox.checked);
     });
-      // Ensure clicking the image returns to the checkbox
-      img.addEventListener("click", () => {
-        checkbox.checked = false;  // Uncheck the checkbox
-        img.style.display = "none";  // Hide the image
-        checkbox.style.display = "block";  // Show the checkbox again
+
+    // Ensure clicking the image returns to the checkbox
+    img.addEventListener("click", () => {
+        uncheckCheckbox(checkbox, img, name);
     });
 }
 
@@ -277,18 +264,38 @@ function createCheckbox(name, avatar) {
 
 
 function handleContactClick(contactItem) {
-    contactItem.addEventListener("click", () => {
-        contactItem.classList.toggle("selected");
-        const avatar = contactItem.querySelector(".avatar");
-        if (avatar) avatar.classList.toggle("selected-avatar");
+    contactItem.classList.toggle("selected");
+    const avatar = contactItem.querySelector(".avatar");
+    const nameSpan = contactItem.querySelector(".contact-name");
+    const checkboxImg = contactItem.querySelector(".checkbox-image");
 
-        const nameSpan = contactItem.querySelector(".contact-name");
-        if (nameSpan) nameSpan.classList.toggle("selected-name");
+    avatar?.classList.toggle("selected-avatar");
+    nameSpan?.classList.toggle("selected-name");
+    checkboxImg?.classList.toggle("selected-checkbox-image");
+}
 
-        const checkboxImg = contactItem.querySelector(".checkbox-image");
-        if (checkboxImg) checkboxImg.classList.toggle("selected-checkbox-image");
+
+function handleCheckboxChecked(avatar) {
+    selectedContactsContainer.appendChild(avatar);
+}
+
+
+function handleCheckboxUnchecked(avatar) {
+    selectedContactsContainer.removeChild(avatar);
+}
+
+function handleCheckboxChangeAvatar(name) {
+    const avatar = createElement("div", "avatar", getInitials(name));
+    checkbox.addEventListener("change", () => {
+        toggleContactSelection(name, checkbox.checked);
         
-    })
+        if (checkbox.checked) {
+            handleCheckboxChecked(avatar, name);
+        } else {
+            handleCheckboxUnchecked(avatar, name);
+            }
+        console.log(`Avatar visibility for ${name}:`, avatar.style.display);
+    });
 }
 
 
