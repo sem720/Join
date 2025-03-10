@@ -69,6 +69,7 @@ function createElement(tag, className = "", text = "") {
 function createAvatar(name, bgcolor) {
     const avatar = createElement("div", "avatar", getInitials(name));
     avatar.style.backgroundColor = bgcolor;
+    avatar.dataset.name = name; 
     return avatar;
 }
 
@@ -84,6 +85,7 @@ function createCheckboxElement(name, avatar) {
     checkbox.type = "checkbox";
     checkbox.dataset.contactName = name;
     checkbox.dataset.contactAvatar = avatar;
+
     
     return checkbox;
 }
@@ -144,4 +146,23 @@ function clearError(selector) {
 function resetDateInput(input) {
     input.value = '';
     input.classList.remove('has-value');
+}
+
+function toggleCheckboxVisibility(checkbox, img, isChecked) {
+    img.style.display = isChecked ? "block" : "none";
+    checkbox.style.display = isChecked ? "none" : "block";
+}
+
+
+function uncheckCheckbox(checkbox, img, name) {
+    checkbox.checked = false;
+    img.style.display = "none";
+    checkbox.style.display = "block";
+
+    // Manually trigger the change event
+    const changeEvent = new Event('change');
+    checkbox.dispatchEvent(changeEvent);
+
+    console.log(`Checkbox changed: ${name}, unchecked: ${checkbox.checked}`);
+    console.log(`Avatar hidden for ${name} after unchecking.`);
 }
