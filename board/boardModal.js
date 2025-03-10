@@ -13,7 +13,7 @@ async function openAddTaskModal() {
         event.stopPropagation();
     });
     
-    await fetchContacts();
+    await fetchAndRenderContacts();
     initOutsideClick();
 }
 
@@ -37,6 +37,20 @@ document.addEventListener("DOMContentLoaded", function () {
     init();
 
 });
+
+
+function initOutsideClick() {
+    const modal = document.getElementById("addTaskModal");
+    const contactsContainer = document.getElementById("contacts-container");
+    const assignmentButton = document.getElementById("assignment-btn");
+
+    modal.addEventListener("click", (event) => {
+        if (!contactsContainer.contains(event.target) && !assignmentButton.contains(event.target)) {
+            closeContacts();
+            updateDropdownIcon(false);
+        }
+    });
+}
 
 
 
