@@ -10,10 +10,9 @@
   <link rel="stylesheet" href="/comp/components.css" />
   <link rel="stylesheet" href="/comp/navbar/navbar.css" />
   <link rel="stylesheet" href="/comp/sidebar/sidebar.css" />
-  <link rel="stylesheet" href="/board/addTaskModal.css" />
+  <link rel="stylesheet" href="./addTaskModal.css" />
   <link rel="stylesheet" href="/addTask/addTask.css" />
   <link rel="stylesheet" href="/addTask/addTask.comps.css" />
-  <link rel="stylesheet" href="/addTask/addTask.responsive.css" />
   <link rel="stylesheet" href="./taskDetails.css">
   <link rel="stylesheet" href="/board/addTaskModal.responsive.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -35,8 +34,8 @@
     <div id="modal-body">
       <div class="modal-addTask-container">
         <h1 class="h1-addTask h1">Add Task</h1>
-        <main class="main-addTask">
-          <form onsubmit="createTask(event)">
+        <main class="main-addTask" id="main-addTask">
+          <form class="form"   onsubmit="createTask(event)">
             <!-- Left Container -->
             <div class="left-container">
               <label for="task-name">Title <span class="required">*</span></label>
@@ -63,11 +62,11 @@
 
               <!-- Right Container -->
               <div class="right-container">
-                <label for="due-date">Due Date <span class="required">*</span></label>
-                <div class="date-container">
+                <label for="due-date" id="date-label">Due Date <span class="required">*</span></label>
+                <div class="date-container" id="date-container">
                   <input type="date" class="input-standard" id="due-date" name="due-date" placeholder="dd/mm/yyyy"
                     required />
-                  <img src="/assets/imgs/calendar.png" id="calendar-icon" alt="Kalender Icon" />
+                  <img src="/assets/imgs/calendar.png" id="calendar-icon" class="calendar-icon"  alt="Kalender Icon" />
                 </div>
                 <div class="error-message" data-error-for="due-date" style="display: none"></div>
 
@@ -111,7 +110,7 @@
             </form>
 
             <!-- Footer Section - Now inside modal-body -->
-            <section class="footer">
+            <section class="footer" id="footer">
               <div class="text">
                 <span class="required">*</span>This field is required.
               </div>
