@@ -32,16 +32,12 @@ body {
     max-width: 900px;
 }
 
-form {
-    margin-bottom: 32px;
-}
-
 .main-addTask form {
     display: flex;
-    justify-content: center;
     align-items: flex-start;
     height: 50vh;
-    max-width: 900px;
+    max-width: 1000px;
+    margin-bottom: 32px;
 }
 
 .left-container {
@@ -58,10 +54,10 @@ form {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding-left: 97px;
     min-width: 300px;
-    width: 50%;
+    width: 54%;
     flex: 1;
+    box-sizing: border-box;
 }
 
 
