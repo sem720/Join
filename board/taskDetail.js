@@ -109,6 +109,9 @@ async function openEditTaskModal(taskId) {
             // 🟢 Kontakte & Subtasks setzen
             setEditAssignedContacts(taskData.assignedTo || []);
             setEditSubtasks(taskData.subtasks || []);
+
+            initEditTaskFlatpickr();
+          
         }, 10); // ⏳ Warten, bis das HTML geladen ist
 
         // 🟢 Edit Task Modal anzeigen
