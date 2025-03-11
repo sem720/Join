@@ -12,12 +12,11 @@ body {
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
-    /* overflow: hidden; */
-    overflow: auto;
+    overflow: hidden;
 }
 
 #addTask-wrap {
-    max-height: 90vh;
+    max-height: 86vh;
     padding: 60px 60px 0 60px;
 }
 
