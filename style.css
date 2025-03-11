@@ -172,8 +172,8 @@ body {
   gap: 30px;
 }
 
-.d-none {
-  display: none;
+.d_none {
+  display: none !important;
 }
 
 /* Responsive */
