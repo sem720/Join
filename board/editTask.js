@@ -160,6 +160,80 @@ function formatDateForInput(dueDate) {
 }
 
 
+//Please remove, if you don't need it, it just handles that the input stays black and not takes placeholder color
+function editDateInput() {
+    const dateInput = document.getElementById("edit-due-date");
+    const calendarIcon = document.getElementById("edit-calendar-icon");
+  
+    if (!dateInput || !calendarIcon) return console.error("Edit date input or calendar icon not found.");
+      
+    dateInput.addEventListener("input", function () {
+      if (dateInput.value) {
+        dateInput.classList.add("has-value"); 
+      } else {
+        dateInput.classList.remove("has-value"); 
+      }
+    });
+}
+
+
+//attaching click to calendar icon
+function setupEditCalendarIcon() {
+    const dateInput = document.getElementById("edit-due-date");
+    const calendarIcon = document.getElementById("edit-calendar-icon");
+  
+    if (!dateInput || !calendarIcon) return console.error("Edit date input or calendar icon not found.");
+  
+    calendarIcon.addEventListener("click", function () {
+      if (!dateInput._flatpickr) return console.error("Flatpickr is not initialized on #edit-due-date.");
+        
+      // ✅ Toggle calendar: If open, close it; if closed, open it
+      dateInput._flatpickr.isOpen ? dateInput._flatpickr.close() : dateInput._flatpickr.open();
+    });
+}
+  
+
+//resetting the date by click on calendar-icon
+function setupEditDateReset() {
+    const dateInput = document.getElementById("edit-due-date");
+    const calendarIcon = document.getElementById("edit-calendar-icon");
+
+    if (!dateInput || !dateInput._flatpickr) return console.error("Edit date input or Flatpickr instance not found.");
+
+    calendarIcon.addEventListener("click", function () {
+        dateInput._flatpickr.clear();  // ✅ Clears the date
+    });
+}
+
+
+function handleEditCalendarClick() {
+    const calendarIcon = document.getElementById("edit-calendar-icon");
+    const dateInput = document.getElementById("edit-due-date");
+
+    if (!calendarIcon || !dateInput || !dateInput._flatpickr) return console.error("❌ Flatpickr or elements not initialized properly.");
+    
+    calendarIcon.addEventListener("click", () => {
+        console.log("Calendar icon clicked!");
+        dateInput._flatpickr.isOpen ? dateInput._flatpickr.close() : dateInput._flatpickr.open();
+    });
+}
+
+
+//to set up flatpickr and its functionality
+function initEditTaskFlatpickr() {
+    console.log("Initializing Flatpickr for edit modal...");
+    
+    // Initialize Flatpickr for edit due date
+    flatpickr("#edit-due-date", {
+        dateFormat: "d/m/Y",
+        allowInput: true,
+        placeholder: "dd/mm/yyyy"
+    });
+
+    handleEditCalendarClick();
+    setupEditDateReset();
+}
+
 
 
 
@@ -208,3 +282,5 @@ async function saveTaskChanges(event) {
         console.error("❌ Fehler beim Speichern der Änderungen:", error);
     }
 }
+
+
