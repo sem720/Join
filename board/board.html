@@ -283,12 +283,26 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
-    flatpickr("#due-date", {
-      dateFormat: "d/m/Y",
-      allowInput: true,
-      placeholder: "dd/mm/yyyy"
+    document.addEventListener("DOMContentLoaded", function () {
+      // Initialize Flatpickr for both fields
+      flatpickr("#due-date", {
+        dateFormat: "d/m/Y",
+        allowInput: true,
+        placeholder: "dd/mm/yyyy"
+      });
+  
+      flatpickr("#edit-due-date", {
+        dateFormat: "d/m/Y",
+        allowInput: true,
+        placeholder: "dd/mm/yyyy"
+      });
+  
+      // Ensure the calendar icon opens Flatpickr
+      document.getElementById("edit-calendar-icon").addEventListener("click", function () {
+        document.getElementById("edit-due-date")._flatpickr.open();
+      });
     });
-  </script>
+  </script>  
 </body>
 
 </html>
