@@ -146,6 +146,11 @@ function editTaskTempl() {
         <div class="form-content">
             <label for="edit-due-date">Due Date</label>
             <input type="text" class="edit-input-board" id="edit-due-date" placeholder="TT/MM/YYYY" required />
+            <img 
+              src="/assets/imgs/calendar.png"
+              id="edit-calendar-icon"
+              alt="Kalender Icon"
+            />
         </div>
 
         <div class="form-content">
