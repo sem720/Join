@@ -3,8 +3,7 @@
         padding: 0 !important;
         height: 88vh;
         width: 90vw;
-        overflow-y: scroll;
-        scrollbar-width: none;
+        overflow-y: hidden;
     }
 
     #modal-body {
