@@ -5,6 +5,10 @@ function createTask(event) {
     event.preventDefault();
     let taskData = getTaskFormData();
 
+    console.log("📤 Task Data Before Saving:", taskData); // Check full object
+    console.log("🟡 Task Priority:", taskData?.priority?.priorityText); // Check priority safely
+
+
     if (!validateTaskData(taskData)) return;
 
     saveTaskToFirebase(taskData)
@@ -12,34 +16,41 @@ function createTask(event) {
         .catch(error => console.error("❌ Fehler beim Speichern des Tasks: ", error));
 }
 
+
 function handleTaskCreation(event) {
     event.preventDefault(); 
   
     if (validateForm()) {
       alert("Task created!"); 
     }
-  }
+}
+
 
 function handleTaskSuccess() {
     showTaskPopup();
-    setTimeout(() => window.location.href = "/board/board.html", 1500);
+    setTimeout(() => window.location.href = "/board/board.html", 150000);
 }
 
 /** ================================
  *        FORM DATA HANDLING
  * ================================ */
 function getTaskFormData() {
+    let priority = getSelectedPriority();
+    console.log("🟡 Fixed Priority:", priority); // Now should always be an object
+
     return {
         title: getValue("#task-name"),
         description: getValue("#description"),
         assignedTo: getSelectedContacts(),
         dueDate: getValue("#due-date"),
-        priority: getSelectedPriority(),
+        priority: priority,
         category: getSelectedCategory(),
         subtasks: getSubtasks(),
         mainCategory: getMainCategory()
     };
 }
+
+
 
 
 function getMainCategory() {
@@ -87,18 +98,29 @@ function validateTaskData(taskData) {
  *        TASK PRIORITY
  * ================================ */
 function getSelectedPriority() {
-    const priorityText = document.querySelector(".btn-switch.active")?.innerText.trim() || "Medium";
-    const priorityImages = {
-        "Low": "/assets/imgs/low.png",
-        "Medium": "/assets/imgs/medium.png",
-        "Urgent": "/assets/imgs/urgent.png"
-    };
+    console.log("🔍 activeButton:", activeButton);
+
+    if (!activeButton) {
+        console.warn("⚠️ No active button found, returning default priority.");
+        return { priorityText: "Medium", priorityImage: "/assets/imgs/medium.png" };
+    }
 
     return {
-        text: priorityText,
-        image: priorityImages[priorityText] || "/assets/imgs/medium.png"
+        priorityText: activeButton.innerText.trim(), // Get text from button
+        priorityImage: getPriorityImage(activeButton.id) // Get image based on ID
     };
 }
+
+
+function getPriorityImage(priority) {
+    const priorityImages = {
+        "low": "/assets/imgs/low.png",
+        "medium": "/assets/imgs/medium.png",
+        "urgent": "/assets/imgs/urgent.png"
+    };
+    return priorityImages[priority] || "/assets/imgs/medium.png";
+}
+
 
 /** ================================
  *      CONTACT SELECTION
@@ -108,19 +130,11 @@ function getSelectedContacts() {
         .map(checkbox => {
             const name = checkbox.dataset.contactName;
             const contact = allContacts.get(name);
-
-            if (!contact) {
-                console.warn(`⚠️ Kein Kontakt gefunden für ${name}`);
-                return null;
-            }
-
-            return {
-                name,
-                avatar: generateAvatar(name, contact.bgcolor)
-            };
+            return contact ? { name, avatar: generateAvatar(name, contact.bgcolor) } : (console.warn(`⚠️ Kein Kontakt gefunden für ${name}`), null);
         })
-        .filter(contact => contact !== null);
+        .filter(contact => contact);
 }
+
 
 function generateAvatar(name, bgcolor) {
     return {
@@ -134,25 +148,18 @@ function generateAvatar(name, bgcolor) {
  * ================================ */
 function getSelectedCategory() {
     const selectedInput = document.getElementById("selected-category");
+    if (!selectedInput) return console.error("❌ Error: Could not find #selected-category input.") || "";
+       
+    let category = selectedInput.value?.trim(); 
 
-    if (!selectedInput) {
-        console.error("❌ Error: Could not find #selected-category input.");
-        return "";
-    }
-
-    let category = selectedInput.value?.trim(); // Ensure it's a string
-
-    if (!category) {
-        console.warn("⚠️ No category selected!");
-        return ""; // Prevent `undefined` errors
-    }
-
+    if (!category) return console.log("⚠️ No category selected!") || "";
+    
     console.log("✅ getSelectedCategory() returning:", category);
 
     return category.replace("_", " ") // Convert "technical_task" → "Technical Task"
-        .split(" ")
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
+                   .split(" ")
+                   .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                   .join(" ");
 }
 
 
