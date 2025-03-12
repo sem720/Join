@@ -132,7 +132,7 @@
         </main>
         
         <!-- Task Added Popup -->
-        <div id="task-added-popup" class="task-popup btn-dark" style="display: none;">
+        <div id="task-added-popup" class="task-popup btn-dark">
           Task added to board
           <img src="/assets/imgs/board-icon.svg" alt="board-icon" id="popup-icon">
         </div>
@@ -296,11 +296,7 @@
         allowInput: true,
         placeholder: "dd/mm/yyyy"
       });
-  
-      // Ensure the calendar icon opens Flatpickr
-      document.getElementById("edit-calendar-icon").addEventListener("click", function () {
-        document.getElementById("edit-due-date")._flatpickr.open();
-      });
+
     });
   </script>  
 </body>
