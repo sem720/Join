@@ -71,17 +71,36 @@
                 <div class="error-message" data-error-for="due-date" style="display: none"></div>
 
                 <label>Prio</label>
-                <div class="button-container">
-                  <button class="btn-switch" id="urgent" type="button" onclick="toggleButtons(this)">
-                    Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
-                  </button>
-                  <button class="btn-switch" id="medium" type="button" onclick="toggleButtons(this)">
-                    Medium <img src="/assets/imgs/medium.png" alt="medium-icon" />
-                  </button>
-                  <button class="btn-switch" id="low" type="button" onclick="toggleButtons(this)">
-                    Low <img src="/assets/imgs/low.png" alt="low-icon" />
-                  </button>
-                </div>
+            <div class="button-container">
+              <button
+                class="btn-switch"
+                id="urgent"
+                name="urgent"
+                type="button"
+                onclick="toggleButtons(this)"
+              >
+                Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
+              </button>
+              <button
+                class="btn-switch"
+                id="medium"
+                name="medium"
+                type="button"
+                onclick="toggleButtons(this)"
+              >
+                Medium <img src="/assets/imgs/medium.png" alt="medium-icon" />
+              </button>
+              <button
+                class="btn-switch"
+                id="low"
+                name="low"
+                type="button"
+                onclick="toggleButtons(this)"
+              >
+                Low <img src="/assets/imgs/low.png" alt="low-icon" />
+              </button>
+            </div>
+
 
                 <label id="category">Category <span class="required">*</span></label>
                 <div class="dropdown-container">
