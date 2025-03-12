@@ -85,32 +85,6 @@ function getEditedSubtasks() {
 }
 
 
-function setAssignedContacts(contacts) {
-    const container = document.getElementById("selected-contacts-container");
-    container.innerHTML = contacts.map(contact =>
-        `<div class="avatar-board-card" style="background-color: ${contact.avatar.bgcolor};">${contact.avatar.initials}</div>`
-    ).join("");
-}
-// No selected code provided, so I'll generate a code snippet that can be inserted at the cursor position.
-
-// Example of a function to handle errors in a more robust way
-function handleError(error) {
-    console.error("❌ Fehler:", error);
-    // Additional error handling logic can be added here
-}
-
-// Example of a function to update the task card
-function updateTaskCard(taskId, updatedTask) {
-    // Logic to update the task card can be added here
-    console.log(`✅ Task ${taskId} wurde erfolgreich aktualisiert.`);
-}
-
-// Example of a function to close the edit task modal
-// function closeEditTaskModal() {
-//     // Logic to close the edit task modal can be added here
-//     console.log("✅ Edit-Modal geschlossen.");
-// }
-
 // Example of a function to get the selected priority
 function getSelectedPriority() {
     const priorityButton = document.querySelector(".btn-switch.active");
@@ -180,15 +154,15 @@ function formatDateForInput(dueDate) {
 function editDateInput() {
     const dateInput = document.getElementById("edit-due-date");
     const calendarIcon = document.getElementById("edit-calendar-icon");
-  
+
     if (!dateInput || !calendarIcon) return console.error("Edit date input or calendar icon not found.");
-      
+
     dateInput.addEventListener("input", function () {
-      if (dateInput.value) {
-        dateInput.classList.add("has-value"); 
-      } else {
-        dateInput.classList.remove("has-value"); 
-      }
+        if (dateInput.value) {
+            dateInput.classList.add("has-value");
+        } else {
+            dateInput.classList.remove("has-value");
+        }
     });
 }
 
@@ -197,17 +171,17 @@ function editDateInput() {
 function setupEditCalendarIcon() {
     const dateInput = document.getElementById("edit-due-date");
     const calendarIcon = document.getElementById("edit-calendar-icon");
-  
+
     if (!dateInput || !calendarIcon) return console.error("Edit date input or calendar icon not found.");
-  
+
     calendarIcon.addEventListener("click", function () {
-      if (!dateInput._flatpickr) return console.error("Flatpickr is not initialized on #edit-due-date.");
-        
-      // ✅ Toggle calendar: If open, close it; if closed, open it
-      dateInput._flatpickr.isOpen ? dateInput._flatpickr.close() : dateInput._flatpickr.open();
+        if (!dateInput._flatpickr) return console.error("Flatpickr is not initialized on #edit-due-date.");
+
+        // ✅ Toggle calendar: If open, close it; if closed, open it
+        dateInput._flatpickr.isOpen ? dateInput._flatpickr.close() : dateInput._flatpickr.open();
     });
 }
-  
+
 
 //resetting the date by click on calendar-icon
 function setupEditDateReset() {
@@ -227,7 +201,7 @@ function handleEditCalendarClick() {
     const dateInput = document.getElementById("edit-due-date");
 
     if (!calendarIcon || !dateInput || !dateInput._flatpickr) return console.error("❌ Flatpickr or elements not initialized properly.");
-    
+
     calendarIcon.addEventListener("click", () => {
         console.log("Calendar icon clicked!");
         dateInput._flatpickr.isOpen ? dateInput._flatpickr.close() : dateInput._flatpickr.open();
@@ -238,7 +212,7 @@ function handleEditCalendarClick() {
 //to set up flatpickr and its functionality
 function initEditTaskFlatpickr() {
     console.log("Initializing Flatpickr for edit modal...");
-    
+
     // Initialize Flatpickr for edit due date
     flatpickr("#edit-due-date", {
         dateFormat: "d/m/Y",

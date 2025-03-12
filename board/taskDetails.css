@@ -352,7 +352,7 @@ li {
 }
 
 .small-button-container {
-    width: 97%;
+    width: 97% !important;
     margin-left: 4px;
 }
 
