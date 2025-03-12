@@ -35,22 +35,30 @@ function handleTaskSuccess() {
  *        FORM DATA HANDLING
  * ================================ */
 function getTaskFormData() {
-    let priority = getSelectedPriority();
-    console.log("🟡 Fixed Priority:", priority); // Now should always be an object
-
     return {
         title: getValue("#task-name"),
         description: getValue("#description"),
         assignedTo: getSelectedContacts(),
         dueDate: getValue("#due-date"),
-        priority: priority,
+        priority: getValidPriority(), // ✅ Moved logic to a separate function
         category: getSelectedCategory(),
         subtasks: getSubtasks(),
         mainCategory: getMainCategory()
     };
 }
 
+// ✅ This function ensures priority is always an object
+function getValidPriority() {
+    let priority = getSelectedPriority();
 
+    if (typeof priority !== "object") {
+        console.error("🚨 Priority was converted to a string! Fixing...");
+        priority = { priorityText: priority, priorityImage: "/assets/imgs/medium.png" };
+    }
+
+    console.log("🟡 Final Priority Object:", priority); // ✅ Debugging
+    return priority;
+}
 
 
 function getMainCategory() {
@@ -105,11 +113,15 @@ function getSelectedPriority() {
         return { priorityText: "Medium", priorityImage: "/assets/imgs/medium.png" };
     }
 
-    return {
-        priorityText: activeButton.innerText.trim(), // Get text from button
-        priorityImage: getPriorityImage(activeButton.id) // Get image based on ID
+    const priority = {
+        priorityText: activeButton.innerText.trim(), 
+        priorityImage: getPriorityImage(activeButton.id) 
     };
+
+    console.log("✅ getSelectedPriority() returning:", priority); // Check what it returns
+    return priority;
 }
+
 
 
 function getPriorityImage(priority) {
