@@ -1,3 +1,6 @@
+/**
+ * Initializes summary page by calling all display functions
+ */
 function initSum() {
   displayInfo();
   getGreeting();
@@ -10,6 +13,9 @@ function initSum() {
   getClosestDueDate();
 }
 
+/**
+ * Displays user information in header
+ */
 function displayInfo() {
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -22,6 +28,9 @@ function displayInfo() {
   }
 }
 
+/**
+ * Displays time-based greeting message
+ */
 function getGreeting() {
   const hour = new Date().getHours();
   let message;
@@ -38,6 +47,10 @@ function getGreeting() {
   document.getElementById("greeting-2").innerText = message;
 }
 
+/**
+ * Counts and displays total number of tasks
+ * @async
+ */
 async function countTasks() {
   const url =
     "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
@@ -51,6 +64,10 @@ async function countTasks() {
   }
 }
 
+/**
+ * Counts and displays number of urgent tasks
+ * @async
+ */
 async function countUrgentTasks() {
   const url =
     "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
@@ -71,6 +88,10 @@ async function countUrgentTasks() {
   }
 }
 
+/**
+ * Counts and displays number of tasks in 'To do' category
+ * @async
+ */
 async function countToDoTasks() {
   const url =
     "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
@@ -91,6 +112,10 @@ async function countToDoTasks() {
   }
 }
 
+/**
+ * Counts and displays number of tasks in 'Done' category
+ * @async
+ */
 async function countDone() {
   const url =
     "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
@@ -111,6 +136,10 @@ async function countDone() {
   }
 }
 
+/**
+ * Counts and displays number of tasks in 'In progress' category
+ * @async
+ */
 async function countProgress() {
   const url =
     "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
@@ -131,6 +160,10 @@ async function countProgress() {
   }
 }
 
+/**
+ * Counts and displays number of tasks in 'Await feedback' category
+ * @async
+ */
 async function countAwait() {
   const url =
     "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";
@@ -151,13 +184,20 @@ async function countAwait() {
   }
 }
 
-// Date function
-
+/**
+ * Parses Firebase date string into Date object
+ * @param {string} firebaseDate - Date string in "dd/mm/yyyy" format
+ * @returns {Date} Parsed Date object
+ */
 function parseFirebaseDate(firebaseDate) {
   const parts = firebaseDate.split("/");
   return new Date(parts[2], parts[1] - 1, parts[0]);
 }
 
+/**
+ * Finds and displays closest upcoming due date from tasks
+ * @async
+ */
 async function getClosestDueDate() {
   const url =
     "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json";

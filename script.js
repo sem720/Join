@@ -3,10 +3,13 @@ let logStatus;
 const dbUrl =
   "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app";
 
-// Login function
+/**
+ * Handles user login process with email and password
+ * @returns {void}
+ */
 function login() {
   if (!validateForm()) {
-    return; // break when validation is false
+    return;
   }
 
   let email = document.getElementById("Email").value.trim().toLowerCase();
@@ -34,6 +37,12 @@ function login() {
   document.getElementById("Email").value = "";
 }
 
+/**
+ * Saves user data to localStorage
+ * @param {Object} user - User object from database
+ * @param {string} email - User's email address
+ * @returns {void}
+ */
 function saveUserToLocalStorage(user, email) {
   const userData = {
     name: user.name,
@@ -43,6 +52,10 @@ function saveUserToLocalStorage(user, email) {
   localStorage.setItem("user", JSON.stringify(userData));
 }
 
+/**
+ * Handles guest login without credentials
+ * @returns {void}
+ */
 function guestLogin() {
   const guestData = {
     name: "Guest",
@@ -56,6 +69,10 @@ function guestLogin() {
   }, 500);
 }
 
+/**
+ * Checks if user is logged in and redirects if not
+ * @returns {void}
+ */
 function checkUserStatus() {
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
@@ -66,8 +83,10 @@ function checkUserStatus() {
   }
 }
 
-// form validation
-
+/**
+ * Validates login form inputs
+ * @returns {boolean} True if form is valid
+ */
 function validateForm() {
   const email = document.getElementById("Email").value.trim().toLowerCase();
   const password = document.getElementById("Password").value;
@@ -94,46 +113,21 @@ function validateForm() {
   return true;
 }
 
-// email validation
+/**
+ * Validates email format
+ * @param {string} email - Email to validate
+ * @returns {boolean} True if valid email format
+ */
 function validateEmail(email) {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailPattern.test(email);
 }
 
-//Password Input Show Password function
-
-/*
-const passwordInput = document.getElementById("Password");
-const lockIcon = document.getElementById("lock-icon");
-const eyeSlashIcon = document.getElementById("input-icon-visibility-off");
-const eyeIcon = document.getElementById("input-icon-visibility");
-
-passwordInput.addEventListener("input", () => {
-  if (passwordInput.value) {
-    lockIcon.classList.add("d_none");
-    eyeSlashIcon.classList.remove("d_none");
-  } else {
-    lockIcon.classList.remove("d_none");
-    eyeSlashIcon.classList.add("d_none");
-    eyeIcon.classList.add("d_none");
-    passwordInput.type = "password";
-  }
-});
-
-eyeSlashIcon.addEventListener("click", () => {
-  passwordInput.type = "text";
-  eyeSlashIcon.classList.add("d_none");
-  eyeIcon.classList.remove("d_none");
-});
-
-eyeIcon.addEventListener("click", () => {
-  passwordInput.type = "password";
-  eyeIcon.classList.add("d_none");
-  eyeSlashIcon.classList.remove("d_none");
-});
-
-*/
-
+/**
+ * Toggles password visibility in input field
+ * @param {string} inputId - ID of password input element
+ * @returns {void}
+ */
 function setupPasswordToggle(inputId) {
   const passwordInput = document.getElementById(inputId);
   const container = passwordInput.parentElement;

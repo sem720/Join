@@ -1,17 +1,21 @@
 const dbUrl =
   "https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app";
 
-// Add User function
+/**
+ * Adds a new user to the database and creates associated contact
+ * @async
+ * @throws {Error} When database operations fail
+ */
 async function addUser() {
   if (!validateForm()) return;
 
-  let { email, password, name, phone } = getUserInput();
-  let userData = prepareUserData(name, email, password);
-  let firebaseKey = formatFirebaseKey(email);
+  const { email, password, name, phone } = getUserInput();
+  const userData = prepareUserData(name, email, password);
+  const firebaseKey = formatFirebaseKey(email);
 
   try {
     await saveUser(firebaseKey, userData);
-    let contactId = await saveContact(name, email, phone, userData.bgcolor);
+    const contactId = await saveContact(name, email, phone, userData.bgcolor);
     await updateContact(contactId, name, email, phone, userData.bgcolor);
     finalizeSignup();
   } catch (error) {
@@ -19,6 +23,10 @@ async function addUser() {
   }
 }
 
+/**
+ * Extracts user input values from form fields
+ * @returns {Object} User input values
+ */
 function getUserInput() {
   return {
     email: document.getElementById("idEmail").value.trim().toLowerCase(),
@@ -28,14 +36,31 @@ function getUserInput() {
   };
 }
 
+/**
+ * Creates user data object with random background color
+ * @param {string} name - User name
+ * @param {string} email - User email
+ * @param {string} password - User password
+ * @returns {Object} Prepared user data
+ */
 function prepareUserData(name, email, password) {
   return { name, email, password, bgcolor: getRandomColor() };
 }
 
+/**
+ * Formats email for Firebase key
+ * @param {string} email - User email
+ * @returns {string} Formatted Firebase key
+ */
 function formatFirebaseKey(email) {
   return email.replace(/\./g, "_").replace(/@/g, "-");
 }
 
+/**
+ * Saves user data to Firebase
+ * @param {string} firebaseKey - Formatted Firebase key
+ * @param {Object} userData - User data to save
+ */
 async function saveUser(firebaseKey, userData) {
   await fetch(`${dbUrl}/users/${firebaseKey}.json`, {
     method: "PUT",
@@ -44,8 +69,16 @@ async function saveUser(firebaseKey, userData) {
   });
 }
 
+/**
+ * Saves new contact to Firebase
+ * @param {string} name - Contact name
+ * @param {string} email - Contact email
+ * @param {string} phone - Contact phone
+ * @param {string} bgcolor - Background color
+ * @returns {Promise<string>} Contact ID
+ */
 async function saveContact(name, email, phone, bgcolor) {
-  let response = await fetch(`${dbUrl}/contacts.json`, {
+  const response = await fetch(`${dbUrl}/contacts.json`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -56,10 +89,18 @@ async function saveContact(name, email, phone, bgcolor) {
       initials: getInitials(name),
     }),
   });
-  let responseData = await response.json();
+  const responseData = await response.json();
   return responseData.name;
 }
 
+/**
+ * Updates existing contact in Firebase
+ * @param {string} contactId - Contact ID to update
+ * @param {string} name - Contact name
+ * @param {string} email - Contact email
+ * @param {string} phone - Contact phone
+ * @param {string} bgcolor - Background color
+ */
 async function updateContact(contactId, name, email, phone, bgcolor) {
   await fetch(`${dbUrl}/contacts/${contactId}.json`, {
     method: "PUT",
@@ -73,152 +114,195 @@ async function updateContact(contactId, name, email, phone, bgcolor) {
       initials: getInitials(name),
     }),
   });
-  console.log("✅ Neuer Kontakt mit Initialen gespeichert:", {
-    id: contactId,
-    name,
-    email,
-    tel: phone,
-    bgcolor,
-  });
 }
 
+/**
+ * Finalizes signup process with animation and redirect
+ */
 function finalizeSignup() {
   document.getElementById("sign-up-alert").classList.add("anim-sign-up");
   resetForm();
   setTimeout(() => (window.location.href = "../index.html"), 1500);
 }
 
-// Reset-Formular nach Registrierung
-function resetForm() {
-  document.getElementById("idName").value = "";
-  document.getElementById("idEmail").value = "";
-  document.getElementById("idPassword").value = "";
-  document.getElementById("idPasswordCon").value = "";
-  document.getElementById("idPolicy").checked = false;
-  if (document.getElementById("idPhone")) {
-    document.getElementById("idPhone").value = "";
-  }
-}
-
-// Zufällige Farbe für Kontakte generieren
-function getRandomColor() {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
-
-function getInitials(name) {
-  if (!name || typeof name !== "string") {
-    return "??"; // Falls Name fehlt, Notfallinitialen setzen
-  }
-  const nameParts = name.trim().split(/\s+/);
-  if (nameParts.length > 1) {
-    return (nameParts[0][0] + nameParts[1][0]).toUpperCase();
-  } else {
-    return nameParts[0][0].toUpperCase();
-  }
-}
-
-function resetForm() {
-  document.getElementById("idName").value = "";
-  document.getElementById("idEmail").value = "";
-  document.getElementById("idPassword").value = "";
-  document.getElementById("idPasswordCon").value = "";
-  document.getElementById("idPolicy").checked = false;
-}
-
-function getRandomColor() {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
-
-// form validation
+/**
+ * Validates form inputs and shows error messages
+ * @returns {boolean} True if form is valid
+ */
 function validateForm() {
-  const name = document.getElementById("idName").value.trim().toLowerCase();
-  const email = document.getElementById("idEmail").value.trim().toLowerCase();
-  const password = document.getElementById("idPassword").value;
-  const confirmPassword = document.getElementById("idPasswordCon").value;
-  const checkPolicy = document.getElementById("idPolicy").checked;
+  const formData = getFormInputValues();
+  const error = validateFormInputs(formData);
+  return handleValidationResult(error);
+}
 
-  let error = "";
-  switch (true) {
-    case !name:
-      error = "Please enter your name";
-      break;
-    case !email:
-      error = "Please enter your email address";
-      break;
-    case !validateEmail(email):
-      error = "Please enter a valid email address";
-      break;
-    case !password:
-      error = "Please enter a password";
-      break;
-    case !confirmPassword:
-      error = "Please confirm your password";
-      break;
-    case password !== confirmPassword:
-      error = "The passwords do not match.";
-      break;
-    case !checkPolicy:
-      error = "Please accept the Privacy policy";
-      break;
-  }
+/**
+ * Extracts form input values
+ * @returns {Object} Form input values
+ */
+function getFormInputValues() {
+  return {
+    name: document.getElementById("idName").value.trim().toLowerCase(),
+    email: document.getElementById("idEmail").value.trim().toLowerCase(),
+    password: document.getElementById("idPassword").value,
+    confirmPassword: document.getElementById("idPasswordCon").value,
+    checkPolicy: document.getElementById("idPolicy").checked,
+  };
+}
 
+/**
+ * Validates form inputs and returns error message
+ * @param {Object} formData - Form input values
+ * @returns {string} Error message or empty string
+ */
+function validateFormInputs({
+  name,
+  email,
+  password,
+  confirmPassword,
+  checkPolicy,
+}) {
+  if (!name) return "Please enter your name";
+  if (!email) return "Please enter your email address";
+  if (!validateEmail(email)) return "Please enter a valid email address";
+  if (!password) return "Please enter a password";
+  if (!confirmPassword) return "Please confirm your password";
+  if (password !== confirmPassword) return "The passwords do not match.";
+  if (!checkPolicy) return "Please accept the Privacy policy";
+  return "";
+}
+
+/**
+ * Handles validation result by showing errors
+ * @param {string} error - Error message
+ * @returns {boolean} True if validation passed
+ */
+function handleValidationResult(error) {
   if (error) {
     document.getElementById("render-alert").innerHTML = error;
     return false;
   }
-
   return true;
 }
 
-// email validation
+/**
+ * Validates email format
+ * @param {string} email - Email to validate
+ * @returns {boolean} True if email is valid
+ */
 function validateEmail(email) {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailPattern.test(email);
 }
 
-//Password Input Show Password function
+/**
+ * Generates a random hex color
+ * @returns {string} Random hex color code
+ */
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
+/**
+ * Creates initials from name
+ * @param {string} name - Full name
+ * @returns {string} Initials (2 characters)
+ */
+function getInitials(name) {
+  if (!name || typeof name !== "string") return "??";
+  const nameParts = name.trim().split(/\s+/);
+  return nameParts.length > 1
+    ? (nameParts[0][0] + nameParts[1][0]).toUpperCase()
+    : nameParts[0][0].toUpperCase();
+}
+
+/**
+ * Resets form fields to initial state
+ */
+function resetForm() {
+  const fields = [
+    "idName",
+    "idEmail",
+    "idPassword",
+    "idPasswordCon",
+    "idPhone",
+  ];
+  fields.forEach((id) => {
+    const element = document.getElementById(id);
+    if (element) element.value = "";
+  });
+  document.getElementById("idPolicy").checked = false;
+}
+
+/**
+ * Sets up password visibility toggle
+ * @param {string} inputId - ID of password input field
+ */
 function setupPasswordToggle(inputId) {
+  const elements = getPasswordToggleElements(inputId);
+  initializePasswordInput(elements);
+  setupToggleListeners(elements);
+}
+
+/**
+ * Gets all password toggle elements
+ * @param {string} inputId - Password input ID
+ * @returns {Object} Password toggle elements
+ */
+function getPasswordToggleElements(inputId) {
   const passwordInput = document.getElementById(inputId);
   const container = passwordInput.parentElement;
-  const lockIcon = container.querySelector(".lock-icon");
-  const eyeSlashIcon = container.querySelector(".eye-icon");
-  const eyeIcon = container.querySelector(".eye-slash-icon");
+  return {
+    input: passwordInput,
+    lock: container.querySelector(".lock-icon"),
+    eyeSlash: container.querySelector(".eye-icon"),
+    eye: container.querySelector(".eye-slash-icon"),
+  };
+}
 
-  passwordInput.addEventListener("input", () => {
-    if (passwordInput.value) {
-      lockIcon.classList.add("d_none");
-      eyeSlashIcon.classList.remove("d_none");
-    } else {
-      lockIcon.classList.remove("d_none");
-      eyeSlashIcon.classList.add("d_none");
-      eyeIcon.classList.add("d_none");
-      passwordInput.type = "password";
-    }
-  });
-
-  eyeSlashIcon.addEventListener("click", () => {
-    passwordInput.type = "text";
-    eyeSlashIcon.classList.add("d_none");
-    eyeIcon.classList.remove("d_none");
-  });
-
-  eyeIcon.addEventListener("click", () => {
-    passwordInput.type = "password";
-    eyeIcon.classList.add("d_none");
-    eyeSlashIcon.classList.remove("d_none");
+/**
+ * Initializes password input behavior
+ * @param {Object} elements - Password toggle elements
+ */
+function initializePasswordInput({ input, lock, eyeSlash }) {
+  input.addEventListener("input", () => {
+    const hasValue = !!input.value;
+    lock.classList.toggle("d_none", hasValue);
+    eyeSlash.classList.toggle("d_none", !hasValue);
+    if (!hasValue) input.type = "password";
   });
 }
 
+/**
+ * Sets up toggle listeners for password visibility
+ * @param {Object} elements - Password toggle elements
+ */
+function setupToggleListeners({ input, eyeSlash, eye }) {
+  eyeSlash.addEventListener("click", () =>
+    togglePasswordVisibility(input, eyeSlash, eye, true)
+  );
+  eye.addEventListener("click", () =>
+    togglePasswordVisibility(input, eyeSlash, eye, false)
+  );
+}
+
+/**
+ * Toggles password visibility
+ * @param {HTMLElement} input - Password input field
+ * @param {HTMLElement} eyeSlash - Eye slash icon
+ * @param {HTMLElement} eye - Eye icon
+ * @param {boolean} show - Whether to show password
+ */
+function togglePasswordVisibility(input, eyeSlash, eye, show) {
+  input.type = show ? "text" : "password";
+  eyeSlash.classList.toggle("d_none", show);
+  eye.classList.toggle("d_none", !show);
+}
+
+// Initialisierung
 setupPasswordToggle("idPassword");
 setupPasswordToggle("idPasswordCon");
