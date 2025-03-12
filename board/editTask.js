@@ -113,10 +113,26 @@ function updateTaskCard(taskId, updatedTask) {
 
 // Example of a function to get the selected priority
 function getSelectedPriority() {
-    // Logic to get the selected priority can be added here
-    const priority = document.querySelector(".btn-switch.active");
-    return priority ? priority.id : null;
+    const priorityButton = document.querySelector(".btn-switch.active");
+
+    if (!priorityButton) {
+        console.warn("⚠️ No active priority button found, using default.");
+        return { priorityText: "Medium", priorityImage: "/assets/imgs/medium.png" };
+    }
+
+    const priorityText = priorityButton.innerText.trim();
+    const priorityImages = {
+        "Low": "/assets/imgs/low.png",
+        "Medium": "/assets/imgs/medium.png",
+        "Urgent": "/assets/imgs/urgent.png"
+    };
+
+    return {
+        priorityText,
+        priorityImage: priorityImages[priorityText] || "/assets/imgs/medium.png"
+    };
 }
+
 
 function showEditConfirmation() {
     const confirmationDiv = document.createElement("div");
