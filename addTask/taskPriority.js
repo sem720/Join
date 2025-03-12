@@ -19,7 +19,10 @@ function toggleButtons(clickedButton) {
     
     activateButton(clickedButton);
     activeButton = clickedButton;
+
+    console.log("✅ New activeButton:", activeButton); // Debugging
 }
+
 
 /**
  * Activates the provided button by adding the 'active' class and applying the appropriate styles.
@@ -61,6 +64,7 @@ function changeButtonStyle(button, action) {
     
     button.style.backgroundColor = action === 'add' ? color : '';
     button.style.color = action === 'add' ? 'white' : '';
+
 }
 
 /**
