@@ -398,3 +398,5 @@ document.getElementById("taskDetailOverlay").addEventListener("click", (event) =
         closeEditTaskModal();
     }
 });
+
+document.addEventListener("DOMContentLoaded", setupCalendarIcon);
