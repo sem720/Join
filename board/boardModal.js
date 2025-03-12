@@ -14,7 +14,12 @@ async function openAddTaskModal() {
     });
     
     await fetchAndRenderContacts();
+    
     initOutsideClick();
+    setupPriorityButtons();
+
+
+    console.log("✅ Modal opened, priority buttons initialized.");
 }
 
 
@@ -33,8 +38,8 @@ function closeModal() {
 document.addEventListener("DOMContentLoaded", function () {
     renderContactsList();
     setupAddSubtaskButton();
-    initialDefaultPriority();
     init();
+   
 
 });
 
@@ -51,6 +56,31 @@ function initOutsideClick() {
         }
     });
 }
+
+
+function showTaskPopup() {
+    let popup = document.getElementById("task-added-popup");
+    popup.classList.add("show");
+
+    setTimeout(() => window.location.href = "/board/board.html", 1500);
+}
+
+
+function setupPriorityButtons() {
+    document.querySelectorAll(".modal .btn-switch").forEach(button => {
+        button.addEventListener("click", () => {
+            document.querySelectorAll(".modal .btn-switch").forEach(btn => btn.classList.remove("active"));
+            button.classList.add("active");
+
+            // ✅ Update the global activeButton
+            activeButton = button;
+            console.log("🔴 Updated activeButton:", activeButton);
+        });
+    });
+}
+
+
+
 
 
 
