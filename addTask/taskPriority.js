@@ -43,6 +43,7 @@ function deactivateButton(button) {
     changeImageStyle(button, 'remove');
 }
 
+
 /**
  * Changes the background color and text color of the button based on its ID.
  * 
@@ -58,13 +59,8 @@ function changeButtonStyle(button, action) {
   
     const color = colorMap[button.id] || '';
     
-    if (action === 'add') {
-        button.style.backgroundColor = color;
-        button.style.color = 'white';
-    } else if (action === 'remove') {
-        button.style.backgroundColor = '';
-        button.style.color = '';
-    }
+    button.style.backgroundColor = action === 'add' ? color : '';
+    button.style.color = action === 'add' ? 'white' : '';
 }
 
 /**
