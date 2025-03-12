@@ -18,6 +18,7 @@ function dateInput() {
     });
 }
 
+
 function setupCalendarIcon() {
   const dateInput = document.getElementById("due-date");
   const calendarIcon = document.getElementById("calendar-icon");
@@ -28,9 +29,7 @@ function setupCalendarIcon() {
     calendarIcon.addEventListener("click", function () {
         dateInput._flatpickr.open(); // Open Flatpickr when the icon is clicked
     });
-  } else {
-    console.error("Flatpickr is not initialized on #due-date.");
-  }
+  } 
 }
 
 
