@@ -41,11 +41,17 @@ function handleKeydownOutsideAssignment(event) {
  */
 
 
-function toggleContacts(event) {
+function toggleContacts(event, containerId, listId, selectedContainerId) {
     event.preventDefault();
     
+    const contactsContainer = document.getElementById(containerId);
+    const contactsList = document.getElementById(listId);
+
+    if (!contactsContainer || !contactsList) return console.error(`❌ Missing container: ${containerId} or ${listId}`);
     const isOpen = contactsContainer.classList.contains("visible");
-    isOpen ? closeContacts() : openContacts();
+    
+    isOpen ? closeContacts(containerId, listId) : (openContacts(containerId, listId, selectedContainerId), renderContactsList(listId));
+
 }
 
 
@@ -73,7 +79,7 @@ function closeOnOutsideClick(event) {
     const assignmentContainer = document.querySelector(".assignment-container");
 
     if (!assignmentContainer.contains(event.target)) {
-        closeContacts();
+        closeContacts("contacts-container", "contacts-list");
         updateDropdownIcon(false);
     }
 }
@@ -95,39 +101,46 @@ function updateDropdownIcon(isOpen) {
  * Opens the contacts list by adding the "visible" class and removing the "hidden" class.
  * It also updates the dropdown icon and manages outside click behavior.
  */
-function openContacts() {
-    const contactsContainer = document.getElementById('contacts-container');
-    const contactsList = document.getElementById("contacts-list");
+function openContacts(containerId, listId, selectedContainerId) {
+    const contactsContainer = document.getElementById(containerId);
+    const contactsList = document.getElementById(listId);
 
     contactsContainer.classList.add("visible");
     contactsContainer.classList.remove("hidden");
-
     contactsList.classList.add("visible");
     contactsList.classList.remove("hidden");
 
     updateDropdownIcon(true);
-    manageOutsideClick(true);
-    updateSelectedContactsDisplay(); // Aktiviert das Schließen bei Klick außerhalb
+    manageOutsideClick(true, containerId);
+    updateSelectedContactsDisplay(selectedContainerId);
+
+    fetchAndRenderContacts(listId);
+    updateSelectedContactsDisplay(selectedContainerId);
 }
+
 
 
 /**
  * Closes the contacts list by adding the "hidden" class and removing the "visible" class.
  * It also updates the dropdown icon and disables outside click behavior.
  */
-function closeContacts() {
-    const contactsContainer = document.getElementById('contacts-container');
-    const contactsList = document.getElementById("contacts-list");
+function closeContacts(containerId, listId) {
+    const contactsContainer = document.getElementById(containerId);
+    const contactsList = document.getElementById(listId);
+
+    if (!contactsContainer || !contactsList) {
+        console.error(`❌ Contacts container (${containerId}) or list (${listId}) not found!`);
+        return;
+    }
 
     contactsContainer.classList.add("hidden");
     contactsContainer.classList.remove("visible");
-
     contactsList.classList.add("hidden");
     contactsList.classList.remove("visible");
 
     updateDropdownIcon(false);
-    manageOutsideClick(false);
-    updateSelectedContactsDisplay(); // Deaktiviert das Schließen bei Klick außerhalb
+    manageOutsideClick(false, containerId);
+
 }
 
 
@@ -136,7 +149,7 @@ function closeContacts() {
  * 
  * @throws {Error} Throws an error if the HTTP request fails or the data is invalid.
  */
-async function fetchAndRenderContacts() {
+async function fetchAndRenderContacts(listId) {
     const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
     if (!response.ok) return console.error(`HTTP error! Status: ${response.status}`);
     
@@ -144,7 +157,7 @@ async function fetchAndRenderContacts() {
     if (!data) return console.error("Keine Nutzerdaten gefunden.");
 
     processContactsData(data); 
-    await renderContactsList();
+    await renderContactsList(listId);
 }
 
 
@@ -166,8 +179,12 @@ function processContactsData(data) {
 /**
  * Renders the list of contacts in the contacts container by creating HTML elements for each contact.
  */
-async function renderContactsList() {
-    const contactsList = document.getElementById('contacts-list');
+async function renderContactsList(targetListId) {
+    const contactsList = document.getElementById(targetListId);
+    if (!contactsList) {
+        console.error(`❌ Target contacts list not found: ${targetListId}`);
+        return;
+    }
     contactsList.innerHTML = '';
 
     allContacts.forEach(({ name, bgcolor }) => {
@@ -184,31 +201,46 @@ async function renderContactsList() {
  * @returns {HTMLElement} The contact element.
  */
 function createContactElement(name, bgcolor) {
-    const contactDiv = createElement("div", "contact-item");
-    const nameSpan = createElement("span", "contact-name", name);
+    console.log(`Creating contact: ${name}`); // Debug log
+
+    const contactDiv = document.createElement("div");
+    contactDiv.classList.add("contact-item");
+
+    const nameSpan = document.createElement("span");
+    nameSpan.classList.add("contact-name");
+    nameSpan.textContent = name;
+
     const checkbox = createCheckbox(name);
 
-    contactDiv.appendChild(createAvatar(name, bgcolor)); 
-    contactDiv.appendChild(nameSpan); 
-    contactDiv.appendChild(checkbox); 
+    contactDiv.appendChild(createAvatar(name, bgcolor));
+    contactDiv.appendChild(nameSpan);
+    contactDiv.appendChild(checkbox);
 
     contactDiv.addEventListener("click", () => handleContactClick(contactDiv));
 
-    return contactDiv; 
+    return contactDiv;
 }
+
 
 
 /**
  * Updates the display of selected contacts in the selected contacts container.
  */
-function updateSelectedContactsDisplay() {
-    selectedContactsContainer.innerHTML = ""; 
+function updateSelectedContactsDisplay(selectedContainerId) {
+    const selectedContainer = document.getElementById(selectedContainerId);
+    if (!selectedContainer) {
+        console.error(`❌ Selected contacts container not found: ${selectedContainerId}`);
+        return;
+    }
+
+    console.log("Selected Container ID:", selectedContainerId);
+    console.log("Selected Container:", selectedContainer);
+    selectedContainer.innerHTML = "";
 
     selectedContacts.forEach(({ name, bgcolor }) => {
         const avatar = createAvatar(name, bgcolor);
-        selectedContactsContainer.appendChild(avatar);
+        selectedContainer.appendChild(avatar);
     });
-    
 }
 
 
@@ -219,16 +251,23 @@ function updateSelectedContactsDisplay() {
  * @param {boolean} isChecked - The new selection state of the contact (true if selected, false if deselected).
  */
 function toggleContactSelection(name, isChecked) {
+    console.log(`Toggling contact: ${name}, Checked: ${isChecked}`);
     const contact = allContacts.get(name);
-    if (!contact) return;
+
+    if (!contact) {
+        console.error(`❌ Contact not found in allContacts: ${name}`);
+        return;
+    }
 
     if (isChecked) {
         selectedContacts.add(contact);
     } else {
         selectedContacts.delete(contact);
     }
-    
-    updateSelectedContactsDisplay();
+
+    console.log("Updated selected contacts:", [...selectedContacts]);
+
+    updateSelectedContactsDisplay("selected-contacts-container"); // Ensure correct ID
 }
 
 
