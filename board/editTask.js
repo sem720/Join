@@ -2,12 +2,12 @@
 // editTask.js - setEditPriority()
 function setEditPriority(priority) {
     setTimeout(() => {
-        if (!priority || !priority.text) {
+        if (!priority || !priority.priorityText) {
             console.warn("⚠️ Keine gültige Priorität gefunden.");
             return;
         }
 
-        const priorityText = priority.text.toLowerCase().trim(); // "urgent", "medium", "low"
+        const priorityText = priority.priorityText.toLowerCase().trim(); // "urgent", "medium", "low"
         const buttonId = `edit-${priorityText}`; // 🔴 Neue ID: edit-urgent, edit-medium, edit-low
 
         // Alle Buttons im Modal zurücksetzen

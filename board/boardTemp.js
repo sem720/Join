@@ -7,8 +7,8 @@
  * @param {Array} task.subtasks - A list of subtasks.
  * @param {Array} task.assignedTo - A list of assigned users.
  * @param {Object} task.priority - The priority object of the task.
- * @param {string} task.priority.text - The priority text.
- * @param {string} task.priority.image - The priority image.
+ * @param {string} task.priority.priorityText - The priority text.
+ * @param {string} task.priority.priorityImage - The priority image.
  * @returns {string} - The HTML template for the task card.
  */
 function taskCardTemplate(task) {
@@ -70,8 +70,8 @@ function generateSubtasksTemplate(task) {
  * @param {string} task.description - The description of the task.
  * @param {string} task.dueDate - The due date of the task.
  * @param {Object} task.priority - The priority object of the task.
- * @param {string} task.priority.text - The priority text.
- * @param {string} task.priority.image - The priority image.
+ * @param {string} task.priority.priorityText - The priority text.
+ * @param {string} task.priority.priorityImage - The priority image.
  * @param {Array} task.assignedTo - A list of assigned users.
  * @param {Array} task.subtasks - A list of subtasks.
  * @param {string} subtasksHTML - The HTML template for the subtasks.
@@ -89,8 +89,8 @@ function taskDetailTemplate(task, subtasksHTML) {
         <h2 class="task-detail-title">${task.title}</h2>
         <p class="task-detail-content">${task.description}</p>
         <p><strong style="padding-right: 16px;">Due date:</strong> ${formatDate(task.dueDate)}</p>
-        <p><strong style="padding-right: 16px;">Priority:</strong> ${task.priority.text} 
-            <img src="${task.priority?.image || ''}" alt="${task.priority?.text || ''}" class="prio-icon">
+        <p><strong style="padding-right: 16px;">Priority:</strong> ${task.priority.priorityText} 
+            <img src="${task.priority?.priorityImage || ''}" alt="${task.priority?.text || ''}" class="prio-icon">
         </p>
         <p style="padding-bottom: 0;"><strong>Assigned To:</strong></p>
         <ul>
@@ -147,9 +147,9 @@ function editTaskTempl() {
             <label for="edit-due-date">Due Date</label>
             <input type="text" class="edit-input-board" id="edit-due-date" placeholder="TT/MM/YYYY" required />
             <img 
-              src="/assets/imgs/calendar.png"
-              id="edit-calendar-icon"
-              alt="Kalender Icon"
+                src="/assets/imgs/calendar.png"
+                id="edit-calendar-icon"
+                alt="Kalender Icon"
             />
         </div>
 
@@ -177,17 +177,17 @@ function editTaskTempl() {
                 <button type="button" class="assignment-btn" id="toggle-contacts-btn" onclick="toggleContacts(event, 'edit-contacts-container', 'edit-contacts-list', 'edit-selected-contacts-container')">
                     Select contacts to assign
                 <span class="icon-container">
-                  <img
+                    <img
                     src="/assets/imgs/dropdown-black.png"
                     alt="Dropdown Icon"
                     id="dropdown-icon"
-                  />
+                    />
                 </span>
                 </button>
                 <div id="edit-selected-contacts-container"></div>
                 <div id="edit-contacts-container" class="hidden">
                 <div id="edit-contacts-list"></div>
-              </div>
+                </div>
             </div>
         </div>
 
