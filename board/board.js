@@ -32,7 +32,7 @@ async function fetchTasks() {
 }
 
 
-async function updateMainCategoryInBackend(taskId, newCategory) {
+/*async function updateMainCategoryInBackend(taskId, newCategory) {
     try {
         await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
             method: "PATCH",
@@ -45,7 +45,7 @@ async function updateMainCategoryInBackend(taskId, newCategory) {
     } catch (error) {
         console.error(`❌ Fehler beim Aktualisieren der mainCategory für Task ${taskId}:`, error);
     }
-}
+}*/
 
 
 
