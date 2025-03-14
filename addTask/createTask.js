@@ -62,7 +62,7 @@ function getValidPriority() {
 
 
 function getMainCategory() {
-    return "to Do";
+    return "To do";
 }
 
 
