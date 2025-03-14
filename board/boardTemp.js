@@ -174,7 +174,7 @@ function editTaskTempl() {
         <div class="form-content">
             <label>Assigned to</label>
             <div class="edit-assignment-container">
-                <button type="button" class="assignment-btn" id="toggle-contacts-btn" onclick="toggleEditContacts(this)">
+                <button type="button" class="assignment-btn" id="toggle-contacts-btn" onclick="toggleContacts(event, 'edit-contacts-container', 'edit-contacts-list', 'edit-selected-contacts-container')">
                     Select contacts to assign
                 <span class="icon-container">
                   <img
