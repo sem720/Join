@@ -1,70 +1,64 @@
+/**
+ * Initializes the task detail overlay and close button event listeners.
+ */
 function initTaskDetailOverlay() {
     const overlay = document.getElementById("taskDetailOverlay");
     const closeBtn = document.getElementById("closeTaskDetail");
-
-    if (closeBtn) {
-        closeBtn.addEventListener("click", closeTaskDetailModal);
-    }
-
-    if (overlay) {
-        overlay.addEventListener("click", (e) => {
-            if (e.target === overlay) {
-                closeTaskDetailModal();
-            }
-        });
-    }
+    closeBtn?.addEventListener("click", closeTaskDetailModal);
+    overlay?.addEventListener("click", (e) => e.target === overlay && closeTaskDetailModal());
 }
 
 
+/**
+ * Formats a date string to ensure it follows the DD/MM/YYYY format.
+ * @param {string} dueDate - The due date string to format.
+ * @returns {string} The formatted date string or an error message if invalid.
+ */
 function formatDate(dueDate) {
-    if (!dueDate) return "Kein Datum";
-
-    // Prüfen, ob das Datum im Format TT/MM/YYYY (Backend) vorliegt
-    const dateParts = dueDate.split("/"); // Teilt das Datum in [TT, MM, YYYY]
-
-    if (dateParts.length !== 3) return "Ungültiges Datum";
-
-    const day = dateParts[0];
-    const month = dateParts[1];
-    const year = dateParts[2];
-
-    return `${day}/${month}/${year}`; // TT/MM/YYYY Format beibehalten
+    if (!dueDate) return "No date";
+    const dateParts = dueDate.split("/"); // Splits the date into [DD, MM, YYYY]
+    if (dateParts.length !== 3) return "Invalid date";
+    return `${dateParts[0]}/${dateParts[1]}/${dateParts[2]}`; // Keeps DD/MM/YYYY format
 }
 
 
+/**
+ * Opens the task detail modal and displays task information.
+ * @param {Object} task - The task object containing details.
+ */
 function openTaskDetailModal(task) {
     if (!task) {
-        console.error("Keine Task-Daten vorhanden!");
+        console.error("No task data available!");
         return;
     }
-
     const overlay = document.getElementById("taskDetailOverlay");
     const taskDetailContent = document.getElementById("taskDetailContent");
-
     let subtasksHTML = generateSubtasks(task);
-
     taskDetailContent.innerHTML = taskDetailTemplate(task, subtasksHTML);
-
     overlay.classList.add("active");
 }
 
 
+/**
+ * Closes the task detail modal or the edit task modal if open.
+ */
 function closeTaskDetailModal() {
     const overlay = document.getElementById("taskDetailOverlay");
     const taskDetailModal = document.getElementById("taskDetailModal");
     const editTaskModal = document.getElementById("editTaskModal");
-
-    // Falls das Edit-Modal offen ist, schließe nur dieses
-    if (!editTaskModal.classList.contains("hidden")) {
-        closeEditTaskModal();
-        return;
-    }
-
-    // Overlay und Task-Detail schließen
+    if (!editTaskModal.classList.contains("hidden")) return closeEditTaskModal();
     overlay.classList.remove("active");
     taskDetailModal.classList.add("hidden");
+    ensureTaskDetailVisibility(overlay, taskDetailModal);
+}
 
-    // WICHTIG: Nach dem Schließen sicherstellen, dass `taskDetailModal` wieder sichtbar ist, falls Overlay nicht aktiv ist
+
+/**
+ * Ensures the task detail modal visibility after closing.
+ * @param {HTMLElement} overlay - The task detail overlay element.
+ * @param {HTMLElement} taskDetailModal - The task detail modal element.
+ */
+function ensureTaskDetailVisibility(overlay, taskDetailModal) {
     setTimeout(() => {
         if (!overlay.classList.contains("active")) {
             taskDetailModal.classList.remove("hidden");
@@ -72,170 +66,176 @@ function closeTaskDetailModal() {
     }, 300);
 }
 
+
+/**
+ * Opens the edit task modal by fetching task data and populating the fields.
+ * @param {string} taskId - The ID of the task to edit.
+ */
 async function openEditTaskModal(taskId) {
     try {
-        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
-        const taskData = await response.json();
-
-        if (!taskData) {
-            throw new Error("❌ Keine Task-Daten gefunden!");
-        }
-
-        // 🟢 TaskDetailModal verstecken
-        document.getElementById("taskDetailModal").classList.add("hidden");
-
-        // 🟢 Lade das Template in das Modal
-        const modalContent = document.getElementById("edit-modal-content");
-        modalContent.innerHTML = editTaskTempl();
-
-        // 🟢 Sicherstellen, dass die Elemente existieren
-        setTimeout(() => {
-            const titleField = document.getElementById("edit-task-title");
-            const descField = document.getElementById("edit-task-description");
-            const dateField = document.getElementById("edit-due-date");
-
-            if (!titleField || !descField || !dateField) {
-                throw new Error("❌ Edit Task Modal Elemente fehlen im HTML!");
-            }
-
-            // 🟢 Felder mit Task-Daten befüllen
-            titleField.value = taskData.title || "";
-            descField.value = taskData.description || "";
-            dateField.value = formatDateForInput(taskData.dueDate);
-
-            // 🟢 Priorität setzen (richtigen Button aktivieren & stylen)
-            setEditPriority(taskData.priority); // Hier wird die Priorität gesetzt
-
-            // 🟢 Kontakte & Subtasks setzen
-            setEditAssignedContacts(taskData.assignedTo || []);
-            setEditSubtasks(taskData.subtasks || []);
-
-            initEditTaskFlatpickr();
-          
-        }, 10); // ⏳ Warten, bis das HTML geladen ist
-
-        // 🟢 Edit Task Modal anzeigen
+        const taskData = await fetchTaskData(taskId);
+        if (!taskData) throw new Error("❌ No task data found!");
+        hideTaskDetailModal();
+        loadEditTaskTemplate();
+        populateEditTaskFields(taskData);
         document.getElementById("editTaskModal").classList.remove("hidden");
-
     } catch (error) {
-        console.error("❌ Fehler beim Laden der Task-Daten:", error);
+        console.error("❌ Error loading task data:", error);
     }
 }
 
 
+/**
+ * Fetches task data from the database.
+ * @param {string} taskId - The ID of the task.
+ * @returns {Promise<Object>} The fetched task data.
+ */
+async function fetchTaskData(taskId) {
+    const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
+    return response.json();
+}
+
+
+/**
+ * Hides the task detail modal.
+ */
+function hideTaskDetailModal() {
+    document.getElementById("taskDetailModal").classList.add("hidden");
+}
+
+
+/**
+ * Loads the edit task template into the modal.
+ */
+function loadEditTaskTemplate() {
+    document.getElementById("edit-modal-content").innerHTML = editTaskTempl();
+}
+
+
+/**
+ * Populates the edit task modal fields with task data.
+ * @param {Object} taskData - The task data to populate.
+ */
+function populateEditTaskFields(taskData) {
+    setTimeout(() => {
+        const titleField = document.getElementById("edit-task-title");
+        const descField = document.getElementById("edit-task-description");
+        const dateField = document.getElementById("edit-due-date");
+        if (!titleField || !descField || !dateField) {
+            throw new Error("❌ Edit Task Modal elements missing in HTML!");
+        }
+        titleField.value = taskData.title || "";
+        descField.value = taskData.description || "";
+        dateField.value = formatDateForInput(taskData.dueDate);
+        setEditPriority(taskData.priority);
+        setEditAssignedContacts(taskData.assignedTo || []);
+        setEditSubtasks(taskData.subtasks || []);
+        initEditTaskFlatpickr();
+    }, 10);
+}
+
+
+/**
+ * Closes the edit task modal and ensures proper visibility of other modals.
+ */
 function closeEditTaskModal() {
     const editTaskModal = document.getElementById("editTaskModal");
-    const taskDetailModal = document.getElementById("taskDetailModal");
-    const overlay = document.getElementById("taskDetailOverlay");
-
-    // ❗ Falls das Edit-Modal noch offen ist, schließe NUR das Edit-Modal
     if (!editTaskModal.classList.contains("hidden")) {
         editTaskModal.classList.add("hidden");
-
-        // 🟢 Prüfe, ob das TaskDetailModal zuvor sichtbar war
-        if (taskDetailModal && !taskDetailModal.classList.contains("hidden")) {
-            taskDetailModal.classList.remove("hidden"); // Task-Detail wieder anzeigen
-        } else {
-            overlay.classList.remove("active"); // Falls TaskDetailModal auch zu ist → Overlay schließen
-        }
-
-        return; // ⛔ Stoppe die Funktion hier, damit das Overlay nicht sofort verschwindet
+        restoreTaskDetailModal();
+        return;
     }
-
-    // ❗ Falls das Edit-Modal bereits geschlossen ist, dann schließe das Overlay und das Task-Detail-Modal
-    overlay.classList.remove("active");
-    taskDetailModal.classList.add("hidden");
+    closeOverlayAndDetailModal();
 }
 
 
+/**
+ * Restores the visibility of the task detail modal if it was previously open.
+ */
+function restoreTaskDetailModal() {
+    const taskDetailModal = document.getElementById("taskDetailModal");
+    const overlay = document.getElementById("taskDetailOverlay");
+    if (taskDetailModal && !taskDetailModal.classList.contains("hidden")) {
+        taskDetailModal.classList.remove("hidden");
+    } else {
+        overlay.classList.remove("active");
+    }
+}
+
+
+/**
+ * Closes the overlay and the task detail modal.
+ */
+function closeOverlayAndDetailModal() {
+    document.getElementById("taskDetailOverlay").classList.remove("active");
+    document.getElementById("taskDetailModal").classList.add("hidden");
+}
+
+
+/**
+ * Deletes a task from the database and updates the UI.
+ * @param {string} taskId - The ID of the task to delete.
+ */
 async function deleteTask(taskId) {
     try {
-        // 📌 Task aus der Datenbank löschen
-        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
-            method: "DELETE"
-        });
-
-        // 📌 Task-Card aus dem Board entfernen
-        const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
-        if (taskElement) {
-            taskElement.remove();
-        }
-
-        // 📌 Task-Detail-Modal schließen
+        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, { method: "DELETE" });
+        document.querySelector(`.task-card[data-id="${taskId}"]`)?.remove();
         closeTaskDetailModal();
-
-        // 📌 Bestätigung anzeigen
         showDeleteConfirmation();
-
     } catch (error) {
-        console.error("❌ Fehler beim Löschen der Task:", error);
+        console.error("❌ Error deleting task:", error);
     }
 }
 
 
+/**
+ * Displays a delete confirmation message with a fade-out effect.
+ */
 function showDeleteConfirmation() {
     const confirmationDiv = document.createElement("div");
     confirmationDiv.classList.add("task-delete-confirmation");
     confirmationDiv.innerText = "Task successfully deleted";
-
     document.body.appendChild(confirmationDiv);
-
-    // 📌 Animation starten (von unten nach oben)
-    setTimeout(() => {
-        confirmationDiv.classList.add("show");
-    }, 10);
-
-    // 📌 Nach 2 Sekunden ausblenden & entfernen
+    setTimeout(() => confirmationDiv.classList.add("show"), 10);
     setTimeout(() => {
         confirmationDiv.classList.remove("show");
-        setTimeout(() => {
-            confirmationDiv.remove();
-        }, 500); // Warte, bis die Animation abgeschlossen ist
+        setTimeout(() => confirmationDiv.remove(), 500);
     }, 2000);
 }
 
 
+/**
+ * Retrieves all subtasks from the task modal.
+ * @returns {Array<Object>} An array of subtasks with their text and checked status.
+ */
 function getSubtasks() {
     const subtaskElements = document.querySelectorAll("#subtask-list input[type='checkbox']");
-
-    if (!subtaskElements || subtaskElements.length === 0) {
-        console.warn("⚠️ Keine Subtasks gefunden. Rückgabe: []");
-        return []; // Falls keine Subtasks vorhanden sind, leere Liste zurückgeben
-    }
-
-    return Array.from(subtaskElements).map((checkbox) => ({
-        text: checkbox.nextElementSibling ? checkbox.nextElementSibling.innerText.trim() : "Unbenannte Subtask",
+    if (!subtaskElements.length) return console.warn("⚠️ No subtasks found. Returning []"), [];
+    return Array.from(subtaskElements).map(checkbox => ({
+        text: checkbox.nextElementSibling?.innerText.trim() || "Unnamed Subtask",
         checked: checkbox.checked
     }));
 }
 
 
-// editTask.js - Eigene Funktion für das Edit-Modal
+/**
+ * Toggles edit buttons in the edit task modal and updates their styles.
+ * @param {HTMLElement} clickedButton - The button that was clicked.
+ */
 function toggleEditButtons(clickedButton) {
-    // Nur Buttons im EDIT-Modal zurücksetzen
-    const buttons = document.querySelectorAll("#editTaskModal .btn-switch");
-    buttons.forEach(btn => {
+    document.querySelectorAll("#editTaskModal .btn-switch").forEach(btn => {
         btn.classList.remove("active");
         btn.style.backgroundColor = "";
         btn.style.color = "#000";
     });
-
-    // Aktivierten Button stylen
     clickedButton.classList.add("active");
-    const priority = clickedButton.id.replace("edit-", ""); // "urgent", "medium", "low"
-
-    switch (priority) {
-        case "urgent":
-            clickedButton.style.backgroundColor = "#ff3b30";
-            clickedButton.style.color = "#fff";
-            break;
-        case "medium":
-            clickedButton.style.backgroundColor = "#ffcc00";
-            clickedButton.style.color = "#000";
-            break;
-        case "low":
-            clickedButton.style.backgroundColor = "#34c759";
-            clickedButton.style.color = "#fff";
-            break;
+    const priorityColors = {
+        urgent: ["#ff3b30", "#fff"],
+        medium: ["#ffcc00", "#000"],
+        low: ["#34c759", "#fff"]
+    };
+    const priority = clickedButton.id.replace("edit-", "");
+    if (priorityColors[priority]) {
+        [clickedButton.style.backgroundColor, clickedButton.style.color] = priorityColors[priority];
     }
 }
