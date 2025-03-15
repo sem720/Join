@@ -239,3 +239,19 @@ function toggleEditButtons(clickedButton) {
         [clickedButton.style.backgroundColor, clickedButton.style.color] = priorityColors[priority];
     }
 }
+
+
+/**
+ * Handles click events on the task detail overlay.
+ * Closes the task edit modal if the overlay itself is clicked.
+ */
+function handleTaskDetailOverlayClick() {
+    const overlay = document.getElementById("taskDetailOverlay");
+    if (overlay) {
+        overlay.addEventListener("click", (event) => {
+            if (event.target === overlay) {
+                closeEditTaskModal();
+            }
+        });
+    }
+}
