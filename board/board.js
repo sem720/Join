@@ -1,119 +1,154 @@
+/**
+ * Fetches tasks from the backend and processes them.
+ * If tasks exist, it renders them and sets up drag-and-drop functionality.
+ * Logs a warning if no tasks are found.
+ * Logs an error if fetching fails.
+ */
 async function fetchTasks() {
     try {
-        const response = await fetch("https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json");
-        const data = await response.json();
+        const data = await fetchTasksFromBackend();
+        if (!data) return console.warn("⚠️ Keine Tasks in der Datenbank gefunden.");
 
-        if (!data) {
-            console.warn("⚠️ Keine Tasks in der Datenbank gefunden.");
-            return;
-        }
-
-        const tasks = Object.keys(data).map(taskId => {
-            let task = { id: taskId, ...data[taskId] };
-
-            // 🟢 Falls `mainCategory` "to do" ist, ändere es zu "To do"
-            if (task.mainCategory && task.mainCategory.toLowerCase() === "to do") {
-                // console.log(`🛠️ Fix: mainCategory für Task ${task.id} geändert von "to do" zu "To do"`);
-                task.mainCategory = "To do";
-
-                // 🟢 Speichere die Korrektur im Backend
-                updateMainCategoryInBackend(task.id, "To do");
-            }
-
-            return task;
-        });
-
+        const tasks = processTasks(data);
         renderTasks(tasks);
         setupDragAndDrop();
-
     } catch (error) {
         console.error("❌ Fehler beim Laden der Tasks:", error);
     }
 }
 
 
-/*async function updateMainCategoryInBackend(taskId, newCategory) {
+/**
+ * Fetches task data from the backend.
+ * @returns {Promise<Object>} A promise resolving to the task data.
+ */
+async function fetchTasksFromBackend() {
+    const response = await fetch("https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json");
+    return await response.json();
+}
+
+
+/**
+ * Processes task data by converting it into an array of task objects.
+ * Fixes `mainCategory` if it is incorrectly formatted.
+ * @param {Object} data - The raw task data from the backend.
+ * @returns {Array<Object>} An array of processed task objects.
+ */
+function processTasks(data) {
+    return Object.keys(data).map(taskId => {
+        let task = { id: taskId, ...data[taskId] };
+        if (task.mainCategory && task.mainCategory.toLowerCase() === "to do") {
+            task.mainCategory = "To do";
+            updateMainCategoryInBackend(task.id, "To do");
+        }
+        return task;
+    });
+}
+
+
+/**
+ * Updates the main category of a task in the backend.
+ * @param {string} taskId - The ID of the task.
+ * @param {string} newCategory - The new main category to be assigned.
+ * @returns {Promise<void>} A promise that resolves when the update is complete.
+ */
+async function updateMainCategoryInBackend(taskId, newCategory) {
     try {
         await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ mainCategory: newCategory })
         });
-
-        // console.log(`✅ Task ${taskId} erfolgreich im Backend aktualisiert: mainCategory = "${newCategory}"`);
-
+        console.log(`✅ Task ${taskId} erfolgreich im Backend aktualisiert: mainCategory = "${newCategory}"`);
     } catch (error) {
         console.error(`❌ Fehler beim Aktualisieren der mainCategory für Task ${taskId}:`, error);
     }
-}*/
+}
 
 
-
+/**
+ * Renders tasks into their respective columns.
+ * @param {Array<Object>} tasks - The list of task objects.
+ */
 function renderTasks(tasks) {
-    const columnMap = {
+    const columnMap = getColumnMap();
+    clearTaskColumns(columnMap);
+    tasks.forEach(task => appendTaskToColumn(task, columnMap));
+    setupDragAndDrop();
+    initTaskCardClickEvents();
+    updateNoTaskVisibility();
+}
+
+
+/**
+ * Retrieves a mapping of task categories to their respective DOM elements.
+ * @returns {Object} A mapping of category names to column elements.
+ */
+function getColumnMap() {
+    return {
         "To do": document.querySelector("#to-do .column-body"),
         "In progress": document.querySelector("#in-progress .column-body"),
         "Await feedback": document.querySelector("#awaitFeedback .column-body"),
         "Done": document.querySelector("#done .column-body")
     };
-
-    // ❗ Leere nur Task-Cards, aber lasse das "no-task"-Element bestehen
-    Object.values(columnMap).forEach(column => {
-        column.querySelectorAll(".task-card").forEach(task => task.remove());
-    });
-
-    tasks.forEach(task => {
-        let category = task.mainCategory || "To do";
-        const column = columnMap[category];
-        if (!column) {
-            console.warn(`⚠️ Keine passende Spalte für Kategorie: ${category}`);
-            return;
-        }
-
-        const taskElement = createTaskElement(task);
-        column.appendChild(taskElement);
-    });
-
-    // ❗ Stelle sicher, dass Drag & Drop-Events neu gesetzt werden
-    setupDragAndDrop();
-
-    // ❗ Stelle sicher, dass Klick-Events neu gesetzt werden
-    initTaskCardClickEvents();
-
-    // ❗ Update Sichtbarkeit der "No Tasks"-Meldung
-    updateNoTaskVisibility();
 }
 
 
+/**
+ * Clears task cards from columns while keeping the "no-task" element intact.
+ * @param {Object} columnMap - A mapping of category names to column elements.
+ */
+function clearTaskColumns(columnMap) {
+    Object.values(columnMap).forEach(column => {
+        column.querySelectorAll(".task-card").forEach(task => task.remove());
+    });
+}
+
+
+/**
+ * Appends a task to the appropriate column.
+ * @param {Object} task - The task object.
+ * @param {Object} columnMap - A mapping of category names to column elements.
+ */
+function appendTaskToColumn(task, columnMap) {
+    let category = task.mainCategory || "To do";
+    const column = columnMap[category];
+    if (!column) {
+        console.warn(`⚠️ Keine passende Spalte für Kategorie: ${category}`);
+        return;
+    }
+    const taskElement = createTaskElement(task);
+    column.appendChild(taskElement);
+}
+
+
+/**
+ * Creates a task element and returns it.
+ * @param {Object} task - The task data.
+ * @returns {HTMLElement} The generated task element.
+ */
 function createTaskElement(task) {
     let categoryColor = task.category === "User Story" ? "#0039fe" : "#1fd7c1";
-
-    // Berechne den Subtask-Fortschritt
     let totalSubtasks = task.subtasks ? task.subtasks.length : 0;
     let completedSubtasks = task.subtasks ? task.subtasks.filter(s => s.completed).length : 0;
     let progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
-
-    const avatarsHTML = task.assignedTo
-        ? task.assignedTo.map(user =>
-            `<div class="avatar-board-card" style="background-color: ${user.avatar.bgcolor};">${user.avatar.initials}</div>`
-        ).join("")
-        : "";
-
+    const avatarsHTML = getAvatarsHTML(task.assignedTo);
     const taskDiv = document.createElement("div");
     taskDiv.classList.add("task-card");
     taskDiv.setAttribute("data-id", task.id);
-
     taskDiv.innerHTML = taskCardTemplate(task, categoryColor, progressPercent, completedSubtasks, totalSubtasks, avatarsHTML);
-
     return taskDiv;
 }
 
 
+/**
+ * Updates the visibility of the "No Tasks" message in each column.
+ * If there are tasks in a column, the message is hidden. Otherwise, it is displayed.
+ */
 function updateNoTaskVisibility() {
     document.querySelectorAll(".column-body").forEach(column => {
         const noTaskDiv = column.querySelector(".no-task");
         const hasTasks = column.querySelector(".task-card") !== null;
-
         if (hasTasks) {
             noTaskDiv.classList.add("d-none");
         } else {
@@ -123,13 +158,16 @@ function updateNoTaskVisibility() {
 }
 
 
+/**
+ * Sets up drag-and-drop functionality for task elements and columns.
+ * Enables draggable tasks and adds event listeners for drag events.
+ */
 function setupDragAndDrop() {
     document.querySelectorAll(".task-card").forEach(task => {
         task.setAttribute("draggable", "true");
         task.addEventListener("dragstart", handleDragStart);
         task.addEventListener("dragend", handleDragEnd);
     });
-
     document.querySelectorAll(".column-body").forEach(column => {
         column.addEventListener("dragover", handleDragOver);
         column.addEventListener("drop", handleDrop);
@@ -138,7 +176,17 @@ function setupDragAndDrop() {
 }
 
 
+/**
+ * Stores the currently dragged task element.
+ * @type {HTMLElement | null}
+ */
 let draggedTask = null;
+
+/**
+ * Handles the drag start event.
+ * Sets the dragged task and applies a visual effect.
+ * @param {DragEvent} event - The drag start event.
+ */
 function handleDragStart(event) {
     draggedTask = event.target;
     event.target.style.opacity = "0.5";
@@ -146,27 +194,46 @@ function handleDragStart(event) {
 }
 
 
+/**
+ * Handles the drag end event.
+ * Resets the dragged task and removes the visual effect.
+ * @param {DragEvent} event - The drag end event.
+ */
 function handleDragEnd(event) {
     event.target.style.opacity = "1";
     draggedTask = null;
 }
 
 
+/**
+ * Handles the drag over event.
+ * Prevents default behavior to allow dropping.
+ * @param {DragEvent} event - The drag over event.
+ */
 function handleDragOver(event) {
     event.preventDefault();
     event.currentTarget.classList.add("drag-over");
 }
 
 
+/**
+ * Handles the drag leave event.
+ * Removes the visual drag-over effect.
+ * @param {DragEvent} event - The drag leave event.
+ */
 function handleDragLeave(event) {
     event.currentTarget.classList.remove("drag-over");
 }
 
 
+/**
+ * Handles the drop event.
+ * Moves the dragged task to a new column and updates its category.
+ * @param {DragEvent} event - The drop event.
+ */
 function handleDrop(event) {
     event.preventDefault();
     event.currentTarget.classList.remove("drag-over");
-
     if (draggedTask) {
         const newColumn = event.target.closest(".column-body");
         const newColumnId = newColumn.parentElement.id;
@@ -178,54 +245,33 @@ function handleDrop(event) {
 }
 
 
+/**
+ * Updates the task category in the database after being moved to a new column.
+ * @param {HTMLElement} taskElement - The task DOM element.
+ * @param {string} newColumnId - The ID of the new column.
+ */
 async function updateTaskCategory(taskElement, newColumnId) {
-    console.log("Neue Spalten-ID:", newColumnId);
-
+    console.log("New Column ID:", newColumnId);
     const taskId = taskElement.dataset.id;
     const newCategory = mapColumnIdToCategory(newColumnId);
-
-    if (!taskId) {
-        console.error("❌ Fehler: Keine Task-ID gefunden!");
-        return;
-    }
-
-    if (!newCategory) {
-        console.error(`❌ Fehler: Ungültige Spalte (${newColumnId}) für Task ${taskId}.`);
-        return;
-    }
-
+    if (!taskId) return console.error("❌ Error: No Task ID found!");
+    if (!newCategory) return console.error(`❌ Error: Invalid column (${newColumnId}) for Task ${taskId}.`);
     try {
-        // Task-Daten aus der Datenbank abrufen
-        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
-        let taskData = await response.json();
-
-        if (!taskData) {
-            throw new Error("❌ Keine Task-Daten gefunden!");
-        }
-
-        // Falls `mainCategory` nicht existiert, erstellen wir es
-        if (!taskData.hasOwnProperty('mainCategory')) {
-            taskData.mainCategory = "";
-        }
-
-        // Die `mainCategory` aktualisieren
+        let taskData = await fetchTaskData(taskId);
         taskData.mainCategory = newCategory;
-
-        // Änderungen im Backend speichern
-        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ mainCategory: newCategory }) // Nur das Feld `mainCategory` aktualisieren
-        });
-
-        console.log(`✅ Task ${taskId} wurde erfolgreich in "${newCategory}" verschoben und gespeichert.`);
-
+        await saveTaskCategory(taskId, newCategory);
+        console.log(`✅ Task ${taskId} successfully moved to "${newCategory}" and saved.`);
     } catch (error) {
-        console.error("❌ Fehler beim Aktualisieren der Task-Kategorie:", error);
+        console.error("❌ Error updating task category:", error);
     }
 }
 
 
+/**
+ * Maps a column ID to its corresponding task category.
+ * @param {string} columnId - The ID of the column.
+ * @returns {string} The mapped category name.
+ */
 function mapColumnIdToCategory(columnId) {
     const columnMap = {
         "to-do": "To do",
@@ -237,166 +283,232 @@ function mapColumnIdToCategory(columnId) {
         "done": "Done",
         "done-body": "Done"
     };
-
-    if (!columnMap[columnId]) {
-        console.warn(`⚠️ Unbekannte Spalten-ID: ${columnId}. Standardwert "To do" wird gesetzt.`);
-    }
-
     return columnMap[columnId] || "To do";  // Fallback auf "To do"
 }
 
 
-document.addEventListener("DOMContentLoaded", setupDragAndDrop);
-
-
-function generateSubtasks(task) {
-    if (!task.subtasks || task.subtasks.length === 0) {
-        return `<p>No subtasks available</p>`;
-    }
-
-    return generateSubtasksTemplate(task);
+/**
+ * Fetches task data from the database.
+ * @param {string} taskId - The ID of the task.
+ * @returns {Promise<Object>} The fetched task data.
+ */
+async function fetchTaskData(taskId) {
+    const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
+    const data = await response.json();
+    if (!data) throw new Error("❌ No task data found!");
+    return data;
 }
 
 
-
-async function toggleSubtask(taskId, subtaskIndex) {
-    try {
-        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
-        const task = await response.json();
-
-        if (!task?.subtasks || subtaskIndex >= task.subtasks.length) return;
-
-        // Status umkehren
-        task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
-
-        // 🔴 Fortschrittsdaten direkt berechnen
-        const totalSubtasks = task.subtasks.length;
-        const completedSubtasks = task.subtasks.filter(st => st.completed).length;
-        const progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
-
-        // 🔴 DOM-Elemente direkt aktualisieren
-        const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
-        if (taskElement) {
-            taskElement.querySelector(".subtask-bar-prog-blue").style.width = `${progressPercent}%`;
-            taskElement.querySelector(".subtask-checked").textContent =
-                `${completedSubtasks}/${totalSubtasks} Subtasks`;
-        }
-
-        // Backend aktualisieren
-        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ subtasks: task.subtasks })
-        });
-
-    } catch (error) {
-        console.error("Fehler beim Aktualisieren des Subtasks:", error);
-    }
-}
-
-
-function updateTaskCard(taskId, task) {
-    const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
-    if (!taskElement) {
-        console.warn(`⚠️ Task-Card für Task ${taskId} nicht gefunden.`);
-        return;
-    }
-
-    // 🟢 Titel & Beschreibung aktualisieren
-    taskElement.querySelector(".task-title").textContent = task.title;
-    taskElement.querySelector(".task-description").textContent = task.description;
-
-    // 🟢 Subtask-Fortschritt berechnen & aktualisieren
-    const totalSubtasks = task.subtasks.length;
-    const completedSubtasks = task.subtasks.filter(st => st.completed).length;
-    const progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
-
-    // 🟢 Fortschrittsbalken aktualisieren
-    const progressBar = taskElement.querySelector(".subtask-bar-prog-blue");
-    if (progressBar) {
-        progressBar.style.width = `${progressPercent}%`;
-    }
-
-    // 🟢 Subtask-Text aktualisieren
-    const subtaskText = taskElement.querySelector(".subtask-checked");
-    if (subtaskText) {
-        subtaskText.textContent = `${completedSubtasks}/${totalSubtasks} Subtasks`;
-    }
-}
-
-
-function initTaskCardClickEvents() {
-    document.querySelectorAll(".task-card").forEach(taskCard => {
-        taskCard.addEventListener("click", async function () {
-            const taskId = this.dataset.id;
-            console.log(taskId);
-            if (!taskId) {
-                console.error("⚠️ Task ID fehlt!");
-                return;
-            }
-
-            const task = await fetchTaskById(taskId);
-            if (task) {
-                openTaskDetailModal(task);
-            }
-        });
+/**
+ * Saves the updated task category in the database.
+ * @param {string} taskId - The ID of the task.
+ * @param {string} newCategory - The new category to be set.
+ */
+async function saveTaskCategory(taskId, newCategory) {
+    await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mainCategory: newCategory })
     });
 }
 
 
-async function fetchTaskById(taskId) {
+/**
+ * Generates the HTML for displaying a task's subtasks.
+ * @param {Object} task - The task object containing subtasks.
+ * @returns {string} The generated HTML for subtasks.
+ */
+function generateSubtasks(task) {
+    if (!task.subtasks || task.subtasks.length === 0) {
+        return `<p>No subtasks available</p>`;
+    }
+    return generateSubtasksTemplate(task);
+}
+
+
+/**
+ * Toggles the completion status of a subtask and updates the backend.
+ * @param {string} taskId - The ID of the task.
+ * @param {number} subtaskIndex - The index of the subtask.
+ */
+async function toggleSubtask(taskId, subtaskIndex) {
     try {
-        // 📌 Task aus der Datenbank abrufen
-        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
-        const taskData = await response.json();
-        // console.log("Task-Daten:", taskData);
-
-        if (!taskData) {
-            throw new Error("Keine Task-Daten gefunden");
-        }
-
-        const task = {
-            id: taskId,
-            title: taskData.title || "Kein Titel",
-            description: taskData.description || "Keine Beschreibung",
-            category: taskData.category || "General",
-            categoryColor: taskData.categoryColor || "#ccc",
-            dueDate: taskData.dueDate || "Kein Datum",
-            priority: taskData.priority || { text: "Keine Priorität", image: "" },
-            assignedTo: Array.isArray(taskData.assignedTo)
-                ? taskData.assignedTo.map(user => ({
-                    name: user.name || "Unbekannter Benutzer",
-                    avatar: user.avatar || { bgcolor: "#ccc", initials: "?" }
-                }))
-                : [],
-            subtasks: Array.isArray(taskData.subtasks)
-                ? taskData.subtasks.map(subtask => ({
-                    text: subtask.text || subtask,
-                    completed: subtask.completed || false
-                }))
-                : []
-        };
-
-        // Hier wird die Funktion openTaskDetailModal aufgerufen, nachdem die Daten geladen sind
-        openTaskDetailModal(task);
-
+        const task = await fetchTaskData(taskId);
+        if (!task?.subtasks || subtaskIndex >= task.subtasks.length) return;
+        task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
+        updateSubtaskUI(taskId, task.subtasks);
+        await saveSubtasks(taskId, task.subtasks);
     } catch (error) {
-        console.error("❌ Fehler beim Laden der Task:", error);
+        console.error("Error updating subtask:", error);
     }
 }
 
 
-document.addEventListener("DOMContentLoaded", function (event) {
+/**
+ * Updates the UI elements related to subtasks.
+ * @param {string} taskId - The ID of the task.
+ * @param {Array} subtasks - The updated subtasks.
+ */
+function updateSubtaskUI(taskId, subtasks) {
+    const totalSubtasks = subtasks.length;
+    const completedSubtasks = subtasks.filter(st => st.completed).length;
+    const progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
+    const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
+    if (taskElement) {
+        taskElement.querySelector(".subtask-bar-prog-blue").style.width = `${progressPercent}%`;
+        taskElement.querySelector(".subtask-checked").textContent = `${completedSubtasks}/${totalSubtasks} Subtasks`;
+    }
+}
+
+
+/**
+ * Saves the updated subtasks to the backend.
+ * @param {string} taskId - The ID of the task.
+ * @param {Array} subtasks - The updated subtasks array.
+ */
+async function saveSubtasks(taskId, subtasks) {
+    await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subtasks })
+    });
+}
+
+
+/**
+ * Updates the content of a task card in the UI.
+ * @param {string} taskId - The ID of the task.
+ * @param {Object} task - The updated task data.
+ */
+function updateTaskCard(taskId, task) {
+    const taskElement = document.querySelector(`.task-card[data-id="${taskId}"]`);
+    if (!taskElement) return console.warn(`⚠️ Task card for task ${taskId} not found.`);
+    updateTaskText(taskElement, task);
+    updateTaskProgress(taskElement, task.subtasks);
+}
+
+
+/**
+ * Updates the task title and description in the UI.
+ * @param {HTMLElement} taskElement - The task card DOM element.
+ * @param {Object} task - The updated task data.
+ */
+function updateTaskText(taskElement, task) {
+    taskElement.querySelector(".task-title").textContent = task.title;
+    taskElement.querySelector(".task-description").textContent = task.description;
+}
+
+
+/**
+ * Updates the task progress bar and subtask count in the UI.
+ * @param {HTMLElement} taskElement - The task card DOM element.
+ * @param {Array} subtasks - The updated subtasks array.
+ */
+function updateTaskProgress(taskElement, subtasks) {
+    const totalSubtasks = subtasks.length;
+    const completedSubtasks = subtasks.filter(st => st.completed).length;
+    const progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
+    const progressBar = taskElement.querySelector(".subtask-bar-prog-blue");
+    if (progressBar) progressBar.style.width = `${progressPercent}%`;
+    const subtaskText = taskElement.querySelector(".subtask-checked");
+    if (subtaskText) subtaskText.textContent = `${completedSubtasks}/${totalSubtasks} Subtasks`;
+}
+
+
+/**
+ * Initializes click events for task cards.
+ * When a task card is clicked, it fetches the task data and opens the detail modal.
+ */
+function initTaskCardClickEvents() {
+    document.querySelectorAll(".task-card").forEach(taskCard =>
+        taskCard.addEventListener("click", async function () {
+            const taskId = this.dataset.id;
+            if (!taskId) return console.error("⚠️ Task ID fehlt!");
+            const task = await fetchTaskById(taskId);
+            if (task) openTaskDetailModal(task);
+        })
+    );
+}
+
+
+/**
+ * Fetches a task by its ID and processes the data.
+ * @param {string} taskId - The ID of the task.
+ */
+async function fetchTaskById(taskId) {
+    try {
+        const taskData = await fetchTaskData(taskId);
+        const task = processTaskData(taskId, taskData);
+        openTaskDetailModal(task);
+    } catch (error) {
+        console.error("❌ Error fetching task:", error);
+    }
+}
+
+
+/**
+ * Fetches task data from the database.
+ * @param {string} taskId - The ID of the task.
+ * @returns {Promise<Object>} The fetched task data.
+ */
+async function fetchTaskData(taskId) {
+    const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
+    return response.json();
+}
+
+
+/**
+ * Processes task data and ensures default values.
+ * @param {string} taskId - The ID of the task.
+ * @param {Object} taskData - The raw task data from the backend.
+ * @returns {Object} The processed task object.
+ */
+function processTaskData(taskId, taskData) {
+    if (!taskData) throw new Error("No task data found");
+    return {
+        id: taskId,
+        title: taskData.title || "No title",
+        description: taskData.description || "No description",
+        category: taskData.category || "General",
+        categoryColor: taskData.categoryColor || "#ccc",
+        dueDate: taskData.dueDate || "No date",
+        priority: taskData.priority || { text: "No priority", image: "" },
+        assignedTo: Array.isArray(taskData.assignedTo) ? taskData.assignedTo.map(user => ({
+            name: user.name || "Unknown user",
+            avatar: user.avatar || { bgcolor: "#ccc", initials: "?" }
+        })) : [],
+        subtasks: Array.isArray(taskData.subtasks) ? taskData.subtasks.map(subtask => ({
+            text: subtask.text || subtask,
+            completed: subtask.completed || false
+        })) : []
+    };
+}
+
+
+/**
+ * Initializes event listeners and fetches necessary data on page load.
+ */
+function init() {
+    setupDragAndDrop();
     fetchTasks();
     initTaskDetailOverlay();
     initTaskCardClickEvents();
-});
+    setupCalendarIcon();
+}
 
 
-document.getElementById("taskDetailOverlay").addEventListener("click", (event) => {
-    if (event.target === document.getElementById("taskDetailOverlay")) {
-        closeEditTaskModal();
+/**
+ * Handles click events on the task detail overlay.
+ * Closes the task edit modal if the overlay itself is clicked.
+ */
+function handleTaskDetailOverlayClick() {
+    const overlay = document.getElementById("taskDetailOverlay");
+    if (overlay) {
+        overlay.addEventListener("click", (event) => {
+            if (event.target === overlay) {
+                closeEditTaskModal();
+            }
+        });
     }
-});
-
-document.addEventListener("DOMContentLoaded", setupCalendarIcon);
+}

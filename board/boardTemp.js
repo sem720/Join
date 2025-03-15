@@ -206,3 +206,15 @@ function editTaskTempl() {
     </div>
     `
 }
+
+
+/**
+ * Generates the avatar HTML for assigned users.
+ * @param {Array<Object>} assignedTo - The assigned users.
+ * @returns {string} The generated avatar HTML.
+ */
+function getAvatarsHTML(assignedTo) {
+    return assignedTo ? assignedTo.map(user =>
+        `<div class="avatar-board-card" style="background-color: ${user.avatar.bgcolor};">${user.avatar.initials}</div>`
+    ).join("") : "";
+}
