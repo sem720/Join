@@ -54,7 +54,10 @@
 
             <label id="assignment">Assigned to</label>
             <div class="assignment-container" id="assignment">
-              <button class="assignment-btn no-loading" id="assignment-btn" onclick="toggleContacts(event, 'contacts-container', 'contacts-list', 'selected-contacts-container')">
+              <button class="assignment-btn no-loading" id="assignment-btn" 
+              data-container-id="contacts-container" 
+              data-list-id="contacts-list" 
+              data-selected-id="selected-contacts-container">
                 Select contacts to assign
                 <span class="icon-container">
                   <img
