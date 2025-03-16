@@ -38,7 +38,7 @@ function taskCardTemplate(task) {
         </div>
         <div class="task-card-footer">
             <div class="task-card-avatar">${avatarsHTML}</div>
-            <img src="${task.priority?.image || ''}" alt="${task.priority?.text || ''}" class="prio-icon">
+            <img src="${task.priority?.priorityImage || ''}" alt="${task.priority?.priorityText || ''}" class="prio-icon">
         </div>
     `;
 }
@@ -90,7 +90,7 @@ function taskDetailTemplate(task, subtasksHTML) {
         <p class="task-detail-content">${task.description}</p>
         <p><strong style="padding-right: 16px;">Due date:</strong> ${formatDate(task.dueDate)}</p>
         <p><strong style="padding-right: 16px;">Priority:</strong> ${task.priority.priorityText} 
-            <img src="${task.priority?.priorityImage || ''}" alt="${task.priority?.text || ''}" class="prio-icon">
+            <img src="${task.priority?.priorityImage || ''}" alt="${task.priority?.priorityText || ''}" class="prio-icon">
         </p>
         <p style="padding-bottom: 0;"><strong>Assigned To:</strong></p>
         <ul>
