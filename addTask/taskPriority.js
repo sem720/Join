@@ -8,10 +8,8 @@ let activeButton = null;
  * @param {HTMLElement} clickedButton - The button element that was clicked.
  */
 function toggleButtons(clickedButton) {
-    if (activeButton) {
-         deactivateButton(activeButton);   
-    }
-  
+    if (activeButton) deactivateButton(activeButton);   
+    
     if (activeButton === clickedButton) {
         activeButton = null;
         return;
