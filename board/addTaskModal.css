@@ -165,6 +165,10 @@
     display: none;
 }
 
+#contacts-container.visible {
+    display: block;
+}
+
 #contacts-container {
    width: 100%;
    max-height: 160px;
