@@ -28,7 +28,8 @@ function handleTaskCreation(event) {
 
 function handleTaskSuccess() {
     showTaskPopup();
-    setTimeout(() => window.location.href = "/board/board.html", 150000);
+
+    setTimeout(() => window.location.href = "/board/board.html", 1500);
 }
 
 /** ================================
@@ -97,8 +98,6 @@ function validateTaskData(taskData) {
     !taskData.dueDate.trim() ? (showError("#due-date", "Due Date is required."), isValid = false) : clearError("#due-date");
     !taskData.category.trim() ? (showError("#selected-category", "Category is required."), isValid = false) : clearError("#selected-category");
 
-    console.log("Category Element Found:", document.getElementById("selected-category"));
-
     return isValid;
 }
 
@@ -121,7 +120,6 @@ function getSelectedPriority() {
     console.log("✅ getSelectedPriority() returning:", priority); // Check what it returns
     return priority;
 }
-
 
 
 function getPriorityImage(priority) {
