@@ -5,6 +5,7 @@ let contactsContainer;
 const icon = document.getElementById("dropdown-icon");
 const selectedContactsContainer = document.getElementById("selected-contacts-container");
 
+
 /**
  * Initializes the task contact management by setting up the necessary DOM elements
  * and fetching the contacts data. It also adds a listener for outside keydown events.
@@ -16,8 +17,31 @@ function initAddTaskContacts(listId) {
 
     fetchAndRenderContacts(listId);
 
+    // Attach event listener to ALL buttons with `assignment-btn` class
+    document.querySelectorAll(".assignment-btn").forEach((button) => {
+        button.addEventListener("click", (event) => {
+            console.log("✅ Button Clicked!", event.target); // Debugging
+            const containerId = button.getAttribute("data-container-id");
+            const listId = button.getAttribute("data-list-id");
+            const selectedContainerId = button.getAttribute("data-selected-id");
+
+            console.log("📌 Button Clicked. Retrieved IDs:", { containerId, listId, selectedContainerId });
+
+            if (!listId) {
+                console.error("❌ listId is undefined! Check the button's data attributes.");
+                return;
+            }
+
+            toggleContacts(event, containerId, listId, selectedContainerId);
+        });
+    });
+
+    console.log("💡 Init Contacts - Searching for:", listId);
+    console.log("📌 Contacts List Found:", document.getElementById(listId));
+
     document.addEventListener("keydown", handleKeydownOutsideAssignment);
 }
+
 
 
 /**
@@ -42,22 +66,20 @@ function handleKeydownOutsideAssignment(event) {
 
 
 function toggleContacts(event, containerId, listId, selectedContainerId) {
-    console.log("✅ toggleContacts called with:", { containerId, listId, selectedContainerId });
-
     event.preventDefault();
-    
+
+    console.log("🔄 toggleContacts() called!", { containerId, listId, selectedContainerId });
+
+
     const contactsContainer = document.getElementById(containerId);
     const contactsList = document.getElementById(listId);
-
-    console.log("📌 Found contactsContainer:", contactsContainer);
-    console.log("📌 Found contactsList:", contactsList);
-
-
-    if (!contactsContainer || !contactsList) return console.error(`❌ Missing container: ${containerId} or ${listId}`);
-    const isOpen = contactsContainer.classList.contains("visible");
     
-    isOpen ? closeContacts(containerId, listId) : (openContacts(containerId, listId, selectedContainerId), renderContactsList(listId));
+    if (!contactsContainer || !contactsList) return console.error(`❌ Missing container: ${containerId} or ${listId}`);
+    
+    const isOpen = contactsContainer.classList.toggle("visible");
+    contactsContainer.classList.toggle("hidden", !isOpen);
 
+    updateDropdownIcon(isOpen); // ✅ Update icon here
 }
 
 
@@ -67,36 +89,23 @@ function toggleContacts(event, containerId, listId, selectedContainerId) {
  * 
  * @param {boolean} enable - Determines whether the outside click listener should be enabled or disabled.
  */
-function manageOutsideClick(enable, containerId) {
-    if (enable) {
-        document.addEventListener("click", handleOutsideClick);
-    } else {
-        document.removeEventListener("click", handleOutsideClick);
+
+document.addEventListener("click", function (event) {
+    const menu = document.getElementById("contacts-container");
+
+    if (
+        menu &&
+        menu.classList.contains("visible") && // Only check if menu is visible
+        !menu.contains(event.target) &&
+        !event.target.closest(".assignment-btn")
+    ) {
+        menu.classList.add("hidden");
+        menu.classList.remove("visible");
+        console.log("✅ Closed due to outside click");
+
+        updateDropdownIcon(false);
     }
-
-    function handleOutsideClick(event) {
-        closeOnOutsideClick(event, containerId);
-    }
-}
-
-
-
-/**
- * Closes the contacts list if a click happens outside of the assignment container.
- * 
- * @param {MouseEvent} event - The click event triggered by a user interaction.
- */
-function closeOnOutsideClick(event, containerId) {
-    const contactsContainer = document.getElementById(containerId);
-
-    if (!contactsContainer || contactsContainer.contains(event.target)) {
-        return; // Prevent closing when clicking inside
-    }
-
-    closeContacts(containerId, "contacts-list"); 
-    manageOutsideClick(false, containerId); // Ensure listener is removed when closing
-    updateDropdownIcon(false);
-}
+});
 
 
 
@@ -126,7 +135,6 @@ function openContacts(containerId, listId, selectedContainerId) {
     contactsList.classList.remove("hidden");
 
     updateDropdownIcon(true);
-    manageOutsideClick(true, containerId);
     updateSelectedContactsDisplay(selectedContainerId);
 
     fetchAndRenderContacts(listId);
@@ -154,8 +162,6 @@ function closeContacts(containerId, listId) {
     contactsList.classList.remove("visible");
 
     updateDropdownIcon(false);
-    manageOutsideClick(false, containerId);
-
 }
 
 
@@ -172,11 +178,16 @@ async function fetchAndRenderContacts(listId) {
     if (!data) return console.error("Keine Nutzerdaten gefunden.");
 
     processContactsData(data); 
-    if (listId) {
-        await renderContactsList(listId);
-      } else {
-        console.error('❌ listId is undefined in fetchAndRenderContacts');
-      }
+    console.log("✅ Contacts fetched:", Array.from(allContacts.keys())); // Debugging
+
+    // 🛠 Ensure contacts are loaded before rendering
+    setTimeout(() => {
+        if (listId) {
+            renderContactsList(listId);
+        } else {
+            console.error("❌ listId is undefined in fetchAndRenderContacts");
+        }
+    }, 500); // Small delay to ensure allContacts is populated
 }
 
 
@@ -201,20 +212,25 @@ function processContactsData(data) {
 async function renderContactsList(listId) {
     console.log("🔍 Trying to render contacts for:", listId);
     if (!listId) {
-        console.error("❌ listId is undefined when calling renderContactsList");
+        console.error("❌ listId is undefined in renderContactsList");
         return;
     }
+
     const contactsList = document.getElementById(listId);
     if (!contactsList) {
-        console.error(`❌ Target contacts list not found: ${listId}`);
+        console.error(`❌ Contacts list not found: ${listId}`);
         return;
     }
+
+    console.log(`📝 Rendering contacts in list: ${listId}`);
     contactsList.innerHTML = '';
 
     allContacts.forEach(({ name, bgcolor }) => {
+        console.log(`👤 Adding contact: ${name}`);
         contactsList.appendChild(createContactElement(name, bgcolor));
     });
 }
+
 
 
 /**
