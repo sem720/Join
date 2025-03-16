@@ -16,32 +16,34 @@ function initAddTaskContacts(listId) {
     subtasksInput = document.getElementById('subtasks');
 
     fetchAndRenderContacts(listId);
-
-    // Attach event listener to ALL buttons with `assignment-btn` class
-    document.querySelectorAll(".assignment-btn").forEach((button) => {
-        button.addEventListener("click", (event) => {
-            console.log("✅ Button Clicked!", event.target); // Debugging
-            const containerId = button.getAttribute("data-container-id");
-            const listId = button.getAttribute("data-list-id");
-            const selectedContainerId = button.getAttribute("data-selected-id");
-
-            console.log("📌 Button Clicked. Retrieved IDs:", { containerId, listId, selectedContainerId });
-
-            if (!listId) {
-                console.error("❌ listId is undefined! Check the button's data attributes.");
-                return;
-            }
-
-            toggleContacts(event, containerId, listId, selectedContainerId);
-        });
-    });
+    setupAssignmentButtons(); // 🔄 Event-Listener für Buttons setzen
 
     console.log("💡 Init Contacts - Searching for:", listId);
     console.log("📌 Contacts List Found:", document.getElementById(listId));
 
     document.addEventListener("keydown", handleKeydownOutsideAssignment);
+
+    setupOutsideClickListener();
 }
 
+/**
+ * Fügt allen `.assignment-btn` Buttons einen Click-EventListener hinzu.
+ */
+function setupAssignmentButtons() {
+    document.querySelectorAll(".assignment-btn").forEach((button) => {
+        button.addEventListener("click", (event) => {
+            console.log("✅ Button Clicked!", event.target);
+
+            const containerId = button.getAttribute("data-container-id");
+            const listId = button.getAttribute("data-list-id");
+            const selectedContainerId = button.getAttribute("data-selected-id");
+
+            if (!listId) return console.error("❌ listId is undefined! Check the button's data attributes.");
+             
+            toggleContacts(event, containerId, listId, selectedContainerId);
+        });
+    });
+}
 
 
 /**
@@ -70,7 +72,6 @@ function toggleContacts(event, containerId, listId, selectedContainerId) {
 
     console.log("🔄 toggleContacts() called!", { containerId, listId, selectedContainerId });
 
-
     const contactsContainer = document.getElementById(containerId);
     const contactsList = document.getElementById(listId);
     
@@ -90,23 +91,29 @@ function toggleContacts(event, containerId, listId, selectedContainerId) {
  * @param {boolean} enable - Determines whether the outside click listener should be enabled or disabled.
  */
 
-document.addEventListener("click", function (event) {
+function setupOutsideClickListener() {
+    document.addEventListener("click", handleOutsideClick);
+}
+
+/**
+ * Schließt das Kontakt-Menü, wenn außerhalb geklickt wird.
+ * @param {Event} event - Der Klick-Event.
+ */
+function handleOutsideClick(event) {
     const menu = document.getElementById("contacts-container");
 
     if (
         menu &&
-        menu.classList.contains("visible") && // Only check if menu is visible
+        menu.classList.contains("visible") && // Nur prüfen, wenn das Menü sichtbar ist
         !menu.contains(event.target) &&
         !event.target.closest(".assignment-btn")
     ) {
         menu.classList.add("hidden");
         menu.classList.remove("visible");
-        console.log("✅ Closed due to outside click");
 
         updateDropdownIcon(false);
     }
-});
-
+}
 
 
 /**
@@ -151,11 +158,8 @@ function closeContacts(containerId, listId) {
     const contactsContainer = document.getElementById(containerId);
     const contactsList = document.getElementById(listId);
 
-    if (!contactsContainer || !contactsList) {
-        console.error(`❌ Contacts container (${containerId}) or list (${listId}) not found!`);
-        return;
-    }
-
+    if (!contactsContainer || !contactsList) return  console.error(`❌ Contacts container (${containerId}) or list (${listId}) not found!`);
+      
     contactsContainer.classList.add("hidden");
     contactsContainer.classList.remove("visible");
     contactsList.classList.add("hidden");
@@ -171,23 +175,20 @@ function closeContacts(containerId, listId) {
  * @throws {Error} Throws an error if the HTTP request fails or the data is invalid.
  */
 async function fetchAndRenderContacts(listId) {
-    const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
-    if (!response.ok) return console.error(`HTTP error! Status: ${response.status}`);
-    
-    const data = await response.json();
-    if (!data) return console.error("Keine Nutzerdaten gefunden.");
+    try {
+        const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        if (!data) throw new Error("Keine Nutzerdaten gefunden.");
 
-    processContactsData(data); 
-    console.log("✅ Contacts fetched:", Array.from(allContacts.keys())); // Debugging
+        processContactsData(data); 
+        console.log("✅ Contacts fetched:", Array.from(allContacts.keys())); // Debugging
 
-    // 🛠 Ensure contacts are loaded before rendering
-    setTimeout(() => {
-        if (listId) {
-            renderContactsList(listId);
-        } else {
-            console.error("❌ listId is undefined in fetchAndRenderContacts");
-        }
-    }, 500); // Small delay to ensure allContacts is populated
+        listId ? renderContactsList(listId) : console.error("❌ listId is undefined in fetchAndRenderContacts");
+
+    } catch (error) {
+        console.error("❌ Fehler beim Laden der Kontakte:", error.message);
+    }
 }
 
 
@@ -211,17 +212,11 @@ function processContactsData(data) {
  */
 async function renderContactsList(listId) {
     console.log("🔍 Trying to render contacts for:", listId);
-    if (!listId) {
-        console.error("❌ listId is undefined in renderContactsList");
-        return;
-    }
-
+    if (!listId) return console.error("❌ listId is undefined in renderContactsList");
+       
     const contactsList = document.getElementById(listId);
-    if (!contactsList) {
-        console.error(`❌ Contacts list not found: ${listId}`);
-        return;
-    }
-
+    if (!contactsList) return console.error(`❌ Contacts list not found: ${listId}`);
+        
     console.log(`📝 Rendering contacts in list: ${listId}`);
     contactsList.innerHTML = '';
 
@@ -232,7 +227,6 @@ async function renderContactsList(listId) {
 }
 
 
-
 /**
  * Creates a contact element to be displayed in the contacts list.
  * 
@@ -241,24 +235,18 @@ async function renderContactsList(listId) {
  * @returns {HTMLElement} The contact element.
  */
 function createContactElement(name, bgcolor) {
-    const contactDiv = document.createElement("div");
-    contactDiv.classList.add("contact-item");
-
-    const nameSpan = document.createElement("span");
-    nameSpan.classList.add("contact-name");
-    nameSpan.textContent = name;
-
-    const checkbox = createCheckbox(name);
-
-    contactDiv.appendChild(createAvatar(name, bgcolor));
-    contactDiv.appendChild(nameSpan);
-    contactDiv.appendChild(checkbox);
+    const contactDiv = createElement("div", "contact-item");
+    const nameSpan = createElement("span", "contact-name", name);
+    
+    contactDiv.append(
+        createAvatar(name, bgcolor),
+        nameSpan,
+        createCheckbox(name)
+    );
 
     contactDiv.addEventListener("click", () => handleContactClick(contactDiv));
-
     return contactDiv;
 }
-
 
 
 /**
@@ -266,11 +254,8 @@ function createContactElement(name, bgcolor) {
  */
 function updateSelectedContactsDisplay(selectedContainerId) {
     const selectedContainer = document.getElementById(selectedContainerId);
-    if (!selectedContainer) {
-        console.error(`❌ Selected contacts container not found: ${selectedContainerId}`);
-        return;
-    }
-
+    if (!selectedContainer) return console.error(`❌ Selected contacts container not found: ${selectedContainerId}`);
+    
     console.log("Selected Container ID:", selectedContainerId);
     console.log("Selected Container:", selectedContainer);
     selectedContainer.innerHTML = "";
@@ -292,11 +277,8 @@ function toggleContactSelection(name, isChecked) {
     console.log(`Toggling contact: ${name}, Checked: ${isChecked}`);
     const contact = allContacts.get(name);
 
-    if (!contact) {
-        console.error(`❌ Contact not found in allContacts: ${name}`);
-        return;
-    }
-
+    if (!contact) return console.error(`❌ Contact not found: ${name}`);
+        
     if (isChecked) {
         selectedContacts.add(contact);
     } else {
