@@ -166,3 +166,14 @@ function uncheckCheckbox(checkbox, img, name) {
     console.log(`Checkbox changed: ${name}, unchecked: ${checkbox.checked}`);
     console.log(`Avatar hidden for ${name} after unchecking.`);
 }
+
+
+/**
+ * Helper function to create an element with optional text content.
+ */
+function createElement(tag, className, text = "") {
+    const element = document.createElement(tag);
+    element.classList.add(className);
+    if (text) element.textContent = text;
+    return element;
+}
