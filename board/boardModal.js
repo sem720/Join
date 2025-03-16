@@ -1,25 +1,37 @@
 async function openAddTaskModal() {
+    showTaskModal(); // Handles UI visibility
+    await initializeTaskModal(); // Handles task-related setup
+}
+
+/**
+ * Handles opening the modal and overlay with animations.
+ */
+function showTaskModal() {
     const overlay = document.getElementById("task-overlay");
     const modal = document.getElementById("addTaskModal");
 
     overlay.classList.add("active");
     modal.classList.remove("hidden");
 
-    setTimeout(() => {
-        modal.classList.add("show");
-    }, 10);
+    setTimeout(() => modal.classList.add("show"), 10);
 
-    modal.addEventListener("click", (event) => {
-        event.stopPropagation();
-    });
-    
-    await fetchAndRenderContacts();
-    
+    modal.addEventListener("click", (event) => event.stopPropagation());
+}
+
+/**
+ * Initializes all necessary functionalities for the task modal.
+ */
+async function initializeTaskModal() {
+    const listId = "contacts-list"; 
+    console.log("✅ listId in initializeTaskModal:", listId);
+
+    await fetchAndRenderContacts(listId);
+    initialDefaultPriority();
     initOutsideClick();
-    setupPriorityButtons();
+    initAddTaskContacts(listId);
+    clearError("#selected-category");
 
-
-    console.log("✅ Modal opened, priority buttons initialized.");
+    console.log("✅ Task modal initialized.");
 }
 
 
@@ -35,26 +47,45 @@ function closeModal() {
     }, 400);
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    renderContactsList();
-    setupAddSubtaskButton();
-    init();
-   
 
+document.addEventListener("DOMContentLoaded", function () {
+    const button = document.querySelector(".assignment-btn");
+    const listId = button.getAttribute("data-list-id");
+    renderContactsList(listId);
+    setupAddSubtaskButton();
+    document.querySelector(".dropdown-btn")?.classList.remove("error");
+    init();
 });
 
 
+//function very important!!!!!!!!!!!!!!!!!!!!!!!!
 function initOutsideClick() {
     const modal = document.getElementById("addTaskModal");
     const contactsContainer = document.getElementById("contacts-container");
-    const assignmentButton = document.getElementById("assignment-btn");
 
-    modal.addEventListener("click", (event) => {
-        if (!contactsContainer.contains(event.target) && !assignmentButton.contains(event.target)) {
-            closeContacts();
-            updateDropdownIcon(false);
-        }
-    });
+    if (!modal || !contactsContainer) return;
+
+    modal.addEventListener("click", (event) => handleOutsideClick(event, contactsContainer, ".assignment-btn"));
+}
+
+/**
+ * Closes a container when clicking outside of it.
+ * @param {Event} event - The click event.
+ * @param {HTMLElement} container - The container to close.
+ * @param {string} exceptionSelector - Selector for elements that should not trigger closing.
+ */
+function handleOutsideClick(event, container, exceptionSelector) {
+    document.getElementById("contacts-container");
+    if (
+        container.classList.contains("visible") &&
+        !container.contains(event.target) &&
+        !event.target.closest(exceptionSelector)
+    ) {
+        container.classList.add("hidden");
+        container.classList.remove("visible");
+        console.log("✅ Container closed due to outside click");
+        updateDropdownIcon(false);
+    }
 }
 
 
@@ -64,23 +95,6 @@ function showTaskPopup() {
 
     setTimeout(() => window.location.href = "/board/board.html", 1500);
 }
-
-
-function setupPriorityButtons() {
-    document.querySelectorAll(".modal .btn-switch").forEach(button => {
-        button.addEventListener("click", () => {
-            document.querySelectorAll(".modal .btn-switch").forEach(btn => btn.classList.remove("active"));
-            button.classList.add("active");
-
-            // ✅ Update the global activeButton
-            activeButton = button;
-            console.log("🔴 Updated activeButton:", activeButton);
-        });
-    });
-}
-
-
-
 
 
 
