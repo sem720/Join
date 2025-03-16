@@ -251,10 +251,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         opacity: 1;
     }
 }
-
-#contacts-list {
-    display: none;
-}
   
 #contacts-list.visible {
     display: block;
