@@ -52,7 +52,7 @@ function processTasks(data) {
  * @param {string} newCategory - The new main category to be assigned.
  * @returns {Promise<void>} A promise that resolves when the update is complete.
  */
-/*async function updateMainCategoryInBackend(taskId, newCategory) {
+async function updateMainCategoryInBackend(taskId, newCategory) {
     try {
         await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
             method: "PATCH",
@@ -63,7 +63,7 @@ function processTasks(data) {
     } catch (error) {
         console.error(`❌ Fehler beim Aktualisieren der mainCategory für Task ${taskId}:`, error);
     }
-}*/
+}
 
 
 /**
