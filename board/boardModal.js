@@ -83,8 +83,11 @@ function handleOutsideClick(event, container, exceptionSelector) {
     ) {
         container.classList.add("hidden");
         container.classList.remove("visible");
+        
         console.log("✅ Container closed due to outside click");
         updateDropdownIcon(false);
+
+        if (container.id === "edit-contacts-container") updateDropdownIcon(false, document.querySelector("#toggle-contacts-btn img"));
     }
 }
 
