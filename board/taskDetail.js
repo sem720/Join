@@ -75,10 +75,26 @@ async function openEditTaskModal(taskId) {
     try {
         const taskData = await fetchTaskData(taskId);
         if (!taskData) throw new Error("❌ No task data found!");
+
         hideTaskDetailModal();
         loadEditTaskTemplate();
+
+        // Wait until the modal exists in the DOM
+        await new Promise((resolve) => {
+            const checkExist = setInterval(() => {
+                const modal = document.getElementById("editTaskModal");
+                if (modal) {
+                    clearInterval(checkExist);
+                    resolve();
+                }
+            }, 50);
+        });
+
         populateEditTaskFields(taskData);
         document.getElementById("editTaskModal").classList.remove("hidden");
+
+        initEditTaskContacts("edit-contacts-list");
+        
     } catch (error) {
         console.error("❌ Error loading task data:", error);
     }
@@ -255,3 +271,54 @@ function handleTaskDetailOverlayClick() {
         });
     }
 }
+
+
+function setupEditAssignmentButton() {
+    const editAssignmentBtn = document.getElementById("toggle-contacts-btn");
+
+    if (!editAssignmentBtn) return console.error("❌ Edit Assignment Button not found!");
+        
+    editAssignmentBtn.addEventListener("click", (event) => {
+        console.log("✅ Edit Assignment Button Clicked!", event.target);
+
+        const containerId = editAssignmentBtn.getAttribute("data-container-id");
+        const listId = editAssignmentBtn.getAttribute("data-list-id");
+        const selectedContainerId = editAssignmentBtn.getAttribute("data-selected-id");
+
+        if (!listId) return console.error("❌ listId is undefined! Check button data attributes.");
+            
+        toggleContacts(event, containerId, listId, selectedContainerId);
+    });
+}
+
+
+function initEditTaskContacts() {
+    console.log("🎯 Initializing Edit Modal Contacts");
+
+    // Get elements specific to the Edit Modal
+    const editAssignmentButton = document.getElementById("toggle-contacts-btn");
+    const editContactsContainer = document.getElementById("edit-contacts-container");
+    const editContactsList = document.getElementById("edit-contacts-list");
+    const editSelectedContainer = document.getElementById("edit-selected-contacts-container");
+
+    if (!editAssignmentButton || !editContactsContainer || !editContactsList || !editSelectedContainer) {
+        console.error("❌ Missing elements in Edit Modal contact section.");
+        return;
+    }
+
+    // Fetch and render contacts for the Edit Modal
+    fetchAndRenderContacts("edit-contacts-list");
+
+    // Add click event listener to toggle contacts
+    editAssignmentButton.addEventListener("click", (event) => {
+        toggleContacts(event, "edit-contacts-container", "edit-contacts-list", "edit-selected-contacts-container");
+    });
+
+    // Listen for outside clicks
+    document.addEventListener("click", (event) => {
+        handleOutsideClick(event, editContactsContainer, ".assignment-btn");
+    });
+
+    console.log("✅ Edit Modal Contacts Initialized");
+}
+
