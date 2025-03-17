@@ -74,13 +74,15 @@ function toggleContacts(event, containerId, listId, selectedContainerId) {
 
     const contactsContainer = document.getElementById(containerId);
     const contactsList = document.getElementById(listId);
+    const button = event.target.closest(".assignment-btn"); // Get the clicked button
+    const dropdownIcon = button?.querySelector("img"); // Find the dropdown icon inside the button
     
     if (!contactsContainer || !contactsList) return console.error(`❌ Missing container: ${containerId} or ${listId}`);
     
     const isOpen = contactsContainer.classList.toggle("visible");
     contactsContainer.classList.toggle("hidden", !isOpen);
 
-    updateDropdownIcon(isOpen); // ✅ Update icon here
+    updateDropdownIcon(isOpen, dropdownIcon); // ✅ Update icon here
 }
 
 
@@ -121,9 +123,9 @@ function handleOutsideClick(event) {
  * 
  * @param {boolean} isOpen - If true, the icon indicates that the contacts list is open; otherwise, it indicates closed.
  */
-function updateDropdownIcon(isOpen) {
-    if (icon) {
-        icon.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
+function updateDropdownIcon(isOpen, iconElement) {
+    if (iconElement) {
+        iconElement.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
     }
 }
 
