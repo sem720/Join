@@ -155,7 +155,7 @@ function editTaskTempl() {
 
         <div class="form-content">
             <label>Priority</label>
-            <div class="button-container small-button-container">
+            <div class="button-container small-button-container" id="edit-button-container">
                 <button class="btn-switch" id="edit-urgent" name="urgent" type="button" onclick="toggleEditButtons(this)">
                     Urgent 
                     <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
@@ -196,8 +196,21 @@ function editTaskTempl() {
 
         <div class="form-content">
             <label>Subtasks</label>
-            <input type="text" class="edit-input-board" id="edit-subtasks" placeholder="Add new subtask" />
+             <div class="subtask-input-wrapper" id="edit-subtask-wrapper">
+            <input 
+                type="text" 
+                class="edit-input-board" 
+                id="edit-subtasks" 
+                placeholder="Add new subtask" 
+            />
+            <img
+                src="/assets/imgs/add-subtask.png"
+                alt="addSubtask-icon"
+                class="add-subtask-icon"
+            />
+            </div>
             <ul id="edit-subtask-list"></ul>
+          </div>
         </div>
     </form>
 
