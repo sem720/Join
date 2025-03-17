@@ -3,8 +3,26 @@
     height: 16px;
     cursor: pointer;
     position: absolute;
-    right: 24px;
+    right: 12px;
     top: 35px;
+}
+
+#toggle-contacts-btn {
+    height: 40px;
+}
+
+#edit-task-title,
+#edit-due-date,
+#edit-button-container,
+#edit-subtasks {
+    width: 100%;
+}
+
+#edit-subtask-wrapper {
+    display: block;
+    width: 100%;
+    margin: 0;
+    height: inherit;
 }
 
 .task-edit-confirmation {
@@ -167,4 +185,10 @@
 #editTaskModal #edit-urgent.active img,
 #editTaskModal #edit-medium.active img {
     filter: brightness(0) invert(1);
+}
+
+.add-subtask-icon:hover,
+.icon-container:hover {
+    background-color: #ebebed;
+    border-radius: 50%;
 }
