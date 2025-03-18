@@ -322,3 +322,35 @@ function initEditTaskContacts() {
     console.log("✅ Edit Modal Contacts Initialized");
 }
 
+
+function getPreselectedContacts() {
+    const container = document.getElementById("edit-selected-contacts-container");
+    if (!container) {
+        console.warn("⚠️ getPreselectedContacts: Edit modal is not open. Skipping.");
+        return [];
+    }
+
+    const avatars = container.querySelectorAll(".avatar-board-card"); // 🔄 Use querySelectorAll()
+    const initialsList = Array.from(avatars).map(avatar => avatar.textContent.trim());
+
+    console.log("🔎 Extracted Preselected Initials:", initialsList);
+    return initialsList;
+}
+
+
+
+function removePreselectedContact(contactItem) {
+    const name = contactItem.querySelector(".contact-name").textContent.trim();
+    const container = document.getElementById("edit-selected-contacts-container");
+    const avatars = Array.from(container.getElementsByClassName("avatar-board-card"));
+
+    const matchedAvatar = avatars.find(avatar => avatar.textContent.trim() === getInitials(name));
+
+    if (matchedAvatar) {
+        console.log(`❌ Removing preselected contact: ${name}`);
+        matchedAvatar.remove();
+
+        // Re-enable selection in the list
+        renderContactsList("edit-contacts-list");
+    }
+}
