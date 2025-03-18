@@ -144,9 +144,9 @@ function handleTouchMove(event) {
  * Updates the position of the dragged task.
  */
 function updateTaskPosition(touch) {
-    draggedTask.style.position = "absolute";
-    draggedTask.style.left = `${touch.clientX - 150}px`;
-    draggedTask.style.top = `${touch.clientY - 150}px`;
+    draggedTask.style.position = "fixed";
+    draggedTask.style.left = `${touch.clientX - 50}px`;
+    draggedTask.style.top = `${touch.clientY - 50}px`;
 }
 
 
