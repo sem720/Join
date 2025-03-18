@@ -353,6 +353,20 @@ body {
     color: red;
 }
 
+.task-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.task-card.dragging {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.column-body.drag-over {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px dashed #aaa;
+}
+
 ::-webkit-scrollbar-button {
     display: none;
 }
