@@ -50,10 +50,11 @@ function closeModal() {
 
 document.addEventListener("DOMContentLoaded", function () {
     const button = document.querySelector(".assignment-btn");
-    const listId = button.getAttribute("data-list-id");
-    renderContactsList(listId);
+    if (button) {
+        const listId = button.getAttribute("data-list-id");
+        renderContactsList(listId);
+    }
     setupAddSubtaskButton();
-    document.querySelector(".dropdown-btn")?.classList.remove("error");
     init();
 });
 
@@ -65,8 +66,15 @@ function initOutsideClick() {
 
     if (!modal || !contactsContainer) return;
 
-    modal.addEventListener("click", (event) => handleOutsideClick(event, contactsContainer, ".assignment-btn"));
+    const button = document.querySelector(".assignment-btn"); 
+    const dropdownIcon = button?.querySelector("img");
+
+    modal.addEventListener("click", (event) => {
+        handleOutsideClick(event, contactsContainer, ".assignment-btn", dropdownIcon);
+       
+    });
 }
+
 
 /**
  * Closes a container when clicking outside of it.
@@ -75,20 +83,39 @@ function initOutsideClick() {
  * @param {string} exceptionSelector - Selector for elements that should not trigger closing.
  */
 function handleOutsideClick(event, container, exceptionSelector) {
-    
-    if (
-        container.classList.contains("visible") &&
-        !container.contains(event.target) &&
-        !event.target.closest(exceptionSelector)
-    ) {
-        container.classList.add("hidden");
-        container.classList.remove("visible");
-        
-        console.log("✅ Container closed due to outside click");
-        updateDropdownIcon(false);
+    if (!container || !container.classList.contains("visible")) return;
 
-        if (container.id === "edit-contacts-container") updateDropdownIcon(false, document.querySelector("#toggle-contacts-btn img"));
+    if (!container.contains(event.target) && !event.target.closest(exceptionSelector)) {
+        closeDropdownContainer(container);
+        resetDropdownIcon(container);
     }
+}
+
+/**
+ * Closes the dropdown container.
+ * @param {HTMLElement} container - The dropdown container.
+ */
+function closeDropdownContainer(container) {
+    container.classList.add("hidden");
+    container.classList.remove("visible");
+    console.log("✅ Container closed due to outside click");
+}
+
+/**
+ * Resets the dropdown icon based on the container.
+ * @param {HTMLElement} container - The dropdown container.
+ */
+function resetDropdownIcon(container) {
+    let dropdownIcon;
+
+    if (container.id === "edit-contacts-container") {
+        dropdownIcon = document.querySelector("#toggle-contacts-btn img");
+    } else {
+        const button = document.querySelector(".assignment-btn");
+        dropdownIcon = button?.querySelector("img");
+    }
+
+    if (dropdownIcon) updateDropdownIcon(false, dropdownIcon);
 }
 
 
