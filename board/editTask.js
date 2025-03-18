@@ -66,6 +66,10 @@ function setEditAssignedContacts(contacts) {
     container.innerHTML = contacts.map(contact =>
         `<div class="avatar-board-card" style="background-color: ${contact.avatar.bgcolor};">${contact.avatar.initials}</div>`
     ).join("");
+
+    // Log preselected contacts
+    console.log("🎯 Preselected Contacts:");
+    contacts.forEach(contact => console.log(`✅ ${contact.name} (${contact.avatar.initials})`));
 }
 
 
