@@ -75,7 +75,7 @@ function initOutsideClick() {
  * @param {string} exceptionSelector - Selector for elements that should not trigger closing.
  */
 function handleOutsideClick(event, container, exceptionSelector) {
-    document.getElementById("contacts-container");
+    
     if (
         container.classList.contains("visible") &&
         !container.contains(event.target) &&
