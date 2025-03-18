@@ -25,6 +25,19 @@
     height: inherit;
 }
 
+#edit-contacts-container,
+#edit-contacts-list {
+    height: 160px;
+}
+
+#edit-contacts-list {
+    overflow-y: scroll;
+}
+
+#edit-selected-contacts-container {
+    padding-bottom: 8px;
+}
+
 .task-edit-confirmation {
     position: fixed;
     left: 50%;
