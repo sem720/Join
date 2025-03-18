@@ -37,7 +37,7 @@ function setupAssignmentButtons() {
             const containerId = button.getAttribute("data-container-id");
             const listId = button.getAttribute("data-list-id");
             const selectedContainerId = button.getAttribute("data-selected-id");
-
+            
             if (!listId) return console.error("❌ listId is undefined! Check the button's data attributes.");
              
             toggleContacts(event, containerId, listId, selectedContainerId);
@@ -113,7 +113,11 @@ function handleOutsideClick(event) {
         menu.classList.add("hidden");
         menu.classList.remove("visible");
 
-        updateDropdownIcon(false);
+        const button = document.querySelector(".assignment-btn"); 
+        const dropdownIcon = button?.querySelector("img");
+
+        updateDropdownIcon(false, dropdownIcon);
+        closeContacts("edit-contacts-container", "edit-contacts-list", "edit-selected-contacts-container");
     }
 }
 
@@ -147,7 +151,6 @@ function openContacts(containerId, listId, selectedContainerId) {
     updateSelectedContactsDisplay(selectedContainerId);
 
     fetchAndRenderContacts(listId);
-    updateSelectedContactsDisplay(selectedContainerId);
 }
 
 
@@ -160,13 +163,16 @@ function closeContacts(containerId, listId) {
     const contactsContainer = document.getElementById(containerId);
     const contactsList = document.getElementById(listId);
 
-    if (!contactsContainer || !contactsList) return  console.error(`❌ Contacts container (${containerId}) or list (${listId}) not found!`);
+    if (!contactsContainer || !contactsList) return;
       
     contactsContainer.classList.add("hidden");
     contactsContainer.classList.remove("visible");
     contactsList.classList.add("hidden");
     contactsList.classList.remove("visible");
 
+    console.log(`🔄 Updating selected contacts display for: ${selectedContainerId}`);
+    
+    updateSelectedContactsDisplay(selectedContainerId);
     updateDropdownIcon(false);
 }
 
@@ -243,10 +249,7 @@ async function renderContactsList(listId) {
     console.log("🔍 Trying to render contacts for:", listId);
 
     const contactsList = document.getElementById(listId);
-    if (!contactsList) {
-        console.error(`❌ Contacts list not found: ${listId}`);
-        return;
-    }
+    if (!contactsList) return;
 
     console.log(`📝 Rendering contacts in list: ${listId}`);
     contactsList.innerHTML = '';
@@ -277,9 +280,7 @@ function createContactElement(name, bgcolor, isPreselected) {
         createCheckbox(name)
     );
 
-    if (isPreselected) {
-        console.log(`🎯 Preselected Contact in List: ${name}`);
-    }
+    if (isPreselected)  console.log(`🎯 Preselected Contact in List: ${name}`);
 
     contactDiv.addEventListener("click", () => handleContactClick(contactDiv, isPreselected));
     return contactDiv;
@@ -291,10 +292,10 @@ function createContactElement(name, bgcolor, isPreselected) {
  */
 function updateSelectedContactsDisplay(selectedContainerId) {
     const selectedContainer = document.getElementById(selectedContainerId);
-    if (!selectedContainer) return console.error(`❌ Selected contacts container not found: ${selectedContainerId}`);
-    
-    console.log("Selected Container ID:", selectedContainerId);
-    console.log("Selected Container:", selectedContainer);
+
+    console.log("🔄 Updating selected contacts display for:", selectedContainerId);
+    if (!selectedContainer) return;
+
     selectedContainer.innerHTML = "";
 
     selectedContacts.forEach(({ name, bgcolor }) => {
@@ -320,7 +321,8 @@ function toggleContactSelection(name, isChecked) {
 
     console.log("Updated selected contacts:", [...selectedContacts]);
 
-    updateSelectedContactsDisplay("selected-contacts-container"); // Ensure correct ID
+    updateSelectedContactsDisplay("selected-contacts-container"); 
+    updateSelectedContactsDisplay("edit-selected-contacts-container");// Ensure correct ID
 }
 
 
@@ -330,7 +332,6 @@ function handleCheckboxChange(checkbox, img, name) {
         
         toggleContactSelection(name, checkbox.checked);
         toggleCheckboxVisibility(checkbox, img, checkbox.checked);
-
     });
 
     // Ensure clicking the image returns to the checkbox
@@ -371,7 +372,6 @@ function handleContactClick(contactItem, isPreselected) {
     nameSpan?.classList.toggle("selected-name");
     checkboxImg?.classList.toggle("selected-checkbox-image");
 
-    
     console.log(`🔄 Contact selection toggled: ${contactItem.textContent.trim()}`);
 }
 
