@@ -210,21 +210,52 @@ function processContactsData(data) {
 
 
 /**
- * Renders the list of contacts in the contacts container by creating HTML elements for each contact.
+ * Gets the initials of preselected contacts if the edit modal is open.
+ * @returns {string[]} List of preselected initials.
+ */
+function getPreselectedInitials() {
+    if (typeof getPreselectedContacts !== "function") return [];
+
+    return getPreselectedContacts();
+}
+
+
+/**
+ * Creates and appends a single contact element to the contact list.
+ * @param {HTMLElement} contactsList - The container to append the contact to.
+ * @param {string} name - The full name of the contact.
+ * @param {string} bgcolor - The background color of the contact's avatar.
+ * @param {boolean} isPreselected - Whether the contact is preselected.
+ */
+function renderSingleContact(contactsList, name, bgcolor, isPreselected) {
+    console.log(`👤 Adding contact: ${name} (${getInitials(name)}) | Preselected: ${isPreselected}`);
+    
+    const contactElement = createContactElement(name, bgcolor, isPreselected);
+    contactsList.appendChild(contactElement);
+}
+
+
+/**
+ * Renders the list of contacts in the specified container.
+ * @param {string} listId - The ID of the contacts container.
  */
 async function renderContactsList(listId) {
     console.log("🔍 Trying to render contacts for:", listId);
-    if (!listId) return console.error("❌ listId is undefined in renderContactsList");
-       
+
     const contactsList = document.getElementById(listId);
-    if (!contactsList) return console.error(`❌ Contacts list not found: ${listId}`);
-        
+    if (!contactsList) {
+        console.error(`❌ Contacts list not found: ${listId}`);
+        return;
+    }
+
     console.log(`📝 Rendering contacts in list: ${listId}`);
     contactsList.innerHTML = '';
 
+    const preselectedInitials = getPreselectedInitials();
+    console.log("🛠 Preselected Contacts (Edit Modal Only):", preselectedInitials);
+
     allContacts.forEach(({ name, bgcolor }) => {
-        console.log(`👤 Adding contact: ${name}`);
-        contactsList.appendChild(createContactElement(name, bgcolor));
+        renderSingleContact(contactsList, name, bgcolor, preselectedInitials.includes(getInitials(name)));
     });
 }
 
@@ -236,7 +267,7 @@ async function renderContactsList(listId) {
  * @param {string} bgcolor - The background color associated with the contact.
  * @returns {HTMLElement} The contact element.
  */
-function createContactElement(name, bgcolor) {
+function createContactElement(name, bgcolor, isPreselected) {
     const contactDiv = createElement("div", "contact-item");
     const nameSpan = createElement("span", "contact-name", name);
     
@@ -246,7 +277,11 @@ function createContactElement(name, bgcolor) {
         createCheckbox(name)
     );
 
-    contactDiv.addEventListener("click", () => handleContactClick(contactDiv));
+    if (isPreselected) {
+        console.log(`🎯 Preselected Contact in List: ${name}`);
+    }
+
+    contactDiv.addEventListener("click", () => handleContactClick(contactDiv, isPreselected));
     return contactDiv;
 }
 
@@ -281,11 +316,7 @@ function toggleContactSelection(name, isChecked) {
 
     if (!contact) return console.error(`❌ Contact not found: ${name}`);
         
-    if (isChecked) {
-        selectedContacts.add(contact);
-    } else {
-        selectedContacts.delete(contact);
-    }
+    isChecked ? selectedContacts.add(contact) : selectedContacts.delete(contact);
 
     console.log("Updated selected contacts:", [...selectedContacts]);
 
@@ -299,6 +330,7 @@ function handleCheckboxChange(checkbox, img, name) {
         
         toggleContactSelection(name, checkbox.checked);
         toggleCheckboxVisibility(checkbox, img, checkbox.checked);
+
     });
 
     // Ensure clicking the image returns to the checkbox
@@ -324,7 +356,12 @@ function createCheckbox(name, avatar) {
 }
 
 
-function handleContactClick(contactItem) {
+function handleContactClick(contactItem, isPreselected) {
+    if (isPreselected) {
+        console.log(`🛑 Contact is preselected: ${contactItem.textContent.trim()}`);
+        removePreselectedContact(contactItem);
+        return; // Prevent further toggling
+    }
     contactItem.classList.toggle("selected");
     const avatar = contactItem.querySelector(".avatar");
     const nameSpan = contactItem.querySelector(".contact-name");
@@ -333,6 +370,9 @@ function handleContactClick(contactItem) {
     avatar?.classList.toggle("selected-avatar");
     nameSpan?.classList.toggle("selected-name");
     checkboxImg?.classList.toggle("selected-checkbox-image");
+
+    
+    console.log(`🔄 Contact selection toggled: ${contactItem.textContent.trim()}`);
 }
 
 
