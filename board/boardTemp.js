@@ -96,7 +96,7 @@ function taskDetailTemplate(task, subtasksHTML) {
         <ul>
             ${task.assignedTo.map(user => `
                 <li style="display: flex; align-items: center; gap: 8px;">
-                    <div class="avatar-board-card" style="background-color: ${user.avatar?.bgcolor || "#ccc"};">
+                    <div class="avatar-board-card" data-name="${user.name}" style="background-color: ${user.avatar?.bgcolor || "#ccc"};">
                         ${user.avatar?.initials || "?"}
                     </div>
                     ${user.name}
