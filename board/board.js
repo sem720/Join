@@ -397,4 +397,5 @@ function init() {
     initTaskDetailOverlay();
     initTaskCardClickEvents();
     setupCalendarIcon();
+    setupAssignmentButtons();
 }
