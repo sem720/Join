@@ -2,15 +2,16 @@
     .modal {
         padding: 0 !important;
         height: 88vh;
-        width: 80vw;
+        width: 70vw;
         overflow-y: hidden;
     }
 
     #modal-body {
         height: 90vh;
+        width: 100%;
         align-items: center;
-        padding-left: 100px;
-        padding-right: 100px;
+        padding-left: 60px;
+        padding-right: 60px;
     }
 
     #main-addTask {
@@ -18,12 +19,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        overflow-y: scroll;
     }
 
     .close-btn {
         top: 30px;
-        right: 100px;
+       
     }
 
     .modal-addTask-container {
@@ -35,13 +35,13 @@
 
     .main-addTask form {
         flex-direction: column;
-        align-items: center !important;
-        gap: 10px;
+        align-items: center;
+        gap: 40px;
         height: 70vh;
         margin-bottom: 16px;
     }
 
-    .main-addTask::-webkit-scrollbar {
+    .main-addTask form::-webkit-scrollbar {
         display: none;
     }
 
@@ -58,15 +58,18 @@
         height: 100%;
     }
 
-    #calendar-icon {
-        top: 8px !important;
-    }
- 
     .h1 {
-        font-size: 2rem;
+        font-size: clamp(2rem, 5vw, 2.8rem);
         display: block;
         line-height: 1.2;
-        padding-bottom: 10px;
+        padding-bottom: 10px !important;
+        width: 200px;
+        max-width: 90%;
+    }
+
+    .avatar {
+        width: 30px;
+        height: 30px;
     }
 
 
@@ -94,13 +97,14 @@
 
     #due-date {
         padding: 4px;
+        font-size: 1rem;
     }
 
     .text {
         display: flex;
         align-items: flex-end;
-        font-size: 12px;
-        width: 38%;
+        font-size: 14px;
+        width: 46%;
     }
 
     .create-btn, .clear-btn {
@@ -120,7 +124,7 @@
     .dropdown-btn,
     .subtask-input-wrapper,
     #subtasks{
-        height: 30px;
+        height: 40px;
     }
 
     #description {
@@ -149,9 +153,7 @@
         height: 40px;
     }
 
-    #modal-body {
-        padding: 30px;
-    }
+    
     
 }
   
