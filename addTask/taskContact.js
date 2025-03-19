@@ -317,7 +317,11 @@ function toggleContactSelection(name, isChecked) {
 
     if (!contact) return console.error(`❌ Contact not found: ${name}`);
         
-    isChecked ? selectedContacts.add(contact) : selectedContacts.delete(contact);
+    if (selectedContacts.has(contact)) {
+        selectedContacts.delete(contact);
+    } else {
+        selectedContacts.add(contact);
+    }
 
     console.log("Updated selected contacts:", [...selectedContacts]);
 
