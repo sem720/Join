@@ -83,7 +83,7 @@ body {
     gap: 32px;
     margin-top: 40px;
     overflow-y: auto;
-    max-height: calc(100vh - 200px);
+    max-height: calc(100vh - 275px);
 }
 
 .column {
