@@ -95,7 +95,7 @@ async function openEditTaskModal(taskId) {
 
         initEditTaskContacts("edit-contacts-list");
         updateSelectedContactsDisplay("edit-selected-contacts-container"); // Show them
-
+        setupAddSubtaskButton();
         
     } catch (error) {
         console.error("❌ Error loading task data:", error);
