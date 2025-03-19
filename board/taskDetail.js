@@ -295,9 +295,33 @@ function setupEditAssignmentButton() {
 
 
 function initEditTaskContacts() {
-    console.log("🎯 Initializing Edit Modal Contacts");
+    const elements = getEditModalElements();
+    if (!elements) return;
 
-    // Get elements specific to the Edit Modal
+    const { editAssignmentButton, editContactsContainer, editContactsList } = elements;
+    
+    initializeEditContacts();
+    setupEditTaskEventListeners(editAssignmentButton, editContactsContainer, editContactsList);
+}
+
+
+function setupEditTaskEventListeners(editAssignmentButton, editContactsContainer, editContactsList) {
+    editAssignmentButton.addEventListener("click", (event) => {
+        toggleContacts(event, editContactsContainer.id, editContactsList.id, "edit-selected-contacts-container");
+    });
+
+    document.addEventListener("click", (event) => {
+        handleOutsideClick(event, editContactsContainer, ".assignment-btn");
+    });
+}
+
+function initializeEditContacts() {
+    fetchAndRenderContacts("edit-contacts-list");
+    resetSelectedContacts();
+}
+
+// ✅ Helper function to get required elements
+function getEditModalElements() {
     const editAssignmentButton = document.getElementById("toggle-contacts-btn");
     const editContactsContainer = document.getElementById("edit-contacts-container");
     const editContactsList = document.getElementById("edit-contacts-list");
@@ -305,23 +329,10 @@ function initEditTaskContacts() {
 
     if (!editAssignmentButton || !editContactsContainer || !editContactsList || !editSelectedContainer) {
         console.error("❌ Missing elements in Edit Modal contact section.");
-        return;
+        return null;
     }
 
-    // Fetch and render contacts for the Edit Modal
-    fetchAndRenderContacts("edit-contacts-list");
-
-    // Add click event listener to toggle contacts
-    editAssignmentButton.addEventListener("click", (event) => {
-        toggleContacts(event, "edit-contacts-container", "edit-contacts-list", "edit-selected-contacts-container");
-    });
-
-    // Listen for outside clicks
-    document.addEventListener("click", (event) => {
-        handleOutsideClick(event, editContactsContainer, ".assignment-btn");
-    });
-
-    console.log("✅ Edit Modal Contacts Initialized");
+    return { editAssignmentButton, editContactsContainer, editContactsList, editSelectedContainer };
 }
 
 
