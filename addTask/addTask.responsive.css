@@ -4,7 +4,7 @@
        max-height: 100vh;
        width: 100%;
        min-width: 300px;
-       gap: 2rem;
+       gap: 2.5rem;
      }
 
      #addTask-wrap::-webkit-scrollbar {
@@ -122,14 +122,14 @@
      }
 
      .contact-name {
-        font-size: 14px;
+        font-size: 16px;
         flex-grow: 1;
         padding-left: 16px;
      }
 
      .avatar {
-        width: 20px;
-        height: 18px;
+        width: 24px;
+        height: 24px;
         margin: 0 !important;
      }
 
