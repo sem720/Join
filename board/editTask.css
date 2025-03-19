@@ -209,3 +209,7 @@
 .subtask-action {
     top: 14px;
 }
+
+#edit-selected-contacts-container .avatar {
+    margin-right: 4px;
+}
