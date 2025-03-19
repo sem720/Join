@@ -37,14 +37,12 @@
 
 #main-addTask{
     max-width: 1000px;
-    flex: 1;
 }
 
 .form {
     max-width: 920px;
     width: 100%;
     gap: 60px;
-    flex: 1;
 }
 
 .footer-modal {
@@ -183,3 +181,18 @@
     padding-right: 0 !important;
 }
 
+.contact-item {
+    height: 40px;
+}
+
+.selected-contacts-container {
+    display: flex;
+    justify-content: center;
+}
+
+.avatar {
+    margin-top: 0 !important;
+    margin-bottom: 4px;
+    width: 28px;
+    height: 28px;
+}
