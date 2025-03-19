@@ -30,7 +30,8 @@ async function initializeTaskModal() {
     initOutsideClick();
     initAddTaskContacts(listId);
     clearError("#selected-category");
-
+    setupAssignmentButtons();
+    resetSelectedContacts();
     console.log("✅ Task modal initialized.");
 }
 
@@ -55,7 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
         renderContactsList(listId);
     }
     setupAddSubtaskButton();
-    init();
 });
 
 
@@ -127,5 +127,14 @@ function showTaskPopup() {
 }
 
 
+function resetSelectedContacts() {
+    selectedContacts.clear(); // Clear old selections
 
+    document.querySelectorAll(".contact-checkbox:checked").forEach((checkbox) => {
+        const name = checkbox.getAttribute("data-contact-name");
+        const contact = allContacts.get(name);
+        if (contact) selectedContacts.add(contact);
+    });
 
+    console.log("✅ Selected contacts reset:", [...selectedContacts]);
+}
