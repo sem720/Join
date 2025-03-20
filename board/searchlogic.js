@@ -119,8 +119,6 @@ function setupSearchEventListeners() {
     if (!searchIcon) return console.error("❌ searchIcon not found!"); // Debugging log
     if (!searchInput) return console.error("❌ searchInput not found!");
 
-    console.log("✅ searchIcon found! Adding click event listener...");
-    
     searchIcon.addEventListener('click', () => {
         console.log("🖱️ Search icon clicked! Calling resetSearch...");
         resetSearch();
