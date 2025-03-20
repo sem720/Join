@@ -55,7 +55,7 @@ function processTasks(data) {
 async function updateMainCategoryInBackend(taskId, newCategory) {
     try {
         await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
-            method: "PUT",
+            method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ mainCategory: newCategory })
         });
