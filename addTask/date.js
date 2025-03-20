@@ -39,6 +39,7 @@ function setupCalendarIcon() {
  */
 function setupDateReset() {
     const dateInput = document.getElementById("due-date");
+    
     if (dateInput) {
       dateInput.addEventListener('click', (event) => handleDateReset(event, dateInput));
     }
