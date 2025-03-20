@@ -8,7 +8,6 @@ async function fetchTasks() {
     try {
         const data = await fetchTasksFromBackend();
         if (!data) return console.warn("⚠️ Keine Tasks in der Datenbank gefunden.");
-
         const tasks = processTasks(data);
         renderTasks(tasks);
         setupDragAndDrop();
@@ -319,6 +318,10 @@ function updateTaskText(taskElement, task) {
  * @param {Array} subtasks - The updated subtasks array.
  */
 function updateTaskProgress(taskElement, subtasks) {
+    if (!subtasks) {
+        console.warn("⚠️ Keine Subtasks vorhanden – Fortschrittsbalken bleibt unverändert.");
+        return;
+    }
     const totalSubtasks = subtasks.length;
     const completedSubtasks = subtasks.filter(st => st.completed).length;
     const progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;

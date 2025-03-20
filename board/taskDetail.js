@@ -44,26 +44,7 @@ function openTaskDetailModal(task) {
  */
 function closeTaskDetailModal() {
     const overlay = document.getElementById("taskDetailOverlay");
-    const taskDetailModal = document.getElementById("taskDetailModal");
-    const editTaskModal = document.getElementById("editTaskModal");
-    if (!editTaskModal.classList.contains("hidden")) return closeEditTaskModal();
     overlay.classList.remove("active");
-    taskDetailModal.classList.add("hidden");
-    ensureTaskDetailVisibility(overlay, taskDetailModal);
-}
-
-
-/**
- * Ensures the task detail modal visibility after closing.
- * @param {HTMLElement} overlay - The task detail overlay element.
- * @param {HTMLElement} taskDetailModal - The task detail modal element.
- */
-function ensureTaskDetailVisibility(overlay, taskDetailModal) {
-    setTimeout(() => {
-        if (!overlay.classList.contains("active")) {
-            taskDetailModal.classList.remove("hidden");
-        }
-    }, 300);
 }
 
 
@@ -77,9 +58,7 @@ async function openEditTaskModal(taskId) {
         if (!taskData) throw new Error("❌ No task data found!");
 
         hideTaskDetailModal();
-        loadEditTaskTemplate();
-
-        // Wait until the modal exists in the DOM
+        loadEditTaskTemplate(taskId);
         await new Promise((resolve) => {
             const checkExist = setInterval(() => {
                 const modal = document.getElementById("editTaskModal");
@@ -94,7 +73,7 @@ async function openEditTaskModal(taskId) {
         document.getElementById("editTaskModal").classList.remove("hidden");
 
         initEditTaskContacts("edit-contacts-list");
-        updateSelectedContactsDisplay("edit-selected-contacts-container"); // Show them
+        updateSelectedContactsDisplay("edit-selected-contacts-container");
         setupAddSubtaskButton();
 
     } catch (error) {
@@ -118,15 +97,17 @@ async function fetchTaskData(taskId) {
  * Hides the task detail modal.
  */
 function hideTaskDetailModal() {
-    document.getElementById("taskDetailModal").classList.add("hidden");
+    const taskDetailModal = document.getElementById("taskDetailModal");
+    taskDetailModal.classList.add("hidden");
+    taskDetailModal.style.display = "none";
 }
 
 
 /**
  * Loads the edit task template into the modal.
  */
-function loadEditTaskTemplate() {
-    document.getElementById("edit-modal-content").innerHTML = editTaskTempl();
+function loadEditTaskTemplate(taskId) {
+    document.getElementById("edit-modal-content").innerHTML = editTaskTempl(taskId);
 }
 
 
@@ -147,10 +128,13 @@ function populateEditTaskFields(taskData) {
         dateField.value = formatDateForInput(taskData.dueDate);
         setEditPriority(taskData.priority);
         setEditAssignedContacts(taskData.assignedTo || []);
-        setEditSubtasks(taskData.subtasks || []);
+        // 🆕 Speichert die Subtasks im globalen Array
+        subtasksArray = taskData.subtasks || [];
+        setEditSubtasks(subtasksArray); // 🔄 UI mit aktuellen Subtasks aktualisieren
         initEditTaskFlatpickr();
     }, 10);
 }
+
 
 
 /**
@@ -173,23 +157,14 @@ function closeEditTaskModal() {
 function restoreTaskDetailModal() {
     const taskDetailModal = document.getElementById("taskDetailModal");
     const overlay = document.getElementById("taskDetailOverlay");
-
     if (taskDetailModal.classList.contains("hidden")) {
         taskDetailModal.classList.remove("hidden");
+        taskDetailModal.style.display = "block";
     }
-
     if (!overlay.classList.contains("active")) {
         overlay.classList.add("active");
     }
 }
-document.getElementById("taskDetailOverlay").addEventListener("click", function (event) {
-    if (event.target === this) {
-        closeEditTaskModal();
-        restoreTaskDetailModal(); // Stellt sicher, dass Task Detail sichtbar bleibt
-    }
-});
-
-
 
 
 /**
@@ -375,3 +350,14 @@ function removePreselectedContact(contactItem) {
         renderContactsList("edit-contacts-list");
     }
 }
+
+
+
+document.getElementById("taskDetailOverlay").addEventListener("click", function (event) {
+    if (event.target === this) {
+        closeEditTaskModal();
+        restoreTaskDetailModal(); // Stellt sicher, dass Task Detail sichtbar bleibt
+    }
+});
+
+
