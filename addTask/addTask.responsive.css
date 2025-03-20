@@ -16,7 +16,7 @@
         display: block;
         line-height: 1;
         padding-top: 20px;
-        padding-bottom: 70px;
+        padding-bottom: 65px;
         margin: 0 !important;
      }
 
@@ -179,7 +179,7 @@
      #due-date, 
      .button-container, 
      .dropdown-container {
-         margin-bottom: 28px;
+         margin-bottom: 38px;
      }
 
      .footer, .btn-div-footer {
@@ -241,9 +241,9 @@
       width: 100%;
      }
 
-     .btn-div-footer {
+   .btn-div-footer {
       position: fixed;
-      bottom: clamp(0px, 10.5vh, 100px);
+      bottom: clamp(10px, 13vh, 100px);
       z-index: 100;
       right: 3%;
       width:max-content;
