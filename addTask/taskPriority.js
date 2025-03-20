@@ -17,8 +17,6 @@ function toggleButtons(clickedButton) {
     
     activateButton(clickedButton);
     activeButton = clickedButton;
-
-    console.log("✅ New activeButton:", activeButton); // Debugging
 }
 
 
@@ -32,6 +30,7 @@ function activateButton(button) {
     changeButtonStyle(button, 'add');
     changeImageStyle(button, 'add');
 }
+
 
 /**
  * Deactivates the provided button by removing the 'active' class and applying the appropriate styles.
@@ -65,6 +64,7 @@ function changeButtonStyle(button, action) {
 
 }
 
+
 /**
  * Changes the image filter style for the button's image element.
  * 
@@ -80,6 +80,7 @@ function changeImageStyle(button, action) {
         img.style.filter = ''; 
     }
 }
+
 
 /**
  * Sets the default priority to 'medium' and activates its button on page load.
