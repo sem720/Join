@@ -186,8 +186,9 @@
         padding-right: 0 !important;
      }   
      
-     #addTask-wrap {
-         padding: clamp(20px, 4vw, 80px);    
+     .btn-div-footer {
+         bottom: clamp(10px, 10vh, 30px);
+         right: 3%;
      }
 }
 
@@ -226,7 +227,7 @@
 
    .h1-addTask {
       margin: 0 !important;
-      padding-bottom: 20px;
+      padding-bottom: 50px;
    }
 }
 

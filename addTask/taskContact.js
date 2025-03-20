@@ -389,6 +389,7 @@ function handleCheckboxUnchecked(avatar) {
     selectedContactsContainer.removeChild(avatar);
 }
 
+
 function handleCheckboxChangeAvatar(name) {
     const avatar = createElement("div", "avatar", getInitials(name));
     checkbox.addEventListener("change", () => {

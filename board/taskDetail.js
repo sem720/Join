@@ -349,10 +349,7 @@ function getEditModalElements() {
 
 function getPreselectedContacts() {
     const container = document.getElementById("edit-selected-contacts-container");
-    if (!container) {
-        console.warn("⚠️ getPreselectedContacts: Edit modal is not open. Skipping.");
-        return [];
-    }
+    if (!container) return [];
 
     const avatars = container.querySelectorAll(".avatar-board-card"); // 🔄 Use querySelectorAll()
     const initialsList = Array.from(avatars).map(avatar => avatar.textContent.trim());
