@@ -96,7 +96,7 @@ async function openEditTaskModal(taskId) {
         initEditTaskContacts("edit-contacts-list");
         updateSelectedContactsDisplay("edit-selected-contacts-container"); // Show them
         setupAddSubtaskButton();
-        
+
     } catch (error) {
         console.error("❌ Error loading task data:", error);
     }
@@ -173,12 +173,23 @@ function closeEditTaskModal() {
 function restoreTaskDetailModal() {
     const taskDetailModal = document.getElementById("taskDetailModal");
     const overlay = document.getElementById("taskDetailOverlay");
-    if (taskDetailModal && !taskDetailModal.classList.contains("hidden")) {
+
+    if (taskDetailModal.classList.contains("hidden")) {
         taskDetailModal.classList.remove("hidden");
-    } else {
-        overlay.classList.remove("active");
+    }
+
+    if (!overlay.classList.contains("active")) {
+        overlay.classList.add("active");
     }
 }
+document.getElementById("taskDetailOverlay").addEventListener("click", function (event) {
+    if (event.target === this) {
+        closeEditTaskModal();
+        restoreTaskDetailModal(); // Stellt sicher, dass Task Detail sichtbar bleibt
+    }
+});
+
+
 
 
 /**
@@ -279,7 +290,7 @@ function setupEditAssignmentButton() {
     const editAssignmentBtn = document.getElementById("toggle-contacts-btn");
 
     if (!editAssignmentBtn) return console.error("❌ Edit Assignment Button not found!");
-        
+
     editAssignmentBtn.addEventListener("click", (event) => {
         console.log("✅ Edit Assignment Button Clicked!", event.target);
 
@@ -288,7 +299,7 @@ function setupEditAssignmentButton() {
         const selectedContainerId = editAssignmentBtn.getAttribute("data-selected-id");
 
         if (!listId) return console.error("❌ listId is undefined! Check button data attributes.");
-            
+
         toggleContacts(event, containerId, listId, selectedContainerId);
     });
 }
@@ -299,7 +310,7 @@ function initEditTaskContacts() {
     if (!elements) return;
 
     const { editAssignmentButton, editContactsContainer, editContactsList } = elements;
-    
+
     initializeEditContacts();
     setupEditTaskEventListeners(editAssignmentButton, editContactsContainer, editContactsList);
 }
