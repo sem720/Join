@@ -1,4 +1,3 @@
-
 // editTask.js - setEditPriority()
 function setEditPriority(priority) {
     setTimeout(() => {
@@ -44,51 +43,6 @@ function setEditPriority(priority) {
 
 
 
-
-
-
-
-
-
-
-function setEditSubtasks(subtasks) {
-    const list = document.getElementById("edit-subtask-list");
-    list.innerHTML = subtasks.map((subtask, index) =>
-        `<li>
-            <label for="edit-subtask-${index}">${subtask.text}</label>
-        </li>`
-    ).join("");
-}
-
-
-function setEditAssignedContacts(contacts) {
-    const container = document.getElementById("edit-selected-contacts-container");
-    container.innerHTML = contacts.map(contact =>
-        `<div class="avatar-board-card" style="background-color: ${contact.avatar.bgcolor};">${contact.avatar.initials}</div>`
-    ).join("");
-
-    // Log preselected contacts
-    console.log("🎯 Preselected Contacts:");
-    contacts.forEach(contact => console.log(`✅ ${contact.name} (${contact.avatar.initials})`));
-}
-
-
-function getEditedAssignedContacts() {
-    return Array.from(document.querySelectorAll("#edit-selected-contacts-container .avatar-board-card")).map(contact => ({
-        name: contact.textContent,
-        avatar: { bgcolor: contact.style.backgroundColor, initials: contact.textContent }
-    }));
-}
-
-
-function getEditedSubtasks() {
-    return Array.from(document.querySelectorAll("#edit-subtask-list li")).map(li => ({
-        text: li.querySelector("label").textContent,
-        completed: li.querySelector("input").checked
-    }));
-}
-
-
 // Example of a function to get the selected priority
 function getSelectedPriority() {
     const priorityButton = document.querySelector(".btn-switch.active");
@@ -112,19 +66,151 @@ function getSelectedPriority() {
 }
 
 
+
+let subtasksArray = []; // Globale Variable zum Speichern der Subtasks
+
+
+/**
+ * Setzt die Subtask-Liste im `editTaskModal` mit UI-Updates.
+ * @param {Array} subtasks - Die Liste der Subtasks.
+ */
+function setEditSubtasks(subtasks) {
+    subtasksArray = subtasks; // 🆕 Subtasks beibehalten!
+    const list = document.getElementById("edit-subtask-list");
+    list.innerHTML = subtasks.map((subtask, index) => subtaskTemplate(subtask, index)).join("");
+}
+
+
+/**
+ * Holt die bearbeiteten Subtasks aus `editTaskModal`.
+ * Speichert den richtigen Text für jede Subtask.
+ */
+function getEditedSubtasks() {
+    return Array.from(document.querySelectorAll("#edit-subtask-list .subtask-item")).map(li => {
+        const textElement = li.querySelector(".subtask-text");
+        return {
+            text: textElement ? textElement.textContent.replace("• ", "").trim() : "Unnamed Subtask",
+            completed: false // Da es ein neuer Subtask ist, immer `false`
+        };
+    });
+}
+
+
+/**
+ * Fügt eine neue Subtask zur UI hinzu (noch nicht im Backend!).
+ */
+function addNewSubtask() {
+    const inputField = document.getElementById("edit-subtasks");
+    const subtaskText = inputField.value.trim();
+    if (!subtaskText) return;
+    subtasksArray.push({ text: subtaskText, completed: false });
+    renderSubtasks(); // UI aktualisieren
+    inputField.value = ""; // 🔄 Eingabefeld leeren
+}
+
+
+/**
+ * Aktualisiert die UI für die Subtask-Liste im `editTaskModal`.
+ */
+function renderSubtasks() {
+    setEditSubtasks(subtasksArray);
+}
+
+
+/**
+ * Bearbeitet eine bestehende Subtask im `editTaskModal` direkt in der Zeile.
+ * @param {number} index - Index der Subtask in `subtasksArray`
+ */
+function editSubtask(index) {
+    const subtaskItem = document.querySelector(`#subtask-${index}`);
+    if (!subtaskItem) return console.error("❌ Subtask nicht gefunden!");
+
+    const subtaskTextElement = subtaskItem.querySelector(".subtask-text");
+    const subtaskText = subtaskTextElement.textContent.replace("• ", "").trim(); // 🔄 Punkt entfernen für Bearbeitung
+
+    // Erstelle ein Eingabefeld anstelle des Textes
+    const inputField = document.createElement("input");
+    inputField.type = "text";
+    inputField.value = subtaskText;
+    inputField.classList.add("edit-subtask-input");
+
+    // Ersetze den Text mit dem Eingabefeld
+    subtaskItem.replaceChild(inputField, subtaskTextElement);
+    inputField.focus();
+
+    // ✅ Speichern bei Enter-Taste
+    inputField.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            saveEditedSubtask(index, inputField.value);
+        }
+    });
+
+    // ✅ Speichern bei Klick auf ✅
+    const saveIcon = subtaskItem.querySelector(".save-subtask-icon");
+    saveIcon.classList.remove("hidden");
+    saveIcon.addEventListener("click", () => saveEditedSubtask(index, inputField.value));
+}
+
+
+/**
+ * Speichert die geänderte Subtask und zeigt den Punkt wieder in der UI.
+ * @param {number} index - Index der Subtask
+ * @param {string} newText - Der neue Text der Subtask
+ */
+function saveEditedSubtask(index, newText) {
+    if (!newText.trim()) return; // 🚫 Leere Eingabe ignorieren
+
+    subtasksArray[index].text = newText.trim(); // ✅ Text ohne Punkt speichern
+    renderSubtasks(); // 🔄 UI neu rendern (statt `setEditSubtasks`)
+}
+
+
+/**
+ * Löscht eine Subtask aus `subtasksArray`.
+ * @param {number} index - Index der Subtask
+ */
+function deleteSubtask(index) {
+    subtasksArray.splice(index, 1); // Subtask entfernen
+    setEditSubtasks(subtasksArray); // UI aktualisieren
+}
+
+
+
+
+
+
+
+
+
+function setEditAssignedContacts(contacts) {
+    const container = document.getElementById("edit-selected-contacts-container");
+    container.innerHTML = contacts.map(contact =>
+        `<div class="avatar-board-card" style="background-color: ${contact.avatar.bgcolor};">${contact.avatar.initials}</div>`
+    ).join("");
+
+    // Log preselected contacts
+    console.log("🎯 Preselected Contacts:");
+    contacts.forEach(contact => console.log(`✅ ${contact.name} (${contact.avatar.initials})`));
+}
+
+
+function getEditedAssignedContacts() {
+    return Array.from(document.querySelectorAll("#edit-selected-contacts-container .avatar-board-card")).map(contact => ({
+        name: contact.textContent,
+        avatar: { bgcolor: contact.style.backgroundColor, initials: contact.textContent }
+    }));
+}
+
+
+
 function showEditConfirmation() {
     const confirmationDiv = document.createElement("div");
     confirmationDiv.classList.add("task-edit-confirmation");
     confirmationDiv.innerText = "Task successfully updated";
-
     document.body.appendChild(confirmationDiv);
-
-    // 📌 Animation starten
     setTimeout(() => {
         confirmationDiv.classList.add("show");
     }, 10);
-
-    // 📌 Nach 2 Sekunden ausblenden
     setTimeout(() => {
         confirmationDiv.classList.remove("show");
         setTimeout(() => {
@@ -274,6 +360,79 @@ async function saveTaskChanges(event) {
         console.log(`✅ Task ${taskId} wurde erfolgreich aktualisiert.`);
     } catch (error) {
         console.error("❌ Fehler beim Speichern der Änderungen:", error);
+    }
+}
+
+
+async function saveTaskChangesAndUpdateUI(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const taskId = form.getAttribute("data-task-id");
+
+    if (!taskId) {
+        console.error("❌ Fehler: Keine Task-ID gefunden!");
+        return;
+    }
+
+    const updatedSubtasks = getEditedSubtasks();
+    console.log("🔍 Subtasks, die gespeichert werden:", updatedSubtasks); // Debugging
+
+    const updatedTask = {
+        title: document.getElementById("edit-task-title").value,
+        description: document.getElementById("edit-task-description").value,
+        dueDate: document.getElementById("edit-due-date").value,
+        priority: getSelectedPriority(),
+        assignedTo: getEditedAssignedContacts(),
+        subtasks: updatedSubtasks.length > 0 ? updatedSubtasks : []  // Falls leer, speichere `[]`
+    };
+
+    try {
+        // 🔹 Änderungen im Backend speichern
+        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedTask)
+        });
+
+        console.log(`✅ Task ${taskId} wurde erfolgreich aktualisiert.`);
+
+        // 🔄 Tasks aktualisieren & Modal schließen
+        await fetchTasks();
+        closeEditTaskModal();
+        closeTaskDetailModal();
+        showEditConfirmation();
+    } catch (error) {
+        console.error("❌ Fehler beim Speichern der Änderungen:", error);
+    }
+}
+
+
+
+
+
+
+
+async function showTaskDetailModal(taskId) {
+    try {
+        const taskData = await fetchTaskData(taskId);
+        if (!taskData) throw new Error("❌ Keine aktuellen Task-Daten gefunden!");
+
+        // 🔹 Falls `subtasks` oder `assignedTo` fehlen, setzen wir leere Arrays
+        taskData.subtasks = taskData.subtasks || [];
+        taskData.assignedTo = taskData.assignedTo || [];
+
+        console.log("🔍 Task-Daten nach Fix:", taskData); // Debugging
+
+        const taskDetailContent = document.getElementById("taskDetailContent");
+        let subtasksHTML = generateSubtasks(taskData);
+        taskDetailContent.innerHTML = taskDetailTemplate(taskData, subtasksHTML);
+
+        // const taskDetailModal = document.getElementById("taskDetailModal");
+        // taskDetailModal.style.display = "block";
+
+    } catch (error) {
+        console.error("❌ Fehler beim Laden der aktualisierten Task-Daten:", error);
     }
 }
 

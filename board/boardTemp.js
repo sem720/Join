@@ -83,30 +83,37 @@ function taskDetailTemplate(task, subtasksHTML) {
     return `
         <div class="task-detail-header">
             <span class="task-detail-category" style="background: ${categoryColor};">
-                ${task.category}
+                ${task.category || "No category"}
             </span>
         </div>
-        <h2 class="task-detail-title">${task.title}</h2>
-        <p class="task-detail-content">${task.description}</p>
-        <p><strong style="padding-right: 16px;">Due date:</strong> ${formatDate(task.dueDate)}</p>
-        <p><strong style="padding-right: 16px;">Priority:</strong> ${task.priority.priorityText} 
+        <h2 class="task-detail-title">${task.title || "No title"}</h2>
+        <p class="task-detail-content">${task.description || "No description available."}</p>
+        <p><strong style="padding-right: 16px;">Due date:</strong> ${formatDate(task.dueDate) || "No date"}</p>
+        <p><strong style="padding-right: 16px;">Priority:</strong> ${task.priority?.priorityText || "No priority"} 
             <img src="${task.priority?.priorityImage || ''}" alt="${task.priority?.priorityText || ''}" class="prio-icon">
         </p>
+
         <p style="padding-bottom: 0;"><strong>Assigned To:</strong></p>
         <ul>
-            ${task.assignedTo.map(user => `
-                <li style="display: flex; align-items: center; gap: 8px;">
-                    <div class="avatar-board-card" data-name="${user.name}" style="background-color: ${user.avatar?.bgcolor || "#ccc"};">
-                        ${user.avatar?.initials || "?"}
-                    </div>
-                    ${user.name}
-                </li>
-            `).join("")}
+            ${task.assignedTo && Array.isArray(task.assignedTo) && task.assignedTo.length > 0
+            ? task.assignedTo.map(user => `
+                    <li style="display: flex; align-items: center; gap: 8px;">
+                        <div class="avatar-board-card" data-name="${user.name || "Unknown"}" 
+                            style="background-color: ${user.avatar?.bgcolor || "#ccc"};">
+                            ${user.avatar?.initials || "?"}
+                        </div>
+                        ${user.name || "Unknown"}
+                    </li>
+                `).join("")
+            : "<p>No one assigned</p>"
+        }
         </ul>
+
         <div class="task-detail-subtasks">
             <p><strong>Subtasks</strong></p>
-            ${subtasksHTML}
+            ${subtasksHTML || "<p>No subtasks available.</p>"}
         </div>
+
         <div class="task-detail-footer">
             <button onclick="deleteTask('${task.id}')" class="btn-delete">
                 <img src="../assets/imgs/delete.svg" alt="" class="delete-icon">
@@ -126,13 +133,14 @@ function taskDetailTemplate(task, subtasksHTML) {
  * Creates an HTML template for editing a task.
  * @returns {string} - The HTML template for task editing.
  */
-function editTaskTempl() {
+function editTaskTempl(taskId) {
     return `
     <button id="editTask-close-btn" class="editTask-close-btn" onclick="closeEditTaskModal()">
         &times;
     </button>
 
-    <form class="edit-modal-container" onsubmit="saveTaskChanges(event)">
+    <!-- Task-ID als data-Attribut speichern -->
+    <form class="edit-modal-container" onsubmit="saveTaskChangesAndUpdateUI(event)" data-task-id="${taskId}">
         <div class="form-content">
             <label for="edit-task-title">Title</label>
             <input id="edit-task-title" class="edit-input-board" type="text" placeholder="Enter a title" required />
@@ -189,38 +197,38 @@ function editTaskTempl() {
                 </button>
                 <div id="edit-selected-contacts-container"></div>
                 <div id="edit-contacts-container" class="hidden">
-                <div id="edit-contacts-list"></div>
+                    <div id="edit-contacts-list"></div>
                 </div>
             </div>
         </div>
 
         <div class="form-content">
             <label>Subtasks</label>
-             <div class="subtask-input-wrapper" id="edit-subtask-wrapper">
-            <input 
-                type="text" 
-                class="edit-input-board" 
-                id="edit-subtasks" 
-                placeholder="Add new subtask" 
-            />
-            <img
-                src="/assets/imgs/add-subtask.png"
-                alt="addSubtask-icon"
-                class="add-subtask-icon"
-            />
+            <div class="subtask-input-wrapper" id="edit-subtask-wrapper">
+                <input 
+                    type="text" 
+                    class="edit-input-board" 
+                    id="edit-subtasks" 
+                    placeholder="Add new subtask" 
+                />
+                <img
+                    src="/assets/imgs/add-subtask.png"
+                    alt="addSubtask-icon"
+                    class="add-subtask-icon"
+                />
             </div>
             <ul id="edit-subtask-list"></ul>
-          </div>
         </div>
-    </form>
 
-    <div class="edit-modal-footer">
-        <button class="edit-save-btn btn-dark">
-            OK
-            <img src="/assets/imgs/check-white.png" alt="">
-        </button>
-    </div>
-    `
+        <div class="edit-modal-footer">
+            <button type="submit" class="edit-save-btn btn-dark">
+                OK
+                <img src="/assets/imgs/check-white.png" alt="">
+            </button>
+        </div>
+
+    </form>
+    `;
 }
 
 
@@ -233,4 +241,25 @@ function getAvatarsHTML(assignedTo) {
     return assignedTo ? assignedTo.map(user =>
         `<div class="avatar-board-card" style="background-color: ${user.avatar.bgcolor};">${user.avatar.initials}</div>`
     ).join("") : "";
+}
+
+
+/**
+ * Erstellt das HTML-Template für eine einzelne Subtask.
+ * @param {Object} subtask - Die Subtask-Daten.
+ * @param {number} index - Der Index der Subtask im Array.
+ * @returns {string} HTML-String der Subtask.
+ */
+function subtaskTemplate(subtask, index) {
+    return `
+        <li id="subtask-${index}" class="subtask-item flex">
+            <span class="subtask-text">• ${subtask.text}</span> <!-- ✅ Punkt in der UI -->
+            <div class="li-actions">
+                <img src="/assets/imgs/edit.svg" alt="Edit Icon" class="edit-icon" onclick="editSubtask(${index})">
+                <span class="divider">|</span>
+                <img src="/assets/imgs/delete-black.png" alt="Delete Icon" class="delete-icon" onclick="deleteSubtask(${index})">
+                <img src="/assets/imgs/checkmark-black.png" alt="Save Icon" class="save-subtask-icon hidden">
+            </div>
+        </li>
+    `;
 }

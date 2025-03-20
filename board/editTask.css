@@ -132,7 +132,7 @@
 
     input {
         width: fit-content;
-        height: 16px;
+        height: 24px;
         box-shadow: none;
         cursor: auto;
     }
@@ -212,4 +212,49 @@
 
 #edit-selected-contacts-container .avatar {
     margin-right: 4px;
+}
+
+.save-subtask-icon {
+    cursor: pointer;
+}
+
+.subtask-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-radius: 4px;
+    margin: 4px 0;
+}
+
+.subtask-text {
+    flex-grow: 1;
+    padding: 4px 8px;
+    font-size: 14px;
+}
+
+.li-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.edit-icon,
+.delete-icon {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.edit-icon:hover,
+.delete-icon:hover {
+    opacity: 1;
+}
+
+.divider1 {
+    width: 1px;
+    height: 16px;
+    background-color: #ccc;
 }
