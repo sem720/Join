@@ -12,6 +12,7 @@ function getInitials(name) {
     return parts.map(part => part[0]).join("").toUpperCase();
 }
 
+
 /**
  * Formats a text string by removing leading numbers, bullet points, and underscores,
  * and capitalizing the first letter of each word.
@@ -30,6 +31,7 @@ function formatText(text) {
         .join(" "); 
 }
 
+
 /**
  * Capitalizes the first letter of each word in a given name.
  * 
@@ -43,6 +45,7 @@ function capitalizeName(name) {
         .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
         .join(" ");
 }
+
 
 /**
  * Creates a new HTML element with an optional class and inner text.
@@ -59,6 +62,7 @@ function createElement(tag, className = "", text = "") {
     return element;
 }
 
+
 /**
  * Creates an avatar element for a contact with the initials and background color.
  * 
@@ -73,6 +77,7 @@ function createAvatar(name, bgcolor) {
     return avatar;
 }
 
+
 /**
  * Creates a checkbox input element for selecting a contact.
  * 
@@ -86,7 +91,6 @@ function createCheckboxElement(name, avatar) {
     checkbox.dataset.contactName = name;
     checkbox.dataset.contactAvatar = avatar;
 
-    
     return checkbox;
 }
 
@@ -122,6 +126,7 @@ function showError(selector, message) {
     field.addEventListener("change", () => clearError(selector));
 }
 
+
 /**
  * Clears the error message and removes the error class from the input field identified by the selector.
  * 
@@ -148,12 +153,27 @@ function resetDateInput(input) {
     input.classList.remove('has-value');
 }
 
+
+/**
+ * Toggles the visibility of a checkbox and an associated image based on the checkbox state.
+ * 
+ * @param {HTMLInputElement} checkbox - The checkbox element to toggle.
+ * @param {HTMLImageElement} img - The image element associated with the checkbox.
+ * @param {boolean} isChecked - The current checked state of the checkbox.
+ */
 function toggleCheckboxVisibility(checkbox, img, isChecked) {
     img.style.display = isChecked ? "block" : "none";
     checkbox.style.display = isChecked ? "none" : "block";
 }
 
 
+/**
+ * Unchecks a checkbox, hides the associated image, and triggers a change event.
+ * 
+ * @param {HTMLInputElement} checkbox - The checkbox element to uncheck.
+ * @param {HTMLImageElement} img - The image element associated with the checkbox.
+ * @param {string} name - The name associated with the checkbox for logging purposes.
+ */
 function uncheckCheckbox(checkbox, img, name) {
     checkbox.checked = false;
     img.style.display = "none";
