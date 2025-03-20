@@ -24,5 +24,4 @@ function init() {
     setupCalendarIcon(),
     clearTask();
     initAddTaskContacts("contacts-list");
-
 }
