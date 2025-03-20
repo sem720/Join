@@ -37,9 +37,7 @@ function toggleDropdown() {
     dropdownList.style.display = isOpen ? "block" : "none";
     dropdownBtn.querySelector("img").src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
   
-    if (isOpen) {
-      resetDropdown();
-    }
+    if (isOpen) resetDropdown();
 }
 
 
@@ -56,7 +54,6 @@ function selectCategory(option) {
     updateDropdownHTML(selectedText);
   
     selectedCategory.value = selectedValue;
-    console.log("🟢 Updated selected-category value:", selectedCategory.value);
     dropdownContainer.classList.remove("open");
     dropdownList.style.display = "none";
 
