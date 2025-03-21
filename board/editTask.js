@@ -13,6 +13,7 @@ function setEditPriority(priority) {
     }, 10);
 }
 
+
 /**
  * Checks if the provided priority object is valid.
  * @param {Object} priority - The priority object.
@@ -111,15 +112,17 @@ function setEditSubtasks(subtasks) {
 
 
 /**
- * Gets the edited subtasks from `editTaskModal`.
- * Stores the correct text for each subtask.
+ * Retrieves the edited subtasks while preserving their completed status.
+ * @returns {Array<Object>} Updated subtask list with correct completion status.
  */
 function getEditedSubtasks() {
-    return Array.from(document.querySelectorAll("#edit-subtask-list .subtask-item")).map(li => {
+    return Array.from(document.querySelectorAll("#edit-subtask-list .subtask-item")).map((li) => {
         const textElement = li.querySelector(".subtask-text");
+        const text = textElement ? textElement.textContent.replace("• ", "").trim() : "Unnamed Subtask";
+        const existingSubtask = subtasksArray.find(sub => sub.text === text);
         return {
-            text: textElement ? textElement.textContent.replace("• ", "").trim() : "Unnamed Subtask",
-            completed: false
+            text,
+            completed: existingSubtask ? existingSubtask.completed : false
         };
     });
 }

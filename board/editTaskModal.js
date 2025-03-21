@@ -61,11 +61,16 @@ async function saveTaskChangesAndUpdateUI(event) {
     event.preventDefault();
     const taskId = event.target.getAttribute("data-task-id");
     if (!taskId) return console.error("❌ No Task ID found!");
+    const existingTask = await fetchTaskData(taskId);
+    if (!existingTask) return console.error(`❌ Task ${taskId} not found in database.`);
     const updatedTask = {
         ...getUpdatedTaskData(),
-        assignedTo: getEditedAssignedContacts() || [] // Kontakte direkt hinzufügen
+        aassignedTo: getEditedAssignedContacts().length > 0
+            ? getEditedAssignedContacts()
+            : existingTask.assignedTo || [],
+        subtasks: getEditedSubtasks() || []
     };
-    await updateTaskInDatabase(taskId, updatedTask, true); // ✅ Hier wird die Bestätigung ausgeführt
+    await updateTaskInDatabase(taskId, updatedTask, true);
 }
 
 
