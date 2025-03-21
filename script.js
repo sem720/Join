@@ -165,7 +165,6 @@ function setupPasswordToggle(inputId) {
   });
 }
 
-// Nur aufrufen wenn Elemente existieren
 document.querySelectorAll("#Password, #PasswordCon").forEach((el) => {
   setupPasswordToggle(el.id);
 });

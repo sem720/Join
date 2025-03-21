@@ -4,9 +4,10 @@ function checkNavigationVisibility() {
 
   if (!user) {
     navContainer.style.display = "none";
+    navConOut.style.display = "block";
   } else {
-    navContainer.style.display = "block"; // Setzt den ursprünglichen Wert zurück
-    // Oder spezifisch: 'block', 'flex' etc. je nach Layout
+    navContainer.style.display = "block";
+    navConOut.style.display = "none";
   }
 }
 

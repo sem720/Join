@@ -19,6 +19,10 @@
   margin-bottom: 30px;
 }
 
+.div-nav-out {
+  display: none;
+}
+
 .div-navigation {
   height: 240px;
   display: flex;
