@@ -23,7 +23,6 @@ function showTaskModal() {
  */
 async function initializeTaskModal() {
     const listId = "contacts-list"; 
-    console.log("✅ listId in initializeTaskModal:", listId);
 
     await fetchAndRenderContacts(listId);
     initialDefaultPriority();
@@ -32,7 +31,6 @@ async function initializeTaskModal() {
     clearError("#selected-category");
     setupAssignmentButtons();
     resetSelectedContacts();
-    console.log("✅ Task modal initialized.");
 }
 
 
@@ -98,8 +96,8 @@ function handleOutsideClick(event, container, exceptionSelector) {
 function closeDropdownContainer(container) {
     container.classList.add("hidden");
     container.classList.remove("visible");
-    console.log("✅ Container closed due to outside click");
 }
+
 
 /**
  * Resets the dropdown icon based on the container.
@@ -135,6 +133,4 @@ function resetSelectedContacts() {
         const contact = allContacts.get(name);
         if (contact) selectedContacts.add(contact);
     });
-
-    console.log("✅ Selected contacts reset:", [...selectedContacts]);
 }
