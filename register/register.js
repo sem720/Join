@@ -7,7 +7,7 @@ const dbUrl =
  * @throws {Error} When database operations fail
  */
 async function addUser() {
-  if (!validateForm()) return;
+  if (!(await validateForm())) return;
 
   const { email, password, name, phone } = getUserInput();
   const userData = prepareUserData(name, email, password);
@@ -20,6 +20,7 @@ async function addUser() {
     finalizeSignup();
   } catch (error) {
     console.error("Fehler:", error);
+    handleValidationResult("Registration failed. Please try again.");
   }
 }
 
@@ -129,10 +130,22 @@ function finalizeSignup() {
  * Validates form inputs and shows error messages
  * @returns {boolean} True if form is valid
  */
-function validateForm() {
+async function validateForm() {
   const formData = getFormInputValues();
   const error = validateFormInputs(formData);
-  return handleValidationResult(error);
+  if (error) {
+    handleValidationResult(error);
+    return false;
+  }
+
+  // Check if email already exists
+  const emailExists = await checkEmailExists(formData.email);
+  if (emailExists) {
+    handleValidationResult("Email already exists");
+    return false;
+  }
+
+  return true;
 }
 
 /**
@@ -192,6 +205,18 @@ function handleValidationResult(error) {
 function validateEmail(email) {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailPattern.test(email);
+}
+
+async function checkEmailExists(email) {
+  const firebaseKey = formatFirebaseKey(email);
+  try {
+    const response = await fetch(`${dbUrl}/users/${firebaseKey}.json`);
+    const data = await response.json();
+    return data !== null;
+  } catch (error) {
+    console.error("Error checking email existence:", error);
+    return true; // Im Fehlerfall lieber Registrierung verhindern
+  }
 }
 
 /**
