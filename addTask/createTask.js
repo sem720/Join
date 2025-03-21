@@ -8,7 +8,6 @@ function createTask(event) {
     console.log("📤 Task Data Before Saving:", taskData); // Check full object
     console.log("🟡 Task Priority:", taskData?.priority?.priorityText); // Check priority safely
 
-
     if (!validateTaskData(taskData)) return;
 
     saveTaskToFirebase(taskData)
