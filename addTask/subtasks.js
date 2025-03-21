@@ -4,7 +4,6 @@
  */
 function setupAddSubtaskButton() {
     addEventListeners(".add-subtask-icon", "click", handleAddSubtaskClick);
-    addEventListeners(".add-subtask-icon", "click", addNewSubtask);
     addEventListeners("#subtasks", "keydown", handleSubtaskInputKeydown);
     addEventListeners("#subtasks", "input", handleSubtaskInput);
 
