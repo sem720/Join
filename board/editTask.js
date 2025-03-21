@@ -1,111 +1,145 @@
 
+/**
+ * Sets the priority button in the edit task modal.
+ * @param {Object} priority - The priority object.
+ * @param {string} priority.priorityText - The priority level ("urgent", "medium", "low").
+ */
 function setEditPriority(priority) {
     setTimeout(() => {
-        if (!priority || !priority.priorityText) {
-            console.warn("⚠️ Keine gültige Priorität gefunden.");
-            return;
-        }
-
-        const priorityText = priority.priorityText.toLowerCase().trim(); // "urgent", "medium", "low"
-        const buttonId = `edit-${priorityText}`; // 🔴 Neue ID: edit-urgent, edit-medium, edit-low
-
-        // Alle Buttons im Modal zurücksetzen
-        document.querySelectorAll("#editTaskModal .btn-switch").forEach(btn => {
-            btn.classList.remove("active");
-            btn.style.backgroundColor = "";
-            btn.style.color = "#000";
-        });
-
-        // Richtigen Button im Modal finden
-        const button = document.getElementById(buttonId);
-        if (button) {
-            button.classList.add("active");
-            button.setAttribute("data-active", "true");
-
-            // Stile setzen
-            switch (priorityText) {
-                case "urgent":
-                    button.style.backgroundColor = "#ff3b30";
-                    button.style.color = "#fff";
-                    break;
-                case "medium":
-                    button.style.backgroundColor = "#ffcc00";
-                    button.style.color = "#000";
-                    break;
-                case "low":
-                    button.style.backgroundColor = "#34c759";
-                    button.style.color = "#fff";
-                    break;
-            }
-        }
+        if (!isValidPriority(priority)) return;
+        const priorityText = priority.priorityText.toLowerCase().trim();
+        resetPriorityButtons();
+        activatePriorityButton(priorityText);
     }, 10);
 }
 
-
-
-// Example of a function to get the selected priority
-function getSelectedPriority() {
-    const priorityButton = document.querySelector(".btn-switch.active");
-    if (!priorityButton) {
-        console.warn("⚠️ No active priority button found, using default.");
-        return { priorityText: "Medium", priorityImage: "/assets/imgs/medium.png" };
+/**
+ * Checks if the provided priority object is valid.
+ * @param {Object} priority - The priority object.
+ * @returns {boolean} True if valid, otherwise false.
+ */
+function isValidPriority(priority) {
+    if (!priority || !priority.priorityText) {
+        console.warn("⚠️ Invalid priority provided.");
+        return false;
     }
-    const priorityText = priorityButton.innerText.trim();
-    const priorityImages = {
-        "Low": "/assets/imgs/low.png",
-        "Medium": "/assets/imgs/medium.png",
-        "Urgent": "/assets/imgs/urgent.png"
+    return true;
+}
+
+
+/**
+ * Resets all priority buttons by removing active state and resetting styles.
+ */
+function resetPriorityButtons() {
+    document.querySelectorAll("#editTaskModal .btn-switch").forEach(btn => {
+        btn.classList.remove("active");
+        btn.style.backgroundColor = "";
+        btn.style.color = "#000";
+    });
+}
+
+
+/**
+ * Activates the selected priority button and applies styles.
+ * @param {string} priorityText - The priority level ("urgent", "medium", "low").
+ */
+function activatePriorityButton(priorityText) {
+    const button = document.getElementById(`edit-${priorityText}`);
+    if (!button) return;
+    button.classList.add("active");
+    button.setAttribute("data-active", "true");
+    setPriorityStyle(button, priorityText);
+}
+
+
+/**
+ * Sets the appropriate background and text color for the priority button.
+ * @param {HTMLElement} button - The priority button element.
+ * @param {string} priorityText - The priority level ("urgent", "medium", "low").
+ */
+function setPriorityStyle(button, priorityText) {
+    const styles = {
+        urgent: { bg: "#ff3b30", color: "#fff" },
+        medium: { bg: "#ffcc00", color: "#000" },
+        low: { bg: "#34c759", color: "#fff" }
     };
+    button.style.backgroundColor = styles[priorityText]?.bg || "";
+    button.style.color = styles[priorityText]?.color || "";
+}
+
+
+/**
+ * Retrieves the selected priority or returns the default if none is selected.
+ * @returns {{ priorityText: string, priorityImage: string }} The selected or default priority.
+ */
+function getSelectedPriority() {
+    const button = document.querySelector(".btn-switch.active");
+    const priorityText = button ? button.innerText.trim() : "Medium";
     return {
         priorityText,
-        priorityImage: priorityImages[priorityText] || "/assets/imgs/medium.png"
+        priorityImage: getPriorityImage(priorityText, !button)
     };
 }
 
 
-
-let subtasksArray = []; // Globale Variable zum Speichern der Subtasks
 /**
- * Setzt die Subtask-Liste im `editTaskModal` mit UI-Updates.
- * @param {Array} subtasks - Die Liste der Subtasks.
+ * Maps priority levels to their corresponding images.
+ * @param {string} priorityText - The priority level ("Low", "Medium", "Urgent").
+ * @param {boolean} isDefault - Whether the default priority is being used.
+ * @returns {string} The image path for the given priority.
+ */
+function getPriorityImage(priorityText, isDefault) {
+    if (isDefault) console.warn("⚠️ No active priority button found, using default.");
+    return {
+        Low: "/assets/imgs/low.png",
+        Medium: "/assets/imgs/medium.png",
+        Urgent: "/assets/imgs/urgent.png"
+    }[priorityText] || "/assets/imgs/medium.png";
+}
+
+
+let subtasksArray = []; // Global variable to store the subtasks
+/**
+ * Sets the subtask list in the `editTaskModal` with UI updates.
+ * @param {Array} subtasks - The list of subtasks.
  */
 function setEditSubtasks(subtasks) {
-    subtasksArray = subtasks; // 🆕 Subtasks beibehalten!
+    subtasksArray = subtasks;
     const list = document.getElementById("edit-subtask-list");
     list.innerHTML = subtasks.map((subtask, index) => subtaskTemplate(subtask, index)).join("");
 }
 
 
 /**
- * Holt die bearbeiteten Subtasks aus `editTaskModal`.
- * Speichert den richtigen Text für jede Subtask.
+ * Gets the edited subtasks from `editTaskModal`.
+ * Stores the correct text for each subtask.
  */
 function getEditedSubtasks() {
     return Array.from(document.querySelectorAll("#edit-subtask-list .subtask-item")).map(li => {
         const textElement = li.querySelector(".subtask-text");
         return {
             text: textElement ? textElement.textContent.replace("• ", "").trim() : "Unnamed Subtask",
-            completed: false // Da es ein neuer Subtask ist, immer `false`
+            completed: false
         };
     });
 }
 
 
 /**
- * Fügt eine neue Subtask zur UI hinzu (noch nicht im Backend!).
+ * Adds a new subtask to the UI (not yet in the backend!).
  */
 function addNewSubtask() {
     const inputField = document.getElementById("edit-subtasks");
     const subtaskText = inputField.value.trim();
     if (!subtaskText) return;
     subtasksArray.push({ text: subtaskText, completed: false });
-    renderSubtasks(); // UI aktualisieren
-    inputField.value = ""; // 🔄 Eingabefeld leeren
+    renderSubtasks();
+    inputField.value = "";
 }
 
 
 /**
- * Aktualisiert die UI für die Subtask-Liste im `editTaskModal`.
+ * Updates the UI for the subtask list in the `editTaskModal`.
  */
 function renderSubtasks() {
     setEditSubtasks(subtasksArray);
@@ -113,34 +147,16 @@ function renderSubtasks() {
 
 
 /**
- * Bearbeitet eine bestehende Subtask im `editTaskModal` direkt in der Zeile.
- * @param {number} index - Index der Subtask in `subtasksArray`
+ * Edits an existing subtask in the `editTaskModal` by replacing the text with an input field.
+ * @param {number} index - Index of the subtask in `subtasksArray`
  */
 function editSubtask(index) {
     const subtaskItem = document.querySelector(`#subtask-${index}`);
-    if (!subtaskItem) return console.error("❌ Subtask nicht gefunden!");
-
-    const subtaskTextElement = subtaskItem.querySelector(".subtask-text");
-    const subtaskText = subtaskTextElement.textContent.replace("• ", "").trim(); // 🔄 Punkt entfernen für Bearbeitung
-
-    // Erstelle ein Eingabefeld anstelle des Textes
-    const inputField = document.createElement("input");
-    inputField.type = "text";
-    inputField.value = subtaskText;
-    inputField.classList.add("edit-subtask-input");
-
-    // Ersetze den Text mit dem Eingabefeld
-    subtaskItem.replaceChild(inputField, subtaskTextElement);
-    inputField.focus();
-
-    // ✅ Speichern bei Enter-Taste
+    if (!subtaskItem) return console.error("❌ Subtask not found!");
+    const inputField = createSubtaskInput(subtaskItem);
     inputField.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-            saveEditedSubtask(index, inputField.value);
-        }
+        if (event.key === "Enter") saveEditedSubtask(index, inputField.value);
     });
-
-    // ✅ Speichern bei Klick auf ✅
     const saveIcon = subtaskItem.querySelector(".save-subtask-icon");
     saveIcon.classList.remove("hidden");
     saveIcon.addEventListener("click", () => saveEditedSubtask(index, inputField.value));
@@ -148,27 +164,52 @@ function editSubtask(index) {
 
 
 /**
- * Speichert die geänderte Subtask und zeigt den Punkt wieder in der UI.
- * @param {number} index - Index der Subtask
- * @param {string} newText - Der neue Text der Subtask
+ * Creates an input field for editing a subtask and replaces the existing text.
+ * @param {HTMLElement} subtaskItem - The subtask element to be edited.
+ * @returns {HTMLInputElement} The created input field.
  */
-function saveEditedSubtask(index, newText) {
-    if (!newText.trim()) return; // 🚫 Leere Eingabe ignorieren
-    subtasksArray[index].text = newText.trim(); // ✅ Text ohne Punkt speichern
-    renderSubtasks(); // 🔄 UI neu rendern (statt `setEditSubtasks`)
+function createSubtaskInput(subtaskItem) {
+    const subtaskTextElement = subtaskItem.querySelector(".subtask-text");
+    const inputField = document.createElement("input");
+    inputField.type = "text";
+    inputField.value = subtaskTextElement.textContent.replace("• ", "").trim();
+    inputField.classList.add("edit-subtask-input");
+    subtaskItem.replaceChild(inputField, subtaskTextElement);
+    inputField.focus();
+    return inputField;
 }
 
 
 /**
- * Löscht eine Subtask aus `subtasksArray`.
- * @param {number} index - Index der Subtask
+ * Saves the changed subtask and shows the point again in the UI.
+ * @param {number} index - Index of the Subtask
+ * @param {string} newText - The new text of the subtask
  */
-function deleteSubtask(index) {
-    subtasksArray.splice(index, 1); // Subtask entfernen
-    setEditSubtasks(subtasksArray); // UI aktualisieren
+function saveEditedSubtask(index, newText) {
+    if (!newText.trim()) return;
+    subtasksArray[index].text = newText.trim();
+    renderSubtasks();
 }
 
 
+/**
+ * Deletes a subtask from `subtasksArray`.
+ * @param {number} index - Index of the Subtask
+ */
+function deleteSubtask(index) {
+    subtasksArray.splice(index, 1);
+    setEditSubtasks(subtasksArray);
+}
+
+
+/**
+ * Updates the assigned contacts display in the edit task modal.
+ * @param {Array<Object>} contacts - List of assigned contacts.
+ * @param {string} contacts[].name - Full name of the contact.
+ * @param {Object} contacts[].avatar - Avatar details of the contact.
+ * @param {string} contacts[].avatar.bgcolor - Background color of the avatar.
+ * @param {string} contacts[].avatar.initials - Initials of the contact.
+ */
 function setEditAssignedContacts(contacts) {
     const container = document.getElementById("edit-selected-contacts-container");
     container.innerHTML = contacts.map(contact => {
@@ -183,90 +224,59 @@ function setEditAssignedContacts(contacts) {
 }
 
 
+/**
+ * Retrieves the edited assigned contacts from the edit task modal.
+ * @returns {Array<Object>} List of assigned contacts with name and avatar details.
+ */
 function getEditedAssignedContacts() {
-    return Array.from(document.querySelectorAll("#edit-selected-contacts-container .avatar-board-card")).map(contactElement => {
-        let initials = contactElement.textContent.trim();
-        let bgcolor = contactElement.style.backgroundColor.startsWith("rgb")
-            ? rgbToHex(contactElement.style.backgroundColor)
-            : contactElement.style.backgroundColor;
-
-        // 🔹 1. Versuche, den vollständigen Namen aus `data-name` zu holen
-        let name = contactElement.getAttribute("data-name") || null;
-
-        // 🔹 2. Falls der Name nicht gefunden wurde, in `allContacts` suchen
-        if (!name || name.trim() === "") {
-            if (allContacts.size > 0) {
-                const foundContact = [...allContacts.values()].find(c => getInitials(c.name) === initials);
-                name = foundContact ? foundContact.name : null;
-            } else {
-                console.warn("⚠️ `allContacts` ist leer. Kontakte wurden möglicherweise noch nicht geladen.");
-            }
-        }
-
-        // 🔹 3. Falls kein Name gefunden wurde, Standardwert setzen
-        if (!name) {
-            name = "Unbekannter Nutzer";
-            console.warn(`⚠️ Name für "${initials}" konnte nicht gefunden werden. Fallback: "${name}"`);
-        }
-
-        return {
-            avatar: {
-                bgcolor: bgcolor,
-                initials: initials
-            },
-            name: name
-        };
-    });
+    return Array.from(document.querySelectorAll("#edit-selected-contacts-container .avatar-board-card"))
+        .map(parseContactElement);
 }
 
 
 /**
- * Wandelt eine RGB-Farbe in HEX um.
- * @param {string} rgb - Die RGB-Farbe im Format "rgb(r, g, b)".
- * @returns {string} Die HEX-Farbe im Format "#RRGGBB".
+ * Extracts contact details from a contact element.
+ * @param {HTMLElement} contactElement - The contact element in the UI.
+ * @returns {Object} Contact details including name and avatar.
+ */
+function parseContactElement(contactElement) {
+    const initials = contactElement.textContent.trim();
+    const bgcolor = contactElement.style.backgroundColor.startsWith("rgb")
+        ? rgbToHex(contactElement.style.backgroundColor)
+        : contactElement.style.backgroundColor;
+    const name = contactElement.getAttribute("data-name") || findContactName(initials);
+    return { avatar: { bgcolor, initials }, name };
+}
+
+
+/**
+ * Finds a contact name in allContacts by matching initials.
+ * @param {string} initials - The initials to match.
+ * @returns {string} The full name or "Unknown User" if not found.
+ */
+function findContactName(initials) {
+    if (!allContacts.size) return console.warn("⚠️ `allContacts` is empty."), "Unknown User";
+    const contact = [...allContacts.values()].find(c => getInitials(c.name) === initials);
+    return contact ? contact.name : "Unknown User";
+}
+
+
+/**
+ * Converts an RGB color to HEX.
+ * @param {string} rgb -The RGB color in the format "rgb(r, g, b)".
+ * @returns {string} The HEX color in the format "#RRGGBB".
  */
 function rgbToHex(rgb) {
     const match = rgb.match(/\d+/g);
-    if (!match || match.length < 3) return "#CCCCCC"; // Fallback-Farbe
+    if (!match || match.length < 3) return "#CCCCCC";
     return `#${match.slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('')}`.toUpperCase();
 }
 
 
-async function handleEditTaskSubmit(event) {
-    event.preventDefault(); // Verhindert das Neuladen der Seite
-    const form = event.target;
-    const taskId = form.getAttribute("data-task-id");
-    if (!taskId) {
-        console.error("❌ Fehler: Keine Task-ID gefunden!");
-        return;
-    }
-    await saveSelectedContactsToBackend(taskId); // Speichert die ausgewählten Kontakte
-    await saveTaskChangesAndUpdateUI(event); // Speichert alle anderen Task-Änderungen
-    closeContacts("edit-contacts-container", "edit-contacts-list"); // Dropdown schließen
-}
-
-
-async function saveSelectedContactsToBackend(taskId) {
-    if (!taskId) {
-        console.error("❌ Fehler: Keine Task-ID gefunden!");
-        return;
-    }
-    const selectedContactsArray = getEditedAssignedContacts();
-    const updatedTask = { assignedTo: selectedContactsArray.length > 0 ? selectedContactsArray : [] };
-    try {
-        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedTask)
-        });
-        console.log(`✅ Kontakte für Task ${taskId} erfolgreich gespeichert.`);
-        await fetchTasks(); // UI aktualisieren
-    } catch (error) {
-        console.error("❌ Fehler beim Speichern der Kontakte:", error);
-    }
-}
-
-
+/**
+ * Displays a confirmation message when a task is successfully updated.
+ * The message appears temporarily and fades out after a short duration.
+ */
 function showEditConfirmation() {
     const confirmationDiv = document.createElement("div");
     confirmationDiv.classList.add("task-edit-confirmation");
@@ -284,6 +294,13 @@ function showEditConfirmation() {
 }
 
 
+/**
+ * Formats a given date string into the "DD/MM/YYYY" format.
+ * If the input is already in "DD/MM/YYYY", it is returned as is.
+ * If the input is an invalid date, an empty string is returned.
+ * @param {string} dueDate - The date string to be formatted.
+ * @returns {string} The formatted date in "DD/MM/YYYY" format or an empty string if invalid.
+ */
 function formatDateForInput(dueDate) {
     if (!dueDate) return ""; // Falls kein Datum vorhanden ist
     const dateParts = dueDate.split("/"); // Falls TT/MM/YYYY aus Backend kommt
@@ -315,7 +332,10 @@ function formatDateForInput(dueDate) {
 // }
 
 
-//resetting the date by click on calendar-icon
+/**
+ * Sets up the reset functionality for the edit due date input.
+ * When the calendar icon is clicked, the selected date is cleared.
+ */
 function setupEditDateReset() {
     const dateInput = document.getElementById("edit-due-date");
     const calendarIcon = document.getElementById("edit-calendar-icon");
@@ -326,6 +346,10 @@ function setupEditDateReset() {
 }
 
 
+/**
+ * Sets up the reset functionality for the edit due date input.
+ * When the calendar icon is clicked, the selected date is cleared.
+ */
 function handleEditCalendarClick() {
     const calendarIcon = document.getElementById("edit-calendar-icon");
     const dateInput = document.getElementById("edit-due-date");
@@ -337,7 +361,10 @@ function handleEditCalendarClick() {
 }
 
 
-//to set up flatpickr and its functionality
+/**
+ * Initializes the Flatpickr date picker for the edit task modal.
+ * Configures the date format, enables manual input, and sets up event listeners.
+ */
 function initEditTaskFlatpickr() {
     console.log("Initializing Flatpickr for edit modal...");
     flatpickr("#edit-due-date", {
@@ -347,50 +374,4 @@ function initEditTaskFlatpickr() {
     });
     handleEditCalendarClick();
     setupEditDateReset();
-}
-
-
-async function saveTaskChangesAndUpdateUI(event) {
-    event.preventDefault();
-    const form = event.target;
-    const taskId = form.getAttribute("data-task-id");
-
-    if (!taskId) {
-        console.error("❌ Fehler: Keine Task-ID gefunden!");
-        return;
-    }
-
-    // Daten aus UI holen
-    const updatedTask = {
-        title: document.getElementById("edit-task-title").value,
-        description: document.getElementById("edit-task-description").value,
-        dueDate: document.getElementById("edit-due-date").value,
-        priority: getSelectedPriority(),
-        assignedTo: getEditedAssignedContacts(), // Falls leer, soll ein leeres Array gespeichert werden
-        subtasks: getEditedSubtasks().length > 0 ? getEditedSubtasks() : []
-    };
-
-    // 🔹 Falls `assignedTo` nicht existiert, erstelle es als leeres Array
-    if (!updatedTask.assignedTo || updatedTask.assignedTo.length === 0) {
-        updatedTask.assignedTo = [];
-    }
-
-    try {
-        // 🔹 Änderungen in der Datenbank speichern
-        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedTask)
-        });
-
-        console.log(`✅ Aufgabe ${taskId} wurde erfolgreich aktualisiert.`);
-        await fetchTasks();
-        // 🔄 UI aktualisieren und Modal schließen
-        await fetchTasks();
-        closeEditTaskModal();
-        closeTaskDetailModal();
-        showEditConfirmation();
-    } catch (error) {
-        console.error("❌ Fehler beim Speichern der Änderungen:", error);
-    }
 }

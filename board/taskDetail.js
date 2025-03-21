@@ -49,8 +49,9 @@ function closeTaskDetailModal() {
 
 
 /**
- * Opens the edit task modal by fetching task data and populating the fields.
+ * Opens the edit task modal by fetching task data and ensuring the modal is ready.
  * @param {string} taskId - The ID of the task to edit.
+ * @returns {Promise<void>}
  */
 async function openEditTaskModal(taskId) {
     try {
@@ -59,27 +60,42 @@ async function openEditTaskModal(taskId) {
 
         hideTaskDetailModal();
         loadEditTaskTemplate(taskId);
-        await new Promise((resolve) => {
-            const checkExist = setInterval(() => {
-                const modal = document.getElementById("editTaskModal");
-                if (modal) {
-                    clearInterval(checkExist);
-                    resolve();
-                }
-            }, 50);
-        });
-
+        await waitForModal("editTaskModal");
         populateEditTaskFields(taskData);
-        document.getElementById("editTaskModal").classList.remove("hidden");
-
-        initEditTaskContacts("edit-contacts-list");
-        updateSelectedContactsDisplay("edit-selected-contacts-container");
-        setupAddSubtaskButton();
-
+        showEditTaskModal();
     } catch (error) {
         console.error("❌ Error loading task data:", error);
     }
 }
+
+
+/**
+ * Waits until the edit task modal is available in the DOM.
+ * @param {string} modalId - The ID of the modal element.
+ * @returns {Promise<void>}
+ */
+async function waitForModal(modalId) {
+    return new Promise(resolve => {
+        const checkExist = setInterval(() => {
+            if (document.getElementById(modalId)) {
+                clearInterval(checkExist);
+                resolve();
+            }
+        }, 50);
+    });
+}
+
+
+/**
+ * Displays the edit task modal and initializes contact & subtask inputs.
+ */
+function showEditTaskModal() {
+    document.getElementById("editTaskModal").classList.remove("hidden");
+    initEditTaskContacts("edit-contacts-list");
+    updateSelectedContactsDisplay("edit-selected-contacts-container");
+    setupAddSubtaskButton();
+}
+
 
 
 /**
@@ -120,21 +136,17 @@ function populateEditTaskFields(taskData) {
         const titleField = document.getElementById("edit-task-title");
         const descField = document.getElementById("edit-task-description");
         const dateField = document.getElementById("edit-due-date");
-        if (!titleField || !descField || !dateField) {
-            throw new Error("❌ Edit Task Modal elements missing in HTML!");
-        }
+        if (!titleField || !descField || !dateField) throw new Error("❌ Edit Task Modal elements missing!");
         titleField.value = taskData.title || "";
         descField.value = taskData.description || "";
         dateField.value = formatDateForInput(taskData.dueDate);
         setEditPriority(taskData.priority);
         setEditAssignedContacts(taskData.assignedTo || []);
-        // 🆕 Speichert die Subtasks im globalen Array
         subtasksArray = taskData.subtasks || [];
-        setEditSubtasks(subtasksArray); // 🔄 UI mit aktuellen Subtasks aktualisieren
+        setEditSubtasks(subtasksArray);
         initEditTaskFlatpickr();
     }, 10);
 }
-
 
 
 /**
@@ -239,9 +251,7 @@ function toggleEditButtons(clickedButton) {
         low: ["#34c759", "#fff"]
     };
     const priority = clickedButton.id.replace("edit-", "");
-    if (priorityColors[priority]) {
-        [clickedButton.style.backgroundColor, clickedButton.style.color] = priorityColors[priority];
-    }
+    if (priorityColors[priority]) [clickedButton.style.backgroundColor, clickedButton.style.color] = priorityColors[priority];
 }
 
 
@@ -261,103 +271,123 @@ function handleTaskDetailOverlayClick() {
 }
 
 
+/**
+ * Sets up the edit assignment button to open the contact selection modal.
+ */
 function setupEditAssignmentButton() {
     const editAssignmentBtn = document.getElementById("toggle-contacts-btn");
-
     if (!editAssignmentBtn) return console.error("❌ Edit Assignment Button not found!");
-
     editAssignmentBtn.addEventListener("click", (event) => {
         console.log("✅ Edit Assignment Button Clicked!", event.target);
-
         const containerId = editAssignmentBtn.getAttribute("data-container-id");
         const listId = editAssignmentBtn.getAttribute("data-list-id");
         const selectedContainerId = editAssignmentBtn.getAttribute("data-selected-id");
-
         if (!listId) return console.error("❌ listId is undefined! Check button data attributes.");
-
         toggleContacts(event, containerId, listId, selectedContainerId);
     });
 }
 
 
+/**
+ * Initializes the edit task contact selection functionality.
+ * Retrieves required elements, initializes contacts, and sets up event listeners.
+ */
 function initEditTaskContacts() {
     const elements = getEditModalElements();
     if (!elements) return;
-
     const { editAssignmentButton, editContactsContainer, editContactsList } = elements;
-
     initializeEditContacts();
     setupEditTaskEventListeners(editAssignmentButton, editContactsContainer, editContactsList);
 }
 
 
+/**
+ * Sets up event listeners for the edit task contacts.
+ * Handles assignment button clicks and outside clicks to toggle the contact selection modal.
+ * @param {HTMLElement} editAssignmentButton - The button to open the contact selection.
+ * @param {HTMLElement} editContactsContainer - The container holding the contact list.
+ * @param {HTMLElement} editContactsList - The list of selectable contacts.
+ */
 function setupEditTaskEventListeners(editAssignmentButton, editContactsContainer, editContactsList) {
     editAssignmentButton.addEventListener("click", (event) => {
         toggleContacts(event, editContactsContainer.id, editContactsList.id, "edit-selected-contacts-container");
     });
-
     document.addEventListener("click", (event) => {
         handleOutsideClick(event, editContactsContainer, ".assignment-btn");
     });
 }
 
+
+/**
+ * Initializes the edit task contacts by fetching and rendering the contact list.
+ * Also resets the selected contacts in the edit task modal.
+ */
 function initializeEditContacts() {
     fetchAndRenderContacts("edit-contacts-list");
     resetSelectedContacts();
 }
 
-// ✅ Helper function to get required elements
+
+/**
+ * Retrieves essential elements from the edit task modal for contact management.
+ * @returns {Object|null} An object containing the required elements, or null if any element is missing.
+ * @property {HTMLElement} editAssignmentButton - The button to open the contact selection.
+ * @property {HTMLElement} editContactsContainer - The container holding the contact list.
+ * @property {HTMLElement} editContactsList - The list of selectable contacts.
+ * @property {HTMLElement} editSelectedContainer - The container displaying selected contacts.
+ */
 function getEditModalElements() {
     const editAssignmentButton = document.getElementById("toggle-contacts-btn");
     const editContactsContainer = document.getElementById("edit-contacts-container");
     const editContactsList = document.getElementById("edit-contacts-list");
     const editSelectedContainer = document.getElementById("edit-selected-contacts-container");
-
     if (!editAssignmentButton || !editContactsContainer || !editContactsList || !editSelectedContainer) {
         console.error("❌ Missing elements in Edit Modal contact section.");
         return null;
     }
-
     return { editAssignmentButton, editContactsContainer, editContactsList, editSelectedContainer };
 }
 
 
+/**
+ * Retrieves the initials of preselected contacts from the edit task modal.
+ * @returns {Array<string>} An array of initials representing the preselected contacts.
+ */
 function getPreselectedContacts() {
     const container = document.getElementById("edit-selected-contacts-container");
     if (!container) return [];
-
     const avatars = container.querySelectorAll(".avatar-board-card"); // 🔄 Use querySelectorAll()
     const initialsList = Array.from(avatars).map(avatar => avatar.textContent.trim());
-
     console.log("🔎 Extracted Preselected Initials:", initialsList);
     return initialsList;
 }
 
 
-
+/**
+ * Removes a preselected contact from the edit task modal.
+ * 
+ * @param {HTMLElement} contactItem - The contact element to be removed.
+ */
 function removePreselectedContact(contactItem) {
     const name = contactItem.querySelector(".contact-name").textContent.trim();
     const container = document.getElementById("edit-selected-contacts-container");
     const avatars = Array.from(container.getElementsByClassName("avatar-board-card"));
-
     const matchedAvatar = avatars.find(avatar => avatar.textContent.trim() === getInitials(name));
-
     if (matchedAvatar) {
         console.log(`❌ Removing preselected contact: ${name}`);
         matchedAvatar.remove();
-
-        // Re-enable selection in the list
         renderContactsList("edit-contacts-list");
     }
 }
 
 
-
+/**
+ * Closes the edit task modal when clicking outside of it and restores the task detail modal.
+ * Ensures that the task detail modal remains visible after closing the edit modal.
+ */
 document.getElementById("taskDetailOverlay").addEventListener("click", function (event) {
     if (event.target === this) {
         closeEditTaskModal();
         restoreTaskDetailModal(); // Stellt sicher, dass Task Detail sichtbar bleibt
     }
 });
-
-
