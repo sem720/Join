@@ -1,4 +1,4 @@
-// editTask.js - setEditPriority()
+
 function setEditPriority(priority) {
     setTimeout(() => {
         if (!priority || !priority.priorityText) {
@@ -46,19 +46,16 @@ function setEditPriority(priority) {
 // Example of a function to get the selected priority
 function getSelectedPriority() {
     const priorityButton = document.querySelector(".btn-switch.active");
-
     if (!priorityButton) {
         console.warn("⚠️ No active priority button found, using default.");
         return { priorityText: "Medium", priorityImage: "/assets/imgs/medium.png" };
     }
-
     const priorityText = priorityButton.innerText.trim();
     const priorityImages = {
         "Low": "/assets/imgs/low.png",
         "Medium": "/assets/imgs/medium.png",
         "Urgent": "/assets/imgs/urgent.png"
     };
-
     return {
         priorityText,
         priorityImage: priorityImages[priorityText] || "/assets/imgs/medium.png"
@@ -68,8 +65,6 @@ function getSelectedPriority() {
 
 
 let subtasksArray = []; // Globale Variable zum Speichern der Subtasks
-
-
 /**
  * Setzt die Subtask-Liste im `editTaskModal` mit UI-Updates.
  * @param {Array} subtasks - Die Liste der Subtasks.
@@ -159,7 +154,6 @@ function editSubtask(index) {
  */
 function saveEditedSubtask(index, newText) {
     if (!newText.trim()) return; // 🚫 Leere Eingabe ignorieren
-
     subtasksArray[index].text = newText.trim(); // ✅ Text ohne Punkt speichern
     renderSubtasks(); // 🔄 UI neu rendern (statt `setEditSubtasks`)
 }
@@ -175,32 +169,102 @@ function deleteSubtask(index) {
 }
 
 
-
-
-
-
-
-
-
 function setEditAssignedContacts(contacts) {
     const container = document.getElementById("edit-selected-contacts-container");
-    container.innerHTML = contacts.map(contact =>
-        `<div class="avatar-board-card" style="background-color: ${contact.avatar.bgcolor};">${contact.avatar.initials}</div>`
-    ).join("");
-
-    // Log preselected contacts
-    console.log("🎯 Preselected Contacts:");
-    contacts.forEach(contact => console.log(`✅ ${contact.name} (${contact.avatar.initials})`));
+    container.innerHTML = contacts.map(contact => {
+        console.log(`🛠️ Setze Kontakt: ${contact.name} (${contact.avatar.initials})`);
+        return `<div class="avatar-board-card" 
+                style="background-color: ${contact.avatar.bgcolor};" 
+                data-name="${contact.name}"> 
+                    ${contact.avatar.initials}
+                </div>`;
+    }).join("");
+    console.log("✅ Vorab ausgewählte Kontakte mit Namen:", contacts);
 }
 
 
 function getEditedAssignedContacts() {
-    return Array.from(document.querySelectorAll("#edit-selected-contacts-container .avatar-board-card")).map(contact => ({
-        name: contact.textContent,
-        avatar: { bgcolor: contact.style.backgroundColor, initials: contact.textContent }
-    }));
+    return Array.from(document.querySelectorAll("#edit-selected-contacts-container .avatar-board-card")).map(contactElement => {
+        let initials = contactElement.textContent.trim();
+        let bgcolor = contactElement.style.backgroundColor.startsWith("rgb")
+            ? rgbToHex(contactElement.style.backgroundColor)
+            : contactElement.style.backgroundColor;
+
+        // 🔹 1. Versuche, den vollständigen Namen aus `data-name` zu holen
+        let name = contactElement.getAttribute("data-name") || null;
+
+        // 🔹 2. Falls der Name nicht gefunden wurde, in `allContacts` suchen
+        if (!name || name.trim() === "") {
+            if (allContacts.size > 0) {
+                const foundContact = [...allContacts.values()].find(c => getInitials(c.name) === initials);
+                name = foundContact ? foundContact.name : null;
+            } else {
+                console.warn("⚠️ `allContacts` ist leer. Kontakte wurden möglicherweise noch nicht geladen.");
+            }
+        }
+
+        // 🔹 3. Falls kein Name gefunden wurde, Standardwert setzen
+        if (!name) {
+            name = "Unbekannter Nutzer";
+            console.warn(`⚠️ Name für "${initials}" konnte nicht gefunden werden. Fallback: "${name}"`);
+        }
+
+        return {
+            avatar: {
+                bgcolor: bgcolor,
+                initials: initials
+            },
+            name: name
+        };
+    });
 }
 
+
+/**
+ * Wandelt eine RGB-Farbe in HEX um.
+ * @param {string} rgb - Die RGB-Farbe im Format "rgb(r, g, b)".
+ * @returns {string} Die HEX-Farbe im Format "#RRGGBB".
+ */
+function rgbToHex(rgb) {
+    const match = rgb.match(/\d+/g);
+    if (!match || match.length < 3) return "#CCCCCC"; // Fallback-Farbe
+    return `#${match.slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('')}`.toUpperCase();
+}
+
+
+async function handleEditTaskSubmit(event) {
+    event.preventDefault(); // Verhindert das Neuladen der Seite
+    const form = event.target;
+    const taskId = form.getAttribute("data-task-id");
+    if (!taskId) {
+        console.error("❌ Fehler: Keine Task-ID gefunden!");
+        return;
+    }
+    await saveSelectedContactsToBackend(taskId); // Speichert die ausgewählten Kontakte
+    await saveTaskChangesAndUpdateUI(event); // Speichert alle anderen Task-Änderungen
+    closeContacts("edit-contacts-container", "edit-contacts-list"); // Dropdown schließen
+}
+
+
+async function saveSelectedContactsToBackend(taskId) {
+    if (!taskId) {
+        console.error("❌ Fehler: Keine Task-ID gefunden!");
+        return;
+    }
+    const selectedContactsArray = getEditedAssignedContacts();
+    const updatedTask = { assignedTo: selectedContactsArray.length > 0 ? selectedContactsArray : [] };
+    try {
+        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedTask)
+        });
+        console.log(`✅ Kontakte für Task ${taskId} erfolgreich gespeichert.`);
+        await fetchTasks(); // UI aktualisieren
+    } catch (error) {
+        console.error("❌ Fehler beim Speichern der Kontakte:", error);
+    }
+}
 
 
 function showEditConfirmation() {
@@ -222,64 +286,40 @@ function showEditConfirmation() {
 
 function formatDateForInput(dueDate) {
     if (!dueDate) return ""; // Falls kein Datum vorhanden ist
-
     const dateParts = dueDate.split("/"); // Falls TT/MM/YYYY aus Backend kommt
     if (dateParts.length === 3) {
         return `${dateParts[0]}/${dateParts[1]}/${dateParts[2]}`; // Falls bereits TT/MM/YYYY ist
     }
-
     const date = new Date(dueDate);
     if (isNaN(date.getTime())) return ""; // Falls ungültiges Datum
-
-    // TT/MM/YYYY für Anzeige
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
-
     return `${day}/${month}/${year}`;
 }
 
 
-//Please remove, if you don't need it, it just handles that the input stays black and not takes placeholder color
-function editDateInput() {
-    const dateInput = document.getElementById("edit-due-date");
-    const calendarIcon = document.getElementById("edit-calendar-icon");
-
-    if (!dateInput || !calendarIcon) return console.error("Edit date input or calendar icon not found.");
-
-    dateInput.addEventListener("input", function () {
-        if (dateInput.value) {
-            dateInput.classList.add("has-value");
-        } else {
-            dateInput.classList.remove("has-value");
-        }
-    });
-}
-
-
 //attaching click to calendar icon
-function setupEditCalendarIcon() {
-    const dateInput = document.getElementById("edit-due-date");
-    const calendarIcon = document.getElementById("edit-calendar-icon");
+// function setupEditCalendarIcon() {
+//     const dateInput = document.getElementById("edit-due-date");
+//     const calendarIcon = document.getElementById("edit-calendar-icon");
 
-    if (!dateInput || !calendarIcon) return console.error("Edit date input or calendar icon not found.");
+//     if (!dateInput || !calendarIcon) return console.error("Edit date input or calendar icon not found.");
 
-    calendarIcon.addEventListener("click", function () {
-        if (!dateInput._flatpickr) return console.error("Flatpickr is not initialized on #edit-due-date.");
+//     calendarIcon.addEventListener("click", function () {
+//         if (!dateInput._flatpickr) return console.error("Flatpickr is not initialized on #edit-due-date.");
 
-        // ✅ Toggle calendar: If open, close it; if closed, open it
-        dateInput._flatpickr.isOpen ? dateInput._flatpickr.close() : dateInput._flatpickr.open();
-    });
-}
+//         // ✅ Toggle calendar: If open, close it; if closed, open it
+//         dateInput._flatpickr.isOpen ? dateInput._flatpickr.close() : dateInput._flatpickr.open();
+//     });
+// }
 
 
 //resetting the date by click on calendar-icon
 function setupEditDateReset() {
     const dateInput = document.getElementById("edit-due-date");
     const calendarIcon = document.getElementById("edit-calendar-icon");
-
     if (!dateInput || !dateInput._flatpickr) return console.error("Edit date input or Flatpickr instance not found.");
-
     calendarIcon.addEventListener("click", function () {
         dateInput._flatpickr.clear();  // ✅ Clears the date
     });
@@ -289,9 +329,7 @@ function setupEditDateReset() {
 function handleEditCalendarClick() {
     const calendarIcon = document.getElementById("edit-calendar-icon");
     const dateInput = document.getElementById("edit-due-date");
-
     if (!calendarIcon || !dateInput || !dateInput._flatpickr) return console.error("❌ Flatpickr or elements not initialized properly.");
-
     calendarIcon.addEventListener("click", () => {
         console.log("Calendar icon clicked!");
         dateInput._flatpickr.isOpen ? dateInput._flatpickr.close() : dateInput._flatpickr.open();
@@ -302,71 +340,18 @@ function handleEditCalendarClick() {
 //to set up flatpickr and its functionality
 function initEditTaskFlatpickr() {
     console.log("Initializing Flatpickr for edit modal...");
-
-    // Initialize Flatpickr for edit due date
     flatpickr("#edit-due-date", {
         dateFormat: "d/m/Y",
         allowInput: true,
         placeholder: "dd/mm/yyyy"
     });
-
     handleEditCalendarClick();
     setupEditDateReset();
 }
 
 
-
-
-
-
-
-
-
-
-
-
-async function saveTaskChanges(event) {
-    event.preventDefault(); // Verhindert das Neuladen der Seite
-
-    const taskId = document.getElementById("edit-task-id")?.value;
-    if (!taskId) {
-        console.error("❌ Fehler: Keine Task-ID gefunden!");
-        return;
-    }
-
-    const updatedTask = {
-        title: document.getElementById("edit-task-title").value,
-        description: document.getElementById("edit-task-description").value,
-        dueDate: document.getElementById("edit-due-date").value,
-        priority: getSelectedPriority(), // Priorität auslesen
-        assignedTo: getEditedAssignedContacts(), // Kontakte auslesen
-        subtasks: getEditedSubtasks() // Subtasks auslesen
-    };
-
-    try {
-        // 🔹 Änderungen im Backend speichern
-        await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedTask)
-        });
-
-        // 🔹 Änderungen auf der Task-Card sofort aktualisieren
-        updateTaskCard(taskId, updatedTask);
-
-        // 🔹 Edit-Modal schließen
-        closeEditTaskModal();
-
-        console.log(`✅ Task ${taskId} wurde erfolgreich aktualisiert.`);
-    } catch (error) {
-        console.error("❌ Fehler beim Speichern der Änderungen:", error);
-    }
-}
-
-
 async function saveTaskChangesAndUpdateUI(event) {
     event.preventDefault();
-
     const form = event.target;
     const taskId = form.getAttribute("data-task-id");
 
@@ -375,29 +360,32 @@ async function saveTaskChangesAndUpdateUI(event) {
         return;
     }
 
-    const updatedSubtasks = getEditedSubtasks();
-    console.log("🔍 Subtasks, die gespeichert werden:", updatedSubtasks); // Debugging
-
+    // Daten aus UI holen
     const updatedTask = {
         title: document.getElementById("edit-task-title").value,
         description: document.getElementById("edit-task-description").value,
         dueDate: document.getElementById("edit-due-date").value,
         priority: getSelectedPriority(),
-        assignedTo: getEditedAssignedContacts(),
-        subtasks: updatedSubtasks.length > 0 ? updatedSubtasks : []  // Falls leer, speichere `[]`
+        assignedTo: getEditedAssignedContacts(), // Falls leer, soll ein leeres Array gespeichert werden
+        subtasks: getEditedSubtasks().length > 0 ? getEditedSubtasks() : []
     };
 
+    // 🔹 Falls `assignedTo` nicht existiert, erstelle es als leeres Array
+    if (!updatedTask.assignedTo || updatedTask.assignedTo.length === 0) {
+        updatedTask.assignedTo = [];
+    }
+
     try {
-        // 🔹 Änderungen im Backend speichern
+        // 🔹 Änderungen in der Datenbank speichern
         await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedTask)
         });
 
-        console.log(`✅ Task ${taskId} wurde erfolgreich aktualisiert.`);
-
-        // 🔄 Tasks aktualisieren & Modal schließen
+        console.log(`✅ Aufgabe ${taskId} wurde erfolgreich aktualisiert.`);
+        await fetchTasks();
+        // 🔄 UI aktualisieren und Modal schließen
         await fetchTasks();
         closeEditTaskModal();
         closeTaskDetailModal();
@@ -406,34 +394,3 @@ async function saveTaskChangesAndUpdateUI(event) {
         console.error("❌ Fehler beim Speichern der Änderungen:", error);
     }
 }
-
-
-
-
-
-
-
-async function showTaskDetailModal(taskId) {
-    try {
-        const taskData = await fetchTaskData(taskId);
-        if (!taskData) throw new Error("❌ Keine aktuellen Task-Daten gefunden!");
-
-        // 🔹 Falls `subtasks` oder `assignedTo` fehlen, setzen wir leere Arrays
-        taskData.subtasks = taskData.subtasks || [];
-        taskData.assignedTo = taskData.assignedTo || [];
-
-        console.log("🔍 Task-Daten nach Fix:", taskData); // Debugging
-
-        const taskDetailContent = document.getElementById("taskDetailContent");
-        let subtasksHTML = generateSubtasks(taskData);
-        taskDetailContent.innerHTML = taskDetailTemplate(taskData, subtasksHTML);
-
-        // const taskDetailModal = document.getElementById("taskDetailModal");
-        // taskDetailModal.style.display = "block";
-
-    } catch (error) {
-        console.error("❌ Fehler beim Laden der aktualisierten Task-Daten:", error);
-    }
-}
-
-

@@ -37,9 +37,9 @@ function setupAssignmentButtons() {
             const containerId = button.getAttribute("data-container-id");
             const listId = button.getAttribute("data-list-id");
             const selectedContainerId = button.getAttribute("data-selected-id");
-            
+
             if (!listId) return console.error("❌ listId is undefined! Check the button's data attributes.");
-             
+
             toggleContacts(event, containerId, listId, selectedContainerId);
         });
     });
@@ -76,9 +76,9 @@ function toggleContacts(event, containerId, listId, selectedContainerId) {
     const contactsList = document.getElementById(listId);
     const button = event.target.closest(".assignment-btn"); // Get the clicked button
     const dropdownIcon = button?.querySelector("img"); // Find the dropdown icon inside the button
-    
+
     if (!contactsContainer || !contactsList) return console.error(`❌ Missing container: ${containerId} or ${listId}`);
-    
+
     const isOpen = contactsContainer.classList.toggle("visible");
     contactsContainer.classList.toggle("hidden", !isOpen);
 
@@ -113,7 +113,7 @@ function handleOutsideClick(event) {
         menu.classList.add("hidden");
         menu.classList.remove("visible");
 
-        const button = document.querySelector(".assignment-btn"); 
+        const button = document.querySelector(".assignment-btn");
         const dropdownIcon = button?.querySelector("img");
 
         updateDropdownIcon(false, dropdownIcon);
@@ -159,22 +159,25 @@ function openContacts(containerId, listId, selectedContainerId) {
  * Closes the contacts list by adding the "hidden" class and removing the "visible" class.
  * It also updates the dropdown icon and disables outside click behavior.
  */
-function closeContacts(containerId, listId) {
+function closeContacts(containerId, listId, selectedContainerId = null) {
     const contactsContainer = document.getElementById(containerId);
     const contactsList = document.getElementById(listId);
 
     if (!contactsContainer || !contactsList) return;
-      
+
     contactsContainer.classList.add("hidden");
     contactsContainer.classList.remove("visible");
     contactsList.classList.add("hidden");
     contactsList.classList.remove("visible");
 
-    console.log(`🔄 Updating selected contacts display for: ${selectedContainerId}`);
-    
-    updateSelectedContactsDisplay(selectedContainerId);
+    if (selectedContainerId) {
+        console.log(`🔄 Updating selected contacts display for: ${selectedContainerId}`);
+        updateSelectedContactsDisplay(selectedContainerId);
+    }
+
     updateDropdownIcon(false);
 }
+
 
 
 /**
@@ -189,7 +192,7 @@ async function fetchAndRenderContacts(listId) {
         const data = await response.json();
         if (!data) throw new Error("Keine Nutzerdaten gefunden.");
 
-        processContactsData(data); 
+        processContactsData(data);
         console.log("✅ Contacts fetched:", Array.from(allContacts.keys())); // Debugging
 
         listId ? renderContactsList(listId) : console.error("❌ listId is undefined in fetchAndRenderContacts");
@@ -210,8 +213,8 @@ function processContactsData(data) {
     Object.values(data).forEach(user => {
         let name = capitalizeName(user.name);
         let bgcolor = user.bgcolor;
-        allContacts.set(name, { name, bgcolor }); 
-    }); 
+        allContacts.set(name, { name, bgcolor });
+    });
 }
 
 
@@ -235,7 +238,7 @@ function getPreselectedInitials() {
  */
 function renderSingleContact(contactsList, name, bgcolor, isPreselected) {
     console.log(`👤 Adding contact: ${name} (${getInitials(name)}) | Preselected: ${isPreselected}`);
-    
+
     const contactElement = createContactElement(name, bgcolor, isPreselected);
     contactsList.appendChild(contactElement);
 }
@@ -273,14 +276,14 @@ async function renderContactsList(listId) {
 function createContactElement(name, bgcolor, isPreselected) {
     const contactDiv = createElement("div", "contact-item");
     const nameSpan = createElement("span", "contact-name", name);
-    
+
     contactDiv.append(
         createAvatar(name, bgcolor),
         nameSpan,
         createCheckbox(name)
     );
 
-    if (isPreselected)  console.log(`🎯 Preselected Contact in List: ${name}`);
+    if (isPreselected) console.log(`🎯 Preselected Contact in List: ${name}`);
 
     contactDiv.addEventListener("click", () => handleContactClick(contactDiv, isPreselected));
     return contactDiv;
@@ -292,17 +295,21 @@ function createContactElement(name, bgcolor, isPreselected) {
  */
 function updateSelectedContactsDisplay(selectedContainerId) {
     const selectedContainer = document.getElementById(selectedContainerId);
-
-    console.log("🔄 Updating selected contacts display for:", selectedContainerId);
     if (!selectedContainer) return;
 
-    selectedContainer.innerHTML = "";
+    selectedContainer.innerHTML = ""; // Vorherige Avatare löschen
 
-    selectedContacts.forEach(({ name, bgcolor }) => {
-        const avatar = createAvatar(name, bgcolor);
-        selectedContainer.appendChild(avatar);
+    selectedContacts.forEach(contact => {
+        const avatarDiv = document.createElement("div");
+        avatarDiv.classList.add("avatar-board-card");
+        avatarDiv.style.backgroundColor = contact.bgcolor;
+        avatarDiv.textContent = getInitials(contact.name);
+        selectedContainer.appendChild(avatarDiv);
     });
+
+    console.log("🔄 Kontakte in UI aktualisiert:", selectedContainerId);
 }
+
 
 
 /**
@@ -316,7 +323,7 @@ function toggleContactSelection(name, isChecked) {
     const contact = allContacts.get(name);
 
     if (!contact) return console.error(`❌ Contact not found: ${name}`);
-        
+
     if (selectedContacts.has(contact)) {
         selectedContacts.delete(contact);
     } else {
@@ -325,7 +332,7 @@ function toggleContactSelection(name, isChecked) {
 
     console.log("Updated selected contacts:", [...selectedContacts]);
 
-    updateSelectedContactsDisplay("selected-contacts-container"); 
+    updateSelectedContactsDisplay("selected-contacts-container");
     updateSelectedContactsDisplay("edit-selected-contacts-container");// Ensure correct ID
 }
 
@@ -333,7 +340,7 @@ function toggleContactSelection(name, isChecked) {
 function handleCheckboxChange(checkbox, img, name) {
     checkbox.addEventListener("change", () => {
         console.log(`Checkbox changed: ${name}, Checked: ${checkbox.checked}`);
-        
+
         toggleContactSelection(name, checkbox.checked);
         toggleCheckboxVisibility(checkbox, img, checkbox.checked);
     });
@@ -394,14 +401,12 @@ function handleCheckboxChangeAvatar(name) {
     const avatar = createElement("div", "avatar", getInitials(name));
     checkbox.addEventListener("change", () => {
         toggleContactSelection(name, checkbox.checked);
-        
+
         if (checkbox.checked) {
             handleCheckboxChecked(avatar, name);
         } else {
             handleCheckboxUnchecked(avatar, name);
-            }
+        }
         console.log(`Avatar visibility for ${name}:`, avatar.style.display);
     });
 }
-
-

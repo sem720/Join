@@ -140,7 +140,7 @@ function editTaskTempl(taskId) {
     </button>
 
     <!-- Task-ID als data-Attribut speichern -->
-    <form class="edit-modal-container" onsubmit="saveTaskChangesAndUpdateUI(event)" data-task-id="${taskId}">
+    <form class="edit-modal-container" onsubmit="handleEditTaskSubmit(event)" data-task-id="${taskId}">
         <div class="form-content">
             <label for="edit-task-title">Title</label>
             <input id="edit-task-title" class="edit-input-board" type="text" placeholder="Enter a title" required />
