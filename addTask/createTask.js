@@ -8,7 +8,6 @@ function createTask(event) {
     console.log("📤 Task Data Before Saving:", taskData); // Check full object
     console.log("🟡 Task Priority:", taskData?.priority?.priorityText); // Check priority safely
 
-
     if (!validateTaskData(taskData)) return;
 
     saveTaskToFirebase(taskData)
@@ -43,7 +42,7 @@ function getTaskFormData() {
         dueDate: getValue("#due-date"),
         priority: getValidPriority(), // ✅ Moved logic to a separate function
         category: getSelectedCategory(),
-        subtasks: getSubtasks(),
+        subtasks: getTaskSubtasks(),
         mainCategory: getMainCategory()
     };
 }
@@ -176,8 +175,10 @@ function getSelectedCategory() {
 /** ================================
  *      SUBTASKS HANDLING
  * ================================ */
-function getSubtasks() {
-    return Array.from(document.querySelectorAll("#subtask-list li")).map(subtask => ({
+function getTaskSubtasks() {
+    console.log("Gefundene Subtasks:", document.querySelectorAll("#subtask-list li"));
+
+    return Array.from(document.querySelectorAll(".subtask-item")).map(subtask => ({
         text: formatText(subtask.textContent),
         completed: false
     }));

@@ -137,4 +137,12 @@
       });
     }
   </script>
+  <script>
+    w3.includeHTML(() => {
+      checkNavigationVisibility();
+
+      // Für zukünftige Änderungen (falls nötig)
+      document.addEventListener("w3include-loaded", checkNavigationVisibility);
+    });
+  </script>
 </html>
