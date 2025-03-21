@@ -130,35 +130,42 @@ function validateEmail(email) {
  */
 function setupPasswordToggle(inputId) {
   const passwordInput = document.getElementById(inputId);
+  if (!passwordInput) return; // Wichtig: Element-Check
+
   const container = passwordInput.parentElement;
+  if (!container) return; // Parent-Check
+
+  // Safe Query mit Optional Chaining
   const lockIcon = container.querySelector(".lock-icon");
   const eyeSlashIcon = container.querySelector(".eye-icon");
   const eyeIcon = container.querySelector(".eye-slash-icon");
 
   passwordInput.addEventListener("input", () => {
     if (passwordInput.value) {
-      lockIcon.classList.add("d_none");
-      eyeSlashIcon.classList.remove("d_none");
+      lockIcon?.classList.add("d_none");
+      eyeSlashIcon?.classList.remove("d_none");
     } else {
-      lockIcon.classList.remove("d_none");
-      eyeSlashIcon.classList.add("d_none");
-      eyeIcon.classList.add("d_none");
+      lockIcon?.classList.remove("d_none");
+      eyeSlashIcon?.classList.add("d_none");
+      eyeIcon?.classList.add("d_none");
       passwordInput.type = "password";
     }
   });
 
-  eyeSlashIcon.addEventListener("click", () => {
+  eyeSlashIcon?.addEventListener("click", () => {
     passwordInput.type = "text";
     eyeSlashIcon.classList.add("d_none");
-    eyeIcon.classList.remove("d_none");
+    eyeIcon?.classList.remove("d_none");
   });
 
-  eyeIcon.addEventListener("click", () => {
+  eyeIcon?.addEventListener("click", () => {
     passwordInput.type = "password";
     eyeIcon.classList.add("d_none");
-    eyeSlashIcon.classList.remove("d_none");
+    eyeSlashIcon?.classList.remove("d_none");
   });
 }
 
-setupPasswordToggle("Password");
-setupPasswordToggle("PasswordCon");
+// Nur aufrufen wenn Elemente existieren
+document.querySelectorAll("#Password, #PasswordCon").forEach((el) => {
+  setupPasswordToggle(el.id);
+});

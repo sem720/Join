@@ -141,3 +141,7 @@
     margin-bottom: 0px;
   }
 }
+
+.d_none {
+  display: none;
+}
