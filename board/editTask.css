@@ -57,6 +57,7 @@
 .task-edit-confirmation.show {
     bottom: 50%;
     opacity: 1;
+    z-index: 5000;
 }
 
 .edit-modal-container {
