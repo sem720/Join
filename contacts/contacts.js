@@ -158,9 +158,10 @@ async function saveNewContact(event) {
     event.preventDefault();
     const { name, email, phone } = getTrimmedInputs();
     if (!validateInputs(name, email, phone)) return;
-    let newContact = { name, email, tel: phone, bgcolor: getRandomColor() };
+    let newContact = { name, email, tel: phone, bgcolor: getRandomColor(), initials: getInitials(name) };
     try {
         const contactId = await saveContactToDatabase(newContact);
+        newContact.id = contactId;
         await updateUIAfterSave(contactId, newContact);
     } catch (error) {
         console.error("Error saving contact:", error);
@@ -363,10 +364,14 @@ async function updateUIAfterDeletion() {
     await renderContacts();
     document.getElementById("contactsDetails").classList.remove("active");
     document.getElementById("contentDetails").innerHTML = "";
+    if (window.innerWidth <= 1000) {
+        document.getElementById("contacts").classList.remove("hidden");
+    }
     const successAlert = document.getElementById("successDeleteAlert");
     successAlert.classList.add("success-animation");
     setTimeout(() => successAlert.classList.remove("success-animation"), 5000);
 }
+
 
 
 /**
