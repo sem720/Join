@@ -258,13 +258,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 #selected-contacts-container {
     display: flex;
-    padding-top: 4px;
+    padding: 4px 0px 4px 4px;
 }
 
 #selected-contacts-container > div {
-    margin-top: 8px;
-    margin-right: 4px;
     display: flex;
+    margin-right: -10px;
 }
 
 #task-name, #due-date, #category-container {
