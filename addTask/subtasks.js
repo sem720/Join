@@ -46,13 +46,8 @@ function setupGlobalEnterKeyListener() {
 }
 
 
-function saveEditedSubtask(inputElement) {
-    const editedText = inputElement.value.trim();
-    if (!editedText) return;
-
-    // Replace the input with a span containing the updated text
-    const li = inputElement.closest(".subtask-item");
-    li.innerHTML = `
+function getSubtaskHTML(editedText) {
+    return `
         <span class="subtask-text">• ${editedText}</span>
         <div class="li-actions">
             <img src="/assets/imgs/edit.svg" class="edit-icon" alt="Edit Icon" onclick="editSubtask(event)">
@@ -60,8 +55,16 @@ function saveEditedSubtask(inputElement) {
             <img src="/assets/imgs/delete-black.png" class="delete-icon" alt="Delete Icon" onclick="deleteSubtask(event)">
         </div>
     `;
+}
 
-    console.log("Subtask edited:", editedText);
+
+function saveEditedSubtask(inputElement) {
+    const editedText = inputElement.value.trim();
+    if (!editedText) return;
+
+    // Replace the input with a span containing the updated text
+    const li = inputElement.closest(".subtask-item");
+    li.innerHTML = getSubtaskHTML(editedText);
 }
 
 

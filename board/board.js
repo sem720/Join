@@ -396,4 +396,6 @@ function init() {
     initTaskCardClickEvents();
     setupCalendarIcon();
     setupAssignmentButtons();
+    setupContactButton();
+    setupAddSubtaskButton();
 }

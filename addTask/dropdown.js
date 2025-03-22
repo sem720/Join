@@ -28,6 +28,7 @@ const dropdownContainer = document.querySelector('.dropdown-container');
  */
 const defaultText = "Select task category";
 
+
 /**
  * Toggles the visibility of the dropdown list and updates the dropdown button icon.
  * When the dropdown is opened, it resets the selected category.

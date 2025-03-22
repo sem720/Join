@@ -143,6 +143,7 @@ function clearError(selector) {
     elementToHighlight.classList.remove("error");
 }
 
+
 /**
  * Resets the value of a date input field and removes the 'has-value' class.
  * 
