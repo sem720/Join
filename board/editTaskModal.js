@@ -65,7 +65,7 @@ async function saveTaskChangesAndUpdateUI(event) {
     if (!existingTask) return console.error(`❌ Task ${taskId} not found in database.`);
     const updatedTask = {
         ...getUpdatedTaskData(),
-        aassignedTo: getEditedAssignedContacts().length > 0
+        assignedTo: getEditedAssignedContacts().length > 0
             ? getEditedAssignedContacts()
             : existingTask.assignedTo || [],
         subtasks: getEditedSubtasks() || []
