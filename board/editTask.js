@@ -153,7 +153,7 @@ function renderSubtasks() {
  * Edits an existing subtask in the `editTaskModal` by replacing the text with an input field.
  * @param {number} index - Index of the subtask in `subtasksArray`
  */
-function editSubtask(index) {
+function editSubtaskInEditModal(index) {
     const subtaskItem = document.querySelector(`#subtask-${index}`);
     if (!subtaskItem) return console.error("❌ Subtask not found!");
     const inputField = createSubtaskInput(subtaskItem);
@@ -199,7 +199,7 @@ function saveEditedSubtask(index, newText) {
  * Deletes a subtask from `subtasksArray`.
  * @param {number} index - Index of the Subtask
  */
-function deleteSubtask(index) {
+function deleteSubtaskInEditModal(index) {
     subtasksArray.splice(index, 1);
     setEditSubtasks(subtasksArray);
 }

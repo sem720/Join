@@ -255,9 +255,9 @@ function subtaskTemplate(subtask, index) {
         <li id="subtask-${index}" class="subtask-item flex">
             <span class="subtask-text">• ${subtask.text}</span> <!-- ✅ Punkt in der UI -->
             <div class="li-actions">
-                <img src="/assets/imgs/edit.svg" alt="Edit Icon" class="edit-icon" onclick="editSubtask(${index})">
+                <img src="/assets/imgs/edit.svg" alt="Edit Icon" class="edit-icon" onclick="editSubtaskInEditModal(${index})">
                 <span class="divider">|</span>
-                <img src="/assets/imgs/delete-black.png" alt="Delete Icon" class="delete-icon" onclick="deleteSubtask(${index})">
+                <img src="/assets/imgs/delete-black.png" alt="Delete Icon" class="delete-icon" onclick="deleteSubtaskInEditModal(${index})">
                 <img src="/assets/imgs/checkmark-black.png" alt="Save Icon" class="save-subtask-icon hidden">
             </div>
         </li>

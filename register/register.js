@@ -331,3 +331,28 @@ function togglePasswordVisibility(input, eyeSlash, eye, show) {
 // Initialisierung
 setupPasswordToggle("idPassword");
 setupPasswordToggle("idPasswordCon");
+
+function checkForm() {
+  let email = document.getElementById("idEmail").value.trim();
+  let password = document.getElementById("idPassword").value.trim();
+  let name = document.getElementById("idName").value.trim();
+  let passwordcon = document.getElementById("idPasswordCon").value.trim();
+  let policyCheckbox = document.getElementById("idPolicy");
+
+  let loginButton = document.getElementById("button-signup");
+
+  const isFormValid =
+    email !== "" &&
+    password !== "" &&
+    name !== "" &&
+    policyCheckbox.checked &&
+    passwordcon !== "";
+
+  loginButton.disabled = !isFormValid;
+}
+
+document.getElementById("idEmail").addEventListener("input", checkForm);
+document.getElementById("idPassword").addEventListener("input", checkForm);
+document.getElementById("idPasswordCon").addEventListener("input", checkForm);
+document.getElementById("idName").addEventListener("input", checkForm);
+document.getElementById("idPolicy").addEventListener("change", checkForm);

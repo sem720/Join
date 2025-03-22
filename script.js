@@ -37,6 +37,19 @@ function login() {
   document.getElementById("Email").value = "";
 }
 
+function checkForm() {
+  let email = document.getElementById("Email").value.trim();
+  let password = document.getElementById("Password").value.trim();
+  let loginButton = document.getElementById("login-button");
+
+  const isFormValid = email !== "" && password !== "";
+
+  loginButton.disabled = !isFormValid;
+}
+
+document.getElementById("Email").addEventListener("input", checkForm);
+document.getElementById("Password").addEventListener("input", checkForm);
+
 /**
  * Saves user data to localStorage
  * @param {Object} user - User object from database
