@@ -1,10 +1,8 @@
 const BASE_URL = 'https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/contacts/';
 
-
 /**
  * Fetches contacts from the backend, formats them, and returns an array.
  * @param {string} url - The base URL to fetch contacts from (without `.json`).
- * @returns {Promise<Array<Object>>} A promise resolving to an array of formatted contacts.
  */
 async function fetchContacts(url) {
     try {
@@ -43,7 +41,6 @@ async function renderContacts() {
 /**
  * Groups contacts by first letter and sorts them alphabetically within each group.
  * @param {Array<Object>} contacts - The array of contact objects.
- * @returns {Object} A sorted object with contact groups.
  */
 function groupAndSortContacts(contacts) {
     return contacts.reduce((acc, contact) => {
@@ -152,7 +149,6 @@ function toggleMobileView() {
 /**
  * Handles new contact form submission, validates input, and saves contact data.
  * @param {Event} event - The form submission event.
- * @returns {Promise<void>}
  */
 async function saveNewContact(event) {
     event.preventDefault();
@@ -373,10 +369,8 @@ async function updateUIAfterDeletion() {
 }
 
 
-
 /**
- * Toggles the visibility of the contact list and details on smaller screens.
- * On screens with a width of 1000px or less, this function hides the contact list and shows the details when the back button is clicked.
+ * Toggles the visibility of the contact list and details on smaller screens. On screens with a width of 1000px or less, this function hides the contact list and shows the details when the back button is clicked.
  * @function toggleBack
  * @description Toggles the visibility of the contact list and details on smaller screens.
  */
