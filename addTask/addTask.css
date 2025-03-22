@@ -68,7 +68,7 @@ label {
 }
 
 input,
-textarea{
+textarea {
     box-sizing: border-box;
     width: 400px;
     height: 42px;
@@ -216,6 +216,8 @@ select {
 #subtask-list {
     margin: 0;
     width: 100%;
+    max-height: 140px;
+    overflow-y: auto;
 }
 
 .subtask-text {
@@ -397,7 +399,7 @@ ul {
     outline: none;
     box-shadow: none !important;
     border: 2px solid #565454;
-    border-radius: 1px; 
+    border-radius: 1px;
     display: inline-block;
     position: relative;
     cursor: pointer;
@@ -421,18 +423,21 @@ ul {
 }
 
 .contact-checkbox-container input[type="checkbox"] {
-    width: 100%;  /* Match container size */
+    width: 100%;
+    /* Match container size */
     height: 100%;
     justify-content: center;
     align-items: center;
 }
 
 .checkbox-image {
-    width: 100%;  /* Same size as checkbox */
+    width: 100%;
+    /* Same size as checkbox */
     height: 100%;
     justify-content: center;
     align-items: center;
-    display: none; /* Hidden by default */
+    display: none;
+    /* Hidden by default */
 }
 
 #calendar-icon {
@@ -447,7 +452,7 @@ ul {
 .date-container {
     width: 100%;
     display: flex;
-    align-items: center;   
+    align-items: center;
     position: relative;
 }
 
@@ -472,4 +477,3 @@ ul {
 .selected-checkbox-image {
     filter: invert(1);
 }
-
