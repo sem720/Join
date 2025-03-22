@@ -226,7 +226,6 @@ async function saveContactToDatabase(contact) {
  * Updates the UI after successfully saving a contact.
  * @param {string} contactId - The contact ID.
  * @param {Object} contact - The updated contact object.
- * @returns {Promise<void>}
  */
 async function updateUIAfterSave(contactId, contact) {
     await fetch(`${BASE_URL}${contactId}.json`, {
@@ -257,7 +256,6 @@ function getRandomColor() {
 /**
  * Handles the editing of a contact, updates it in the database, and refreshes the UI.
  * @param {Event} event - The form submission event.
- * @returns {Promise<void>}
  */
 async function saveEditedContact(event) {
     event.preventDefault();
@@ -299,7 +297,6 @@ async function getUpdatedContactData(contactId) {
  * Updates the contact entry in the database.
  * @param {string} contactId - The contact ID.
  * @param {Object} updatedContact - The updated contact object.
- * @returns {Promise<void>}
  */
 async function updateContactInDatabase(contactId, updatedContact) {
     await fetch(`${BASE_URL}${contactId}.json`, {
@@ -314,7 +311,6 @@ async function updateContactInDatabase(contactId, updatedContact) {
  * Finalizes the editing process by refreshing the UI and showing a success message.
  * @param {string} contactId - The contact ID.
  * @param {string} updatedName - The updated contact name.
- * @returns {Promise<void>}
  */
 async function finalizeEditedContact(contactId, updatedName) {
     await renderContacts();
@@ -329,7 +325,6 @@ async function finalizeEditedContact(contactId, updatedName) {
 /**
  * Deletes a contact from the database and updates the UI.
  * @param {string} contactId - The unique identifier of the contact.
- * @returns {Promise<void>}
  */
 async function deleteContact(contactId) {
     try {
@@ -344,7 +339,6 @@ async function deleteContact(contactId) {
 /**
  * Deletes a contact from the database.
  * @param {string} contactId - The unique identifier of the contact.
- * @returns {Promise<void>}
  */
 async function deleteContactFromDatabase(contactId) {
     await fetch(`${BASE_URL}${contactId}.json`, { method: "DELETE" });
@@ -389,7 +383,7 @@ function toggleBack() {
  */
 function getInitials(name) {
     if (!name || typeof name !== "string") {
-        return "??"; // Falls Name fehlt, Notfallinitialen setzen
+        return "??";
     }
     const nameParts = name.trim().split(/\s+/);
     if (nameParts.length > 1) {

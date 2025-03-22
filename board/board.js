@@ -163,7 +163,6 @@ function updateNoTaskVisibility() {
  * @param {string} newColumnId - The ID of the new column.
  */
 async function updateTaskCategory(taskElement, newColumnId) {
-    console.log("New Column ID:", newColumnId);
     const taskId = taskElement.dataset.id;
     const newCategory = mapColumnIdToCategory(newColumnId);
     if (!taskId) return console.error("❌ Error: No Task ID found!");
@@ -318,10 +317,6 @@ function updateTaskText(taskElement, task) {
  * @param {Array} subtasks - The updated subtasks array.
  */
 function updateTaskProgress(taskElement, subtasks) {
-    if (!subtasks) {
-        console.warn("⚠️ Keine Subtasks vorhanden – Fortschrittsbalken bleibt unverändert.");
-        return;
-    }
     const totalSubtasks = subtasks.length;
     const completedSubtasks = subtasks.filter(st => st.completed).length;
     const progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
