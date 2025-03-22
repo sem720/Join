@@ -1,8 +1,5 @@
 /**
  * Fetches tasks from the backend and processes them.
- * If tasks exist, it renders them and sets up drag-and-drop functionality.
- * Logs a warning if no tasks are found.
- * Logs an error if fetching fails.
  */
 async function fetchTasks() {
     try {
@@ -19,7 +16,6 @@ async function fetchTasks() {
 
 /**
  * Fetches task data from the backend.
- * @returns {Promise<Object>} A promise resolving to the task data.
  */
 async function fetchTasksFromBackend() {
     const response = await fetch("https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks.json");
@@ -28,10 +24,8 @@ async function fetchTasksFromBackend() {
 
 
 /**
- * Processes task data by converting it into an array of task objects.
- * Fixes `mainCategory` if it is incorrectly formatted.
+ * Processes task data by converting it into an array of task objects. Fixes `mainCategory` if it is incorrectly formatted.
  * @param {Object} data - The raw task data from the backend.
- * @returns {Array<Object>} An array of processed task objects.
  */
 function processTasks(data) {
     return Object.keys(data).map(taskId => {
@@ -49,7 +43,6 @@ function processTasks(data) {
  * Updates the main category of a task in the backend.
  * @param {string} taskId - The ID of the task.
  * @param {string} newCategory - The new main category to be assigned.
- * @returns {Promise<void>} A promise that resolves when the update is complete.
  */
 async function updateMainCategoryInBackend(taskId, newCategory) {
     try {
@@ -81,7 +74,6 @@ function renderTasks(tasks) {
 
 /**
  * Retrieves a mapping of task categories to their respective DOM elements.
- * @returns {Object} A mapping of category names to column elements.
  */
 function getColumnMap() {
     return {
@@ -112,10 +104,6 @@ function clearTaskColumns(columnMap) {
 function appendTaskToColumn(task, columnMap) {
     let category = task.mainCategory || "To do";
     const column = columnMap[category];
-    if (!column) {
-        console.warn(`⚠️ Keine passende Spalte für Kategorie: ${category}`);
-        return;
-    }
     const taskElement = createTaskElement(task);
     column.appendChild(taskElement);
 }
@@ -124,7 +112,6 @@ function appendTaskToColumn(task, columnMap) {
 /**
  * Creates a task element and returns it.
  * @param {Object} task - The task data.
- * @returns {HTMLElement} The generated task element.
  */
 function createTaskElement(task) {
     let categoryColor = task.category === "User Story" ? "#0039fe" : "#1fd7c1";
@@ -141,8 +128,7 @@ function createTaskElement(task) {
 
 
 /**
- * Updates the visibility of the "No Tasks" message in each column.
- * If there are tasks in a column, the message is hidden. Otherwise, it is displayed.
+ * Updates the visibility of the "No Tasks" message in each column. If there are tasks in a column, the message is hidden. Otherwise, it is displayed.
  */
 function updateNoTaskVisibility() {
     document.querySelectorAll(".column-body").forEach(column => {
@@ -181,7 +167,6 @@ async function updateTaskCategory(taskElement, newColumnId) {
 /**
  * Maps a column ID to its corresponding task category.
  * @param {string} columnId - The ID of the column.
- * @returns {string} The mapped category name.
  */
 function mapColumnIdToCategory(columnId) {
     const columnMap = {
@@ -201,7 +186,6 @@ function mapColumnIdToCategory(columnId) {
 /**
  * Fetches task data from the database.
  * @param {string} taskId - The ID of the task.
- * @returns {Promise<Object>} The fetched task data.
  */
 async function fetchTaskData(taskId) {
     const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
@@ -228,7 +212,6 @@ async function saveTaskCategory(taskId, newCategory) {
 /**
  * Generates the HTML for displaying a task's subtasks.
  * @param {Object} task - The task object containing subtasks.
- * @returns {string} The generated HTML for subtasks.
  */
 function generateSubtasks(task) {
     if (!task.subtasks || task.subtasks.length === 0) {
@@ -362,7 +345,6 @@ async function fetchTaskById(taskId) {
  * Processes task data and ensures default values.
  * @param {string} taskId - The ID of the task.
  * @param {Object} taskData - The raw task data from the backend.
- * @returns {Object} The processed task object.
  */
 function processTaskData(taskId, taskData) {
     if (!taskData) throw new Error("No task data found");
@@ -374,15 +356,31 @@ function processTaskData(taskId, taskData) {
         categoryColor: taskData.categoryColor || "#ccc",
         dueDate: taskData.dueDate || "No date",
         priority: taskData.priority || { text: "No priority", image: "" },
-        assignedTo: Array.isArray(taskData.assignedTo) ? taskData.assignedTo.map(user => ({
-            name: user.name || "Unknown user",
-            avatar: user.avatar || { bgcolor: "#ccc", initials: "?" }
-        })) : [],
-        subtasks: Array.isArray(taskData.subtasks) ? taskData.subtasks.map(subtask => ({
-            text: subtask.text || subtask,
-            completed: subtask.completed || false
-        })) : []
+        assignedTo: formatAssignedUsers(taskData.assignedTo),
+        subtasks: formatSubtasks(taskData.subtasks)
     };
+}
+
+
+/**
+ * Formats the assigned users by ensuring each user has a name and an avatar.
+ */
+function formatAssignedUsers(assignedTo) {
+    return Array.isArray(assignedTo) ? assignedTo.map(user => ({
+        name: user.name || "Unknown user",
+        avatar: user.avatar || { bgcolor: "#ccc", initials: "?" }
+    })) : [];
+}
+
+
+/**
+ * Formats the subtasks by ensuring each subtask has a text description and a completion status.
+ */
+function formatSubtasks(subtasks) {
+    return Array.isArray(subtasks) ? subtasks.map(subtask => ({
+        text: subtask.text || subtask,
+        completed: subtask.completed || false
+    })) : [];
 }
 
 
