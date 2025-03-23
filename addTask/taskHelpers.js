@@ -97,7 +97,7 @@ function createCheckboxElement(name, avatar) {
 
 function createImageElement() {
     const img = createElement("img", "checkbox-image");
-    img.src = "/assets/imgs/check-mark.png"; // Default image (unchecked state)
+    img.src = "/assets/imgs/check-mark.png"; 
     img.alt = "Checkbox image";
     img.classList.add("checkbox-image-small");
     img.style.display = "none";
@@ -122,7 +122,7 @@ function showError(selector, message) {
     const elementToHighlight = selector === "#selected-category" ? document.querySelector(".dropdown-btn") : field;
     elementToHighlight.classList.add("error");
 
-    field.addEventListener("input", () => clearError(selector)); // For text inputs
+    field.addEventListener("input", () => clearError(selector)); 
     field.addEventListener("change", () => clearError(selector));
 }
 
@@ -175,17 +175,13 @@ function toggleCheckboxVisibility(checkbox, img, isChecked) {
  * @param {HTMLImageElement} img - The image element associated with the checkbox.
  * @param {string} name - The name associated with the checkbox for logging purposes.
  */
-function uncheckCheckbox(checkbox, img, name) {
+function uncheckCheckbox(checkbox, img) {
     checkbox.checked = false;
     img.style.display = "none";
     checkbox.style.display = "block";
 
-    // Manually trigger the change event
     const changeEvent = new Event('change');
     checkbox.dispatchEvent(changeEvent);
-
-    console.log(`Checkbox changed: ${name}, unchecked: ${checkbox.checked}`);
-    console.log(`Avatar hidden for ${name} after unchecking.`);
 }
 
 
