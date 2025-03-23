@@ -7,7 +7,6 @@ function setupAddSubtaskButton() {
     addEventListeners("#subtasks", "keydown", handleSubtaskInputKeydown);
     addEventListeners("#subtasks", "input", handleSubtaskInput);
 
-    setupEditSubtaskInput();
     setupGlobalEnterKeyListener();
 }
 
@@ -33,7 +32,7 @@ function setupGlobalEnterKeyListener() {
         event.preventDefault();
         const activeElement = document.activeElement;
 
-        if ((activeElement.matches("#subtasks") || activeElement.classList.contains("edit-input")) && value) {
+        if ((activeElement.matches("#subtasks") || activeElement.classList.contains("edit-input")) && activeElement.value) {
             activeElement.matches("#subtasks") ? (showSubtaskActions(), saveSubtask()) : saveEditedSubtask(activeElement);
         }
     });
