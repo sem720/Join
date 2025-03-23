@@ -11,7 +11,7 @@ async function openAddTaskModal() {
         return; 
     }
 
-    document.getElementById("modal").style.display = "block"; 
+    document.querySelector(".modal").style.display = "block"; 
 }
 
 
