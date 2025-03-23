@@ -1,4 +1,12 @@
+/**
+ * Stores the currently active button element.
+ * If no button is active, the value is `null`.
+ * This is used to keep track of which button is selected to ensure only one button is active at a time.
+ * 
+ * @type {HTMLElement | null}
+ */
 let activeButton = null; 
+
 
 /**
  * Toggles the active state of the clicked button.
