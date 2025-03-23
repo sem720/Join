@@ -37,24 +37,50 @@
         <div class="modal-addTask-container">
           <h1 class="h1-addTask h1">Add Task</h1>
           <main class="main-addTask" id="main-addTask">
-            <form class="form" onsubmit="createTask(event)">
+            <form class="form" name="form" onsubmit="createTask(event)">
               <!-- Left Container -->
               <div class="left-container">
-                <label for="task-name">Title <span class="required">*</span></label>
-                <input id="task-name" class="input-standard" type="text" name="task-name" placeholder="Enter a title"
+                <label for="task-name">Title 
+                  <span class="required">
+                  *
+                  </span>
+                </label>
+                <input 
+                  id="task-name" 
+                  class="input-standard" 
+                  type="text" 
+                  name="task-name" 
+                  placeholder="Enter a title"
                   required />
-                <div class="error-message" data-error-for="task-name" style="display: none"></div>
+                <div 
+                  class="error-message" 
+                  data-error-for="task-name" 
+                  style="display: none"
+                ></div>
 
                 <label for="description">Description</label>
-                <textarea id="description" name="description" placeholder="Enter a Description"></textarea>
+                <textarea 
+                  id="description" 
+                  name="description" 
+                  placeholder="Enter a Description"
+                ></textarea>
 
-                <label id="assignment-label">Assigned to</label>
+                <label for="assignment-btn">Assigned to</label>
                 <div class="assignment-container">
-                  <button class="assignment-btn no-loading" id="assignment-btn" data-container-id="contacts-container"
-                    data-list-id="contacts-list" data-selected-id="selected-contacts-container">
+                  <button 
+                    class="assignment-btn no-loading" 
+                    id="assignment-btn" 
+                    data-container-id="contacts-container"
+                    data-list-id="contacts-list" 
+                    data-selected-id="selected-contacts-container"
+                    >
                     Select contacts to assign
                     <span class="icon-container">
-                      <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon" />
+                      <img 
+                        src="/assets/imgs/dropdown-black.png" 
+                        alt="Dropdown Icon" 
+                        id="dropdown-icon" 
+                      />
                     </span>
                   </button>
                   <div id="selected-contacts-container" class="selected-contacts"></div>
@@ -66,49 +92,113 @@
 
               <!-- Right Container -->
               <div class="right-container">
-                <label for="due-date" id="date-label">Due Date <span class="required">*</span></label>
+                <label 
+                  for="due-date" 
+                  id="date-label"
+                >Due Date <span class="required">*</span></label>
                 <div class="date-container" id="date-container">
-                  <input type="date" class="input-standard" id="due-date" name="due-date" placeholder="dd/mm/yyyy"
-                    required />
-                  <img src="/assets/imgs/calendar.png" id="calendar-icon" class="calendar-icon" alt="Kalender Icon" />
+                  <input 
+                    type="date" 
+                    class="input-standard" 
+                    id="due-date" 
+                    name="due-date" 
+                    placeholder="dd/mm/yyyy"
+                    required 
+                  />
+                  <img 
+                    src="/assets/imgs/calendar.png" 
+                    id="calendar-icon" 
+                    class="calendar-icon" 
+                    alt="Kalender Icon" 
+                  />
                 </div>
                 <div class="error-message" data-error-for="due-date" style="display: none"></div>
 
-                <label>Prio</label>
+                <label for="medium">Prio</label>
                 <div class="button-container">
-                  <button class="btn-switch" id="urgent" name="urgent" type="button" onclick="toggleButtons(this)">
+                  <button 
+                    class="btn-switch" 
+                    id="urgent" 
+                    name="urgent" 
+                    type="button" 
+                    onclick="toggleButtons(this)"
+                  >
                     Urgent <img src="/assets/imgs/urgent.png" alt="urgent-icon" />
                   </button>
-                  <button class="btn-switch" id="medium" name="medium" type="button" onclick="toggleButtons(this)">
+                  <button 
+                    class="btn-switch" 
+                    id="medium" 
+                    name="medium" 
+                    type="button" 
+                    onclick="toggleButtons(this)"
+                  >
                     Medium <img src="/assets/imgs/medium.png" alt="medium-icon" />
                   </button>
-                  <button class="btn-switch" id="low" name="low" type="button" onclick="toggleButtons(this)">
+                  <button 
+                    class="btn-switch" 
+                    id="low" 
+                    name="low" 
+                    type="button"
+                    onclick="toggleButtons(this)"
+                  >
                     Low <img src="/assets/imgs/low.png" alt="low-icon" />
                   </button>
                 </div>
 
 
-                <label id="category">Category <span class="required">*</span></label>
+                <label id="dropdown-btn">Category <span class="required">*</span></label>
                 <div class="dropdown-container">
-                  <button type="button" class="dropdown-btn no-loading" onclick="toggleDropdown()">Select task category
+                  <button 
+                    type="button" 
+                    class="dropdown-btn no-loading" 
+                    onclick="toggleDropdown()"
+                  >Select task category
                     <span class="icon-container">
-                      <img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon" />
+                      <img 
+                        src="/assets/imgs/dropdown-black.png" 
+                        alt="Dropdown Icon" 
+                        id="dropdown-icon" 
+                      />
                     </span>
                   </button>
                   <div class="dropdown-options" id="dropdown-list">
-                    <li onclick="selectCategory(this)" data-value="technical_task" class="no-loading">Technical Task
+                    <li 
+                      onclick="selectCategory(this)" 
+                      data-value="technical_task" 
+                      class="no-loading"
+                    >Technical Task
                     </li>
-                    <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
+                    <li 
+                      onclick="selectCategory(this)" 
+                      data-value="user_story" 
+                      class="no-loading"
+                    >User Story</li>
                   </div>
-                  <input type="hidden" id="selected-category" name="selected-category" required />
+                  <input 
+                    type="hidden" 
+                    id="selected-category" 
+                    name="selected-category" 
+                    required 
+                    aria-labelledby="category-label" 
+                  />
                 </div>
                 <div class="error-message" data-error-for="selected-category" style="display: none"></div>
 
                 <label for="subtasks">Subtasks</label>
                 <div class="subtask-input-wrapper">
-                  <input type="text" class="input-standard" id="subtasks" name="subtasks" placeholder="Add new subtask"
-                    autocomplete="off" />
-                  <img src="/assets/imgs/add-subtask.png" alt="addSubtask-icon" class="add-subtask-icon" />
+                  <input 
+                    type="text" 
+                    class="input-standard" 
+                    id="subtasks" 
+                    name="subtasks" p
+                    laceholder="Add new subtask"
+                    autocomplete="off" 
+                  />
+                  <img 
+                    src="/assets/imgs/add-subtask.png" 
+                    alt="addSubtask-icon" 
+                    class="add-subtask-icon" 
+                  />
                 </div>
                 <ul id="subtask-list"></ul>
               </div> <!-- END right-container -->
@@ -135,7 +225,6 @@
                 </button>
               </div>
             </section> <!-- END footer section -->
-
           </main>
 
           <!-- Task Added Popup -->
