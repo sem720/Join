@@ -16,10 +16,7 @@ function initAddTaskContacts(listId) {
     subtasksInput = document.getElementById('subtasks');
 
     fetchAndRenderContacts(listId);
-    setupAssignmentButtons(); // 🔄 Event-Listener für Buttons setzen
-
-    console.log("💡 Init Contacts - Searching for:", listId);
-    console.log("📌 Contacts List Found:", document.getElementById(listId));
+    setupAssignmentButtons(); 
 
     document.addEventListener("keydown", handleKeydownOutsideAssignment);
 
@@ -32,7 +29,6 @@ function initAddTaskContacts(listId) {
 function setupAssignmentButtons() {
     document.querySelectorAll(".assignment-btn").forEach((button) => {
         button.addEventListener("click", (event) => {
-            console.log("✅ Button Clicked!", event.target);
 
             const containerId = button.getAttribute("data-container-id");
             const listId = button.getAttribute("data-list-id");
@@ -67,22 +63,20 @@ function handleKeydownOutsideAssignment(event) {
  */
 
 
-function toggleContacts(event, containerId, listId, selectedContainerId) {
+function toggleContacts(event, containerId, listId) {
     event.preventDefault();
-
-    console.log("🔄 toggleContacts() called!", { containerId, listId, selectedContainerId });
 
     const contactsContainer = document.getElementById(containerId);
     const contactsList = document.getElementById(listId);
-    const button = event.target.closest(".assignment-btn"); // Get the clicked button
-    const dropdownIcon = button?.querySelector("img"); // Find the dropdown icon inside the button
+    const button = event.target.closest(".assignment-btn"); 
+    const dropdownIcon = button?.querySelector("img"); 
 
     if (!contactsContainer || !contactsList) return console.error(`❌ Missing container: ${containerId} or ${listId}`);
 
     const isOpen = contactsContainer.classList.toggle("visible");
     contactsContainer.classList.toggle("hidden", !isOpen);
 
-    updateDropdownIcon(isOpen, dropdownIcon); // ✅ Update icon here
+    updateDropdownIcon(isOpen, dropdownIcon); 
 }
 
 
@@ -103,22 +97,47 @@ function setupOutsideClickListener() {
  */
 function handleOutsideClick(event) {
     const menu = document.getElementById("contacts-container");
+    
+    if (!shouldCloseDropdown(menu, event)) return;
+    
+    closeDropdownMenu(menu);
+    resetDropdownState();
+    closeContacts("edit-contacts-container", "edit-contacts-list", "edit-selected-contacts-container");
+}
 
-    if (
-        menu &&
-        menu.classList.contains("visible") && // Nur prüfen, wenn das Menü sichtbar ist
-        !menu.contains(event.target) &&
-        !event.target.closest(".assignment-btn")
-    ) {
-        menu.classList.add("hidden");
-        menu.classList.remove("visible");
 
-        const button = document.querySelector(".assignment-btn");
-        const dropdownIcon = button?.querySelector("img");
+/**
+ * Checks if the dropdown menu should be closed based on the event target.
+ * 
+ * @param {HTMLElement} menu - The dropdown menu container.
+ * @param {Event} event - The click event.
+ * @returns {boolean} - True if the dropdown should be closed, false otherwise.
+ */
+function shouldCloseDropdown(menu, event) {
+    return menu && menu.classList.contains("visible") && 
+           !menu.contains(event.target) && 
+           !event.target.closest(".assignment-btn");
+}
 
-        updateDropdownIcon(false, dropdownIcon);
-        closeContacts("edit-contacts-container", "edit-contacts-list", "edit-selected-contacts-container");
-    }
+
+/**
+ * Closes the dropdown menu by hiding it.
+ * 
+ * @param {HTMLElement} menu - The dropdown menu container.
+ */
+function closeDropdownMenu(menu) {
+    menu.classList.add("hidden");
+    menu.classList.remove("visible");
+}
+
+
+/**
+ * Resets the dropdown button icon state.
+ */
+function resetDropdownState() {
+    const button = document.querySelector(".assignment-btn");
+    const dropdownIcon = button?.querySelector("img");
+    updateDropdownIcon(false, dropdownIcon);
 }
 
 
@@ -154,7 +173,6 @@ function openContacts(containerId, listId, selectedContainerId) {
 }
 
 
-
 /**
  * Closes the contacts list by adding the "hidden" class and removing the "visible" class.
  * It also updates the dropdown icon and disables outside click behavior.
@@ -170,14 +188,10 @@ function closeContacts(containerId, listId, selectedContainerId = null) {
     contactsList.classList.add("hidden");
     contactsList.classList.remove("visible");
 
-    if (selectedContainerId) {
-        console.log(`🔄 Updating selected contacts display for: ${selectedContainerId}`);
-        updateSelectedContactsDisplay(selectedContainerId);
-    }
-
+    if (selectedContainerId) updateSelectedContactsDisplay(selectedContainerId);
+    
     updateDropdownIcon(false);
 }
-
 
 
 /**
@@ -193,8 +207,6 @@ async function fetchAndRenderContacts(listId) {
         if (!data) throw new Error("Keine Nutzerdaten gefunden.");
 
         processContactsData(data);
-        console.log("✅ Contacts fetched:", Array.from(allContacts.keys())); // Debugging
-
         listId ? renderContactsList(listId) : console.error("❌ listId is undefined in fetchAndRenderContacts");
 
     } catch (error) {
@@ -237,8 +249,6 @@ function getPreselectedInitials() {
  * @param {boolean} isPreselected - Whether the contact is preselected.
  */
 function renderSingleContact(contactsList, name, bgcolor, isPreselected) {
-    console.log(`👤 Adding contact: ${name} (${getInitials(name)}) | Preselected: ${isPreselected}`);
-
     const contactElement = createContactElement(name, bgcolor, isPreselected);
     contactsList.appendChild(contactElement);
 }
@@ -249,16 +259,11 @@ function renderSingleContact(contactsList, name, bgcolor, isPreselected) {
  * @param {string} listId - The ID of the contacts container.
  */
 async function renderContactsList(listId) {
-    console.log("🔍 Trying to render contacts for:", listId);
-
     const contactsList = document.getElementById(listId);
     if (!contactsList) return;
 
-    console.log(`📝 Rendering contacts in list: ${listId}`);
     contactsList.innerHTML = '';
-
     const preselectedInitials = getPreselectedInitials();
-    console.log("🛠 Preselected Contacts (Edit Modal Only):", preselectedInitials);
 
     allContacts.forEach(({ name, bgcolor }) => {
         renderSingleContact(contactsList, name, bgcolor, preselectedInitials.includes(getInitials(name)));
@@ -283,8 +288,6 @@ function createContactElement(name, bgcolor, isPreselected) {
         createCheckbox(name)
     );
 
-    if (isPreselected) console.log(`🎯 Preselected Contact in List: ${name}`);
-
     contactDiv.addEventListener("click", () => handleContactClick(contactDiv, isPreselected));
     return contactDiv;
 }
@@ -297,17 +300,15 @@ function updateSelectedContactsDisplay(selectedContainerId) {
     const selectedContainer = document.getElementById(selectedContainerId);
     if (!selectedContainer) return;
 
-    selectedContainer.innerHTML = ""; // Vorherige Avatare löschen
+    selectedContainer.innerHTML = ""; 
 
     selectedContacts.forEach(contact => {
         const avatarDiv = document.createElement("div");
-        avatarDiv.classList.add("avatar-board-card");
+        avatarDiv.classList.add("avatar");
         avatarDiv.style.backgroundColor = contact.bgcolor;
         avatarDiv.textContent = getInitials(contact.name);
         selectedContainer.appendChild(avatarDiv);
     });
-
-    console.log("🔄 Kontakte in UI aktualisiert:", selectedContainerId);
 }
 
 
@@ -318,8 +319,7 @@ function updateSelectedContactsDisplay(selectedContainerId) {
  * @param {string} name - The name of the contact.
  * @param {boolean} isChecked - The new selection state of the contact (true if selected, false if deselected).
  */
-function toggleContactSelection(name, isChecked) {
-    console.log(`Toggling contact: ${name}, Checked: ${isChecked}`);
+function toggleContactSelection(name) {
     const contact = allContacts.get(name);
 
     if (!contact) return console.error(`❌ Contact not found: ${name}`);
@@ -330,22 +330,17 @@ function toggleContactSelection(name, isChecked) {
         selectedContacts.add(contact);
     }
 
-    console.log("Updated selected contacts:", [...selectedContacts]);
-
     updateSelectedContactsDisplay("selected-contacts-container");
-    updateSelectedContactsDisplay("edit-selected-contacts-container");// Ensure correct ID
+    updateSelectedContactsDisplay("edit-selected-contacts-container");
 }
 
 
 function handleCheckboxChange(checkbox, img, name) {
     checkbox.addEventListener("change", () => {
-        console.log(`Checkbox changed: ${name}, Checked: ${checkbox.checked}`);
-
         toggleContactSelection(name, checkbox.checked);
         toggleCheckboxVisibility(checkbox, img, checkbox.checked);
     });
 
-    // Ensure clicking the image returns to the checkbox
     img.addEventListener("click", () => {
         uncheckCheckbox(checkbox, img, name);
     });
@@ -355,7 +350,6 @@ function handleCheckboxChange(checkbox, img, name) {
 // Function to create the checkbox with image logic
 function createCheckbox(name, avatar) {
     const container = createElement("div", "contact-checkbox-container");
-
     const checkbox = createCheckboxElement(name, avatar);
     const img = createImageElement();
 
@@ -369,11 +363,8 @@ function createCheckbox(name, avatar) {
 
 
 function handleContactClick(contactItem, isPreselected) {
-    if (isPreselected) {
-        console.log(`🛑 Contact is preselected: ${contactItem.textContent.trim()}`);
-        removePreselectedContact(contactItem);
-        return; // Prevent further toggling
-    }
+    if (isPreselected) return removePreselectedContact(contactItem);
+       
     contactItem.classList.toggle("selected");
     const avatar = contactItem.querySelector(".avatar");
     const nameSpan = contactItem.querySelector(".contact-name");
@@ -382,8 +373,6 @@ function handleContactClick(contactItem, isPreselected) {
     avatar?.classList.toggle("selected-avatar");
     nameSpan?.classList.toggle("selected-name");
     checkboxImg?.classList.toggle("selected-checkbox-image");
-
-    console.log(`🔄 Contact selection toggled: ${contactItem.textContent.trim()}`);
 }
 
 
@@ -407,6 +396,5 @@ function handleCheckboxChangeAvatar(name) {
         } else {
             handleCheckboxUnchecked(avatar, name);
         }
-        console.log(`Avatar visibility for ${name}:`, avatar.style.display);
     });
 }
