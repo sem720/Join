@@ -3,16 +3,21 @@
  * @async
  */
 async function openAddTaskModal() {
-    showTaskModal(); 
-    await initializeTaskModal(); 
-
     if (window.innerWidth < 670) {
-        window.location.href = "/addTask/addTask.html"; 
+        window.location.href = "/addTask/addTask.html";
         return; 
     }
 
-    document.querySelector(".modal").style.display = "block"; 
+    showTaskModal();
+    await initializeTaskModal();
+    
+    const modal = document.getElementById("addTaskModal");
+    const modalOverlay = document.querySelector(".modal-overlay");
+
+    modal.style.display = "block"; 
+    modalOverlay.classList.add("active"); 
 }
+
 
 
 /**
