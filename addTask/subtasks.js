@@ -30,39 +30,25 @@ function addEventListeners(selector, eventType, handler) {
 function setupGlobalEnterKeyListener() {
     document.addEventListener("keydown", (event) => {
         if (event.key !== "Enter") return;
-
         event.preventDefault();
         const activeElement = document.activeElement;
 
-        if (activeElement.matches("#subtasks") && activeElement.value.trim()) {
-            showSubtaskActions();
-            saveSubtask();
-        }
-
-        if (activeElement.classList.contains("edit-input") && activeElement.value.trim()) {
-            saveEditedSubtask(activeElement);
+        if ((activeElement.matches("#subtasks") || activeElement.classList.contains("edit-input")) && value) {
+            activeElement.matches("#subtasks") ? (showSubtaskActions(), saveSubtask()) : saveEditedSubtask(activeElement);
         }
     });
 }
 
 
-function getSubtaskHTML(editedText) {
-    return `
-        <span class="subtask-text">• ${editedText}</span>
-        <div class="li-actions">
-            <img src="/assets/imgs/edit.svg" class="edit-icon" alt="Edit Icon" onclick="editSubtask(event)">
-            <span class="divider1"></span>
-            <img src="/assets/imgs/delete-black.png" class="delete-icon" alt="Delete Icon" onclick="deleteSubtask(event)">
-        </div>
-    `;
-}
-
-
+/**
+ * Saves the edited subtask by updating the list item with the new text.
+ * 
+ * @param {HTMLInputElement} inputElement - The input field containing the edited subtask text.
+ */
 function saveEditedSubtask(inputElement) {
     const editedText = inputElement.value.trim();
     if (!editedText) return;
 
-    // Replace the input with a span containing the updated text
     const li = inputElement.closest(".subtask-item");
     li.innerHTML = getSubtaskHTML(editedText);
 }
@@ -230,7 +216,6 @@ function saveSubtask() {
         subtaskList.appendChild(li);
     }
 
-    console.log(document.querySelector(".li-actions"));
     clearSubtask();
 }
 
@@ -330,114 +315,3 @@ function deleteSubtask(event) {
 }
 
 
-function setupEditSubtaskInput() {
-    const inputField = document.getElementById("edit-subtasks");
-    const addSubtaskBtn = document.querySelector("#edit-subtask-wrapper .add-subtask-icon");
-
-    if (addSubtaskBtn) addSubtaskBtn.addEventListener("click", handleEditSubtaskClick);
-    if (inputField) inputField.addEventListener("keydown", handleEditSubtaskKeydown);
-    if (inputField) inputField.addEventListener("input", handleEditSubtaskInput);
-}
-
-
-function handleEditSubtaskInput() {
-    const inputField = document.getElementById("edit-subtasks");
-    const addSubtaskBtn = document.querySelector("#edit-subtask-wrapper .add-subtask-icon");
-
-    if (inputField.value.trim()) {
-        addSubtaskBtn.style.display = "none";
-        showEditSubtaskActions();
-    } else {
-        addSubtaskBtn.style.setProperty("display", "block", "important");
-
-    }
-}
-
-
-function handleEditSubtaskClick() {
-    const inputField = document.getElementById("edit-subtasks");
-    if (inputField.value.trim()) {
-        saveEditSubtask();
-    }
-}
-
-
-function showEditSubtaskActions() {
-    const inputField = document.getElementById("edit-subtasks");
-    let iconContainer = document.querySelector("#edit-subtask-wrapper .subtask-action");
-
-    if (!iconContainer) {
-        iconContainer = document.createElement("div");
-        iconContainer.classList.add("subtask-action");
-
-        const checkIcon = createIcon("/assets/imgs/checkmark-black.png", "Checkmark Icon", "checkmark-icon", saveEditSubtask);
-        const divider = document.createElement("div");
-        divider.classList.add("divider");
-        const clearIcon = createIcon("/assets/imgs/clear-subtask.png", "Clear Icon", "clear-icon", clearEditSubtask);
-
-        iconContainer.append(clearIcon, divider, checkIcon);
-        inputField.parentElement.appendChild(iconContainer);
-    }
-}
-
-
-function removeEditSubtaskActions() {
-    const iconContainer = document.querySelector(".subtask-action");
-    const addSubtaskBtn = document.querySelector("#edit-subtask-wrapper .add-subtask-icon");
-
-    console.log("Removing subtask actions...", iconContainer); // Debugging
-
-    if (iconContainer) {
-        iconContainer.remove(); // Remove actions (✔ ✖)
-        console.log("Subtask action removed.");
-    } else {
-        console.log("No subtask action found.");
-    }
-
-    if (addSubtaskBtn) {
-        addSubtaskBtn.style.display = "flex"; // Use "flex" instead of "inline"
-        addSubtaskBtn.src = "/assets/imgs/add-subtask.png"; // Reset to ➕
-        console.log("Plus icon shown.");
-    } else {
-        console.log("No addSubtaskBtn found.");
-    }
-}
-
-
-
-function saveEditSubtask() {
-    const inputField = document.getElementById("edit-subtasks");
-    const subtaskList = document.getElementById("edit-subtask-list");
-
-    if (inputField.value.trim()) {
-        const li = createSubtaskElement(inputField.value);
-        subtaskList.appendChild(li);
-    }
-
-    inputField.value = "";
-    removeEditSubtaskActions();
-}
-
-
-function clearEditSubtask() {
-    const inputField = document.getElementById("edit-subtasks");
-    const addSubtaskBtn = document.querySelector("#edit-subtask-wrapper .add-subtask-icon");
-
-    inputField.value = "";
-    addSubtaskBtn.src = "/assets/imgs/add-subtask.png"; // Reset to ➕
-    addSubtaskBtn.style.display = "block";
-}
-
-
-function handleEditSubtaskKeydown(event) {
-    const inputField = document.getElementById("edit-subtasks");
-
-    if (event.key === "Enter") {
-        event.preventDefault();
-
-        if (inputField.value.trim()) {
-            showEditSubtaskActions();
-            saveEditSubtask();
-        }
-    }
-}
