@@ -42,7 +42,7 @@ function getTaskFormData() {
         dueDate: getValue("#due-date"),
         priority: getValidPriority(), // ✅ Moved logic to a separate function
         category: getSelectedCategory(),
-        subtasks: getTaskSubtasks(),
+        subtasks: getSubtasks(),
         mainCategory: getMainCategory()
     };
 }
@@ -175,9 +175,7 @@ function getSelectedCategory() {
 /** ================================
  *      SUBTASKS HANDLING
  * ================================ */
-function getTaskSubtasks() {
-    console.log("Gefundene Subtasks:", document.querySelectorAll("#subtask-list li"));
-
+function getSubtasks() {
     return Array.from(document.querySelectorAll(".subtask-item")).map(subtask => ({
         text: formatText(subtask.textContent),
         completed: false
