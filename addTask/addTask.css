@@ -303,6 +303,7 @@ ul {
     flex-grow: 1;
     height: 24px;
     border: none;
+    border-bottom: 1px solid var(--light-blue);
     font-size: inherit;
     display: flex;
     align-items: center;
