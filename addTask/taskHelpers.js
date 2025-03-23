@@ -198,3 +198,20 @@ function createElement(tag, className, text = "") {
     if (text) element.textContent = text;
     return element;
 }
+
+
+/**
+ * Generates the HTML structure for a subtask list item.
+ * @param {string} editedText - The text content of the subtask.
+ * @returns {string} The HTML string for the subtask list item.
+ */
+function getSubtaskHTML(editedText) {
+    return `
+        <span class="subtask-text">• ${editedText}</span>
+        <div class="li-actions">
+            <img src="/assets/imgs/edit.svg" class="edit-icon" alt="Edit Icon" onclick="editSubtask(event)">
+            <span class="divider1"></span>
+            <img src="/assets/imgs/delete-black.png" class="delete-icon" alt="Delete Icon" onclick="deleteSubtask(event)">
+        </div>
+    `;
+}
