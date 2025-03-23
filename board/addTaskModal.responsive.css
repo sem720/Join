@@ -158,9 +158,12 @@
 }
   
 @media only screen and (max-width: 670px) {
-    .modal {
+    #addTaskModal,
+    .modal-overlay.active {
         display: none;
     }
+
+    
 }
 
 
