@@ -57,7 +57,7 @@ function getTaskFormData() {
         dueDate: getValue("#due-date"),
         priority: getSelectedPriority(), 
         category: getSelectedCategory(),
-        subtasks: getSubtasks(),
+        subtasks: getTaskSubtasks(),
         mainCategory: getMainCategory()
     };
 }
@@ -223,11 +223,15 @@ function getSelectedCategory() {
  * Retrieves the subtasks from the form.
  * @returns {Array<{text: string, completed: boolean}>} An array of subtasks.
  */
-function getSubtasks() {
-    return Array.from(document.querySelectorAll(".subtask-item")).map(subtask => ({
+function getTaskSubtasks() {
+    const subtasks = Array.from(document.querySelectorAll(".subtask-item")).map(subtask => ({
         text: formatText(subtask.textContent),
         completed: false
     }));
+
+    console.log("Retrieved subtasks:", subtasks); // Debugging output
+
+    return subtasks;
 }
 
 
