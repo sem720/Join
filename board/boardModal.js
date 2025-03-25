@@ -3,11 +3,8 @@
  * @async
  */
 async function openAddTaskModal() {
-    if (window.innerWidth < 670) {
-        window.location.href = "/addTask/addTask.html";
-        return; 
-    }
-
+    if (window.innerWidth < 670) return window.location.href = "/addTask/addTask.html";
+       
     showTaskModal();
     await initializeTaskModal();
     
@@ -150,7 +147,7 @@ function showTaskPopup() {
     let popup = document.getElementById("task-added-popup");
     popup.classList.add("show");
 
-    setTimeout(() => window.location.href = "/board/board.html", 1500);
+    setTimeout(() => window.location.href = "/board/board.html", 150000);
 }
 
 
