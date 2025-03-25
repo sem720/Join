@@ -101,8 +101,8 @@
     </div>
   </body>
   <script src="/comp/navbar/navbar.js"></script>
+  <script src="./help.js"></script>
   <script src="/comp/sidebar/sidebar.js"></script>
-  <script src="../privacyPolicy/privacy.js"></script>
   <script src="https://www.w3schools.com/lib/w3.js"></script>
   <script>
     w3.includeHTML(function () {
@@ -117,14 +117,6 @@
         );
       });
     });
-
-    function setActiveNav() {
-      const currentPage = window.location.pathname.split("/").pop();
-      document.querySelectorAll(".nav").forEach((button) => {
-        const link = button.getAttribute("data-link");
-        button.classList.toggle("sidebar-active-tap", link === currentPage);
-      });
-    }
     /**
      * Navigates the browser back to the previous page.
      *
@@ -136,6 +128,14 @@
      */
     function toggleBack() {
       window.history.back();
+    }
+
+    function setActiveNav() {
+      const currentPage = window.location.pathname.split("/").pop();
+      document.querySelectorAll(".nav").forEach((button) => {
+        const link = button.getAttribute("data-link");
+        button.classList.toggle("sidebar-active-tap", link === currentPage);
+      });
     }
   </script>
 </html>
