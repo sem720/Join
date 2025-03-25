@@ -64,6 +64,7 @@ window.addEventListener("DOMContentLoaded", attachLoadingStateToButtons);
     LOGIN_PAGE,
     "/legalNotice/legals.html",
     "/privacyPolicy/privacy.html",
+    "/register/register.html",
   ];
 
   const storedUser = localStorage.getItem(USER_STORAGE_KEY);
