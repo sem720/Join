@@ -125,16 +125,14 @@
   <script src="/comp/sidebar/sidebar.js"></script>
   <script src="https://www.w3schools.com/lib/w3.js"></script>
   <script>
-    w3.includeHTML(() => {
+    w3.includeHTML(function () {
+      setActiveNav();
+      w3.includeHTML(() => {
       checkNavigationVisibility();
 
       // Für zukünftige Änderungen (falls nötig)
       document.addEventListener("w3include-loaded", checkNavigationVisibility);
     });
-  </script>
-  <script>
-    w3.includeHTML(function () {
-      setActiveNav();
     });
 
     function setActiveNav() {
@@ -144,5 +142,7 @@
         button.classList.toggle("sidebar-active-tap", link === currentPage);
       });
     }
+
+    
   </script>
 </html>
