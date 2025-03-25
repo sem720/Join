@@ -229,8 +229,6 @@ function getTaskSubtasks() {
         completed: false
     }));
 
-    console.log("Retrieved subtasks:", subtasks); // Debugging output
-
     return subtasks;
 }
 
