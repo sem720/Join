@@ -137,8 +137,16 @@
                 Select task category
               </button>
               <div class="dropdown-options" id="dropdown-list">
-                <li onclick="selectCategory(this)" data-value="technical_task" class="no-loading">Technical Task</li>
-                <li onclick="selectCategory(this)" data-value="user_story" class="no-loading">User Story</li>
+                <li 
+                  onclick="selectCategory(this)" 
+                  data-value="technical_task" 
+                  class="no-loading"
+                >Technical Task</li>
+                <li 
+                  onclick="selectCategory(this)" 
+                  data-value="user_story" 
+                  class="no-loading"
+                >User Story</li>
               </div>
             </div>
             <input
@@ -146,7 +154,11 @@
               id="selected-category"
               name="selected-category"
             />
-            <div class="error-message" data-error-for="selected-category" style="display: none"></div>
+            <div 
+              class="error-message" 
+              data-error-for="selected-category" 
+              style="display: none"
+            ></div>
 
             <label for="subtasks" id="label-subtask">Subtasks</label>
             <div class="subtask-input-wrapper">
@@ -191,7 +203,12 @@
               </span>
             </button>
 
-            <button class="btn-dark create-btn no-loading" onclick="createTask(event)">
+            <button 
+              class="btn-dark create-btn no-loading" 
+              onclick="createTask(event)"
+              disabled
+              type="submit"
+            >
               Create Task
               <img src="/assets/imgs/check-white.png" alt="check-icon" />
             </button>
