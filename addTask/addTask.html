@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Adding a Task</title>
     <link rel="stylesheet" href="/root.css" />
-    <link rel="stylesheet" type="text/css" href="/addTask/addTask.css" />
-    <link rel="stylesheet" href="/addTask/addTask.comps.css" />
+    <link rel="stylesheet" type="text/css" href="/addTask/addTask.main.css" />
     <link rel="stylesheet" href="/comp/components.css" />
     <link rel="stylesheet" href="/comp/navbar/navbar.css" />
     <link rel="stylesheet" href="/comp/sidebar/sidebar.css" />
@@ -252,7 +251,6 @@
       const app = initializeApp(firebaseConfig);
       const database = getDatabase(app);
 
-      // Hier wird die Funktion dem window-Objekt hinzugefügt
       window.saveTaskToFirebase = async function (taskData) {
         try {
           await push(ref(database, "tasks"), taskData);
