@@ -317,3 +317,21 @@ body {
   margin-right: -2px;
   cursor: pointer;
 }
+
+@media (min-width: 320px) and (max-width: 400px) {
+  .form, .div-input, .div-input input{
+    width: 90%;
+  }
+
+  .input-icon {
+    right: 10px;
+  }
+
+  .div-arrow-left {
+    left: 10px;
+  }
+
+  #arrow {
+    padding-right: 10px;
+  }
+}
