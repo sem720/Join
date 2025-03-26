@@ -76,18 +76,15 @@ function updateNoResultsMessage(resultsFound) {
  */
 function findTask() {
     const searchQuery = searchInput.value.trim().toLowerCase();
-    console.log("Search Term: ", searchQuery); // Debugging: Log the search term
     
-    // If input is cleared, reset search
     if (searchQuery === '') {
-        console.log('Search input cleared, showing all tasks'); 
         const taskCards = document.querySelectorAll('.task-card');
         taskCards.forEach(card => card.style.display = 'block');
         noResultsMessage.style.display = 'none';
         return;
     }
 
-    filterTaskCards(searchQuery); // Call filterTaskCards to handle filtering
+    filterTaskCards(searchQuery); 
 }
 
 
@@ -98,11 +95,8 @@ function findTask() {
  * @param {KeyboardEvent} event - The keyboard event object.
  */
 function handleEnterKeyPress(event) {
-    console.log("🔍 Key pressed:", event.key, " | Code:", event.code); // Debugging log
-    
     if (event.key === 'Enter' || event.code === 'Enter') {
-        event.preventDefault(); // Prevents form submission
-        console.log("✅ Enter key detected! Calling findTask...");
+        event.preventDefault();
         findTask();
     }
 }
@@ -114,13 +108,12 @@ function handleEnterKeyPress(event) {
  */
 function setupSearchEventListeners() {
     const searchIcon = document.getElementById('search-icon');
-    const searchInput = document.getElementById('findTask'); // Ensure it exists
+    const searchInput = document.getElementById('findTask'); 
 
-    if (!searchIcon) return console.error("❌ searchIcon not found!"); // Debugging log
+    if (!searchIcon) return console.error("❌ searchIcon not found!"); 
     if (!searchInput) return console.error("❌ searchInput not found!");
 
     searchIcon.addEventListener('click', () => {
-        console.log("🖱️ Search icon clicked! Calling resetSearch...");
         resetSearch();
     });
 
@@ -132,7 +125,6 @@ function setupSearchEventListeners() {
  * Resets the search input and restores visibility of all task cards.
  */
 function resetSearch() {
-    console.log("✅ resetSearch function is running..."); // Debugging log
     searchInput.value = '';
     const taskCards = document.querySelectorAll('.task-card');
     taskCards.forEach(card => card.style.display = 'block');
