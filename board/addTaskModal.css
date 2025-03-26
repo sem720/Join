@@ -19,6 +19,12 @@
     padding: 0;
 }
 
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 40px;
+}
+
 #task-name,
 #description,
 .button-container,
@@ -43,6 +49,7 @@
     max-width: 920px;
     width: 100%;
     gap: 60px;
+    margin-bottom: 0px;
 }
 
 .footer-modal {
@@ -62,10 +69,6 @@
 
 .icon-container {
     margin-right: 10px;
-}
-
-.h1 {
-    padding-bottom: 40px;
 }
 
 .modal-overlay {
@@ -90,7 +93,7 @@
     left: 50%;
     transform: translate(100%, -50%);
     background: white;
-    padding: 0px 40px 40px 40px;
+    padding: 30px;
     border-radius: 32px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     width: 85%;
@@ -112,10 +115,11 @@
     opacity: 0;
 }
 
+.modal-body {
+    height: 85%;
+}
+
 .close-btn {
-    position: absolute;
-    top: 70px;
-    right: 70px;
     font-size: 28px;
     width: 30px;
     height: 30px;
@@ -133,7 +137,7 @@
 #modal-body,
 .modal-addTask-container {
     max-width: 920px;
-    padding: 20px;
+    padding: 10px;
 }
 
 .modal-addTask-container #task-added-popup {
@@ -190,9 +194,3 @@
     justify-content: center;
 }
 
-.avatar {
-    margin-top: 0 !important;
-    margin-bottom: 4px;
-    width: 28px;
-    height: 28px;
-}
