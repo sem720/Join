@@ -28,13 +28,6 @@ function executeWithLoadingState(actionFunction) {
  */
 function attachLoadingStateToButtons() {
   document.querySelectorAll("button:not(.no-loading)").forEach((button) => {
-    console.log(
-      "Checking button:",
-      button,
-      "Has no-loading class?",
-      button.classList.contains("no-loading")
-    );
-
     const originalOnClick = button.onclick;
 
     if (originalOnClick) {
