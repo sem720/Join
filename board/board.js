@@ -51,7 +51,6 @@ async function updateMainCategoryInBackend(taskId, newCategory) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ mainCategory: newCategory })
         });
-        console.log(`✅ Task ${taskId} erfolgreich im Backend aktualisiert: mainCategory = "${newCategory}"`);
     } catch (error) {
         console.error(`❌ Fehler beim Aktualisieren der mainCategory für Task ${taskId}:`, error);
     }
