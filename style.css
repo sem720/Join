@@ -261,3 +261,14 @@ body {
     }
   }
 }
+
+@media (min-width: 320px) and (max-width: 390px) {
+  .form, .div-input, .form input{
+      width: 90%;
+  }
+
+  .navigate-signup-mobile {
+    display: flex;
+    flex-direction: column;
+  }
+}
