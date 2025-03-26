@@ -28,13 +28,16 @@
   <!-- Modal und Overlay -->
   <div id="task-overlay" class="modal-overlay" onclick="closeModal()">
     <div id="addTaskModal" class="modal hidden">
-      <button id="close-modal" class="close-btn no-loading" onclick="closeModal()">
-        &times;
-      </button>
-
       <div id="modal-body">
         <div class="modal-addTask-container">
-          <h1 class="h1-addTask h1">Add Task</h1>
+
+          <div class="modal-header">
+            <h1 class="h1-addTask h1">Add Task</h1>
+            <button id="close-modal" class="close-btn no-loading" onclick="closeModal()">
+              &times;
+            </button>
+          </div>
+          
           <main class="main-addTask" id="main-addTask">
             <form class="form" name="form" onsubmit="createTask(event)">
               <!-- Left Container -->
