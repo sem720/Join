@@ -334,4 +334,24 @@ body {
   #arrow {
     padding-right: 10px;
   }
+
+  .form {
+    height: 58vh;
+    gap: 16px;
+    padding-top: 1rem;
+  }
+
+  h1 {
+    line-height: 2rem;
+    font-size: 2.8rem !important;
+  }
+
+  .div-input input {
+    height: 20px;
+  }
+
+  .checkbox-privacy {
+    padding: 16px 0 8px 0;
+  }
+  
 }
