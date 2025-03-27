@@ -95,6 +95,7 @@ function showEditTaskModal() {
     updateSelectedContactsDisplay("edit-selected-contacts-container");
     setupAddSubtaskButton();
     setupEditSubtaskInput();
+    resetSelectedContacts();
 }
 
 
@@ -355,11 +356,14 @@ function getEditModalElements() {
  * @returns {Array<string>} An array of initials representing the preselected contacts.
  */
 function getPreselectedContacts() {
+    console.log("📌 getPreselectedContacts() called", new Error().stack); 
     const container = document.getElementById("edit-selected-contacts-container");
     if (!container) return [];
-    const avatars = container.querySelectorAll(".avatar-board-card"); // 🔄 Use querySelectorAll()
+    const avatars = container.querySelectorAll(".avatar-board-card"); 
     const initialsList = Array.from(avatars).map(avatar => avatar.textContent.trim());
     console.log("🔎 Extracted Preselected Initials:", initialsList);
+    console.log("🔍 getPreselectedContacts() called from:", new Error().stack);
+
     return initialsList;
 }
 

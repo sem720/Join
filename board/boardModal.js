@@ -45,8 +45,8 @@ async function initializeTaskModal() {
     initOutsideClick();
     initAddTaskContacts(listId);
     clearError("#selected-category");
+    setupContactButton();
     setupAssignmentButtons();
-    resetSelectedContacts();
     updateDropdownIcon();
 }
 
@@ -71,9 +71,11 @@ function closeModal() {
  * Sets up the contact button to render the contacts list.
  */
 function setupContactButton() {
+    console.log("📌 setupContactButton() called");  // Debug log
     const button = document.querySelector(".assignment-btn");
     if (button) {
         const listId = button.getAttribute("data-list-id");
+        console.log("📌 Calling renderContactsList() with listId:", listId);  // Debug log
         renderContactsList(listId);
     }
 }
@@ -153,12 +155,15 @@ function showTaskPopup() {
 
 
 /**
- * Resets the selected contacts for a specific modal.
- * @param {string} modalName - The name of the modal (e.g., 'addTaskModal', 'editTaskModal').
+ * Resets the selected contacts by clearing the set and updating it with checked contacts.
  */
-function resetSelectedContacts(modalName) {
-    if (!modalSelectedContacts[modalName]) return console.error(`Modal not found: ${modalName}`);
+function resetSelectedContacts() {
+    const selectedContacts = new Set();
+    selectedContacts.clear(); // Clear old selections
 
-    modalSelectedContacts[modalName].clear();  // Clear old selections
-    updateSelectedContactsDisplay(modalName);  // Update the display of selected contacts for that modal
+    document.querySelectorAll(".contact-checkbox:checked").forEach((checkbox) => {
+        const name = checkbox.getAttribute("data-contact-name");
+        const contact = allContacts.get(name);
+        if (contact) selectedContacts.add(contact);
+    });
 }
