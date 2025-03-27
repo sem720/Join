@@ -18,10 +18,11 @@ function taskCardTemplate(task) {
     let completedSubtasks = task.subtasks ? task.subtasks.filter(s => s.completed).length : 0;
     let progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
 
-    const avatarsHTML = task.assignedTo
-        ? task.assignedTo.map(user =>
-            `<div class="avatar-board-card" style="background-color: ${user.avatar.bgcolor};">${user.avatar.initials}</div>`
-        ).join("")
+    const avatarsHTML = task.assignedTo && Array.isArray(task.assignedTo)
+        ? task.assignedTo.map(user => {
+            const avatar = user.avatar || { bgcolor: "#ccc", initials: "?" };
+            return `<div class="avatar-board-card" style="background-color: ${avatar.bgcolor};">${avatar.initials}</div>`;
+        }).join("")
         : "";
 
     return `
@@ -238,9 +239,10 @@ function editTaskTempl(taskId) {
  * @returns {string} The generated avatar HTML.
  */
 function getAvatarsHTML(assignedTo) {
-    return assignedTo ? assignedTo.map(user =>
-        `<div class="avatar-board-card" style="background-color: ${user.avatar.bgcolor};">${user.avatar.initials}</div>`
-    ).join("") : "";
+    return assignedTo ? assignedTo.map(user => {
+        const avatar = user.avatar || { bgcolor: "#ccc", initials: "?" };
+        return `<div class="avatar-board-card" style="background-color: ${avatar.bgcolor};">${avatar.initials}</div>`;
+    }).join("") : "";
 }
 
 

@@ -8,13 +8,28 @@
  */
 function createTask(event) {
     event.preventDefault();
-    let taskData = getTaskFormData();
 
-    if (!validateTaskData(taskData)) return;
+    const safeAssignedTo = Array.from(selectedContacts).map(user => ({
+        name: user.name || "Unknown",
+        avatar: {
+            bgcolor: user.bgcolor || "#ccc", // <- direkt aus user
+            initials: getInitials(user.name || "?")
+        }
+    }));
 
-    saveTaskToFirebase(taskData)
-        .then(() => handleTaskSuccess())
-        .catch(error => console.error("❌ Fehler beim Speichern des Tasks: ", error));
+    const taskData = {
+        title: document.getElementById("task-name").value,
+        description: document.getElementById("description").value,
+        dueDate: document.getElementById("due-date").value,
+        priority: getSelectedPriority(),
+        category: document.getElementById("selected-category").value,
+        assignedTo: safeAssignedTo,
+        subtasks: getSubtasks(),
+        mainCategory: window.selectedTaskCategory || "To do"
+    };
+
+    saveTaskToFirebase(taskData);
+    showTaskPopup();
 }
 
 
@@ -23,10 +38,10 @@ function createTask(event) {
  * @param {Event} event - The form submission event.
  */
 function handleTaskCreation(event) {
-    event.preventDefault(); 
-  
+    event.preventDefault();
+
     if (validateForm()) {
-      alert("Task created!"); 
+        alert("Task created!");
     }
 }
 
@@ -55,7 +70,7 @@ function getTaskFormData() {
         description: getValue("#description"),
         assignedTo: getSelectedContacts(),
         dueDate: getValue("#due-date"),
-        priority: getSelectedPriority(), 
+        priority: getSelectedPriority(),
         category: getSelectedCategory(),
         subtasks: getTaskSubtasks(),
         mainCategory: getMainCategory()
@@ -94,11 +109,11 @@ function clearTask() {
     document.querySelector(".dropdown-btn").innerHTML = `Select task category <span class="icon-container"><img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon"></span>`;
     document.getElementById("selected-contacts-container").innerHTML = "";
     selectedContacts.clear();
-    
-    document.querySelectorAll(".error-message").forEach((error) => {error.style.display = "none";});
-    document.querySelectorAll(".error").forEach((el) => {el.classList.remove("error");});
+
+    document.querySelectorAll(".error-message").forEach((error) => { error.style.display = "none"; });
+    document.querySelectorAll(".error").forEach((el) => { el.classList.remove("error"); });
 }
-  
+
 
 /** ================================
  *        TASK VALIDATION
@@ -135,8 +150,8 @@ function getSelectedPriority() {
     }
 
     const priority = {
-        priorityText: activeButton.innerText.trim(), 
-        priorityImage: getPriorityImage(activeButton.id) 
+        priorityText: activeButton.innerText.trim(),
+        priorityImage: getPriorityImage(activeButton.id)
     };
 
     return priority;
@@ -203,15 +218,15 @@ function generateAvatar(name, bgcolor) {
 function getSelectedCategory() {
     const selectedInput = document.getElementById("selected-category");
     if (!selectedInput) return console.error("❌ Error: Could not find #selected-category input.") || "";
-       
-    let category = selectedInput.value?.trim(); 
+
+    let category = selectedInput.value?.trim();
 
     if (!category) return console.log("⚠️ No category selected!") || "";
 
-    return category.replace("_", " ") 
-                   .split(" ")
-                   .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                   .join(" ");
+    return category.replace("_", " ")
+        .split(" ")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
 }
 
 
@@ -267,5 +282,4 @@ function showTaskPopup() {
 }
 
 
-  
-  
+
