@@ -70,3 +70,11 @@ a:hover {
 .nav.sidebar-active-tap {
   background-color: #091931;
 }
+
+/* Landscape mode deactivated */
+
+@media only screen and (max-width: 768px) and (orientation: landscape) {
+  body {
+    display: none;
+  }
+}
