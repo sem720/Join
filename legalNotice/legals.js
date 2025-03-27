@@ -5,9 +5,9 @@ function checkNavigationVisibility() {
 
   if (!user) {
     navContainer.style.display = "none";
-    navConOut.style.display = "block";
+    navConOut.style.display = "flex";
   } else {
-    navContainer.style.display = "block";
+    navContainer.style.display = "flex";
     navConOut.style.display = "none";
   }
 }
