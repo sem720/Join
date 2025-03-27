@@ -31,7 +31,8 @@ const searchIcon = document.querySelector('.search-icon');
 function filterTaskCards(searchQuery) {
     const taskCards = document.querySelectorAll('.task-card');  
     const resultsFound = processTaskCards(taskCards, searchQuery);
-    updateNoResultsMessage(resultsFound);  
+    updateNoResultsMessage(resultsFound); 
+
 }
 
 
