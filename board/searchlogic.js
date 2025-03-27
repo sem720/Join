@@ -29,11 +29,9 @@ const searchIcon = document.querySelector('.search-icon');
  * @param {string} searchQuery - The search query input by the user.
  */
 function filterTaskCards(searchQuery) {
-    setTimeout(() => {
-        const taskCards = document.querySelectorAll('.task-card');  
-        const resultsFound = processTaskCards(taskCards, searchQuery);
-        updateNoResultsMessage(resultsFound); 
-    }, 200); 
+    const taskCards = document.querySelectorAll('.task-card');  
+    const resultsFound = processTaskCards(taskCards, searchQuery);
+    updateNoResultsMessage(resultsFound);  
 }
 
 
@@ -132,6 +130,6 @@ function resetSearch() {
 }
 
 
-// Initialize search event listeners
-setupSearchEventListeners();
+
+
 
