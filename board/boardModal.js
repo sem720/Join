@@ -147,7 +147,7 @@ function showTaskPopup() {
     let popup = document.getElementById("task-added-popup");
     popup.classList.add("show");
 
-    setTimeout(() => window.location.href = "/board/board.html", 150000);
+    setTimeout(() => window.location.href = "/board/board.html", 1500);
 }
 
 

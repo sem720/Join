@@ -69,7 +69,6 @@ function changeButtonStyle(button, action) {
     
     button.style.backgroundColor = action === 'add' ? color : '';
     button.style.color = action === 'add' ? 'white' : '';
-
 }
 
 

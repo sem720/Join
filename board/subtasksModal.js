@@ -25,7 +25,6 @@ function handleEditSubtaskInput() {
         showEditSubtaskActions();
     } else {
         addSubtaskBtn.style.setProperty("display", "block", "important");
-
     }
 }
 
