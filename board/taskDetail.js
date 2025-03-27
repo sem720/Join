@@ -94,6 +94,7 @@ function showEditTaskModal() {
     initEditTaskContacts("edit-contacts-list");
     updateSelectedContactsDisplay("edit-selected-contacts-container");
     setupAddSubtaskButton();
+    setupEditSubtaskInput();
 }
 
 
