@@ -198,6 +198,7 @@ async function deleteTask(taskId) {
     try {
         await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, { method: "DELETE" });
         document.querySelector(`.task-card[data-id="${taskId}"]`)?.remove();
+        updateNoTaskVisibility();
         closeTaskDetailModal();
         showDeleteConfirmation();
     } catch (error) {

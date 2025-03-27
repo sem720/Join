@@ -2,19 +2,18 @@
  * Opens the task modal. If the screen width is below 670px, redirects to the addTask page.
  * @async
  */
-async function openAddTaskModal() {
-    if (window.innerWidth < 670) return window.location.href = "/addTask/addTask.html";
-       
+async function openAddTaskModal(category = "To do") {
+    window.selectedTaskCategory = category;
+    if (window.innerWidth < 670) {
+        return window.location.href = `/addTask/addTask.html?category=${encodeURIComponent(category)}`;
+    }
     showTaskModal();
     await initializeTaskModal();
-    
     const modal = document.getElementById("addTaskModal");
     const modalOverlay = document.querySelector(".modal-overlay");
-
-    modal.style.display = "block"; 
-    modalOverlay.classList.add("active"); 
+    modal.style.display = "block";
+    modalOverlay.classList.add("active");
 }
-
 
 
 /**
@@ -38,7 +37,7 @@ function showTaskModal() {
  * @async
  */
 async function initializeTaskModal() {
-    const listId = "contacts-list"; 
+    const listId = "contacts-list";
 
     await fetchAndRenderContacts(listId);
     initialDefaultPriority();
@@ -90,7 +89,7 @@ function initOutsideClick() {
 
     if (!modal || !contactsContainer) return;
 
-    const button = document.querySelector(".assignment-btn"); 
+    const button = document.querySelector(".assignment-btn");
     const dropdownIcon = button?.querySelector("img");
 
     modal.addEventListener("click", (event) => {
