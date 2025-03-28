@@ -395,4 +395,5 @@ function init() {
     setupAssignmentButtons();
     setupContactButton();
     setupAddSubtaskButton();
+    setupSearchEventListeners();
 }

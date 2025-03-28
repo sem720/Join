@@ -2,19 +2,18 @@
  * Opens the task modal. If the screen width is below 670px, redirects to the addTask page.
  * @async
  */
-async function openAddTaskModal() {
-    if (window.innerWidth < 670) return window.location.href = "/addTask/addTask.html";
-       
+async function openAddTaskModal(category = "To do") {
+    window.selectedTaskCategory = category;
+    if (window.innerWidth < 670) {
+        return window.location.href = `/addTask/addTask.html?category=${encodeURIComponent(category)}`;
+    }
     showTaskModal();
     await initializeTaskModal();
-    
     const modal = document.getElementById("addTaskModal");
     const modalOverlay = document.querySelector(".modal-overlay");
-
-    modal.style.display = "block"; 
-    modalOverlay.classList.add("active"); 
+    modal.style.display = "block";
+    modalOverlay.classList.add("active");
 }
-
 
 
 /**
@@ -38,15 +37,16 @@ function showTaskModal() {
  * @async
  */
 async function initializeTaskModal() {
-    const listId = "contacts-list"; 
+    const listId = "contacts-list";
 
     await fetchAndRenderContacts(listId);
     initialDefaultPriority();
     initOutsideClick();
     initAddTaskContacts(listId);
     clearError("#selected-category");
+    setupContactButton();
     setupAssignmentButtons();
-    resetSelectedContacts();
+    updateDropdownIcon();
 }
 
 
@@ -70,9 +70,11 @@ function closeModal() {
  * Sets up the contact button to render the contacts list.
  */
 function setupContactButton() {
+    console.log("📌 setupContactButton() called");  // Debug log
     const button = document.querySelector(".assignment-btn");
     if (button) {
         const listId = button.getAttribute("data-list-id");
+        console.log("📌 Calling renderContactsList() with listId:", listId);  // Debug log
         renderContactsList(listId);
     }
 }
@@ -87,7 +89,7 @@ function initOutsideClick() {
 
     if (!modal || !contactsContainer) return;
 
-    const button = document.querySelector(".assignment-btn"); 
+    const button = document.querySelector(".assignment-btn");
     const dropdownIcon = button?.querySelector("img");
 
     modal.addEventListener("click", (event) => {
@@ -155,6 +157,7 @@ function showTaskPopup() {
  * Resets the selected contacts by clearing the set and updating it with checked contacts.
  */
 function resetSelectedContacts() {
+    const selectedContacts = new Set();
     selectedContacts.clear(); // Clear old selections
 
     document.querySelectorAll(".contact-checkbox:checked").forEach((checkbox) => {
