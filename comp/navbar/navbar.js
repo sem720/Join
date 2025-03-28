@@ -18,7 +18,8 @@ function displayInitials() {
     document.getElementById("render-profile").innerText =
       initials.toUpperCase();
   } else {
-    document.getElementById("render-profile").innerText = "G";
+    document.getElementById("render-profile").style.display = "none";
+    document.getElementById("visible-off").style.display = "none";
   }
 }
 

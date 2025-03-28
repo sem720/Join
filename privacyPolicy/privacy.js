@@ -23,5 +23,3 @@ function checkNavigationVisibility() {
     navConOut.style.display = "none";
   }
 }
-
-document.addEventListener("DOMContentLoaded", checkNavigationVisibility);

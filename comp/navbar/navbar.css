@@ -30,8 +30,8 @@
 }
 
 .profile-circle {
-  height: 50px;
-  width: 50px;
+  height: 50px !important;
+  width: 50px !important;
   background: white;
   border-radius: 50%;
   border: 3px solid #161618;
@@ -131,11 +131,19 @@
   height: 100px;
 }
 
+.vis-none {
+  display: none;
+}
+
 /* Responsive */
 
 @media (max-width: 670px) {
   .navbar-wrap {
     padding-left: 0;
     height: 80px;
+  }
+
+  .vis-none {
+    display: block;
   }
 }
