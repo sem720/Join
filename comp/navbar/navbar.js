@@ -1,3 +1,10 @@
+/**
+ * Zeigt die Initialen des Benutzers basierend auf dem im localStorage gespeicherten Benutzernamen an.
+ * Wenn kein Benutzername vorhanden ist, wird der Buchstabe "G" angezeigt.
+ * Die Initialen werden aus den ersten beiden Buchstaben des Benutzernamens extrahiert.
+ *
+ * @returns {void} Keine Rückgabe.
+ */
 function displayInitials() {
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -15,12 +22,19 @@ function displayInitials() {
   }
 }
 
-function initNavbar() {
-  displayInitials();
-}
+/**
+ * Initialisiert die Navbar, indem die Funktion `displayInitials` aufgerufen wird,
+ * um die Benutzer-Initialen anzuzeigen.
+ *
+ * @returns {void} Keine Rückgabe.
+ */
+function initNavbar() {}
 
-//Toggle Menu
-
+/**
+ * Schaltet das Menü ein oder aus, indem die Klasse `hidden` auf das Menüelement angewendet oder entfernt wird.
+ *
+ * @returns {void} Keine Rückgabe.
+ */
 function toggleMenu() {
   const menu = document.getElementById("menu");
 
@@ -31,8 +45,12 @@ function toggleMenu() {
   }
 }
 
-// Log out function
-
+/**
+ * Loggt den Benutzer aus, indem das `user`-Objekt aus dem localStorage entfernt wird
+ * und der Benutzer zur Startseite weitergeleitet wird.
+ *
+ * @returns {void} Keine Rückgabe.
+ */
 function logout() {
   localStorage.removeItem("user");
 

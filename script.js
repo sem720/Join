@@ -137,44 +137,90 @@ function validateEmail(email) {
 }
 
 /**
- * Toggles password visibility in input field
- * @param {string} inputId - ID of password input element
+ * Überprüft, ob das angegebene Element vorhanden ist.
+ * @param {string} elementId - ID des HTML-Elements.
+ * @returns {HTMLElement|null} Das gefundene Element oder null, wenn es nicht existiert.
+ */
+function getElementByIdSafe(elementId) {
+  const element = document.getElementById(elementId);
+  if (!element) {
+    console.warn(`Element mit ID '${elementId}' nicht gefunden.`);
+  }
+  return element;
+}
+
+/**
+ * Versteckt oder zeigt Icons basierend auf dem Passwortfeldinhalt.
+ * @param {HTMLElement} passwordInput - Das Passwort-Eingabefeld.
+ * @param {HTMLElement} lockIcon - Das Schlosssymbol.
+ * @param {HTMLElement} eyeSlashIcon - Das durchgestrichene Augensymbol.
+ * @param {HTMLElement} eyeIcon - Das Augensymbol.
+ * @returns {void}
+ */
+function togglePasswordIcons(passwordInput, lockIcon, eyeSlashIcon, eyeIcon) {
+  if (passwordInput.value) {
+    lockIcon?.classList.add("d_none");
+    eyeSlashIcon?.classList.remove("d_none");
+  } else {
+    lockIcon?.classList.remove("d_none");
+    eyeSlashIcon?.classList.add("d_none");
+    eyeIcon?.classList.add("d_none");
+    passwordInput.type = "password";
+  }
+}
+
+/**
+ * Zeigt das Passwort als Klartext, wenn das Augensymbol (eyeSlashIcon) geklickt wird.
+ * @param {HTMLElement} passwordInput - Das Passwort-Eingabefeld.
+ * @param {HTMLElement} eyeSlashIcon - Das durchgestrichene Augensymbol.
+ * @param {HTMLElement} eyeIcon - Das Augensymbol.
+ * @returns {void}
+ */
+function showPasswordText(passwordInput, eyeSlashIcon, eyeIcon) {
+  passwordInput.type = "text";
+  eyeSlashIcon.classList.add("d_none");
+  eyeIcon?.classList.remove("d_none");
+}
+
+/**
+ * Versteckt das Passwort und zeigt das durchgestrichene Augensymbol, wenn das Augensymbol (eyeIcon) geklickt wird.
+ * @param {HTMLElement} passwordInput - Das Passwort-Eingabefeld.
+ * @param {HTMLElement} eyeIcon - Das Augensymbol.
+ * @param {HTMLElement} eyeSlashIcon - Das durchgestrichene Augensymbol.
+ * @returns {void}
+ */
+function hidePasswordText(passwordInput, eyeIcon, eyeSlashIcon) {
+  passwordInput.type = "password";
+  eyeIcon.classList.add("d_none");
+  eyeSlashIcon?.classList.remove("d_none");
+}
+
+/**
+ * Initialisiert das Umschalten der Passwortsichtbarkeit für das angegebene Eingabefeld.
+ * @param {string} inputId - Die ID des Passwort-Eingabefeldes.
  * @returns {void}
  */
 function setupPasswordToggle(inputId) {
-  const passwordInput = document.getElementById(inputId);
-  if (!passwordInput) return; // Wichtig: Element-Check
+  const passwordInput = getElementByIdSafe(inputId);
+  if (!passwordInput) return;
 
   const container = passwordInput.parentElement;
-  if (!container) return; // Parent-Check
+  if (!container) return;
 
-  // Safe Query mit Optional Chaining
   const lockIcon = container.querySelector(".lock-icon");
   const eyeSlashIcon = container.querySelector(".eye-icon");
   const eyeIcon = container.querySelector(".eye-slash-icon");
 
   passwordInput.addEventListener("input", () => {
-    if (passwordInput.value) {
-      lockIcon?.classList.add("d_none");
-      eyeSlashIcon?.classList.remove("d_none");
-    } else {
-      lockIcon?.classList.remove("d_none");
-      eyeSlashIcon?.classList.add("d_none");
-      eyeIcon?.classList.add("d_none");
-      passwordInput.type = "password";
-    }
+    togglePasswordIcons(passwordInput, lockIcon, eyeSlashIcon, eyeIcon);
   });
 
   eyeSlashIcon?.addEventListener("click", () => {
-    passwordInput.type = "text";
-    eyeSlashIcon.classList.add("d_none");
-    eyeIcon?.classList.remove("d_none");
+    showPasswordText(passwordInput, eyeSlashIcon, eyeIcon);
   });
 
   eyeIcon?.addEventListener("click", () => {
-    passwordInput.type = "password";
-    eyeIcon.classList.add("d_none");
-    eyeSlashIcon?.classList.remove("d_none");
+    hidePasswordText(passwordInput, eyeIcon, eyeSlashIcon);
   });
 }
 
