@@ -1,3 +1,14 @@
+let draggedTask = null;
+let touchStartX = 0;
+let touchStartY = 0;
+let currentColumn = null;
+
+let isDraggingScroll = false;
+let scrollStartX = 0;
+let scrollStartScrollLeft = 0;
+let scrollContainer = null;
+
+
 /**
  * Sets up drag-and-drop functionality for task elements and columns.
  * Enables draggable tasks and adds event listeners for drag events.
@@ -15,12 +26,6 @@ function setupDragAndDrop() {
     });
 }
 
-
-/**
- * Stores the currently dragged task element.
- * @type {HTMLElement | null}
- */
-let draggedTask = null;
 
 /**
  * Handles the drag start event.
@@ -83,11 +88,6 @@ function handleDrop(event) {
         updateNoTaskVisibility();
     }
 }
-
-
-let touchStartX = 0;
-let touchStartY = 0;
-let currentColumn = null;
 
 
 /**
@@ -199,53 +199,74 @@ function resetTaskPosition() {
 }
 
 
-let isDraggingScroll = false;
-let scrollStartX = 0;
-let scrollStartScrollLeft = 0;
-let scrollContainer = null;
+/**
+ * Sets up mousedown, mouseup, and mouseleave events for scroll tracking.
+ * @param {HTMLElement} column - The column element to add events to.
+ */
+function setupMouseDownAndUp(column) {
+    column.addEventListener('mousedown', (e) => {
+        if (e.target.closest('.task-card')) return;
+        isDraggingScroll = true;
+        scrollContainer = column;
+        scrollStartX = e.pageX - column.offsetLeft;
+        scrollStartScrollLeft = column.scrollLeft;
+    });
+    column.addEventListener('mouseup', () => isDraggingScroll = false);
+    column.addEventListener('mouseleave', () => isDraggingScroll = false);
+}
 
+
+/**
+ * Sets up mousemove event for horizontal dragging behavior.
+ * @param {HTMLElement} column - The column element to scroll.
+ */
+function setupMouseMove(column) {
+    column.addEventListener('mousemove', (e) => {
+        if (!isDraggingScroll) return;
+        e.preventDefault();
+        const x = e.pageX - column.offsetLeft;
+        const walk = (x - scrollStartX) * 1.5;
+        column.scrollLeft = scrollStartScrollLeft - walk;
+    });
+}
+
+
+/**
+ * Combines mouse-based scroll setup on a column.
+ * @param {HTMLElement} column - The column element to enable scrolling on.
+ */
+function setupMouseScroll(column) {
+    setupMouseDownAndUp(column);
+    setupMouseMove(column);
+}
+
+
+/**
+ * Sets up touch-based scrolling for mobile devices.
+ * @param {HTMLElement} column - The column element to enable touch scroll on.
+ */
+function setupTouchScroll(column) {
+    column.addEventListener('touchstart', (e) => {
+        scrollContainer = column;
+        scrollStartX = e.touches[0].clientX;
+        scrollStartScrollLeft = column.scrollLeft;
+    });
+    column.addEventListener('touchmove', (e) => {
+        if (!scrollContainer) return;
+        const x = e.touches[0].clientX;
+        const walk = (x - scrollStartX) * 1.5;
+        scrollContainer.scrollLeft = scrollStartScrollLeft - walk;
+    });
+    column.addEventListener('touchend', () => scrollContainer = null);
+}
+
+
+/**
+ * Enables horizontal scroll for all columns using mouse and touch events.
+ */
 function enableHorizontalScrollOnColumnBody() {
     document.querySelectorAll('.column-body').forEach(column => {
-        column.addEventListener('mousedown', (e) => {
-            if (e.target.closest('.task-card')) return; // Nur wenn auf Spaltenhintergrund
-            isDraggingScroll = true;
-            scrollContainer = column;
-            scrollStartX = e.pageX - column.offsetLeft;
-            scrollStartScrollLeft = column.scrollLeft;
-        });
-
-        column.addEventListener('mouseleave', () => {
-            isDraggingScroll = false;
-        });
-
-        column.addEventListener('mouseup', () => {
-            isDraggingScroll = false;
-        });
-
-        column.addEventListener('mousemove', (e) => {
-            if (!isDraggingScroll) return;
-            e.preventDefault();
-            const x = e.pageX - column.offsetLeft;
-            const walk = (x - scrollStartX) * 1.5; // Scrollgeschwindigkeit
-            column.scrollLeft = scrollStartScrollLeft - walk;
-        });
-
-        // Für Touch
-        column.addEventListener('touchstart', (e) => {
-            scrollContainer = column;
-            scrollStartX = e.touches[0].clientX;
-            scrollStartScrollLeft = column.scrollLeft;
-        });
-
-        column.addEventListener('touchmove', (e) => {
-            if (!scrollContainer) return;
-            const x = e.touches[0].clientX;
-            const walk = (x - scrollStartX) * 1.5;
-            scrollContainer.scrollLeft = scrollStartScrollLeft - walk;
-        });
-
-        column.addEventListener('touchend', () => {
-            scrollContainer = null;
-        });
+        setupMouseScroll(column);
+        setupTouchScroll(column);
     });
 }
