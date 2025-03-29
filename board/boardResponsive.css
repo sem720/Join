@@ -18,6 +18,8 @@
         flex-direction: row;
         overflow-x: auto;
         scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
     }
 
     .column {

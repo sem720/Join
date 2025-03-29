@@ -396,4 +396,5 @@ function init() {
     setupContactButton();
     setupAddSubtaskButton();
     setupSearchEventListeners();
+    enableHorizontalScrollOnColumnBody();
 }

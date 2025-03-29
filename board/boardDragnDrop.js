@@ -197,3 +197,55 @@ function resetTaskPosition() {
     draggedTask = null;
     currentColumn = null;
 }
+
+
+let isDraggingScroll = false;
+let scrollStartX = 0;
+let scrollStartScrollLeft = 0;
+let scrollContainer = null;
+
+function enableHorizontalScrollOnColumnBody() {
+    document.querySelectorAll('.column-body').forEach(column => {
+        column.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.task-card')) return; // Nur wenn auf Spaltenhintergrund
+            isDraggingScroll = true;
+            scrollContainer = column;
+            scrollStartX = e.pageX - column.offsetLeft;
+            scrollStartScrollLeft = column.scrollLeft;
+        });
+
+        column.addEventListener('mouseleave', () => {
+            isDraggingScroll = false;
+        });
+
+        column.addEventListener('mouseup', () => {
+            isDraggingScroll = false;
+        });
+
+        column.addEventListener('mousemove', (e) => {
+            if (!isDraggingScroll) return;
+            e.preventDefault();
+            const x = e.pageX - column.offsetLeft;
+            const walk = (x - scrollStartX) * 1.5; // Scrollgeschwindigkeit
+            column.scrollLeft = scrollStartScrollLeft - walk;
+        });
+
+        // Für Touch
+        column.addEventListener('touchstart', (e) => {
+            scrollContainer = column;
+            scrollStartX = e.touches[0].clientX;
+            scrollStartScrollLeft = column.scrollLeft;
+        });
+
+        column.addEventListener('touchmove', (e) => {
+            if (!scrollContainer) return;
+            const x = e.touches[0].clientX;
+            const walk = (x - scrollStartX) * 1.5;
+            scrollContainer.scrollLeft = scrollStartScrollLeft - walk;
+        });
+
+        column.addEventListener('touchend', () => {
+            scrollContainer = null;
+        });
+    });
+}
