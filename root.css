@@ -73,8 +73,19 @@ a:hover {
 
 /* Landscape mode deactivated */
 
-@media only screen and (max-width: 768px) and (orientation: landscape) {
-  body {
-    display: none;
+#landscape-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: white;
+  z-index: 9999;
+  display: none;
+}
+
+@media (max-height: 430px) {
+  #landscape-overlay {
+    display: block;
   }
 }
