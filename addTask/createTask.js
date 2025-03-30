@@ -24,7 +24,7 @@ function createTask(event) {
         priority: getSelectedPriority(),
         category: document.getElementById("selected-category").value,
         assignedTo: safeAssignedTo,
-        subtasks: getSubtasks(),
+        subtasks: getTaskSubtasks(),
         mainCategory: window.selectedTaskCategory || "To do"
     };
 
