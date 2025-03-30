@@ -260,7 +260,6 @@ function getTaskSubtasks() {
 async function saveTaskToFirebase(taskData) {
     try {
         await firebase.database().ref("tasks").push(taskData);
-        console.log("✅ Task erfolgreich gespeichert:", taskData);
     } catch (error) {
         console.error("❌ Fehler beim Speichern des Tasks:", error);
     }
