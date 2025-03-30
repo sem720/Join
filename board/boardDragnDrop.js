@@ -8,6 +8,9 @@ let scrollStartX = 0;
 let scrollStartScrollLeft = 0;
 let scrollContainer = null;
 
+let longPressTimeout = null;
+let isLongPressDrag = false;
+
 
 /**
  * Sets up drag-and-drop functionality for task elements and columns.
@@ -112,27 +115,30 @@ function setupDragAndDrop() {
 
 
 /**
- * Handles the touch start event for mobile drag-and-drop.
- * Stores the initial touch position and applies a visual effect to the dragged task.
- *
- * @param {TouchEvent} event - The touch event triggered when a user starts touching a task.
+ * Handles touch start for mobile long-press drag.
+ * @param {TouchEvent} event
  */
 function handleTouchStart(event) {
     draggedTask = event.target.closest(".task-card");
     if (!draggedTask) return;
     touchStartX = event.touches[0].clientX;
     touchStartY = event.touches[0].clientY;
-    draggedTask.style.opacity = "0.5";
+    longPressTimeout = setTimeout(() => {
+        isLongPressDrag = true;
+        draggedTask.style.opacity = "0.5";
+    }, 500);
 }
 
 
 /**
- * Handles the touch move event, moving the task visually as the user drags it.
- * Determines which column the task is currently over.
- * @param {TouchEvent} event - The touch event triggered when the user moves their finger.
+ * Handles touch move. Only activates drag if long-press was triggered.
+ * @param {TouchEvent} event
  */
 function handleTouchMove(event) {
-    if (!draggedTask) return;
+    if (!isLongPressDrag) {
+        clearTimeout(longPressTimeout);
+        return;
+    }
     const touch = event.touches[0];
     updateTaskPosition(touch);
     highlightCurrentColumn(touch);
@@ -166,19 +172,35 @@ function highlightCurrentColumn(touch) {
 
 
 /**
- * Handles the touch end event, placing the task in the new column if applicable.
- * Updates the task category and resets its position.
+ * Handles touch end and delegates further processing.
+ * @param {TouchEvent} event - The touch end event.
  */
-function handleTouchEnd() {
-    if (!draggedTask || !currentColumn) {
-        resetTaskPosition();
-        return;
+function handleTouchEnd(event) {
+    clearTimeout(longPressTimeout);
+    const touch = event.changedTouches[0];
+    const movedX = Math.abs(touch.clientX - touchStartX);
+    const movedY = Math.abs(touch.clientY - touchStartY);
+    const hasMoved = movedX > 10 || movedY > 10;
+    processTouchEndAction(hasMoved);
+}
+
+
+/**
+ * Determines what action to take on touch end: open modal or drop task.
+ * @param {boolean} hasMoved - Whether the touch moved significantly.
+ */
+function processTouchEndAction(hasMoved) {
+    if (isLongPressDrag && draggedTask && currentColumn) {
+        currentColumn.appendChild(draggedTask);
+        const newColumnId = currentColumn.parentElement.id;
+        updateTaskCategory(draggedTask, newColumnId);
+        updateNoTaskVisibility();
+    } else if (draggedTask && !isLongPressDrag && !hasMoved) {
+        const taskId = draggedTask.dataset.id;
+        if (taskId) fetchTaskById(taskId);
     }
-    currentColumn.appendChild(draggedTask);
-    const newColumnId = currentColumn.parentElement.id;
-    updateTaskCategory(draggedTask, newColumnId);
-    updateNoTaskVisibility();
     resetTaskPosition();
+    isLongPressDrag = false;
 }
 
 
