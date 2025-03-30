@@ -46,4 +46,5 @@ function init() {
     clearTask();
     initAddTaskContacts("contacts-list");
     initFormValidation(); 
+    renderContactsList("contacts-list");
 }
