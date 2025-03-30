@@ -49,16 +49,12 @@ function toggleDropdown() {
  * @param {HTMLElement} option - The selected option element from the dropdown list.
  */
 function selectCategory(option) {
-    const selectedText = option.textContent;
-    const selectedValue = option.getAttribute("data-value");
-    
-    updateDropdownHTML(selectedText);
-  
-    selectedCategory.value = selectedValue;
-    dropdownContainer.classList.remove("open");
-    dropdownList.style.display = "none";
-
-    clearError("#selected-category");
+  document.getElementById("selected-category").value = option.getAttribute("data-value");
+  updateDropdownHTML(option.textContent);
+  document.querySelector(".dropdown-container").classList.remove("open");
+  document.getElementById("dropdown-list").style.display = "none";
+  clearError("#selected-category");
+  checkFormValidity();
 }
 
 
