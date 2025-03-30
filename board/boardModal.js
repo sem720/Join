@@ -32,6 +32,7 @@ async function setupModal(category) {
     initFormValidation();
     toggleModalVisibility(true);
     checkFormValidity();
+    dateInput();
 }
 
 
