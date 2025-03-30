@@ -1,35 +1,49 @@
 /** ================================
  *          TASK CREATION
  * ================================ */
-
 /**
  * Creates a new task by gathering form data, validating it, and saving it to Firebase.
  * @param {Event} event - The form submission event.
  */
 function createTask(event) {
     event.preventDefault();
+    
+    const taskData = gatherTaskData();
+    saveTaskToFirebase(taskData);
+    showTaskPopup();
+}
 
-    const safeAssignedTo = Array.from(selectedContacts).map(user => ({
+
+/**
+ * Retrieves and formats assigned contacts for the task.
+ * @returns {Array<Object>} - List of assigned users with name, background color, and initials.
+ */
+function getSafeAssignedContacts() {
+    return Array.from(selectedContacts).map(user => ({
         name: user.name || "Unknown",
         avatar: {
-            bgcolor: user.bgcolor || "#ccc", // <- direkt aus user
+            bgcolor: user.bgcolor || "#ccc",
             initials: getInitials(user.name || "?")
         }
     }));
+}
 
-    const taskData = {
+
+/**
+ * Gathers task form data and returns it as an object.
+ * @returns {Object} - Task data containing title, description, due date, priority, category, assigned users, and subtasks.
+ */
+function gatherTaskData() {
+    return {
         title: document.getElementById("task-name").value,
         description: document.getElementById("description").value,
         dueDate: document.getElementById("due-date").value,
         priority: getSelectedPriority(),
         category: document.getElementById("selected-category").value,
-        assignedTo: safeAssignedTo,
+        assignedTo: getSafeAssignedContacts(),
         subtasks: getTaskSubtasks(),
         mainCategory: window.selectedTaskCategory || "To do"
     };
-
-    saveTaskToFirebase(taskData);
-    showTaskPopup();
 }
 
 
@@ -112,6 +126,8 @@ function clearTask() {
 
     document.querySelectorAll(".error-message").forEach((error) => { error.style.display = "none"; });
     document.querySelectorAll(".error").forEach((el) => { el.classList.remove("error"); });
+
+    checkFormValidity();
 }
 
 
