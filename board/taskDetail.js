@@ -164,7 +164,7 @@ function closeEditTaskModal() {
     }
     updateSelectedContactsDisplay("edit-selected-contacts-container");
     closeOverlayAndDetailModal();
-    
+
 }
 
 
@@ -203,6 +203,7 @@ async function deleteTask(taskId) {
         document.querySelector(`.task-card[data-id="${taskId}"]`)?.remove();
         closeTaskDetailModal();
         showDeleteConfirmation();
+        updateNoTaskVisibility();
     } catch (error) {
         console.error("❌ Error deleting task:", error);
     }
@@ -360,7 +361,7 @@ function getEditModalElements() {
 function getPreselectedContacts() {
     const container = document.getElementById("edit-selected-contacts-container");
     if (!container) return [];
-    const avatars = container.querySelectorAll(".avatar-board-card"); 
+    const avatars = container.querySelectorAll(".avatar-board-card");
     const initialsList = Array.from(avatars).map(avatar => avatar.textContent.trim());
     console.log("🔎 Extracted Preselected Initials:", initialsList);
     return initialsList;
