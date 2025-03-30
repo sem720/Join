@@ -1,8 +1,31 @@
+/**
+ * Map to store all contacts with their names as keys and associated details as values.
+ */
 const allContacts = new Map();
+
+/**
+ * Set to store selected contacts.
+ */
 const selectedContacts = new Set();
+
+/**
+ * Reference to the assignment button DOM element.
+ */
 let assignmentButton;
+
+/**
+ * Reference to the contacts container DOM element.
+ */
 let contactsContainer;
+
+/**
+ * Reference to the dropdown icon DOM element.
+ */
 const icon = document.getElementById("dropdown-icon");
+
+/**
+ * Reference to the selected contacts container DOM element.
+ */
 const selectedContactsContainer = document.getElementById("selected-contacts-container");
 
 
@@ -23,8 +46,9 @@ function initAddTaskContacts(listId) {
     setupOutsideClickListener();
 }
 
+
 /**
- * Fügt allen `.assignment-btn` Buttons einen Click-EventListener hinzu.
+ * Adds a click event listener to all `.assignment-btn` buttons to toggle the visibility of the contacts list.
  */
 function setupAssignmentButtons() {
     document.querySelectorAll(".assignment-btn").forEach((button) => {
@@ -62,7 +86,6 @@ function handleKeydownOutsideAssignment(event) {
  * @param {MouseEvent} event - The click event triggered when the user clicks the toggle button.
  */
 
-
 function toggleContacts(event, containerId, listId) {
     event.preventDefault();
 
@@ -91,9 +114,11 @@ function setupOutsideClickListener() {
     document.addEventListener("click", handleOutsideClick);
 }
 
+
 /**
- * Schließt das Kontakt-Menü, wenn außerhalb geklickt wird.
- * @param {Event} event - Der Klick-Event.
+ * Closes the contact menu when clicking outside.
+ *
+ * @param {Event} event - The click event.
  */
 function handleOutsideClick(event) {
     const menu = document.getElementById("contacts-container");
@@ -156,6 +181,10 @@ function updateDropdownIcon(isOpen, iconElement) {
 /**
  * Opens the contacts list by adding the "visible" class and removing the "hidden" class.
  * It also updates the dropdown icon and manages outside click behavior.
+ * 
+ * @param {string} containerId - The ID of the contacts container.
+ * @param {string} listId - The ID of the contacts list.
+ * @param {string} selectedContainerId - The ID of the selected contacts container.
  */
 function openContacts(containerId, listId, selectedContainerId) {
     const contactsContainer = document.getElementById(containerId);
@@ -176,6 +205,10 @@ function openContacts(containerId, listId, selectedContainerId) {
 /**
  * Closes the contacts list by adding the "hidden" class and removing the "visible" class.
  * It also updates the dropdown icon and disables outside click behavior.
+ * 
+ * @param {string} containerId - The ID of the contacts container.
+ * @param {string} listId - The ID of the contacts list.
+ * @param {string} [selectedContainerId=null] - The ID of the selected contacts container (optional).
  */
 function closeContacts(containerId, listId, selectedContainerId = null) {
     const contactsContainer = document.getElementById(containerId);
@@ -243,6 +276,7 @@ function getPreselectedInitials() {
 
 /**
  * Creates and appends a single contact element to the contact list.
+ * 
  * @param {HTMLElement} contactsList - The container to append the contact to.
  * @param {string} name - The full name of the contact.
  * @param {string} bgcolor - The background color of the contact's avatar.
@@ -276,6 +310,7 @@ async function renderContactsList(listId) {
  * 
  * @param {string} name - The name of the contact.
  * @param {string} bgcolor - The background color associated with the contact.
+ * @param {boolean} isPreselected - Whether the contact is preselected.
  * @returns {HTMLElement} The contact element.
  */
 function createContactElement(name, bgcolor, isPreselected) {
@@ -295,6 +330,8 @@ function createContactElement(name, bgcolor, isPreselected) {
 
 /**
  * Updates the display of selected contacts in the selected contacts container.
+ * 
+ * @param {string} selectedContainerId - The ID of the selected contacts container.
  */
 function updateSelectedContactsDisplay(selectedContainerId) {
     const selectedContainer = document.getElementById(selectedContainerId);
@@ -312,12 +349,10 @@ function updateSelectedContactsDisplay(selectedContainerId) {
 }
 
 
-
 /**
  * Toggles the selection state of a contact and updates the display of selected contacts.
  * 
  * @param {string} name - The name of the contact.
- * @param {boolean} isChecked - The new selection state of the contact (true if selected, false if deselected).
  */
 function toggleContactSelection(name) {
     const contact = allContacts.get(name);
@@ -335,66 +370,3 @@ function toggleContactSelection(name) {
 }
 
 
-function handleCheckboxChange(checkbox, img, name) {
-    checkbox.addEventListener("change", () => {
-        toggleContactSelection(name, checkbox.checked);
-        toggleCheckboxVisibility(checkbox, img, checkbox.checked);
-    });
-
-    img.addEventListener("click", () => {
-        uncheckCheckbox(checkbox, img, name);
-    });
-}
-
-
-// Function to create the checkbox with image logic
-function createCheckbox(name, avatar) {
-    const container = createElement("div", "contact-checkbox-container");
-    const checkbox = createCheckboxElement(name, avatar);
-    const img = createImageElement();
-
-    container.appendChild(checkbox);
-    container.appendChild(img);
-
-    handleCheckboxChange(checkbox, img, name);
-
-    return container;
-}
-
-
-function handleContactClick(contactItem, isPreselected) {
-    if (isPreselected) return removePreselectedContact(contactItem);
-       
-    contactItem.classList.toggle("selected");
-    const avatar = contactItem.querySelector(".avatar");
-    const nameSpan = contactItem.querySelector(".contact-name");
-    const checkboxImg = contactItem.querySelector(".checkbox-image");
-
-    avatar?.classList.toggle("selected-avatar");
-    nameSpan?.classList.toggle("selected-name");
-    checkboxImg?.classList.toggle("selected-checkbox-image");
-}
-
-
-function handleCheckboxChecked(avatar) {
-    selectedContactsContainer.appendChild(avatar);
-}
-
-
-function handleCheckboxUnchecked(avatar) {
-    selectedContactsContainer.removeChild(avatar);
-}
-
-
-function handleCheckboxChangeAvatar(name) {
-    const avatar = createElement("div", "avatar", getInitials(name));
-    checkbox.addEventListener("change", () => {
-        toggleContactSelection(name, checkbox.checked);
-
-        if (checkbox.checked) {
-            handleCheckboxChecked(avatar, name);
-        } else {
-            handleCheckboxUnchecked(avatar, name);
-        }
-    });
-}
