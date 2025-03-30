@@ -1,6 +1,7 @@
 /**
  * Opens the task modal. If the screen width is below 670px, redirects to the addTask page.
  * @async
+ * @param {string} category - The category for the task (default is "To do").
  */
 async function openAddTaskModal(category = "To do") {
     window.selectedTaskCategory = category;
@@ -39,14 +40,17 @@ function showTaskModal() {
 async function initializeTaskModal() {
     const listId = "contacts-list";
 
-    await fetchAndRenderContacts(listId);
+    await fetchAndRenderContacts(listId); 
     initialDefaultPriority();
     initOutsideClick();
-    initAddTaskContacts(listId);
+    initAddTaskContacts(listId); 
     clearError("#selected-category");
     setupContactButton();
     setupAssignmentButtons();
     updateDropdownIcon();
+
+    selectedContacts.clear(); 
+    updateSelectedContactsDisplay("selected-contacts-container"); 
 }
 
 
@@ -54,15 +58,19 @@ async function initializeTaskModal() {
  * Closes the task modal with fade-out animation.
  */
 function closeModal() {
-    const overlay = document.getElementById("task-overlay");
     const modal = document.getElementById("addTaskModal");
+    const overlay = document.getElementById("task-overlay");
 
     modal.classList.remove("show");
-
     setTimeout(() => {
         modal.classList.add("hidden");
         overlay.classList.remove("active");
     }, 400);
+
+    updateSelectedContactsDisplay("selected-contacts-container");
+
+    document.querySelectorAll(".contact-checkbox").forEach(checkbox => checkbox.checked = false);
+    selectedContacts.clear();
 }
 
 
@@ -70,11 +78,9 @@ function closeModal() {
  * Sets up the contact button to render the contacts list.
  */
 function setupContactButton() {
-    console.log("📌 setupContactButton() called");  // Debug log
     const button = document.querySelector(".assignment-btn");
     if (button) {
         const listId = button.getAttribute("data-list-id");
-        console.log("📌 Calling renderContactsList() with listId:", listId);  // Debug log
         renderContactsList(listId);
     }
 }
@@ -157,7 +163,6 @@ function showTaskPopup() {
  * Resets the selected contacts by clearing the set and updating it with checked contacts.
  */
 function resetSelectedContacts() {
-    const selectedContacts = new Set();
     selectedContacts.clear(); // Clear old selections
 
     document.querySelectorAll(".contact-checkbox:checked").forEach((checkbox) => {
@@ -165,4 +170,6 @@ function resetSelectedContacts() {
         const contact = allContacts.get(name);
         if (contact) selectedContacts.add(contact);
     });
+
+    updateSelectedContactsDisplay("selected-contacts-container"); 
 }
