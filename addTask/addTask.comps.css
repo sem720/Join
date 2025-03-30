@@ -133,11 +133,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #due-date {
     color:  #D7D7D7;
     font-family: "Inter", sans-serif;
- }
+}
  
  #due-date.has-value {
-     color: black;
- }
+     color: black !important;
+}
 
 .task-popup {
     width: 250px;
