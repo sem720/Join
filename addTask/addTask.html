@@ -304,7 +304,6 @@
       window.saveTaskToFirebase = async function (taskData) {
         try {
           await push(ref(database, "tasks"), taskData);
-          console.log("Task erfolgreich gespeichert:", taskData);
         } catch (error) {
           console.error("Fehler beim Speichern des Tasks:", error);
         }
