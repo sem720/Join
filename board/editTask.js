@@ -157,12 +157,16 @@ function editSubtaskInEditModal(index) {
     const subtaskItem = document.querySelector(`#subtask-${index}`);
     if (!subtaskItem) return console.error("❌ Subtask not found!");
     const inputField = createSubtaskInput(subtaskItem);
-    inputField.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") saveEditedSubtask(index, inputField.value);
-    });
     const saveIcon = subtaskItem.querySelector(".save-subtask-icon");
     saveIcon.classList.remove("hidden");
     saveIcon.addEventListener("click", () => saveEditedSubtask(index, inputField.value));
+    inputField.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            const currentValue = event.target.value?.trim();
+            if (currentValue) saveEditedSubtask(index, currentValue);
+        }
+    });
 }
 
 
@@ -189,7 +193,7 @@ function createSubtaskInput(subtaskItem) {
  * @param {string} newText - The new text of the subtask
  */
 function saveEditedSubtask(index, newText) {
-    if (!newText.trim()) return;
+    if (typeof newText !== "string" || !newText.trim()) return;
     subtasksArray[index].text = newText.trim();
     renderSubtasks();
 }

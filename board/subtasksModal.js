@@ -101,12 +101,12 @@ function showEditSubtaskActions() {
  */
 function removeEditSubtaskActions() {
     document.querySelector(".subtask-action")?.remove();
-    
+
     const addSubtaskBtn = document.querySelector("#edit-subtask-wrapper .add-subtask-icon");
     if (addSubtaskBtn) {
-        addSubtaskBtn.style.display = "flex"; 
-        addSubtaskBtn.src = "/assets/imgs/add-subtask.png"; 
-    } 
+        addSubtaskBtn.style.display = "flex";
+        addSubtaskBtn.src = "/assets/imgs/add-subtask.png";
+    }
 }
 
 
@@ -138,7 +138,7 @@ function clearEditSubtask() {
 
     removeEditSubtaskActions();
 
-    addSubtaskBtn.src = "/assets/imgs/add-subtask.png"; 
+    addSubtaskBtn.src = "/assets/imgs/add-subtask.png";
     addSubtaskBtn.style.display = "block";
 }
 
@@ -162,20 +162,51 @@ function handleEditSubtaskKeydown(event) {
 
 
 /**
- * Edits a subtask by replacing the text with an input field and enabling edit actions.
- * @param {Event} event - The click event triggered by the edit icon.
+ * Initiates the editing process for a subtask item when the edit icon is clicked.
+ * Finds the list item (li), extracts the original text, and prepares the editing UI.
+ * @param {MouseEvent} event - The click event from the edit icon.
  */
 function editSubtask(event) {
     const li = event.target.closest("li");
     if (!li) return;
-
     const span = li.querySelector(".subtask-text");
-    const input = createEditInput(span.textContent.trim());
-    const editActions = createEditActions(input, li, span);
+    const originalText = span.textContent.replace("• ", "").trim();
+    setupSubtaskEditing(li, originalText);
+}
 
+
+/**
+ * Replaces the subtask's display text with an input field and edit action icons.
+ * Focuses the input and attaches an Enter key handler for quick saving.
+ * @param {HTMLLIElement} li - The list item element containing the subtask.
+ * @param {string} originalText - The original text of the subtask.
+ */
+function setupSubtaskEditing(li, originalText) {
+    const input = createEditInput(originalText);
+    const editActions = createEditActions(input, li);
     li.innerHTML = "";
     li.appendChild(input);
     li.appendChild(editActions);
-
     input.focus();
+    attachEnterHandler(input, li);
 }
+
+
+/**
+ * Attaches an Enter key listener to save the subtask immediately when Enter is pressed.
+ * If the input is not empty, it replaces the input with the updated subtask HTML.
+ * @param {HTMLInputElement} input - The input field for editing the subtask.
+ * @param {HTMLLIElement} li - The list item element containing the subtask.
+ */
+function attachEnterHandler(input, li) {
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const newText = input.value.trim();
+            if (newText) {
+                li.innerHTML = getSubtaskHTML(newText);
+            }
+        }
+    });
+}
+
