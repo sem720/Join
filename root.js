@@ -76,3 +76,21 @@ window.addEventListener("DOMContentLoaded", attachLoadingStateToButtons);
     window.location.href = LOGIN_PAGE;
   }
 })();
+
+/**
+ * Überprüft den Anmeldestatus des Benutzers und zeigt oder versteckt den Login-Button.
+ *
+ * Die Funktion holt die Benutzerdaten aus dem `localStorage`.
+ * Falls kein Benutzer angemeldet ist, wird der Login-Button angezeigt.
+ * Falls ein Benutzer angemeldet ist, wird der Login-Button versteckt.
+ */
+function checkLoginButton() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const loginButton = document.getElementById("div-nav-out");
+
+  if (!user) {
+    loginButton.style.display = "flex";
+  } else {
+    loginButton.style.display = "none";
+  }
+}
