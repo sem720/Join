@@ -483,13 +483,19 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // Initialize Flatpickr for both fields
+        // Initialize Flatpickr for the first field (#due-date)
         flatpickr("#due-date", {
           dateFormat: "d/m/Y",
           allowInput: true,
           placeholder: "dd/mm/yyyy",
+          onChange: function(selectedDates, dateStr, instance) {
+            const dateInputElement = document.getElementById("due-date");
+            if (dateInputElement) {
+              dateInputElement.classList.add('has-value');
+            }
+          }
         });
-
+    
         flatpickr("#edit-due-date", {
           dateFormat: "d/m/Y",
           allowInput: true,
@@ -497,5 +503,6 @@
         });
       });
     </script>
+    
   </body>
 </html>
