@@ -4,7 +4,7 @@
 function checkFormValidity() {
     const taskName = document.getElementById("task-name");
     const dueDate = document.getElementById("due-date");
-    const category = document.getElementById("category-container");
+    const category = document.getElementById("selected-category");
     const submitBtn = document.querySelector(".create-btn");
 
     if (taskName.value.trim() !== "" && dueDate.value.trim() !== "" && category.value.trim() !== "") {
@@ -21,7 +21,7 @@ function checkFormValidity() {
 function initFormValidation() {
     document.getElementById("task-name")?.addEventListener("input", checkFormValidity);
     document.getElementById("due-date")?.addEventListener("input", checkFormValidity);
-    document.getElementById("category-container")?.addEventListener("input", checkFormValidity);
+    document.getElementById("selected-category")?.addEventListener("input", checkFormValidity);
 }
 
 
