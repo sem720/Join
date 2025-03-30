@@ -4,17 +4,19 @@
  * Logs an error if the input field with the ID 'due-date' is not found.
  */
 function dateInput() {
-  const dateInput = document.getElementById("due-date");
-  const calendarIcon = document.getElementById("calendar-icon");
+  const dateInputs = document.querySelectorAll("#due-date"); 
+  const calendarIcons = document.querySelectorAll("#calendar-icon");
 
-  if (!dateInput || !calendarIcon) return console.error("Date input or calendar icon not found.");
-    
-  dateInput.addEventListener("input", function () {
-      if (dateInput.value) {
-          dateInput.classList.add("has-value"); 
-      } else {
-          dateInput.classList.remove("has-value"); 
-      }
+  if (!dateInputs.length || !calendarIcons.length) return console.error("Date inputs or calendar icons not found.");
+
+  dateInputs.forEach((dateInput) => {
+      dateInput.addEventListener("input", function () {
+          dateInput.classList.toggle("has-value", !!dateInput.value);
+      });
+
+      dateInput.addEventListener("change", function () {
+          dateInput.classList.toggle("has-value", !!dateInput.value);
+      });
   });
 }
 
