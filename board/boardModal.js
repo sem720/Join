@@ -4,16 +4,46 @@
  * @param {string} category - The category for the task (default is "To do").
  */
 async function openAddTaskModal(category = "To do") {
-    window.selectedTaskCategory = category;
     if (window.innerWidth < 670) {
-        return window.location.href = `/addTask/addTask.html?category=${encodeURIComponent(category)}`;
+        return redirectToAddTaskPage(category);
     }
+    setupModal(category);
+}
+
+
+/**
+ * Redirects the user to the addTask page with the specified category.
+ * @param {string} category - The selected task category.
+ */
+function redirectToAddTaskPage(category) {
+    window.location.href = `/addTask/addTask.html?category=${encodeURIComponent(category)}`;
+}
+
+
+/**
+ * Sets up and displays the task modal, initializing required components.
+ * @async
+ * @param {string} category - The selected task category.
+ */
+async function setupModal(category) {
+    window.selectedTaskCategory = category;
     showTaskModal();
     await initializeTaskModal();
+    initFormValidation();
+    toggleModalVisibility(true);
+    checkFormValidity();
+}
+
+
+/**
+ * Toggles the visibility of the task modal and overlay.
+ * @param {boolean} isVisible - Whether to show or hide the modal.
+ */
+function toggleModalVisibility(isVisible) {
     const modal = document.getElementById("addTaskModal");
     const modalOverlay = document.querySelector(".modal-overlay");
-    modal.style.display = "block";
-    modalOverlay.classList.add("active");
+    modal.style.display = isVisible ? "block" : "none";
+    modalOverlay.classList.toggle("active", isVisible);
 }
 
 
@@ -173,3 +203,6 @@ function resetSelectedContacts() {
 
     updateSelectedContactsDisplay("selected-contacts-container"); 
 }
+
+
+
