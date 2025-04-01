@@ -6,7 +6,6 @@
 function dateInput() {
   const dateInputs = document.querySelectorAll("#due-date"); 
   const calendarIcons = document.querySelectorAll("#calendar-icon");
-
   if (!dateInputs.length || !calendarIcons.length) return console.error("Date inputs or calendar icons not found.");
 
   dateInputs.forEach((dateInput) => {
