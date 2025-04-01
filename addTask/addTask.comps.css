@@ -180,11 +180,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #selected-contacts-container {
     display: flex;
     padding: 4px 0px 4px 4px;
+    align-items: center;
 }
 
 #selected-contacts-container > div {
     display: flex;
-    margin-right: 8px;
+    margin-right: 4px;
 }
 
 #task-name, #due-date, #category-container {
