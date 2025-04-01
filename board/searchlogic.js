@@ -112,11 +112,9 @@ function setupSearchEventListeners() {
     if (!searchIcon) return console.error("❌ searchIcon not found!"); 
     if (!searchInput) return console.error("❌ searchInput not found!");
 
-    searchIcon.addEventListener('click', () => {
-        resetSearch();
-    });
-
-    searchInput.addEventListener('keydown', handleEnterKeyPress);
+   searchIcon.addEventListener('click', resetSearch);
+   searchInput.addEventListener('keydown', handleEnterKeyPress);
+   searchInput.addEventListener('input', findTask);
 }
 
 
