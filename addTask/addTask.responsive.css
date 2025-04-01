@@ -2,6 +2,7 @@
    .main-addTask, form {
       flex-direction: column;
       max-height: 100vh;
+      height: fit-content;
       width: 100%;
       min-width: 300px;
       gap: 2.5rem;
@@ -136,7 +137,7 @@
 
    #selected-contacts-container > div {
       margin-right: -7px !important;
-   }
+   } 
 }
 
 @media only screen and (min-width: 670px) {
@@ -145,21 +146,21 @@
       height: 46px;
    }
 
+   .h1-addTask {
+      padding-bottom: 60px;
+   }
+
    label {
       margin-bottom: 6px;
    }
 
-   #task-name, 
-   #description, 
-   #due-date, 
-   .button-container, 
-   .dropdown-container {
-      margin-bottom: 24px;
+   .btn-div-footer {
+      bottom: clamp(10px, 14vh, 40px);
+      right: 3%;
    }
 
-   .btn-div-footer {
-      bottom: clamp(0px, 12vh, 20px);
-      right: 3%;
+   .resp {
+      padding-top: 80px;
    }
 }
 
@@ -205,7 +206,7 @@
 
 @media only screen and (max-width: 420px) {
    .btn-div-footer {
-      bottom: clamp(10px, 11.5vh, 100px);
+      bottom: clamp(10px, 15vh, 100px);
       right: 3%;
       width:max-content;
    }
@@ -220,19 +221,18 @@
    }
 
    .resp {
-      padding-bottom: 24px;
+      padding-top:100px;
    }
 
    .h1-addTask {
-      padding-bottom: 8px;
+      padding-bottom: 20px;
    }
-
 }
 
 
 @media only screen and (min-width: 421px) and (max-width: 670px) {
    .btn-div-footer {
-      bottom: clamp(30px, 12vh, 100px);
+      bottom: clamp(30px, 15vh, 100px);
       right: 3%;
    }
 
@@ -241,7 +241,7 @@
    }
 
    .h1-addTask {
-      padding-bottom: 0px;
+      padding-bottom: 20px;
    }
 
    .contact-checkbox-container {
@@ -250,5 +250,9 @@
 
    #contacts-list {
       overflow-x: hidden;
+   }
+
+   .resp {
+      padding-top:100px;
    }
 }
