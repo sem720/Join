@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /**
  * Opens the task modal. If the screen width is below 670px, redirects to the addTask page.
  * @async
@@ -194,7 +196,7 @@ function showTaskPopup() {
  * Resets the selected contacts by clearing the set and updating it with checked contacts.
  */
 function resetSelectedContacts() {
-    selectedContacts.clear(); // Clear old selections
+    selectedContacts.clear(); 
 
     document.querySelectorAll(".contact-checkbox:checked").forEach((checkbox) => {
         const name = checkbox.getAttribute("data-contact-name");
