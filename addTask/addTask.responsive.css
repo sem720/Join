@@ -256,3 +256,14 @@
       padding-top:100px;
    }
 }
+
+@media only screen and (max-device-height: 844px) {
+   input::-webkit-datetime-edit {
+      display: none;
+   }
+
+   .date-container {
+      margin-bottom: 28px;
+   }
+    
+}
