@@ -70,6 +70,7 @@ function handleTaskSuccess() {
     setTimeout(() => window.location.href = "/board/board.html", 1500);
 }
 
+
 /** ================================
  *        FORM DATA HANDLING
  * ================================ */
