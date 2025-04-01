@@ -218,17 +218,20 @@ function deleteSubtaskInEditModal(index) {
  * @param {string} contacts[].avatar.initials - Initials of the contact.
  */
 function setEditAssignedContacts(contacts) {
+    console.log('Contacts to be rendered:', contacts);  // Log the contacts
     const container = document.getElementById("edit-selected-contacts-container");
-    container.innerHTML = contacts.map(contact => {
-        console.log(`🛠️ Setze Kontakt: ${contact.name} (${contact.avatar.initials})`);
+    container.innerHTML = '';
+    const content = contacts.map(contact => {
         return `<div class="avatar-board-card" 
                 style="background-color: ${contact.avatar.bgcolor};" 
                 data-name="${contact.name}"> 
                     ${contact.avatar.initials}
                 </div>`;
     }).join("");
-    console.log("✅ Vorab ausgewählte Kontakte mit Namen:", contacts);
+    console.log(content);  // Log the generated HTML content
+    container.innerHTML = content;
 }
+
 
 
 /**
@@ -236,9 +239,29 @@ function setEditAssignedContacts(contacts) {
  * @returns {Array<Object>} List of assigned contacts with name and avatar details.
  */
 function getEditedAssignedContacts() {
-    return Array.from(document.querySelectorAll("#edit-selected-contacts-container .avatar-board-card"))
-        .map(parseContactElement);
+    const container = document.querySelector("#edit-selected-contacts-container");
+    console.log("Container found:", container);
+    if (!container) {
+        console.error("❌ Container not found!");
+        return [];
+    }
+
+    // Log the entire container to inspect its contents
+    console.log("Container contents:", container.innerHTML);
+
+    const contactElements = container.querySelectorAll(".avatar");
+    console.log("Contact Elements:", contactElements);  // Should log the NodeList if found
+
+    if (contactElements.length === 0) {
+        console.warn("⚠️ No contact elements found in the container.");
+    }
+
+    const contacts = Array.from(contactElements).map(parseContactElement);
+    console.log("Contacts collected:", contacts);
+    return contacts;
 }
+
+
 
 
 /**
