@@ -1,215 +1,194 @@
 @media only screen and (max-width: 1000px) {
-    .main-addTask, form {
-       flex-direction: column;
-       max-height: 100vh;
-       width: 100%;
-       min-width: 300px;
-       gap: 2.5rem;
-     }
-
-     #addTask-wrap::-webkit-scrollbar {
-       display: none;
-     }
-
-    .h1-addTask {
-        font-size: 2.8rem;
-        display: block;
-        line-height: 1;
-        padding-top: 20px;
-        padding-bottom: 65px;
-        margin: 0 !important;
-     }
-
-     #addTask-wrap {
-        padding: clamp(10px, 3vw, 50px);
-        flex-grow: 1;
-        max-height: 70vh;
-        overflow-y: auto;
-        scrollbar-width: none;
-     }
-
-     .dropdown-options {
-          height: 80px;
-     }
-
-     #subtasks {
-          font-size: 16px;
-     }
-
-     .text {
-        display: none;
-     }
-
-     .resp {
-         display: block !important;
-         font-size: 14px;
-         padding-left: 8px;
-         padding: 4px;
-     }
-
-     .assignment-container, #task-name, #due-date, .assignment-btn, .dropdown-btn, #category-container, .subtask-input-wrapper {
-        min-width: 300px !important;
-        width: 100% !important;
-        height: 40px;
-     }
-
-     textarea, .button-container, #contacts-container, #subtasks, .dropdown-options, #contacts-list, #subtask-list {
-        min-width: 300px !important;
-        width: 100% !important;
-     }
-
-     .assignment-btn, .dropdown-btn, .dropdown-options {
-        font-size: 16px !important;
-     }
-
-     .right-container, .left-container {
-        padding: 0;
-        height: 50vh;
-        max-height: 80vh;
-        justify-content: flex-start;
-        width: 100%;
-        flex: 1;
-        box-sizing: border-box;
-     }
-
-     .footer {
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-end;
-      z-index: 100;
-      height: 60px;
+   .main-addTask, form {
+      flex-direction: column;
+      max-height: 100vh;
       width: 100%;
-     }
+      min-width: 300px;
+      gap: 2.5rem;
+   }
 
-     .btn-div-footer {
+   #addTask-wrap::-webkit-scrollbar {
+      display: none;
+   }
+
+   .h1-addTask {
+      font-size: 3.3rem;
+      display: block;
+      line-height: 2;
+      padding-bottom: 15px;
+   }
+
+   #addTask-wrap {
+      padding: clamp(10px, 3vw, 50px);
+      flex-grow: 1;
+      max-height: 70vh;
+      overflow-y: scroll;
+      scrollbar-width: none;
+   }
+
+   .dropdown-options {
+      height: 80px;
+   }
+
+   #subtasks {
+      font-size: 16px;
+   }
+
+   .text {
+      display: none;
+   }
+
+   .resp {
+      display: block !important;
+      font-size: 14px;
+      padding-left: 8px;
+      padding: 4px;
+   }
+
+   .assignment-container, #task-name, #due-date, .assignment-btn, .dropdown-btn, #category-container, .subtask-input-wrapper {
+      min-width: 300px !important;
+      width: 100% !important;
+      height: 40px;
+   }
+
+   textarea, .button-container, #contacts-container, #subtasks, .dropdown-options, #contacts-list, #subtask-list {
+      min-width: 300px !important;
+      width: 100% !important;
+   }
+
+   .assignment-btn, .dropdown-btn, .dropdown-options {
+      font-size: 16px !important;
+   }
+
+   .right-container, .left-container {
+      padding: 0;
+      height: 50vh;
+      max-height: 80vh;
+      justify-content: flex-start;
+      width: 100%;
+      flex: 1;
+      box-sizing: border-box;
+   }
+
+   .btn-div-footer {
       position: fixed;
       bottom: clamp(0px, 2vh, 100px);
       z-index: 100;
       right: 4%;
       width:max-content;
-     
-      }
+   }
 
-     ::placeholder, #task-name {
-        font-size: 16px;
-     }
+   ::placeholder, #task-name {
+      font-size: 16px;
+   }
 
-     #due-date[data-placeholder] {
-        font-size: 16px !important;
-     }
+   #due-date[data-placeholder] {
+      font-size: 16px !important;
+   }
 
-     #urgent, #medium, #low {
-        min-width: 90px;
-        width: 100%;
-        height: 44px;
-        font-size: 14px;
-     }
+   #urgent, #medium, #low {
+      min-width: 90px;
+      width: 100%;
+      height: 44px;
+      font-size: 14px;
+   }
 
-     .btn-switch > img {
-        width: 12px;
-        height: 10px;
-     }
+   .btn-switch > img {
+      width: 12px;
+      height: 10px;
+   }
 
-     .contact-item {
-        white-space: nowrap;
-        gap: 10px;
-        width: 100%;
-        height: 32px;
-     }
+   .contact-item {
+      white-space: nowrap;
+      gap: 10px;
+      width: 100%;
+      height: 32px;
+   }
 
-     .contact-item > .contact-name {
-        width: 60%;
-     }
+   .contact-item > .contact-name {
+      width: 60%;
+   }
 
-     .contact-name {
-        font-size: 16px;
-        flex-grow: 1;
-        padding-left: 16px;
-     }
+   .contact-name {
+      font-size: 16px;
+      flex-grow: 1;
+      padding-left: 16px;
+   }
 
-     .contact-checkbox {
-        width: 30px !important;
-     }
+   .contact-checkbox {
+      width: 30px !important;
+   }
 
-     #contacts-container {
-        padding: 4px;
-     }
+   #contacts-container {
+      padding: 4px;
+   }
 
+   .contact-checkbox:focus {
+      box-shadow: none;
+   }
 
-     .contact-checkbox:focus {
-        box-shadow: none;
-     }
+   #selected-contacts-container {
+      padding-top: 4px;
+      padding-left: 4px;
+      box-sizing: border-box;
+      flex: 1;
+   }
 
-     #selected-contacts-container {
-        padding-top: 4px;
-        padding-left: 4px;
-        box-sizing: border-box;
-        flex: 1;
-     }
-
-     #selected-contacts-container > div {
-        margin-right: -7px !important;
-     }
+   #selected-contacts-container > div {
+      margin-right: -7px !important;
+   }
 }
 
 @media only screen and (min-width: 670px) {
-     .h1-addTask {
-         font-size: 4rem;
-     }
+   #urgent, #medium, #low {
+      font-size: 16px;
+      height: 46px;
+   }
 
-     #urgent, #medium, #low {
-         font-size: 16px;
-         height: 46px;
-     }
+   label {
+      margin-bottom: 6px;
+   }
 
-     label {
-         margin-bottom: 6px;
-     }
+   #task-name, 
+   #description, 
+   #due-date, 
+   .button-container, 
+   .dropdown-container {
+      margin-bottom: 24px;
+   }
 
-     #task-name, 
-     #description, 
-     #due-date, 
-     .button-container, 
-     .dropdown-container {
-         margin-bottom: 24px;
-     }
-
-     .footer, .btn-div-footer {
-        padding-right: 0 !important;
-     }   
-     
-     .btn-div-footer {
-         bottom: clamp(10px, 10vh, 30px);
-         right: 3%;
-     }
+   .btn-div-footer {
+      bottom: clamp(0px, 12vh, 20px);
+      right: 3%;
+   }
 }
 
 @media only screen and (min-width: 1001px) {
-     .left-container, .right-container {
-         width: 50%;
-     }
+   .left-container, .right-container {
+      width: 50%;
+   }
 
-     .right-container {
-         padding-left: clamp(12px, 5vw, 120px);
-     }
+   .right-container {
+      padding-left: clamp(12px, 5vw, 120px);
+   }
 
-     #task-name, 
-     #description, 
-     #due-date, 
-     #subtasks,
-     .button-container, 
-     .dropdown-container, 
-     .assignment-container, 
-     .assignment-btn,
-     .dropdown-btn,
-     .subtask-input-wrapper {
-         width: 100%;
-     }
+   #task-name, 
+   #description, 
+   #due-date, 
+   #subtasks,
+   .button-container, 
+   .dropdown-container, 
+   .assignment-container, 
+   .assignment-btn,
+   .dropdown-btn,
+   .subtask-input-wrapper {
+      width: 100%;
+   }
 
    .footer {
       padding-right: 0;
       width: 100%;
-     }
+   }
 
    .btn-div-footer {
       gap: 24px;
@@ -218,26 +197,15 @@
    }
 
    .h1-addTask {
-      margin: 0 !important;
       padding-bottom: 50px;
+      line-height: 5rem;
    }
 }
 
 
 @media only screen and (max-width: 420px) {
-   .footer {
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-end;
-      z-index: 100;
-      height: 60px;
-      width: 100%;
-     }
-
    .btn-div-footer {
-      position: fixed;
-      bottom: clamp(10px, 13vh, 100px);
-      z-index: 100;
+      bottom: clamp(10px, 11.5vh, 100px);
       right: 3%;
       width:max-content;
    }
@@ -250,29 +218,30 @@
    .contact-item {
       width: 100%;
    }
+
+   .resp {
+      padding-bottom: 24px;
+   }
+
+   .h1-addTask {
+      padding-bottom: 8px;
+   }
+
 }
 
 
 @media only screen and (min-width: 421px) and (max-width: 670px) {
-   .footer {
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-end;
-      z-index: 100;
-      height: 60px;
-      width: 100%;
-     }
-
-     .btn-div-footer {
-      position: fixed;
-      bottom: clamp(0px, 10.5vh, 100px);
-      z-index: 100;
+   .btn-div-footer {
+      bottom: clamp(30px, 12vh, 100px);
       right: 3%;
-      width:max-content;
    }
 
    #addTask-wrap {
       padding-bottom: 0;
+   }
+
+   .h1-addTask {
+      padding-bottom: 0px;
    }
 
    .contact-checkbox-container {
