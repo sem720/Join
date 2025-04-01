@@ -62,6 +62,11 @@ async function openEditTaskModal(taskId) {
         loadEditTaskTemplate(taskId);
         await waitForModal("editTaskModal");
         populateEditTaskFields(taskData);
+
+        setTimeout(() => {
+            const contacts = getEditedAssignedContacts();
+            console.log("Contacts retrieved:", contacts);
+        }, 500); // Adjust timing if needed to ensure contacts are rendered
         showEditTaskModal();
     } catch (error) {
         console.error("❌ Error loading task data:", error);
@@ -376,12 +381,13 @@ function getPreselectedContacts() {
 function removePreselectedContact(contactItem) {
     const name = contactItem.querySelector(".contact-name").textContent.trim();
     const container = document.getElementById("edit-selected-contacts-container");
-    const avatars = Array.from(container.getElementsByClassName("avatar-board-card"));
+    const avatars = Array.from(container.getElementsByClassName("avatar"));
     const matchedAvatar = avatars.find(avatar => avatar.textContent.trim() === getInitials(name));
     if (matchedAvatar) {
         console.log(`❌ Removing preselected contact: ${name}`);
         matchedAvatar.remove();
-        renderContactsList("edit-contacts-list");
+        selectedContacts = selectedContacts.filter(contact => contact.name !== name);  // Remove by contact name or initials
+        console.log("Updated selected contacts:", selectedContacts);
     }
 }
 
