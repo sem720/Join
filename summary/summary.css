@@ -380,6 +380,7 @@ body {
   .div-information {
     width: 100%;
     padding: 30px;
+    overflow-y: auto;
   }
 
   .information {
