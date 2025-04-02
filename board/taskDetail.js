@@ -62,16 +62,14 @@ async function openEditTaskModal(taskId) {
         loadEditTaskTemplate(taskId);
         await waitForModal("editTaskModal");
         populateEditTaskFields(taskData);
-
-        setTimeout(() => {
-            const contacts = getEditedAssignedContacts();
-            console.log("Contacts retrieved:", contacts);
-        }, 500); // Adjust timing if needed to ensure contacts are rendered
+        
+        setTimeout(() => console.log("Contacts retrieved:", getEditedAssignedContacts()), 500);
         showEditTaskModal();
     } catch (error) {
         console.error("❌ Error loading task data:", error);
     }
 }
+
 
 
 /**
@@ -169,7 +167,6 @@ function closeEditTaskModal() {
     }
     updateSelectedContactsDisplay("edit-selected-contacts-container");
     closeOverlayAndDetailModal();
-
 }
 
 
@@ -289,7 +286,6 @@ function setupEditAssignmentButton() {
     const editAssignmentBtn = document.getElementById("toggle-contacts-btn");
     if (!editAssignmentBtn) return console.error("❌ Edit Assignment Button not found!");
     editAssignmentBtn.addEventListener("click", (event) => {
-        console.log("✅ Edit Assignment Button Clicked!", event.target);
         const containerId = editAssignmentBtn.getAttribute("data-container-id");
         const listId = editAssignmentBtn.getAttribute("data-list-id");
         const selectedContainerId = editAssignmentBtn.getAttribute("data-selected-id");
@@ -379,17 +375,15 @@ function getPreselectedContacts() {
  * @param {HTMLElement} contactItem - The contact element to be removed.
  */
 function removePreselectedContact(contactItem) {
-    const name = contactItem.querySelector(".contact-name").textContent.trim();
-    const container = document.getElementById("edit-selected-contacts-container");
-    const avatars = Array.from(container.getElementsByClassName("avatar"));
-    const matchedAvatar = avatars.find(avatar => avatar.textContent.trim() === getInitials(name));
-    if (matchedAvatar) {
-        console.log(`❌ Removing preselected contact: ${name}`);
-        matchedAvatar.remove();
-        selectedContacts = selectedContacts.filter(contact => contact.name !== name);  // Remove by contact name or initials
-        console.log("Updated selected contacts:", selectedContacts);
-    }
+    const selectedContacts = new Set();
+    const name = contactItem.getAttribute("data-name");
+    if (!name) return console.warn("data-name attribute not found for contact item. Skipping.");
+        
+    const trimmedName = name.trim();
+    selectedContacts.delete(trimmedName);
+    console.log("Updated selected contacts:", selectedContacts);
 }
+
 
 
 /**
