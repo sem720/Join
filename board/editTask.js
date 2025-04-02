@@ -218,7 +218,6 @@ function deleteSubtaskInEditModal(index) {
  * @param {string} contacts[].avatar.initials - Initials of the contact.
  */
 function setEditAssignedContacts(contacts) {
-    console.log('Contacts to be rendered:', contacts);  // Log the contacts
     const container = document.getElementById("edit-selected-contacts-container");
     container.innerHTML = '';
     const content = contacts.map(contact => {
@@ -228,16 +227,10 @@ function setEditAssignedContacts(contacts) {
                     ${contact.avatar.initials}
                 </div>`;
     }).join("");
-    console.log(content);  // Log the generated HTML content
+   
     container.innerHTML = content;
 
-    // Add event listener to each contact element
-    const contactElements = container.querySelectorAll(".avatar-board-card");
-    contactElements.forEach(element => {
-        element.addEventListener("click", () => {
-            removePreselectedContact(element);
-        });
-    });
+    
 }
 
 
@@ -247,24 +240,15 @@ function setEditAssignedContacts(contacts) {
  */
 function getEditedAssignedContacts() {
     const container = document.querySelector("#edit-selected-contacts-container");
-    console.log("Container found:", container);
     if (!container) {
         console.error("❌ Container not found!");
         return [];
     }
 
-    // Log the entire container to inspect its contents
-    console.log("Container contents:", container.innerHTML);
-
     const contactElements = container.querySelectorAll(".avatar-board-card");
-    console.log("Contact Elements:", contactElements);  // Should log the NodeList if found
-
-    if (contactElements.length === 0) {
-        console.warn("⚠️ No contact elements found in the container.");
-    }
-
+    if (contactElements.length === 0) console.warn("⚠️ No contact elements found in the container.");
+    
     const contacts = Array.from(contactElements).map(parseContactElement);
-    console.log("Contacts collected:", contacts);
     return contacts;
 }
 
@@ -411,57 +395,3 @@ function initEditTaskFlatpickr() {
 }
 
 
-/**
- * Saves the edited assigned contacts to the backend.
- * @param {Array<Object>} contacts - List of assigned contacts.
- * @returns {Promise<void>} A promise that resolves when the contacts are saved.
- */
-async function saveEditedContacts(contacts) {
-    const taskId = document.getElementById('task-id').value; // Assuming task ID is stored in a hidden input field
-    try {
-        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/contacts.json`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(contacts)
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        console.log('Edited contacts saved successfully.');
-    } catch (error) {
-        console.error('Error saving edited contacts:', error);
-    }
-}
-
-/**
- * Saves the edited task, including assigned contacts, to the backend.
- * @returns {Promise<void>} A promise that resolves when the task is saved.
- */
-async function saveEditedTask() {
-    const contacts = getEditedAssignedContacts();
-    await saveEditedContacts(contacts); // Save edited contacts
-
-    // Save other task details (e.g., title, description, due date) to the backend
-    const taskId = document.getElementById('task-id').value;
-    const taskDetails = {
-        title: document.getElementById('edit-task-title').value,
-        description: document.getElementById('edit-task-description').value,
-        dueDate: document.getElementById('edit-due-date').value,
-        priority: getSelectedPriority().priorityText
-    };
-
-    try {
-        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(taskDetails)
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        console.log('Task saved successfully.');
-        showEditConfirmation();
-    } catch (error) {
-        console.error('Error saving task:', error);
-    }
-}
