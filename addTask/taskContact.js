@@ -315,6 +315,7 @@ async function renderContactsList(listId) {
  */
 function createContactElement(name, bgcolor, isPreselected) {
     const contactDiv = createElement("div", "contact-item");
+    contactDiv.setAttribute("data-name", name);
     const nameSpan = createElement("span", "contact-name", name);
 
     contactDiv.append(
@@ -341,7 +342,7 @@ function updateSelectedContactsDisplay(selectedContainerId) {
 
     selectedContacts.forEach(contact => {
         const avatarDiv = document.createElement("div");
-        avatarDiv.classList.add("avatar");
+        avatarDiv.classList.add("avatar", "avatar-board-card");
         avatarDiv.style.backgroundColor = contact.bgcolor;
         avatarDiv.textContent = getInitials(contact.name);
         selectedContainer.appendChild(avatarDiv);
