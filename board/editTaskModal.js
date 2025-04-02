@@ -89,3 +89,74 @@ function getUpdatedTaskData() {
         subtasks: getEditedSubtasks().length ? getEditedSubtasks() : []
     };
 }
+
+/**
+ * Saves the edited assigned contacts to the backend.
+ * @param {Array<Object>} contacts - List of assigned contacts.
+ * @returns {Promise<void>} A promise that resolves when the contacts are saved.
+ */
+async function saveEditedContacts(contacts) {
+    const taskId = document.getElementById('task-id').value; 
+    try {
+        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/contacts.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(contacts)
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Error saving edited contacts:', error);
+    }
+}
+
+
+/**
+ * Saves the edited task, including assigned contacts, to the backend.
+ * @returns {Promise<void>} A promise that resolves when the task is saved.
+ */
+async function saveEditedTask() {
+    try {
+        await saveEditedContacts(getEditedAssignedContacts());
+        const taskId = document.getElementById('task-id').value;
+        const taskDetails = getEditedTaskDetails();
+
+        const response = await updateTaskInDatabase(taskId, taskDetails);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+        console.log('Task saved successfully.');
+        showEditConfirmation();
+    } catch (error) {
+        console.error('Error saving task:', error);
+    }
+}
+
+
+/**
+ * Retrieves the edited task details from the input fields.
+ * @returns {Object} The task details including title, description, due date, and priority.
+ */
+function getEditedTaskDetails() {
+    return {
+        title: document.getElementById('edit-task-title').value,
+        description: document.getElementById('edit-task-description').value,
+        dueDate: document.getElementById('edit-due-date').value,
+        priority: getSelectedPriority().priorityText
+    };
+}
+
+
+/**
+ * Updates the task details in the database.
+ * @param {string} taskId - The ID of the task to update.
+ * @param {Object} taskDetails - The updated task details.
+ * @returns {Promise<Response>} A promise that resolves to the fetch response.
+ */
+async function updateTaskInDatabase(taskId, taskDetails) {
+    return fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(taskDetails)
+    });
+}
