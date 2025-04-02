@@ -384,7 +384,6 @@ function handleEditCalendarClick() {
  * Configures the date format, enables manual input, and sets up event listeners.
  */
 function initEditTaskFlatpickr() {
-    console.log("Initializing Flatpickr for edit modal...");
     flatpickr("#edit-due-date", {
         dateFormat: "d/m/Y",
         allowInput: true,
