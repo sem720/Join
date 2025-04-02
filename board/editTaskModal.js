@@ -63,11 +63,12 @@ async function saveTaskChangesAndUpdateUI(event) {
     if (!taskId) return console.error("❌ No Task ID found!");
     const existingTask = await fetchTaskData(taskId);
     if (!existingTask) return console.error(`❌ Task ${taskId} not found in database.`);
+    const editedContacts = getEditedAssignedContacts() || []; 
     const updatedTask = {
         ...getUpdatedTaskData(),
-        assignedTo: getEditedAssignedContacts().length > 0
-            ? getEditedAssignedContacts()
-            : existingTask.assignedTo || [],
+        assignedTo: (editedContacts && editedContacts.length > 0) 
+        ? editedContacts 
+        : existingTask.assignedTo || [],
         subtasks: getEditedSubtasks() || []
     };
     await updateTaskInDatabase(taskId, updatedTask, true);
