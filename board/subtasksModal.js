@@ -5,13 +5,8 @@ function setupEditSubtaskInput() {
     const inputField = document.getElementById("edit-subtasks");
     const addSubtaskBtn = document.querySelector("#edit-subtask-wrapper .add-subtask-icon");
 
-    console.log("Input field found:", inputField !== null);
-    console.log("Add subtask button found:", addSubtaskBtn !== null);
-
-    if (addSubtaskBtn) {
-        addSubtaskBtn.addEventListener("click", handleEditSubtaskClick);
-    }
-
+    if (addSubtaskBtn) addSubtaskBtn.addEventListener("click", handleEditSubtaskClick);
+    
     if (inputField) {
         inputField.addEventListener("keydown", handleEditSubtaskKeydown);
         inputField.addEventListener("input", handleEditSubtaskInput);
@@ -25,22 +20,12 @@ function setupEditSubtaskInput() {
  * Shows or hides the "Add Subtask" button based on the input field content.
  */
 function handleEditSubtaskInput() {
-    console.log("handleEditSubtaskInput triggered!"); // Debug log
     const inputField = document.getElementById("edit-subtasks");
     const addSubtaskBtn = document.querySelector("#edit-subtask-wrapper .add-subtask-icon");
 
-    if (!inputField) {
-        console.error("Input field not found in handleEditSubtaskInput.");
-        return;
-    }
-
-    if (!addSubtaskBtn) {
-        console.error("Add subtask button not found in handleEditSubtaskInput.");
-        return;
-    }
-
-    console.log("Current input value:", inputField.value); // Log input value
-
+    if (!inputField) return console.error("Input field not found in handleEditSubtaskInput.");
+    if (!addSubtaskBtn) return console.error("Add subtask button not found in handleEditSubtaskInput.");
+        
     if (inputField.value.trim()) {
         addSubtaskBtn.style.display = "none";
         showEditSubtaskActions();
