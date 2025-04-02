@@ -7,7 +7,7 @@
  */
 function createTask(event) {
     event.preventDefault();
-    
+
     const taskData = getTaskFormData();
     saveTaskToFirebase(taskData);
     showTaskPopup();
@@ -80,7 +80,7 @@ function getTaskFormData() {
  * @returns {string} The default category "To do".
  */
 function getMainCategory() {
-    return "To do";
+    return window.selectedTaskCategory || "To do";
 }
 
 

@@ -333,7 +333,6 @@ async function fetchTaskById(taskId) {
     try {
         const taskData = await fetchTaskData(taskId);
         if (!taskData) return console.error("❌ Error fetching task: No task data found for ID:", taskId);
-
         const task = processTaskData(taskId, taskData);
         openTaskDetailModal(task);
     } catch (error) {
