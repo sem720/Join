@@ -25,6 +25,7 @@ async function handleEditTaskSubmit(event) {
 async function saveSelectedContactsToBackend(taskId) {
     if (!taskId) return console.error("❌ No Task ID found!");
     const updatedTask = { assignedTo: getEditedAssignedContacts() || [] };
+    console.log("🔍 Saving selected contacts for task ID:", taskId, updatedTask);
     await updateTaskInDatabase(taskId, updatedTask, false); // ❌ KEINE Bestätigung hier
 }
 
@@ -37,6 +38,7 @@ async function saveSelectedContactsToBackend(taskId) {
  */
 async function updateTaskInDatabase(taskId, updatedTask, showConfirmation = false) {
     try {
+        console.log("🔍 Updating task in database:", taskId, updatedTask);
         await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -63,14 +65,14 @@ async function saveTaskChangesAndUpdateUI(event) {
     if (!taskId) return console.error("❌ No Task ID found!");
     const existingTask = await fetchTaskData(taskId);
     if (!existingTask) return console.error(`❌ Task ${taskId} not found in database.`);
-    const editedContacts = getEditedAssignedContacts() || []; 
     const updatedTask = {
         ...getUpdatedTaskData(),
-        assignedTo: (editedContacts && editedContacts.length > 0) 
-        ? editedContacts 
-        : existingTask.assignedTo || [],
+        assignedTo: getEditedAssignedContacts().length > 0
+            ? getEditedAssignedContacts()
+            : existingTask.assignedTo || [],
         subtasks: getEditedSubtasks() || []
     };
+    console.log("🔍 Saving task changes for task ID:", taskId, updatedTask);
     await updateTaskInDatabase(taskId, updatedTask, true);
 }
 
@@ -147,16 +149,4 @@ function getEditedTaskDetails() {
 }
 
 
-/**
- * Updates the task details in the database.
- * @param {string} taskId - The ID of the task to update.
- * @param {Object} taskDetails - The updated task details.
- * @returns {Promise<Response>} A promise that resolves to the fetch response.
- */
-async function updateTaskInDatabase(taskId, taskDetails) {
-    return fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(taskDetails)
-    });
-}
+
