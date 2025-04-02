@@ -364,7 +364,6 @@ function getPreselectedContacts() {
     if (!container) return [];
     const avatars = container.querySelectorAll(".avatar-board-card");
     const initialsList = Array.from(avatars).map(avatar => avatar.textContent.trim());
-    console.log("🔎 Extracted Preselected Initials:", initialsList);
     return initialsList;
 }
 
@@ -381,7 +380,6 @@ function removePreselectedContact(contactItem) {
         
     const trimmedName = name.trim();
     selectedContacts.delete(trimmedName);
-    console.log("Updated selected contacts:", selectedContacts);
 }
 
 
