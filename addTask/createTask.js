@@ -8,7 +8,7 @@
 function createTask(event) {
     event.preventDefault();
     
-    const taskData = gatherTaskData();
+    const taskData = getTaskFormData();
     saveTaskToFirebase(taskData);
     showTaskPopup();
 }
@@ -26,24 +26,6 @@ function getSafeAssignedContacts() {
             initials: getInitials(user.name || "?")
         }
     }));
-}
-
-
-/**
- * Gathers task form data and returns it as an object.
- * @returns {Object} - Task data containing title, description, due date, priority, category, assigned users, and subtasks.
- */
-function gatherTaskData() {
-    return {
-        title: document.getElementById("task-name").value,
-        description: document.getElementById("description").value,
-        dueDate: document.getElementById("due-date").value,
-        priority: getSelectedPriority(),
-        category: document.getElementById("selected-category").value,
-        assignedTo: getSafeAssignedContacts(),
-        subtasks: getTaskSubtasks(),
-        mainCategory: window.selectedTaskCategory || "To do"
-    };
 }
 
 
