@@ -222,7 +222,7 @@ function setEditAssignedContacts(contacts) {
     const container = document.getElementById("edit-selected-contacts-container");
     container.innerHTML = '';
     const content = contacts.map(contact => {
-        return `<div class="avatar-board-card" 
+        return `<div class="avatar avatar-board-card" 
                 style="background-color: ${contact.avatar.bgcolor};" 
                 data-name="${contact.name}"> 
                     ${contact.avatar.initials}
@@ -230,8 +230,15 @@ function setEditAssignedContacts(contacts) {
     }).join("");
     console.log(content);  // Log the generated HTML content
     container.innerHTML = content;
-}
 
+    // Add event listener to each contact element
+    const contactElements = container.querySelectorAll(".avatar-board-card");
+    contactElements.forEach(element => {
+        element.addEventListener("click", () => {
+            removePreselectedContact(element);
+        });
+    });
+}
 
 
 /**
@@ -249,7 +256,7 @@ function getEditedAssignedContacts() {
     // Log the entire container to inspect its contents
     console.log("Container contents:", container.innerHTML);
 
-    const contactElements = container.querySelectorAll(".avatar");
+    const contactElements = container.querySelectorAll(".avatar-board-card");
     console.log("Contact Elements:", contactElements);  // Should log the NodeList if found
 
     if (contactElements.length === 0) {
@@ -260,9 +267,6 @@ function getEditedAssignedContacts() {
     console.log("Contacts collected:", contacts);
     return contacts;
 }
-
-
-
 
 /**
  * Extracts contact details from a contact element.
@@ -404,4 +408,60 @@ function initEditTaskFlatpickr() {
     });
     handleEditCalendarClick();
     setupEditDateReset();
+}
+
+
+/**
+ * Saves the edited assigned contacts to the backend.
+ * @param {Array<Object>} contacts - List of assigned contacts.
+ * @returns {Promise<void>} A promise that resolves when the contacts are saved.
+ */
+async function saveEditedContacts(contacts) {
+    const taskId = document.getElementById('task-id').value; // Assuming task ID is stored in a hidden input field
+    try {
+        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/contacts.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(contacts)
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        console.log('Edited contacts saved successfully.');
+    } catch (error) {
+        console.error('Error saving edited contacts:', error);
+    }
+}
+
+/**
+ * Saves the edited task, including assigned contacts, to the backend.
+ * @returns {Promise<void>} A promise that resolves when the task is saved.
+ */
+async function saveEditedTask() {
+    const contacts = getEditedAssignedContacts();
+    await saveEditedContacts(contacts); // Save edited contacts
+
+    // Save other task details (e.g., title, description, due date) to the backend
+    const taskId = document.getElementById('task-id').value;
+    const taskDetails = {
+        title: document.getElementById('edit-task-title').value,
+        description: document.getElementById('edit-task-description').value,
+        dueDate: document.getElementById('edit-due-date').value,
+        priority: getSelectedPriority().priorityText
+    };
+
+    try {
+        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(taskDetails)
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        console.log('Task saved successfully.');
+        showEditConfirmation();
+    } catch (error) {
+        console.error('Error saving task:', error);
+    }
 }
