@@ -189,9 +189,15 @@
     height: 40px;
 }
 
-.selected-contacts-container {
+.selected-contacts {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    margin-left: 12px;
+}
+
+#selected-contacts-container > div {
+    display: flex;
+    margin-right: 4px;
 }
 
 #due-date.has-value {
