@@ -17,6 +17,7 @@ function createTask(event) {
 /**
  * Retrieves and formats assigned contacts for the task.
  * @returns {Array<Object>} - List of assigned users with name, background color, and initials.
+ * Assumes selectedContacts is a Set of selected users.
  */
 function getSafeAssignedContacts() {
     return Array.from(selectedContacts).map(user => ({
@@ -31,6 +32,7 @@ function getSafeAssignedContacts() {
 
 /**
  * Handles the task creation event and provides user feedback.
+ * Validates the form and shows a success message if the task is created.
  * @param {Event} event - The form submission event.
  */
 function handleTaskCreation(event) {
@@ -140,14 +142,12 @@ function validateTaskData(taskData) {
 
 /**
  * Retrieves the selected priority of the task.
+ * Defaults to "Medium" priority if no active button is found.
  * @returns {{priorityText: string, priorityImage: string}} The priority object.
  */
 function getSelectedPriority() {
-    if (!activeButton) {
-        console.warn("⚠️ No active button found, returning default priority.");
-        return { priorityText: "Medium", priorityImage: "/assets/imgs/medium.png" };
-    }
-
+    if (!activeButton) return { priorityText: "Medium", priorityImage: "/assets/imgs/medium.png" };
+    
     const priority = {
         priorityText: activeButton.innerText.trim(),
         priorityImage: getPriorityImage(activeButton.id)
@@ -185,7 +185,7 @@ function getSelectedContacts() {
         .map(checkbox => {
             const name = checkbox.dataset.contactName;
             const contact = allContacts.get(name);
-            return contact ? { name, avatar: generateAvatar(name, contact.bgcolor) } : (console.warn(`⚠️ Kein Kontakt gefunden für ${name}`), null);
+            return contact ? { name, avatar: generateAvatar(name, contact.bgcolor) } : (null);
         })
         .filter(contact => contact);
 }
@@ -212,15 +212,16 @@ function generateAvatar(name, bgcolor) {
 
 /**
  * Retrieves the selected category from the form.
+ * Uses fallback mechanism to handle cases where no category is selected.
  * @returns {string} The formatted category name.
  */
 function getSelectedCategory() {
     const selectedInput = document.getElementById("selected-category");
-    if (!selectedInput) return console.error("❌ Error: Could not find #selected-category input.") || "";
+    if (!selectedInput) return "";
 
     let category = selectedInput.value?.trim();
 
-    if (!category) return console.log("⚠️ No category selected!") || "";
+    if (!category) return "";
 
     return category.replace("_", " ")
         .split(" ")
@@ -260,7 +261,7 @@ async function saveTaskToFirebase(taskData) {
     try {
         await firebase.database().ref("tasks").push(taskData);
     } catch (error) {
-        console.error("❌ Fehler beim Speichern des Tasks:", error);
+        throw error;
     }
 }
 
