@@ -11,7 +11,7 @@ function setupEditSubtaskInput() {
         inputField.addEventListener("keydown", handleEditSubtaskKeydown);
         inputField.addEventListener("input", handleEditSubtaskInput);
     } else {
-        console.error("Input field NOT found in setupEditSubtaskInput()");
+        throw error;
     }
 }
 
@@ -23,8 +23,8 @@ function handleEditSubtaskInput() {
     const inputField = document.getElementById("edit-subtasks");
     const addSubtaskBtn = document.querySelector("#edit-subtask-wrapper .add-subtask-icon");
 
-    if (!inputField) return console.error("Input field not found in handleEditSubtaskInput.");
-    if (!addSubtaskBtn) return console.error("Add subtask button not found in handleEditSubtaskInput.");
+    if (!inputField) return;
+    if (!addSubtaskBtn) return;
         
     if (inputField.value.trim()) {
         addSubtaskBtn.style.display = "none";
