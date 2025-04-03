@@ -6,7 +6,7 @@
 function dateInput() {
   const dateInputs = document.querySelectorAll("#due-date"); 
   const calendarIcons = document.querySelectorAll("#calendar-icon");
-  if (!dateInputs.length || !calendarIcons.length) return console.error("Date inputs or calendar icons not found.");
+  if (!dateInputs.length || !calendarIcons.length) return;
 
   dateInputs.forEach((dateInput) => {
       dateInput.addEventListener("input", function () {
@@ -28,7 +28,7 @@ function setupCalendarIcon() {
   const dateInput = document.getElementById("due-date");
   const calendarIcon = document.getElementById("calendar-icon");
 
-  if (!dateInput || !calendarIcon) return console.error("Date input or calendar icon not found.");
+  if (!dateInput || !calendarIcon) return;
 
   if (dateInput._flatpickr) {
       calendarIcon.addEventListener("click", function () {
@@ -44,7 +44,6 @@ function setupCalendarIcon() {
 */
 function setupDateReset() {
   const dateInput = document.getElementById("due-date");
-  
   if (dateInput) dateInput.addEventListener('click', (event) => handleDateReset(event, dateInput));
 }
 
