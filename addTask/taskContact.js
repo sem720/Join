@@ -240,10 +240,11 @@ async function fetchAndRenderContacts(listId) {
         if (!data) throw new Error("Keine Nutzerdaten gefunden.");
 
         processContactsData(data);
-        listId ? renderContactsList(listId) : console.error("❌ listId is undefined in fetchAndRenderContacts");
-
+        listId ? renderContactsList(listId) : alert("Fehler: Ungültige ListID. Bitte versuchen Sie es später noch einmal.");
+    
     } catch (error) {
-        console.error("❌ Fehler beim Laden der Kontakte:", error.message);
+        alert("Es gab einen Fehler beim Laden der Kontaktdaten. Bitte versuchen Sie es später noch einmal.");
+        throw error;
     }
 }
 
@@ -358,7 +359,7 @@ function updateSelectedContactsDisplay(selectedContainerId) {
 function toggleContactSelection(name) {
     const contact = allContacts.get(name);
 
-    if (!contact) return console.error(`❌ Contact not found: ${name}`);
+    if (!contact) return;
 
     if (selectedContacts.has(contact)) {
         selectedContacts.delete(contact);
