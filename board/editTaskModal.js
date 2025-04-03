@@ -135,18 +135,6 @@ async function saveEditedTask() {
 }
 
 
-/**
- * Retrieves the edited task details from the input fields.
- * @returns {Object} The task details including title, description, due date, and priority.
- */
-function getEditedTaskDetails() {
-    return {
-        title: document.getElementById('edit-task-title').value,
-        description: document.getElementById('edit-task-description').value,
-        dueDate: document.getElementById('edit-due-date').value,
-        priority: getSelectedPriority().priorityText
-    };
-}
 
 
 
