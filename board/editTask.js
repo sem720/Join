@@ -241,8 +241,12 @@ function getEditedAssignedContacts() {
         console.error("❌ Container not found!");
         return [];
     }
+   
     const contactElements = container.querySelectorAll(".avatar-board-card");
-    if (contactElements.length === 0) console.warn("⚠️ No contact elements found in the container.");
+    if (contactElements.length === 0) {
+        console.warn("⚠️ No contact elements found in the container.");
+        return []; 
+    }
     const contacts = Array.from(contactElements).map(parseContactElement);
     return contacts;
 }
