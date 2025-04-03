@@ -4,12 +4,13 @@
 async function fetchTasks() {
     try {
         const data = await fetchTasksFromBackend();
-        if (!data) return console.warn("⚠️ Keine Tasks in der Datenbank gefunden.");
+        if (!data) return;
         const tasks = processTasks(data);
         renderTasks(tasks);
         setupDragAndDrop();
     } catch (error) {
-        console.error("❌ Fehler beim Laden der Tasks:", error);
+        alert("❌ Fehler beim Laden der Tasks:");
+        throw error;
     }
 }
 
@@ -52,7 +53,8 @@ async function updateMainCategoryInBackend(taskId, newCategory) {
             body: JSON.stringify({ mainCategory: newCategory })
         });
     } catch (error) {
-        console.error(`❌ Fehler beim Aktualisieren der mainCategory für Task ${taskId}:`, error);
+        alert(`❌ Fehler beim Aktualisieren der mainCategory für Task ${taskId}:`);
+        throw error;
     }
 }
 
@@ -233,7 +235,8 @@ async function toggleSubtask(taskId, subtaskIndex) {
         updateSubtaskUI(taskId, task.subtasks);
         await saveSubtasks(taskId, task.subtasks);
     } catch (error) {
-        console.error("Error updating subtask:", error);
+        alert("Error updating subtask");
+        throw error;
     }
 }
 
@@ -317,7 +320,7 @@ function initTaskCardClickEvents() {
     document.querySelectorAll(".task-card").forEach(taskCard =>
         taskCard.addEventListener("click", async function () {
             const taskId = this.dataset.id;
-            if (!taskId) return console.error("⚠️ Task ID fehlt!");
+            if (!taskId) return;
             const task = await fetchTaskById(taskId);
             if (task) openTaskDetailModal(task);
         })
@@ -332,11 +335,12 @@ function initTaskCardClickEvents() {
 async function fetchTaskById(taskId) {
     try {
         const taskData = await fetchTaskData(taskId);
-        if (!taskData) return console.error("❌ Error fetching task: No task data found for ID:", taskId);
+        if (!taskData) return;
         const task = processTaskData(taskId, taskData);
         openTaskDetailModal(task);
     } catch (error) {
-        console.error("❌ Error fetching task:", error);
+        alert("❌ Error fetching task");
+        throw error;
     }
 }
 
