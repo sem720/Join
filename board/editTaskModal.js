@@ -5,14 +5,13 @@
  */
 async function handleEditTaskSubmit(event) {
     event.preventDefault();
+
     const form = event.target;
     const taskId = form.getAttribute("data-task-id");
-    if (!taskId) {
-        console.error("❌ Fehler: Keine Task-ID gefunden!");
-        return;
-    }
+    if (!taskId) return console.error("❌ Fehler: Keine Task-ID gefunden!");
+        
     await saveSelectedContactsToBackend(taskId);
-    await saveTaskChangesAndUpdateUI(event);
+    await saveTaskChangesAndUpdateUI(taskId);
     closeContacts("edit-contacts-container", "edit-contacts-list");
 }
 
@@ -23,10 +22,9 @@ async function handleEditTaskSubmit(event) {
  * @returns {Promise<void>}
  */
 async function saveSelectedContactsToBackend(taskId) {
-    if (!taskId) return console.error("❌ No Task ID found!");
-    const updatedTask = { assignedTo: getEditedAssignedContacts() || [] };
-    console.log("🔍 Saving selected contacts for task ID:", taskId, updatedTask);
-    await updateTaskInDatabase(taskId, updatedTask, false); // ❌ KEINE Bestätigung hier
+    const assignedContacts = getEditedAssignedContacts();
+    console.log("🔍 Saving selected contacts for task ID:", taskId, { assignedTo: assignedContacts });
+    await updateTaskInDatabase(taskId, { assignedTo: assignedContacts }, false);
 }
 
 
@@ -38,13 +36,12 @@ async function saveSelectedContactsToBackend(taskId) {
  */
 async function updateTaskInDatabase(taskId, updatedTask, showConfirmation = false) {
     try {
-        console.log("🔍 Updating task in database:", taskId, updatedTask);
         await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedTask)
         });
-        console.log(`✅ Task ${taskId} updated successfully.`);
+
         await fetchTasks();
         closeEditTaskModal();
         closeTaskDetailModal();
@@ -57,22 +54,20 @@ async function updateTaskInDatabase(taskId, updatedTask, showConfirmation = fals
 
 /**
  * Saves the task changes and updates the UI.
- * @param {Event} event - The form submission event.
+ * @param {string} taskId - The unique ID of the task.
  * @returns {Promise<void>}
  */
-async function saveTaskChangesAndUpdateUI(event) {
-    event.preventDefault();
-    const taskId = event.target.getAttribute("data-task-id");
-    if (!taskId) return console.error("❌ No Task ID found!");
+async function saveTaskChangesAndUpdateUI(taskId) {
     const existingTask = await fetchTaskData(taskId);
     if (!existingTask) return console.error(`❌ Task ${taskId} not found in database.`);
+
+    const assignedContacts = getEditedAssignedContacts();
     const updatedTask = {
         ...getUpdatedTaskData(),
-        assignedTo: getEditedAssignedContacts().length > 0
-            ? getEditedAssignedContacts()
-            : existingTask.assignedTo || [],
-        subtasks: getEditedSubtasks() || []
+        assignedTo: assignedContacts.length > 0 ? assignedContacts : existingTask.assignedTo || [],
+        subtasks: getEditedSubtasks()
     };
+
     console.log("🔍 Saving task changes for task ID:", taskId, updatedTask);
     await updateTaskInDatabase(taskId, updatedTask, true);
 }
@@ -88,31 +83,8 @@ function getUpdatedTaskData() {
         description: document.getElementById("edit-task-description").value,
         dueDate: document.getElementById("edit-due-date").value,
         priority: getSelectedPriority(),
-        assignedTo: getEditedAssignedContacts() || [],
-        subtasks: getEditedSubtasks().length ? getEditedSubtasks() : []
+        subtasks: getEditedSubtasks()
     };
-}
-
-
-/**
- * Saves the edited assigned contacts to the backend.
- * @param {Array<Object>} contacts - List of assigned contacts.
- * @returns {Promise<void>} A promise that resolves when the contacts are saved.
- */
-async function saveEditedContacts(contacts) {
-    const taskId = document.getElementById('task-id').value;
-    try {
-        const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}/contacts.json`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(contacts)
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-    } catch (error) {
-        console.error('Error saving edited contacts:', error);
-    }
 }
 
 
@@ -121,29 +93,14 @@ async function saveEditedContacts(contacts) {
  * @returns {Promise<void>} A promise that resolves when the task is saved.
  */
 async function saveEditedTask() {
+    if (!taskId) return console.error("❌ Task ID not found!");
+
     try {
-        await saveEditedContacts(getEditedAssignedContacts());
-        const taskId = document.getElementById('task-id').value;
-        const taskDetails = getEditedTaskDetails();
-        const response = await updateTaskInDatabase(taskId, taskDetails);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        console.log('Task saved successfully.');
+        await saveTaskChangesAndUpdateUI(taskId);
         showEditConfirmation();
     } catch (error) {
-        console.error('Error saving task:', error);
+        console.error("❌ Error saving task:", error);
     }
 }
 
 
-/**
- * Retrieves the edited task details from the input fields.
- * @returns {Object} The task details including title, description, due date, and priority.
- */
-function getEditedTaskDetails() {
-    return {
-        title: document.getElementById('edit-task-title').value,
-        description: document.getElementById('edit-task-description').value,
-        dueDate: document.getElementById('edit-due-date').value,
-        priority: getSelectedPriority().priorityText
-    };
-}
