@@ -27,10 +27,8 @@ function formatDate(dueDate) {
  * @param {Object} task - The task object containing details.
  */
 function openTaskDetailModal(task) {
-    if (!task) {
-        console.error("No task data available!");
-        return;
-    }
+    if (!task) return console.error("No task data available!");
+       
     const overlay = document.getElementById("taskDetailOverlay");
     const taskDetailContent = document.getElementById("taskDetailContent");
     let subtasksHTML = generateSubtasks(task);
@@ -62,13 +60,12 @@ async function openEditTaskModal(taskId) {
         await waitForModal("editTaskModal");
         populateEditTaskFields(taskData);
 
-        setTimeout(() => console.log("Contacts retrieved:", getEditedAssignedContacts()), 500);
+        setTimeout(() => getEditedAssignedContacts(), 500);
         showEditTaskModal();
     } catch (error) {
         console.error("❌ Error loading task data:", error);
     }
 }
-
 
 
 /**
@@ -100,7 +97,6 @@ function showEditTaskModal() {
     resetSelectedContacts();
     selectedContacts.clear();
 }
-
 
 
 /**
@@ -321,6 +317,11 @@ function setupEditTaskEventListeners(editAssignmentButton, editContactsContainer
     document.addEventListener("click", (event) => {
         handleOutsideClick(event, editContactsContainer, ".assignment-btn");
     });
+
+    editContactsList.querySelectorAll(".contact-item").forEach(contactItem => {
+        const isPreselected = contactItem.classList.contains("preselected");
+        contactItem.addEventListener("click", () => handleEditContactClick(contactItem, isPreselected));
+    });
 }
 
 
@@ -373,13 +374,19 @@ function getPreselectedContacts() {
  * @param {HTMLElement} contactItem - The contact element to be removed.
  */
 function removePreselectedContact(contactItem) {
-    const selectedContacts = new Set();
     const name = contactItem.getAttribute("data-name");
     if (!name) return console.warn("data-name attribute not found for contact item. Skipping.");
     const trimmedName = name.trim();
     selectedContacts.delete(trimmedName);
-}
 
+    const container = document.getElementById("edit-selected-contacts-container");
+    if (container) {
+        const contactElements = container.querySelectorAll(`[data-name="${trimmedName}"]`);
+        contactElements.forEach(element => {
+            element.remove();
+        });
+    }
+}
 
 /**
  * Closes the edit task modal when clicking outside of it and restores the task detail modal.
@@ -388,6 +395,7 @@ function removePreselectedContact(contactItem) {
 document.getElementById("taskDetailOverlay").addEventListener("click", function (event) {
     if (event.target === this) {
         closeEditTaskModal();
-        restoreTaskDetailModal(); // Stellt sicher, dass Task Detail sichtbar bleibt
+        restoreTaskDetailModal(); 
     }
 });
+
