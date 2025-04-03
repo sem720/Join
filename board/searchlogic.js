@@ -109,8 +109,8 @@ function setupSearchEventListeners() {
     const searchIcon = document.getElementById('search-icon');
     const searchInput = document.getElementById('findTask'); 
 
-    if (!searchIcon) return console.error("❌ searchIcon not found!"); 
-    if (!searchInput) return console.error("❌ searchInput not found!");
+    if (!searchIcon) return; 
+    if (!searchInput) return;
 
    searchIcon.addEventListener('click', resetSearch);
    searchInput.addEventListener('keydown', handleEnterKeyPress);
