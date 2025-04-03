@@ -8,7 +8,7 @@ async function handleEditTaskSubmit(event) {
 
     const form = event.target;
     const taskId = form.getAttribute("data-task-id");
-    if (!taskId) return console.error("❌ Fehler: Keine Task-ID gefunden!");
+    if (!taskId) return;
         
     await saveSelectedContactsToBackend(taskId);
     await saveTaskChangesAndUpdateUI(taskId);
@@ -23,7 +23,6 @@ async function handleEditTaskSubmit(event) {
  */
 async function saveSelectedContactsToBackend(taskId) {
     const assignedContacts = getEditedAssignedContacts();
-    console.log("🔍 Saving selected contacts for task ID:", taskId, { assignedTo: assignedContacts });
     await updateTaskInDatabase(taskId, { assignedTo: assignedContacts }, false);
 }
 
@@ -41,13 +40,12 @@ async function updateTaskInDatabase(taskId, updatedTask, showConfirmation = fals
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updatedTask)
         });
-
         await fetchTasks();
         closeEditTaskModal();
         closeTaskDetailModal();
         if (showConfirmation) showEditConfirmation();
     } catch (error) {
-        console.error("❌ Error saving task changes:", error);
+        throw error;
     }
 }
 
@@ -59,7 +57,7 @@ async function updateTaskInDatabase(taskId, updatedTask, showConfirmation = fals
  */
 async function saveTaskChangesAndUpdateUI(taskId) {
     const existingTask = await fetchTaskData(taskId);
-    if (!existingTask) return console.error(`❌ Task ${taskId} not found in database.`);
+    if (!existingTask) return;
 
     const assignedContacts = getEditedAssignedContacts();
     const updatedTask = {
@@ -68,7 +66,6 @@ async function saveTaskChangesAndUpdateUI(taskId) {
         subtasks: getEditedSubtasks()
     };
 
-    console.log("🔍 Saving task changes for task ID:", taskId, updatedTask);
     await updateTaskInDatabase(taskId, updatedTask, true);
 }
 
@@ -93,13 +90,13 @@ function getUpdatedTaskData() {
  * @returns {Promise<void>} A promise that resolves when the task is saved.
  */
 async function saveEditedTask() {
-    if (!taskId) return console.error("❌ Task ID not found!");
+    if (!taskId) return;
 
     try {
         await saveTaskChangesAndUpdateUI(taskId);
         showEditConfirmation();
     } catch (error) {
-        console.error("❌ Error saving task:", error);
+        throw error;
     }
 }
 
