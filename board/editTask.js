@@ -21,7 +21,6 @@ function setEditPriority(priority) {
  */
 function isValidPriority(priority) {
     if (!priority || !priority.priorityText) {
-        console.warn("⚠️ Invalid priority provided.");
         return false;
     }
     return true;
@@ -90,7 +89,7 @@ function getSelectedPriority() {
  * @returns {string} The image path for the given priority.
  */
 function getPriorityImage(priorityText, isDefault) {
-    if (isDefault) console.warn("⚠️ No active priority button found, using default.");
+    if (isDefault) 
     return {
         Low: "/assets/imgs/low.png",
         Medium: "/assets/imgs/medium.png",
@@ -155,7 +154,7 @@ function renderSubtasks() {
  */
 function editSubtaskInEditModal(index) {
     const subtaskItem = document.querySelector(`#subtask-${index}`);
-    if (!subtaskItem) return console.error("❌ Subtask not found!");
+    if (!subtaskItem) return;
     const inputField = createSubtaskInput(subtaskItem);
     const saveIcon = subtaskItem.querySelector(".save-subtask-icon");
     saveIcon.classList.remove("hidden");
@@ -238,13 +237,11 @@ function setEditAssignedContacts(contacts) {
 function getEditedAssignedContacts() {
     const container = document.querySelector("#edit-selected-contacts-container");
     if (!container) {
-        console.error("❌ Container not found!");
         return [];
     }
    
     const contactElements = container.querySelectorAll(".avatar-board-card");
     if (contactElements.length === 0) {
-        console.warn("⚠️ No contact elements found in the container.");
         return []; 
     }
     const contacts = Array.from(contactElements).map(parseContactElement);
@@ -273,7 +270,7 @@ function parseContactElement(contactElement) {
  * @returns {string} The full name or "Unknown User" if not found.
  */
 function findContactName(initials) {
-    if (!allContacts.size) return console.warn("⚠️ `allContacts` is empty."), "Unknown User";
+    if (!allContacts.size) return;
     const contact = [...allContacts.values()].find(c => getInitials(c.name) === initials);
     return contact ? contact.name : "Unknown User";
 }
@@ -341,9 +338,9 @@ function formatDateForInput(dueDate) {
 function setupEditDateReset() {
     const dateInput = document.getElementById("edit-due-date");
     const calendarIcon = document.getElementById("edit-calendar-icon");
-    if (!dateInput || !dateInput._flatpickr) return console.error("Edit date input or Flatpickr instance not found.");
+    if (!dateInput || !dateInput._flatpickr) return;
     calendarIcon.addEventListener("click", function () {
-        dateInput._flatpickr.clear();  // ✅ Clears the date
+        dateInput._flatpickr.clear();  
     });
 }
 
@@ -355,9 +352,8 @@ function setupEditDateReset() {
 function handleEditCalendarClick() {
     const calendarIcon = document.getElementById("edit-calendar-icon");
     const dateInput = document.getElementById("edit-due-date");
-    if (!calendarIcon || !dateInput || !dateInput._flatpickr) return console.error("❌ Flatpickr or elements not initialized properly.");
+    if (!calendarIcon || !dateInput || !dateInput._flatpickr) return;
     calendarIcon.addEventListener("click", () => {
-        console.log("Calendar icon clicked!");
         dateInput._flatpickr.isOpen ? dateInput._flatpickr.close() : dateInput._flatpickr.open();
     });
 }
