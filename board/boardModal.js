@@ -101,7 +101,6 @@ function closeModal() {
     }, 400);
 
     updateSelectedContactsDisplay("selected-contacts-container");
-
     document.querySelectorAll(".contact-checkbox").forEach(checkbox => checkbox.checked = false);
     selectedContacts.clear();
 }
