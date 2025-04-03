@@ -57,12 +57,11 @@ async function openEditTaskModal(taskId) {
     try {
         const taskData = await fetchTaskData(taskId);
         if (!taskData) throw new Error("❌ No task data found!");
-
         hideTaskDetailModal();
         loadEditTaskTemplate(taskId);
         await waitForModal("editTaskModal");
         populateEditTaskFields(taskData);
-        
+
         setTimeout(() => console.log("Contacts retrieved:", getEditedAssignedContacts()), 500);
         showEditTaskModal();
     } catch (error) {
@@ -377,11 +376,9 @@ function removePreselectedContact(contactItem) {
     const selectedContacts = new Set();
     const name = contactItem.getAttribute("data-name");
     if (!name) return console.warn("data-name attribute not found for contact item. Skipping.");
-        
     const trimmedName = name.trim();
     selectedContacts.delete(trimmedName);
 }
-
 
 
 /**

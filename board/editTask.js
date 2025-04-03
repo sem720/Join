@@ -227,10 +227,7 @@ function setEditAssignedContacts(contacts) {
                     ${contact.avatar.initials}
                 </div>`;
     }).join("");
-   
     container.innerHTML = content;
-
-    
 }
 
 
@@ -244,13 +241,12 @@ function getEditedAssignedContacts() {
         console.error("❌ Container not found!");
         return [];
     }
-
     const contactElements = container.querySelectorAll(".avatar-board-card");
     if (contactElements.length === 0) console.warn("⚠️ No contact elements found in the container.");
-    
     const contacts = Array.from(contactElements).map(parseContactElement);
     return contacts;
 }
+
 
 /**
  * Extracts contact details from a contact element.
@@ -334,22 +330,6 @@ function formatDateForInput(dueDate) {
 }
 
 
-//attaching click to calendar icon
-// function setupEditCalendarIcon() {
-//     const dateInput = document.getElementById("edit-due-date");
-//     const calendarIcon = document.getElementById("edit-calendar-icon");
-
-//     if (!dateInput || !calendarIcon) return console.error("Edit date input or calendar icon not found.");
-
-//     calendarIcon.addEventListener("click", function () {
-//         if (!dateInput._flatpickr) return console.error("Flatpickr is not initialized on #edit-due-date.");
-
-//         // ✅ Toggle calendar: If open, close it; if closed, open it
-//         dateInput._flatpickr.isOpen ? dateInput._flatpickr.close() : dateInput._flatpickr.open();
-//     });
-// }
-
-
 /**
  * Sets up the reset functionality for the edit due date input.
  * When the calendar icon is clicked, the selected date is cleared.
@@ -392,5 +372,3 @@ function initEditTaskFlatpickr() {
     handleEditCalendarClick();
     setupEditDateReset();
 }
-
-
