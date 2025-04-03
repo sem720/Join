@@ -1,5 +1,5 @@
 /**
- * Initializes the date input field by adding an event listener for the "input" event.
+ * Initializes the date input field by adding event listeners for the "input" and "change" events.
  * When the input field has a value, the "has-value" class is added; otherwise, it is removed.
  * Logs an error if the input field with the ID 'due-date' is not found.
  */
@@ -45,9 +45,7 @@ function setupCalendarIcon() {
 function setupDateReset() {
   const dateInput = document.getElementById("due-date");
   
-  if (dateInput) {
-      dateInput.addEventListener('click', (event) => handleDateReset(event, dateInput));
-  }
+  if (dateInput) dateInput.addEventListener('click', (event) => handleDateReset(event, dateInput));
 }
 
 
