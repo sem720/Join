@@ -118,6 +118,7 @@
     overflow-y: auto;
     height: 90vh;
     max-height: 800px;
+    max-width: 600px;
 }
 
 #taskDetailOverlay.active #taskDetailModal,
