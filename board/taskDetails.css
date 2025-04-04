@@ -115,8 +115,8 @@ li {
     font-size: 52px;
     font-weight: bold;
     margin-top: 32px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .task-detail-content {
