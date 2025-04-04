@@ -48,25 +48,6 @@ function initAddTaskContacts(listId) {
 
 
 /**
- * Adds a click event listener to all `.assignment-btn` buttons to toggle the visibility of the contacts list.
- */
-function setupAssignmentButtons() {
-    document.querySelectorAll(".assignment-btn").forEach((button) => {
-        button.addEventListener("click", (event) => {
-
-            const containerId = button.getAttribute("data-container-id");
-            const listId = button.getAttribute("data-list-id");
-            const selectedContainerId = button.getAttribute("data-selected-id");
-
-            if (!listId) return console.error("❌ listId is undefined! Check the button's data attributes.");
-
-            toggleContacts(event, containerId, listId, selectedContainerId);
-        });
-    });
-}
-
-
-/**
  * Handles keydown events when the focus is outside the assignment button or contact field.
  * Prevents opening the contacts list when Enter is pressed.
  * 
@@ -94,7 +75,7 @@ function toggleContacts(event, containerId, listId) {
     const button = event.target.closest(".assignment-btn"); 
     const dropdownIcon = button?.querySelector("img"); 
 
-    if (!contactsContainer || !contactsList) return console.error(`❌ Missing container: ${containerId} or ${listId}`);
+    if (!contactsContainer || !contactsList) return;
 
     const isOpen = contactsContainer.classList.toggle("visible");
     contactsContainer.classList.toggle("hidden", !isOpen);
@@ -116,16 +97,58 @@ function setupOutsideClickListener() {
 
 
 /**
- * Closes the contact menu when clicking outside.
+ * Handles outside click to close the dropdown options and contacts-container when clicked outside.
  *
  * @param {Event} event - The click event.
  */
 function handleOutsideClick(event) {
-    const menu = document.getElementById("contacts-container");
-    
-    if (!shouldCloseDropdown(menu, event)) return;
-    
-    closeDropdownMenu(menu);
+    const dropdownMenu = document.querySelector(".dropdown-options"); 
+    const contactsMenu = document.getElementById("contacts-container");
+    const dropdownIcon = document.querySelector("#dropdown-btn img");
+
+    if (shouldCloseDropdownMenu(dropdownMenu, event)) {
+        closeDropdownMenuAndResetIcon(dropdownMenu, dropdownIcon);
+    }
+
+    if (shouldCloseDropdown(contactsMenu, event)) {
+        closeContactsMenuAndResetState(contactsMenu);
+    }
+}
+
+
+/**
+ * Determines whether the dropdown menu should be closed based on the event target.
+ * 
+ * @param {HTMLElement} dropdownMenu - The dropdown menu element.
+ * @param {Event} event - The event triggered by the outside click.
+ * @returns {boolean} - Whether the dropdown menu should be closed.
+ */
+function shouldCloseDropdownMenu(dropdownMenu, event) {
+    return dropdownMenu && dropdownMenu.style.display === "block" && 
+           !dropdownMenu.contains(event.target) && 
+           !event.target.closest("#dropdown-btn");
+}
+
+
+/**
+ * Closes the dropdown menu and updates the dropdown icon.
+ * 
+ * @param {HTMLElement} dropdownMenu - The dropdown menu element.
+ * @param {HTMLElement} dropdownIcon - The dropdown icon element.
+ */
+function closeDropdownMenuAndResetIcon(dropdownMenu, dropdownIcon) {
+    dropdownMenu.style.display = "none";
+    updateDropdownIcon(false, dropdownIcon);
+}
+
+
+/**
+ * Closes the contacts menu and resets its state.
+ * 
+ * @param {HTMLElement} contactsMenu - The contacts menu element.
+ */
+function closeContactsMenuAndResetState(contactsMenu) {
+    closeDropdownMenu(contactsMenu);
     resetDropdownState();
     closeContacts("edit-contacts-container", "edit-contacts-list", "edit-selected-contacts-container");
 }
@@ -163,18 +186,6 @@ function resetDropdownState() {
     const button = document.querySelector(".assignment-btn");
     const dropdownIcon = button?.querySelector("img");
     updateDropdownIcon(false, dropdownIcon);
-}
-
-
-/**
- * Updates the dropdown icon to indicate whether the contacts list is open or closed.
- * 
- * @param {boolean} isOpen - If true, the icon indicates that the contacts list is open; otherwise, it indicates closed.
- */
-function updateDropdownIcon(isOpen, iconElement) {
-    if (iconElement) {
-        iconElement.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
-    }
 }
 
 
