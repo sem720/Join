@@ -238,11 +238,14 @@ function getSelectedCategory() {
  * @returns {Array<{text: string, completed: boolean}>} An array of subtasks.
  */
 function getTaskSubtasks() {
-    return Array.from(document.querySelectorAll(".subtask-item")).map(subtask => ({
-        text: subtask.textContent.trim(),
-        completed: false
-    }));
+    return Array.from(document.querySelectorAll(".subtask-item")).map(subtask => {
+        let text = subtask.textContent.trim(); 
+        text = text.replace(/^[•●▪▸►☑✔☐-]+/g, "").trim(); 
+        return { text, completed: false };
+    });
 }
+
+
 
 
 /** ================================
