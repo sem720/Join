@@ -13,17 +13,11 @@
  */
 function taskCardTemplate(task) {
     let categoryColor = task.category === "User Story" ? "#0039fe" : "#1fd7c1";
-
     let totalSubtasks = task.subtasks ? task.subtasks.length : 0;
     let completedSubtasks = task.subtasks ? task.subtasks.filter(s => s.completed).length : 0;
     let progressPercent = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
 
-    const avatarsHTML = task.assignedTo && Array.isArray(task.assignedTo)
-        ? task.assignedTo.map(user => {
-            const avatar = user.avatar || { bgcolor: "#ccc", initials: "?" };
-            return `<div class="avatar-board-card" style="background-color: ${avatar.bgcolor};">${avatar.initials}</div>`;
-        }).join("")
-        : "";
+    const avatarsHTML = getAvatarsHTML(task.assignedTo);
 
     return `
         <div class="task-category" style="background-color: ${categoryColor};">
@@ -239,10 +233,18 @@ function editTaskTempl(taskId) {
  * @returns {string} The generated avatar HTML.
  */
 function getAvatarsHTML(assignedTo) {
-    return assignedTo ? assignedTo.map(user => {
+    if (!assignedTo || assignedTo.length === 0) return "";
+    const maxVisible = 4;
+    const visibleUsers = assignedTo.slice(0, maxVisible);
+    const extraCount = assignedTo.length - maxVisible;
+    const avatarsHTML = visibleUsers.map(user => {
         const avatar = user.avatar || { bgcolor: "#ccc", initials: "?" };
         return `<div class="avatar-board-card" style="background-color: ${avatar.bgcolor};">${avatar.initials}</div>`;
-    }).join("") : "";
+    }).join("");
+    const extraHTML = extraCount > 0
+        ? `<div class="avatar-board-card" style="background-color: #777;">+${extraCount}</div>`
+        : "";
+    return avatarsHTML + extraHTML;
 }
 
 

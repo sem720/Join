@@ -28,7 +28,6 @@ function formatDate(dueDate) {
  */
 function openTaskDetailModal(task) {
     if (!task) return console.error("No task data available!");
-       
     const overlay = document.getElementById("taskDetailOverlay");
     const taskDetailContent = document.getElementById("taskDetailContent");
     let subtasksHTML = generateSubtasks(task);
@@ -395,7 +394,7 @@ function removePreselectedContact(contactItem) {
 document.getElementById("taskDetailOverlay").addEventListener("click", function (event) {
     if (event.target === this) {
         closeEditTaskModal();
-        restoreTaskDetailModal(); 
+        restoreTaskDetailModal();
     }
 });
 
