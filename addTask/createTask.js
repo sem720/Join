@@ -92,9 +92,8 @@ function getMainCategory() {
  * @returns {string} The formatted input value.
  */
 function getValue(selector) {
-    return formatText(document.querySelector(selector)?.value.trim() || "");
+    return document.querySelector(selector)?.value.trim() || "";
 }
-
 
 /**
  * Clears the task form fields and resets validation states.
@@ -239,12 +238,10 @@ function getSelectedCategory() {
  * @returns {Array<{text: string, completed: boolean}>} An array of subtasks.
  */
 function getTaskSubtasks() {
-    const subtasks = Array.from(document.querySelectorAll(".subtask-item")).map(subtask => ({
-        text: formatText(subtask.textContent),
+    return Array.from(document.querySelectorAll(".subtask-item")).map(subtask => ({
+        text: subtask.textContent.trim(),
         completed: false
     }));
-
-    return subtasks;
 }
 
 
