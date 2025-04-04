@@ -158,7 +158,7 @@ async function updateTaskCategory(taskElement, newColumnId) {
         let taskData = await fetchTaskData(taskId);
         taskData.mainCategory = newCategory;
         await saveTaskCategory(taskId, newCategory);
-        console.log(`✅ Task ${taskId} successfully moved to "${newCategory}" and saved.`);
+        // console.log(`✅ Task ${taskId} successfully moved to "${newCategory}" and saved.`);
     } catch (error) {
         console.error("❌ Error updating task category:", error);
     }

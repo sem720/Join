@@ -85,7 +85,7 @@ function handleDrop(event) {
     if (draggedTask) {
         const newColumn = event.target.closest(".column-body");
         const newColumnId = newColumn.parentElement.id;
-        console.log("newColumnId:", newColumnId);
+        // console.log("newColumnId:", newColumnId);
         newColumn.appendChild(draggedTask);
         updateTaskCategory(draggedTask, newColumnId);
         updateNoTaskVisibility();
