@@ -211,3 +211,34 @@ function getSubtaskHTML(editedText) {
         </div>
     `;
 }
+
+
+/**
+ * Adds a click event listener to all `.assignment-btn` buttons to toggle the visibility of the contacts list.
+ */
+function setupAssignmentButtons() {
+    document.querySelectorAll(".assignment-btn").forEach((button) => {
+        button.addEventListener("click", (event) => {
+
+            const containerId = button.getAttribute("data-container-id");
+            const listId = button.getAttribute("data-list-id");
+            const selectedContainerId = button.getAttribute("data-selected-id");
+
+            if (!listId) return;
+
+            toggleContacts(event, containerId, listId, selectedContainerId);
+        });
+    });
+}
+
+
+/**
+ * Updates the dropdown icon to indicate whether the contacts list is open or closed.
+ * 
+ * @param {boolean} isOpen - If true, the icon indicates that the contacts list is open; otherwise, it indicates closed.
+ */
+function updateDropdownIcon(isOpen, iconElement) {
+    if (iconElement) {
+        iconElement.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
+    }
+}
