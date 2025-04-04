@@ -89,13 +89,18 @@ function getSelectedPriority() {
  * @returns {string} The image path for the given priority.
  */
 function getPriorityImage(priorityText, isDefault) {
-    if (isDefault) 
-    return {
+    const images = {
         Low: "/assets/imgs/low.png",
         Medium: "/assets/imgs/medium.png",
         Urgent: "/assets/imgs/urgent.png"
-    }[priorityText] || "/assets/imgs/medium.png";
+    };
+
+    const formattedPriority = priorityText.charAt(0).toUpperCase() + priorityText.slice(1).toLowerCase();
+
+    return images[formattedPriority] || (isDefault ? "/assets/imgs/medium.png" : "");
 }
+
+
 
 
 let subtasksArray = []; // Global variable to store the subtasks
@@ -270,7 +275,7 @@ function parseContactElement(contactElement) {
  * @returns {string} The full name or "Unknown User" if not found.
  */
 function findContactName(initials) {
-    if (!allContacts.size) return;
+    if (!allContacts || allContacts.size === 0) return "Unknown User";  
     const contact = [...allContacts.values()].find(c => getInitials(c.name) === initials);
     return contact ? contact.name : "Unknown User";
 }
@@ -283,8 +288,8 @@ function findContactName(initials) {
  */
 function rgbToHex(rgb) {
     const match = rgb.match(/\d+/g);
-    if (!match || match.length < 3) return "#CCCCCC";
-    return `#${match.slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('')}`.toUpperCase();
+    if (!match || match.length < 3) return "#CCCCCC";  
+    return `#${match.slice(0, 3).map(x => Number(x).toString(16).padStart(2, '0')).join('')}`.toUpperCase();
 }
 
 
