@@ -18,6 +18,10 @@
     width: 100%;
 }
 
+#edit-subtasks {
+    padding-right: 70px;
+}
+
 #edit-subtask-wrapper {
     display: block;
     width: 100%;
