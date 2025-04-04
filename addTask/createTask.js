@@ -95,23 +95,82 @@ function getValue(selector) {
     return document.querySelector(selector)?.value.trim() || "";
 }
 
+
 /**
  * Clears the task form fields and resets validation states.
  */
 function clearTask() {
-    const selectedContacts = new Set();
-
-    ["task-name", "description", "subtasks"].forEach(id => document.getElementById(id).value = "");
+    clearFormFields(["task-name", "description", "subtasks"]);
     resetDateInput(document.getElementById("due-date"));
+    resetPriorityToMedium();
+    resetDropdown();
+    resetSelectedContacts();
+    resetErrors();
+    clearSubtasks();
+    checkFormValidity();
+}
 
+
+/**
+ * Clears form fields by their IDs.
+ * @param {Array} fieldIds - Array of element IDs to be cleared.
+ */
+function clearFormFields(fieldIds) {
+    fieldIds.forEach(id => document.getElementById(id).value = "");
+}
+
+
+/**
+ * Resets the dropdown to its initial state.
+ */
+function resetDropdown() {
     document.querySelector(".dropdown-btn").innerHTML = `Select task category <span class="icon-container"><img src="/assets/imgs/dropdown-black.png" alt="Dropdown Icon" id="dropdown-icon"></span>`;
-    document.getElementById("selected-contacts-container").innerHTML = "";
-    selectedContacts.clear();
+}
 
+
+/**
+ * Resets the selected contacts container.
+ */
+function resetSelectedContacts() {
+    document.getElementById("selected-contacts-container").innerHTML = "";
+}
+
+
+/**
+ * Clears all error messages and error classes.
+ */
+function resetErrors() {
     document.querySelectorAll(".error-message").forEach((error) => { error.style.display = "none"; });
     document.querySelectorAll(".error").forEach((el) => { el.classList.remove("error"); });
+}
 
-    checkFormValidity();
+
+/**
+ * Clears all subtasks (removes the subtask list items).
+ */
+function clearSubtasks() {
+    // Clear any input fields in the subtask items
+    document.querySelectorAll(".subtask-item input").forEach(input => input.value = "");
+
+    const subtaskList = document.getElementById("subtask-list");
+    if (subtaskList) {
+        subtaskList.innerHTML = "";  
+    }
+}
+
+
+/**
+ * Resets the priority to "medium" and deactivates any other active button.
+ */
+function resetPriorityToMedium() {
+    if (activeButton) deactivateButton(activeButton);
+    
+    const mediumButton = document.getElementById('medium');
+    if (mediumButton) {
+        activateButton(mediumButton);  
+        activeButton = mediumButton;  
+        
+    }
 }
 
 
