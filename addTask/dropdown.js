@@ -34,11 +34,11 @@ const defaultText = "Select task category";
  * When the dropdown is opened, it resets the selected category.
  */
 function toggleDropdown() {
-    const isOpen = dropdownContainer.classList.toggle("open");
-    dropdownList.style.display = isOpen ? "block" : "none";
-    dropdownBtn.querySelector("img").src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
-  
-    if (isOpen) resetDropdown();
+  const isOpen = dropdownContainer.classList.toggle("open");
+  dropdownList.style.display = isOpen ? "block" : "none";
+  const iconImg = dropdownBtn.querySelector("img");
+  const newSrc = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
+  iconImg.src = newSrc;
 }
 
 
