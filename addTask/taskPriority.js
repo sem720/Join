@@ -9,25 +9,26 @@ let activeButton = null;
 
 
 /**
- * Toggles the active state of the clicked button.
- * If the clicked button is already active, it will be deactivated.
- * If a new button is clicked, the previously active button is deactivated and the new one is activated.
- * 
+ * Handles toggling of active state for buttons.
+ * - If a button is already active and clicked again, it will be deactivated.
+ * - If a different button is clicked, the previous active button is deactivated and the new one is activated.
+ * - Also triggers a form validity check and disables the "create" button afterward.
+ *
  * @param {HTMLElement} clickedButton - The button element that was clicked.
  */
 function toggleButtons(clickedButton) {
     if (activeButton) deactivateButton(activeButton);
-    
+
     if (activeButton === clickedButton) {
         activeButton = null;
         return;
     }
-    
+
     activateButton(clickedButton);
     activeButton = clickedButton;
-    setTimeout(() => {checkFormValidity(); }, 0);
-    const btn = document.querySelector(".create-btn");
-    btn.setAttribute("disabled", "true"); 
+
+    setTimeout(checkFormValidity, 1);
+    document.querySelector(".create-btn").setAttribute("disabled", "true");
 }
 
 
