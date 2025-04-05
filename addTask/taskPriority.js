@@ -16,7 +16,7 @@ let activeButton = null;
  * @param {HTMLElement} clickedButton - The button element that was clicked.
  */
 function toggleButtons(clickedButton) {
-    if (activeButton) deactivateButton(activeButton);   
+    if (activeButton) deactivateButton(activeButton);
     
     if (activeButton === clickedButton) {
         activeButton = null;
@@ -25,6 +25,9 @@ function toggleButtons(clickedButton) {
     
     activateButton(clickedButton);
     activeButton = clickedButton;
+    setTimeout(() => {checkFormValidity(); }, 0);
+    const btn = document.querySelector(".create-btn");
+    btn.setAttribute("disabled", "true"); 
 }
 
 
