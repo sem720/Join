@@ -248,6 +248,7 @@ select {
 
 .assignment-container {
   position: relative;
+  height: 42px;
 }
 
 .contact-name {
@@ -338,14 +339,19 @@ select {
   height: 20px;
 }
 
-.selected-avatar {
-  border: 2px solid white;
+.contact-item.selected {
+  background-color: #091931;
+  border-radius: 8px;
 }
 
-.selected-name {
+.contact-item.selected .contact-name {
   color: white;
 }
 
-.selected-checkbox-image {
-  filter: invert(1);
+.contact-item.selected .avatar {
+  border: 2px solid white;
+}
+
+.contact-item.selected .checkbox-image {
+  filter: brightness(0) invert(1); /* makes it white */
 }
