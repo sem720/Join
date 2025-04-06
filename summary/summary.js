@@ -78,7 +78,7 @@ async function countUrgentTasks() {
 
     if (data) {
       urgentCount = Object.values(data).filter(
-        (task) => task.priority.text === "Urgent"
+        (task) => task.priority.priorityText === "Urgent"
       ).length;
     }
 
