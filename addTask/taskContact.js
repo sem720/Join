@@ -1,14 +1,4 @@
 /**
- * Map to store all contacts with their names as keys and associated details as values.
- */
-const allContacts = new Map();
-
-/**
- * Set to store selected contacts.
- */
-const selectedContacts = new Set();
-
-/**
  * Reference to the assignment button DOM element.
  */
 let assignmentButton;
@@ -239,54 +229,6 @@ function closeContacts(containerId, listId, selectedContainerId = null) {
 
 
 /**
- * Fetches the contacts data from an external source and processes it into a usable format.
- * 
- * @throws {Error} Throws an error if the HTTP request fails or the data is invalid.
- */
-async function fetchAndRenderContacts(listId) {
-    try {
-        const response = await fetch('https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/users.json');
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const data = await response.json();
-        if (!data) throw new Error("Keine Nutzerdaten gefunden.");
-
-        processContactsData(data);
-        listId ? renderContactsList(listId) : alert("Fehler: Ungültige ListID. Bitte versuchen Sie es später noch einmal.");
-    
-    } catch (error) {
-        alert("Es gab einen Fehler beim Laden der Kontaktdaten. Bitte versuchen Sie es später noch einmal.");
-        throw error;
-    }
-}
-
-
-/**
- * Processes the raw contacts data and stores it in the `allContacts` map.
- * 
- * @param {Object} data - The raw contacts data.
- */
-function processContactsData(data) {
-    allContacts.clear();
-    Object.values(data).forEach(user => {
-        let name = capitalizeName(user.name);
-        let bgcolor = user.bgcolor;
-        allContacts.set(name, { name, bgcolor });
-    });
-}
-
-
-/**
- * Gets the initials of preselected contacts if the edit modal is open.
- * @returns {string[]} List of preselected initials.
- */
-function getPreselectedInitials() {
-    if (typeof getPreselectedContacts !== "function") return [];
-
-    return getPreselectedContacts();
-}
-
-
-/**
  * Creates and appends a single contact element to the contact list.
  * 
  * @param {HTMLElement} contactsList - The container to append the contact to.
@@ -308,36 +250,46 @@ async function renderContactsList(listId) {
     const contactsList = document.getElementById(listId);
     if (!contactsList) return;
 
-    contactsList.innerHTML = '';
+    clearContactsList(contactsList);
     const preselectedInitials = getPreselectedInitials();
 
+    renderAllContacts(contactsList, preselectedInitials);
+    attachContactClickHandlers();
+}
+
+
+/**
+ * Clears the content of the contacts container.
+ * @param {HTMLElement} container - The container to clear.
+ */
+function clearContactsList(container) {
+    container.innerHTML = '';
+}
+
+
+/**
+ * Renders all contacts to the specified container.
+ * @param {HTMLElement} container - The container to render contacts into.
+ * @param {Array} preselectedInitials - List of initials that are preselected.
+ */
+function renderAllContacts(container, preselectedInitials) {
     allContacts.forEach(({ name, bgcolor }) => {
-        renderSingleContact(contactsList, name, bgcolor, preselectedInitials.includes(getInitials(name)));
+        const isPreselected = preselectedInitials.includes(getInitials(name));
+        renderSingleContact(container, name, bgcolor, isPreselected);
     });
 }
 
 
 /**
- * Creates a contact element to be displayed in the contacts list.
- * 
- * @param {string} name - The name of the contact.
- * @param {string} bgcolor - The background color associated with the contact.
- * @param {boolean} isPreselected - Whether the contact is preselected.
- * @returns {HTMLElement} The contact element.
+ * Attaches click handlers to all rendered contact items.
  */
-function createContactElement(name, bgcolor, isPreselected) {
-    const contactDiv = createElement("div", "contact-item");
-    contactDiv.setAttribute("data-name", name);
-    const nameSpan = createElement("span", "contact-name", name);
-
-    contactDiv.append(
-        createAvatar(name, bgcolor),
-        nameSpan,
-        createCheckbox(name)
-    );
-
-    contactDiv.addEventListener("click", () => handleContactClick(contactDiv, isPreselected));
-    return contactDiv;
+function attachContactClickHandlers() {
+    document.querySelectorAll(".contact-item").forEach(contactItem => {
+        contactItem.addEventListener("click", (event) => {
+            const isPreselected = contactItem.classList.contains("preselected");
+            handleContactClick(contactItem, isPreselected, event);
+        });
+    });
 }
 
 
@@ -352,34 +304,63 @@ function updateSelectedContactsDisplay(selectedContainerId) {
 
     selectedContainer.innerHTML = ""; 
 
-    selectedContacts.forEach(contact => {
-        const avatarDiv = document.createElement("div");
-        avatarDiv.classList.add("avatar", "avatar-board-card");
-        avatarDiv.style.backgroundColor = contact.bgcolor;
-        avatarDiv.textContent = getInitials(contact.name);
-        selectedContainer.appendChild(avatarDiv);
-    });
+    renderContactAvatars(selectedContainer, Array.from(selectedContacts));
 }
 
 
 /**
- * Toggles the selection state of a contact and updates the display of selected contacts.
+ * Renders the avatars of selected contacts in the specified container.
  * 
- * @param {string} name - The name of the contact.
+ * @param {HTMLElement} container - The container to append the avatars to.
+ * @param {Array} contacts - The array of selected contacts.
  */
-function toggleContactSelection(name) {
-    const contact = allContacts.get(name);
+function renderContactAvatars(container, contacts) {
+    const limit = 4;
+    const displayContacts = contacts.slice(0, limit);
+    const additionalContactsCount = contacts.length - displayContacts.length;
 
-    if (!contact) return;
+    displayContacts.forEach(contact => {
+        const avatarDiv = createContactAvatar(contact);
+        container.appendChild(avatarDiv);
+    });
 
-    if (selectedContacts.has(contact)) {
-        selectedContacts.delete(contact);
-    } else {
-        selectedContacts.add(contact);
+    if (additionalContactsCount > 0) {
+        const additionalAvatar = createAdditionalContactsAvatar(additionalContactsCount);
+        container.appendChild(additionalAvatar);
     }
-
-    updateSelectedContactsDisplay("selected-contacts-container");
-    updateSelectedContactsDisplay("edit-selected-contacts-container");
 }
+
+
+/**
+ * Creates a single contact avatar element.
+ * 
+ * @param {Object} contact - The contact object containing name and bgcolor.
+ * @returns {HTMLElement} The avatar element.
+ */
+function createContactAvatar(contact) {
+    const avatarDiv = document.createElement("div");
+    avatarDiv.classList.add("avatar", "avatar-board-card");
+    avatarDiv.style.backgroundColor = contact.bgcolor;
+    avatarDiv.textContent = getInitials(contact.name);
+    return avatarDiv;
+}
+
+
+/**
+ * Creates an avatar element for additional contacts.
+ * 
+ * @param {number} count - Number of additional contacts.
+ * @returns {HTMLElement} The additional contacts avatar element.
+ */
+function createAdditionalContactsAvatar(count) {
+    const avatarDiv = document.createElement("div");
+    avatarDiv.classList.add("avatar", "additional-contacts");
+    avatarDiv.style.backgroundColor = "#ccc";
+    avatarDiv.textContent = `+${count}`;
+    return avatarDiv;
+}
+
+
+
 
 
