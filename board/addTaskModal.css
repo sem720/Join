@@ -197,7 +197,7 @@
 
 #selected-contacts-container > div {
     display: flex;
-    margin-right: 4px;
+
 }
 
 #due-date.has-value {
