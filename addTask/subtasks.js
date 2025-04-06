@@ -97,6 +97,7 @@ function handleSubtaskInput() {
         showSubtaskActions();
     } else {
         addSubtaskBtn.style.display = "inline";
+        clearSubtask();
     }
 }
 
@@ -129,8 +130,9 @@ function showSubtaskActions() {
         const icons = createSubtaskIcons();
         iconContainer.append(...icons);
         inputField.parentElement.appendChild(iconContainer);
-    }
+    } 
 }
+
 
 
 /**
@@ -156,13 +158,17 @@ function createIcon(src, alt, className, eventHandler) {
  */
 function clearSubtask() {
     const inputField = document.getElementById("subtasks");
-    const iconContainer = document.querySelector(".subtask-action");
     const addSubtaskBtn = document.querySelector(".add-subtask-icon");
-
+    
     inputField.value = "";
-    iconContainer?.remove();
+    
+    const iconContainer = document.querySelector(".subtask-action");
+    if (iconContainer) iconContainer.remove();
+
     addSubtaskBtn.style.display = "inline";
 }
+
+
 
 
 /**
