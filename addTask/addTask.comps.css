@@ -196,3 +196,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .visible {
     display: block;
 }
+
+.avatar.additional-contacts {
+    background-color: #777 !important;
+}
