@@ -11,7 +11,7 @@ function setupEditSubtaskInput() {
         inputField.addEventListener("keydown", handleEditSubtaskKeydown);
         inputField.addEventListener("input", handleEditSubtaskInput);
     } else {
-        throw error;
+        throw new Error("Input field not found");
     }
 }
 
@@ -23,14 +23,14 @@ function handleEditSubtaskInput() {
     const inputField = document.getElementById("edit-subtasks");
     const addSubtaskBtn = document.querySelector("#edit-subtask-wrapper .add-subtask-icon");
 
-    if (!inputField) return;
-    if (!addSubtaskBtn) return;
-        
+    if (!inputField || !addSubtaskBtn) return;
+
     if (inputField.value.trim()) {
         addSubtaskBtn.style.display = "none";
         showEditSubtaskActions();
     } else {
-        addSubtaskBtn.style.setProperty("display", "block", "important");
+        removeEditSubtaskActions();
+        addSubtaskBtn.style.display = "block";
     }
 }
 
@@ -85,14 +85,19 @@ function showEditSubtaskActions() {
  * Removes subtask action icons and restores the "Add Subtask" button.
  */
 function removeEditSubtaskActions() {
-    document.querySelector(".subtask-action")?.remove();
-
+    const inputField = document.getElementById("edit-subtasks");
     const addSubtaskBtn = document.querySelector("#edit-subtask-wrapper .add-subtask-icon");
-    if (addSubtaskBtn) {
-        addSubtaskBtn.style.display = "flex";
-        addSubtaskBtn.src = "/assets/imgs/add-subtask.png";
-    }
+
+    if (!inputField) return;
+    inputField.value = "";
+    
+    const parentElement = inputField.parentElement;
+    const iconContainer = parentElement.querySelector(".subtask-action");
+
+    if (iconContainer) iconContainer.remove();  
+    addSubtaskBtn && (addSubtaskBtn.style.display = "flex", addSubtaskBtn.src = "/assets/imgs/add-subtask.png");
 }
+
 
 
 /**
@@ -194,4 +199,5 @@ function attachEnterHandler(input, li) {
         }
     });
 }
+
 
