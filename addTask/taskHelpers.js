@@ -242,3 +242,26 @@ function updateDropdownIcon(isOpen, iconElement) {
         iconElement.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
     }
 }
+
+
+/**
+ * Creates a contact element to be displayed in the contacts list.
+ * 
+ * @param {string} name - The name of the contact.
+ * @param {string} bgcolor - The background color associated with the contact.
+ * @param {boolean} isPreselected - Whether the contact is preselected.
+ * @returns {HTMLElement} The contact element.
+ */
+function createContactElement(name, bgcolor) {
+    const contactDiv = createElement("div", "contact-item");
+    contactDiv.setAttribute("data-name", name);
+    const nameSpan = createElement("span", "contact-name", name);
+
+    contactDiv.append(
+        createAvatar(name, bgcolor),
+        nameSpan,
+        createCheckbox(name)
+    );
+    
+    return contactDiv;
+}
