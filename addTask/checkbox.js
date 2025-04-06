@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /**
  * Handles the change event on the checkbox and updates the contact selection.
  * 
