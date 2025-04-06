@@ -44,6 +44,7 @@ function init() {
     initEventListeners();
     setupCalendarIcon();
     clearTask();
+    clearSubtask();
     initAddTaskContacts("contacts-list");
     initFormValidation(); 
     renderContactsList("contacts-list");
