@@ -43,18 +43,50 @@ function createCheckbox(name, avatar) {
  * 
  * @param {HTMLElement} contactItem - The contact element being clicked.
  * @param {boolean} isPreselected - Whether the contact is preselected.
+ * @param {MouseEvent} event - The click event.
  */
-function handleContactClick(contactItem, isPreselected) {
+function handleContactClick(contactItem, isPreselected, event) {
     if (isPreselected) return removePreselectedContact(contactItem);
-       
-    contactItem.classList.toggle("selected");
+    if (clickedInsideCheckbox(event)) return;
+    const isSelected = toggleContactVisualState(contactItem);
+    toggleContactSelection(contactItem.dataset.name, isSelected);
+}
+
+
+/**
+ * Checks if the click event happened on a checkbox or its image.
+ * 
+ * @param {MouseEvent} event - The click event.
+ * @returns {boolean} - True if the target was a checkbox or image, false otherwise.
+ */
+function clickedInsideCheckbox(event) {
+    const target = event.target;
+    return target.classList.contains("contact-checkbox") ||
+           target.classList.contains("checkbox-image");
+}
+
+
+/**
+ * Toggles the visual state of the contact item (selected/unselected).
+ * Also updates the checkbox and related elements.
+ * 
+ * @param {HTMLElement} contactItem - The contact DOM element.
+ * @returns {boolean} - The new selection state (true if selected).
+ */
+function toggleContactVisualState(contactItem) {
+    const isSelected = contactItem.classList.toggle("selected");
     const avatar = contactItem.querySelector(".avatar");
     const nameSpan = contactItem.querySelector(".contact-name");
+    const checkbox = contactItem.querySelector(".contact-checkbox");
     const checkboxImg = contactItem.querySelector(".checkbox-image");
 
-    avatar?.classList.toggle("selected-avatar");
-    nameSpan?.classList.toggle("selected-name");
-    checkboxImg?.classList.toggle("selected-checkbox-image");
+    avatar?.classList.toggle("selected-avatar", isSelected);
+    nameSpan?.classList.toggle("selected-name", isSelected);
+    checkboxImg?.classList.toggle("selected-checkbox-image", isSelected);
+    checkbox.checked = isSelected;
+    toggleCheckboxVisibility(checkbox, checkboxImg, isSelected);
+
+    return isSelected;
 }
 
 
