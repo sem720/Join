@@ -58,7 +58,8 @@ async function openEditTaskModal(taskId) {
         loadEditTaskTemplate(taskId);
         await waitForModal("editTaskModal");
         populateEditTaskFields(taskData);
-
+        showEditSubtaskActions();
+        removeEditSubtaskActions();
         setTimeout(() => getEditedAssignedContacts(), 500);
         showEditTaskModal();
     } catch (error) {
