@@ -146,4 +146,15 @@
   .vis-none {
     display: block;
   }
+
+  .menu {
+    height: 200px;
+    bottom: -220px;
+  }
+}
+
+@media (min-width: 670px) {
+  .help-mobile {
+    display: none;
+  }
 }
