@@ -164,3 +164,13 @@ address span {
 .d_none {
   display: none;
 }
+
+.menu {
+  bottom: -150px;
+}
+
+@media (max-width: 670px) {
+  .menu {
+    bottom: -200px !important;
+  }
+}

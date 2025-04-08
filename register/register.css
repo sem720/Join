@@ -319,7 +319,9 @@ body {
 }
 
 @media (min-width: 320px) and (max-width: 400px) {
-  .form, .div-input, .div-input input{
+  .form,
+  .div-input,
+  .div-input input {
     width: 90%;
   }
 
@@ -353,5 +355,4 @@ body {
   .checkbox-privacy {
     padding: 16px 0 8px 0;
   }
-  
 }

@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Board</title>
     <link rel="stylesheet" href="/root.css" />
-    <link rel="stylesheet" href="/board/board.css" />
     <link rel="stylesheet" href="/comp/components.css" />
     <link rel="stylesheet" href="/comp/navbar/navbar.css" />
     <link rel="stylesheet" href="/comp/sidebar/sidebar.css" />
+    <link rel="stylesheet" href="/board/board.css" />
     <link rel="stylesheet" href="./addTaskModal.css" />
     <link rel="stylesheet" href="/addTask/addTask.main.css" />
     <link rel="stylesheet" href="./taskDetails.css" />
@@ -489,14 +489,14 @@
           dateFormat: "d/m/Y",
           allowInput: true,
           placeholder: "dd/mm/yyyy",
-          onChange: function(selectedDates, dateStr, instance) {
+          onChange: function (selectedDates, dateStr, instance) {
             const dateInputElement = document.getElementById("due-date");
             if (dateInputElement) {
-              dateInputElement.classList.add('has-value');
+              dateInputElement.classList.add("has-value");
             }
-          }
+          },
         });
-    
+
         flatpickr("#edit-due-date", {
           dateFormat: "d/m/Y",
           allowInput: true,
@@ -504,6 +504,5 @@
         });
       });
     </script>
-    
   </body>
 </html>

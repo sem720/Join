@@ -17,7 +17,7 @@
 .navbar-wrap {
   position: fixed;
   top: 0;
-  left: 240px;
+  left: 240px !important;
   right: 0;
   z-index: 9;
 }
@@ -152,6 +152,34 @@ address span {
 
   .help-container {
     padding: 24px;
+  }
+}
+
+@media (max-width: 670px) {
+  .navbar-wrap {
+    position: fixed;
+    top: 0;
+    left: 0 !important;
+    right: 0;
+    z-index: 9;
+  }
+
+  .help-container {
+    margin-top: 80px !important;
+  }
+
+  .div-navigation {
+    display: flex;
+  }
+}
+
+.menu {
+  bottom: -150px;
+}
+
+@media (max-width: 670px) {
+  .menu {
+    bottom: -200px !important;
   }
 }
 

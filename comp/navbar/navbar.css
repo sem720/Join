@@ -149,7 +149,7 @@
 
   .menu {
     height: 200px;
-    bottom: -220px;
+    bottom: -220px !important;
   }
 }
 
