@@ -125,12 +125,84 @@ function setupEditContactOutsideClickHandler() {
     document.addEventListener("click", function (event) {
         const container = document.getElementById("edit-contacts-container");
         const toggleBtn = document.getElementById("toggle-contacts-btn");
-        if (!container || !toggleBtn) return;
+        const arrowIcon = toggleBtn?.querySelector(".icon-container img");
+        if (!container || !toggleBtn || !arrowIcon) return;
         const clickedInside = container.contains(event.target);
         const clickedToggle = toggleBtn.contains(event.target);
         if (!clickedInside && !clickedToggle) {
             container.classList.add("hidden");
             container.classList.remove("visible");
+            arrowIcon.src = "/assets/imgs/dropdown-black.png";
         }
     });
+}
+
+
+/**
+ * Opens the edit task modal by fetching task data and ensuring the modal is ready.
+ * @param {string} taskId - The ID of the task to edit.
+ * @returns {Promise<void>}
+ */
+async function openEditTaskModal(taskId) {
+    try {
+        const taskData = await fetchTaskData(taskId);
+        if (!taskData) throw new Error("❌ No task data found!");
+        hideTaskDetailModal();
+        loadEditTaskTemplate(taskId);
+        await waitForModal("editTaskModal");
+        populateEditTaskFields(taskData);
+        showEditSubtaskActions();
+        removeEditSubtaskActions();
+        setTimeout(() => getEditedAssignedContacts(), 500);
+        showEditTaskModal(taskData);
+    } catch (error) {
+        console.error("❌ Error loading task data:", error);
+    }
+}
+
+
+/**
+ * Waits until the edit task modal is available in the DOM.
+ * @param {string} modalId - The ID of the modal element.
+ * @returns {Promise<void>}
+ */
+async function waitForModal(modalId) {
+    return new Promise(resolve => {
+        const checkExist = setInterval(() => {
+            if (document.getElementById(modalId)) {
+                clearInterval(checkExist);
+                resolve();
+            }
+        }, 50);
+    });
+}
+
+
+/**
+ * Loads the edit task template into the modal.
+ */
+function loadEditTaskTemplate(taskId) {
+    document.getElementById("edit-modal-content").innerHTML = editTaskTempl(taskId);
+}
+
+
+/**
+ * Populates the edit task modal fields with task data.
+ * @param {Object} taskData - The task data to populate.
+ */
+function populateEditTaskFields(taskData) {
+    setTimeout(() => {
+        const titleField = document.getElementById("edit-task-title");
+        const descField = document.getElementById("edit-task-description");
+        const dateField = document.getElementById("edit-due-date");
+        if (!titleField || !descField || !dateField) throw new Error("❌ Edit Task Modal elements missing!");
+        titleField.value = taskData.title || "";
+        descField.value = taskData.description || "";
+        dateField.value = formatDateForInput(taskData.dueDate);
+        setEditPriority(taskData.priority);
+        setEditAssignedContacts(taskData.assignedTo || []);
+        subtasksArray = taskData.subtasks || [];
+        setEditSubtasks(subtasksArray);
+        initEditTaskFlatpickr();
+    }, 10);
 }

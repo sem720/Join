@@ -46,46 +46,6 @@ function closeTaskDetailModal() {
 
 
 /**
- * Opens the edit task modal by fetching task data and ensuring the modal is ready.
- * @param {string} taskId - The ID of the task to edit.
- * @returns {Promise<void>}
- */
-async function openEditTaskModal(taskId) {
-    try {
-        const taskData = await fetchTaskData(taskId);
-        if (!taskData) throw new Error("❌ No task data found!");
-        hideTaskDetailModal();
-        loadEditTaskTemplate(taskId);
-        await waitForModal("editTaskModal");
-        populateEditTaskFields(taskData);
-        showEditSubtaskActions();
-        removeEditSubtaskActions();
-        setTimeout(() => getEditedAssignedContacts(), 500);
-        showEditTaskModal(taskData);
-    } catch (error) {
-        console.error("❌ Error loading task data:", error);
-    }
-}
-
-
-/**
- * Waits until the edit task modal is available in the DOM.
- * @param {string} modalId - The ID of the modal element.
- * @returns {Promise<void>}
- */
-async function waitForModal(modalId) {
-    return new Promise(resolve => {
-        const checkExist = setInterval(() => {
-            if (document.getElementById(modalId)) {
-                clearInterval(checkExist);
-                resolve();
-            }
-        }, 50);
-    });
-}
-
-
-/**
  * Fetches task data from the database.
  * @param {string} taskId - The ID of the task.
  * @returns {Promise<Object>} The fetched task data.
@@ -103,36 +63,6 @@ function hideTaskDetailModal() {
     const taskDetailModal = document.getElementById("taskDetailModal");
     taskDetailModal.classList.add("hidden");
     taskDetailModal.style.display = "none";
-}
-
-
-/**
- * Loads the edit task template into the modal.
- */
-function loadEditTaskTemplate(taskId) {
-    document.getElementById("edit-modal-content").innerHTML = editTaskTempl(taskId);
-}
-
-
-/**
- * Populates the edit task modal fields with task data.
- * @param {Object} taskData - The task data to populate.
- */
-function populateEditTaskFields(taskData) {
-    setTimeout(() => {
-        const titleField = document.getElementById("edit-task-title");
-        const descField = document.getElementById("edit-task-description");
-        const dateField = document.getElementById("edit-due-date");
-        if (!titleField || !descField || !dateField) throw new Error("❌ Edit Task Modal elements missing!");
-        titleField.value = taskData.title || "";
-        descField.value = taskData.description || "";
-        dateField.value = formatDateForInput(taskData.dueDate);
-        setEditPriority(taskData.priority);
-        setEditAssignedContacts(taskData.assignedTo || []);
-        subtasksArray = taskData.subtasks || [];
-        setEditSubtasks(subtasksArray);
-        initEditTaskFlatpickr();
-    }, 10);
 }
 
 
@@ -290,20 +220,56 @@ function initEditTaskContacts() {
 
 
 /**
- * Sets up event listeners for the edit task contacts.
- * Handles assignment button clicks and outside clicks to toggle the contact selection modal.
- * @param {HTMLElement} editAssignmentButton - The button to open the contact selection.
+ * Initializes the edit task contact event listeners.
+ * Delegates the setup of toggle, outside click and contact selection behaviors.
+ * @param {HTMLElement} editAssignmentButton - The button used to open the contact selector.
  * @param {HTMLElement} editContactsContainer - The container holding the contact list.
- * @param {HTMLElement} editContactsList - The list of selectable contacts.
+ * @param {HTMLElement} editContactsList - The list of available contact items.
  */
 function setupEditTaskEventListeners(editAssignmentButton, editContactsContainer, editContactsList) {
-    editAssignmentButton.addEventListener("click", (event) => {
-        toggleContacts(event, editContactsContainer.id, editContactsList.id, "edit-selected-contacts-container");
+    setupContactToggleClick(editAssignmentButton, editContactsContainer, editContactsList);
+    setupOutsideContactClose(editContactsContainer);
+    setupContactSelection(editContactsList);
+}
+
+
+/**
+ * Sets up the toggle behavior for the contact dropdown when the assignment button is clicked.
+ * Also updates the dropdown icon depending on its state.
+ * @param {HTMLElement} button - The toggle button element.
+ * @param {HTMLElement} container - The dropdown container to toggle.
+ * @param {HTMLElement} list - The contact list inside the dropdown.
+ */
+function setupContactToggleClick(button, container, list) {
+    button.addEventListener("click", (event) => {
+        toggleContacts(event, container.id, list.id, "edit-selected-contacts-container");
+        const icon = button.querySelector(".icon-container img");
+        if (icon) {
+            const isOpen = container.classList.contains("visible");
+            icon.src = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png`;
+        }
     });
+}
+
+
+/**
+ * Registers a document-wide click listener to close the dropdown when clicking outside.
+ * @param {HTMLElement} container - The contact dropdown container.
+ */
+function setupOutsideContactClose(container) {
     document.addEventListener("click", (event) => {
-        handleOutsideClick(event, editContactsContainer, ".assignment-btn");
+        handleOutsideClick(event, container, ".assignment-btn");
     });
-    editContactsList.querySelectorAll(".contact-item").forEach(contactItem => {
+}
+
+
+/**
+ * Sets up individual click handlers on each contact item in the list.
+ * Handles preselection state and invokes the appropriate selection logic.
+ * @param {HTMLElement} contactList - The parent element containing contact items.
+ */
+function setupContactSelection(contactList) {
+    contactList.querySelectorAll(".contact-item").forEach(contactItem => {
         const isPreselected = contactItem.classList.contains("preselected");
         contactItem.addEventListener("click", () => handleEditContactClick(contactItem, isPreselected));
     });
