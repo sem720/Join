@@ -95,6 +95,12 @@ function createCheckboxElement(name, avatar) {
 }
 
 
+/**
+ * Creates an image element representing a checkbox check mark.
+ * The image is initially hidden and styled with specific classes.
+ * 
+ * @returns {HTMLImageElement} The created and styled image element.
+ */
 function createImageElement() {
     const img = createElement("img", "checkbox-image");
     img.src = "/assets/imgs/check-mark.png"; 
