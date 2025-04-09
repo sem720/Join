@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /**
  * Map to store all contacts with their names as keys and associated details as values.
  */
