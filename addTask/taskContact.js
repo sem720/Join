@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /**
  * Reference to the assignment button DOM element.
  */
