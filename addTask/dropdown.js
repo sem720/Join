@@ -33,19 +33,21 @@ const defaultText = "Select task category";
  * Toggles the visibility of the dropdown list and updates the dropdown button icon.
  * When the dropdown is opened, it resets the selected category.
  */
-function toggleDropdown() {
-  resetDropdown();
-  const isOpen = dropdownContainer.classList.toggle("open");
-  dropdownList.style.display = isOpen ? "block" : "none";
+function toggleDropdown(event) {
+  event.stopPropagation();
+
+  if (!dropdownContainer.classList.contains("open")) resetDropdown(); ; 
   
+  const isOpen = toggleDropdownState();
   const iconImg = dropdownBtn.querySelector("img");
   const newSrc = `/assets/imgs/dropdown-${isOpen ? "upwards" : "black"}.png?nocache=${Date.now()}`;
   
   iconImg ? iconImg.src = newSrc : (() => { throw new Error('Icon image element not found'); })();
 
   setTimeout(checkFormValidity, 1);
-  document.querySelector(".create-btn").setAttribute("disabled", "true");
+  disableCreateButton();
 }
+
 
 /**
  * Handles the selection of a category from the dropdown.
@@ -89,4 +91,23 @@ function resetDropdown() {
       </span>
     `;
     selectedCategory.value = "";
+}
+
+
+/**
+ * Toggles the dropdown state (open/close).
+ * @returns {boolean} - The new state of the dropdown (open or closed).
+ */
+function toggleDropdownState() {
+  const isOpen = dropdownContainer.classList.toggle("open");
+  dropdownList.style.display = isOpen ? "block" : "none";
+  return isOpen;
+}
+
+
+/**
+ * Disables the "create" button (for form validation or other checks).
+ */
+function disableCreateButton() {
+  document.querySelector(".create-btn").setAttribute("disabled", "true");
 }
