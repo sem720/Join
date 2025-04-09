@@ -31,7 +31,7 @@ function initAddTaskContacts(listId) {
     subtasksInput = document.getElementById('subtasks');
 
     fetchAndRenderContacts(listId);
-    setupAssignmentButtons(); 
+    setupAssignmentButtons();
 
     document.addEventListener("keydown", handleKeydownOutsideAssignment);
 
@@ -64,15 +64,15 @@ function toggleContacts(event, containerId, listId) {
 
     const contactsContainer = document.getElementById(containerId);
     const contactsList = document.getElementById(listId);
-    const button = event.target.closest(".assignment-btn"); 
-    const dropdownIcon = button?.querySelector("img"); 
+    const button = event.target.closest(".assignment-btn");
+    const dropdownIcon = button?.querySelector("img");
 
     if (!contactsContainer || !contactsList) return;
 
     const isOpen = contactsContainer.classList.toggle("visible");
     contactsContainer.classList.toggle("hidden", !isOpen);
 
-    updateDropdownIcon(isOpen, dropdownIcon); 
+    updateDropdownIcon(isOpen, dropdownIcon);
 }
 
 
@@ -94,7 +94,7 @@ function setupOutsideClickListener() {
  * @param {Event} event - The click event.
  */
 function handleOutsideClick(event) {
-    const dropdownMenu = document.querySelector(".dropdown-options"); 
+    const dropdownMenu = document.querySelector(".dropdown-options");
     const contactsMenu = document.getElementById("contacts-container");
     const dropdownIcon = document.querySelector("#dropdown-btn img");
 
@@ -116,9 +116,9 @@ function handleOutsideClick(event) {
  * @returns {boolean} - Whether the dropdown menu should be closed.
  */
 function shouldCloseDropdownMenu(dropdownMenu, event) {
-    return dropdownMenu && dropdownMenu.style.display === "block" && 
-           !dropdownMenu.contains(event.target) && 
-           !event.target.closest("#dropdown-btn");
+    return dropdownMenu && dropdownMenu.style.display === "block" &&
+        !dropdownMenu.contains(event.target) &&
+        !event.target.closest("#dropdown-btn");
 }
 
 
@@ -154,9 +154,9 @@ function closeContactsMenuAndResetState(contactsMenu) {
  * @returns {boolean} - True if the dropdown should be closed, false otherwise.
  */
 function shouldCloseDropdown(menu, event) {
-    return menu && menu.classList.contains("visible") && 
-           !menu.contains(event.target) && 
-           !event.target.closest(".assignment-btn");
+    return menu && menu.classList.contains("visible") &&
+        !menu.contains(event.target) &&
+        !event.target.closest(".assignment-btn");
 }
 
 
@@ -225,7 +225,7 @@ function closeContacts(containerId, listId, selectedContainerId = null) {
     contactsList.classList.remove("visible");
 
     if (selectedContainerId) updateSelectedContactsDisplay(selectedContainerId);
-    
+
     updateDropdownIcon(false);
 }
 
@@ -296,18 +296,27 @@ function attachContactClickHandlers() {
 
 
 /**
- * Updates the display of selected contacts in the selected contacts container.
- * 
- * @param {string} selectedContainerId - The ID of the selected contacts container.
+ * Updates the selected contacts container with up to 4 avatars and a "+X" indicator if needed.
+ * @param {string} selectedContainerId - The ID of the container where avatars are shown.
  */
 function updateSelectedContactsDisplay(selectedContainerId) {
-    const selectedContainer = document.getElementById(selectedContainerId);
-    if (!selectedContainer) return;
-
-    selectedContainer.innerHTML = ""; 
-
-    renderContactAvatars(selectedContainer, Array.from(selectedContacts));
+    const container = document.getElementById(selectedContainerId);
+    if (!container) return;
+    container.innerHTML = "";
+    const contacts = Array.from(selectedContacts);
+    const maxVisible = 4;
+    const visible = contacts.slice(0, maxVisible);
+    const extraCount = contacts.length - maxVisible;
+    visible.forEach(contact => {
+        const avatar = createContactAvatar(contact);
+        container.appendChild(avatar);
+    });
+    if (extraCount > 0) {
+        const extra = createAdditionalContactsAvatar(extraCount);
+        container.appendChild(extra);
+    }
 }
+
 
 
 /**

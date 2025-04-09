@@ -61,7 +61,7 @@ async function openEditTaskModal(taskId) {
         showEditSubtaskActions();
         removeEditSubtaskActions();
         setTimeout(() => getEditedAssignedContacts(), 500);
-        showEditTaskModal();
+        showEditTaskModal(taskData);
     } catch (error) {
         console.error("❌ Error loading task data:", error);
     }
@@ -82,20 +82,6 @@ async function waitForModal(modalId) {
             }
         }, 50);
     });
-}
-
-
-/**
- * Displays the edit task modal and initializes contact & subtask inputs.
- */
-function showEditTaskModal() {
-    document.getElementById("editTaskModal").classList.remove("hidden");
-    initEditTaskContacts("edit-contacts-list");
-    updateSelectedContactsDisplay("edit-selected-contacts-container");
-    setupAddSubtaskButton();
-    setupEditSubtaskInput();
-    resetSelectedContacts();
-    selectedContacts.clear();
 }
 
 
@@ -317,7 +303,6 @@ function setupEditTaskEventListeners(editAssignmentButton, editContactsContainer
     document.addEventListener("click", (event) => {
         handleOutsideClick(event, editContactsContainer, ".assignment-btn");
     });
-
     editContactsList.querySelectorAll(".contact-item").forEach(contactItem => {
         const isPreselected = contactItem.classList.contains("preselected");
         contactItem.addEventListener("click", () => handleEditContactClick(contactItem, isPreselected));
@@ -378,7 +363,6 @@ function removePreselectedContact(contactItem) {
     if (!name) return console.warn("data-name attribute not found for contact item. Skipping.");
     const trimmedName = name.trim();
     selectedContacts.delete(trimmedName);
-
     const container = document.getElementById("edit-selected-contacts-container");
     if (container) {
         const contactElements = container.querySelectorAll(`[data-name="${trimmedName}"]`);
@@ -387,6 +371,7 @@ function removePreselectedContact(contactItem) {
         });
     }
 }
+
 
 /**
  * Closes the edit task modal when clicking outside of it and restores the task detail modal.
@@ -398,4 +383,3 @@ document.getElementById("taskDetailOverlay").addEventListener("click", function 
         restoreTaskDetailModal();
     }
 });
-

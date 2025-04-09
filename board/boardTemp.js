@@ -249,10 +249,10 @@ function getAvatarsHTML(assignedTo) {
 
 
 /**
- * Erstellt das HTML-Template für eine einzelne Subtask.
- * @param {Object} subtask - Die Subtask-Daten.
- * @param {number} index - Der Index der Subtask im Array.
- * @returns {string} HTML-String der Subtask.
+ * Creates the HTML template for a single subtask.
+ * @param {Object} subtask - The subtask data object.
+ * @param {number} index - The index of the subtask in the array.
+ * @returns {string} HTML string representing the subtask.
  */
 function subtaskTemplate(subtask, index) {
     return `
@@ -260,4 +260,28 @@ function subtaskTemplate(subtask, index) {
             ${getSubtaskHTML(subtask.text)}
         </li>
     `;
+}
+
+
+/**
+ * Creates a single avatar HTML string for a contact.
+ * @param {Object} contact - The contact object.
+ * @returns {string} HTML string for the contact avatar.
+ */
+function createContactAvatarHTML(contact) {
+    return `<div class="avatar avatar-board-card" 
+                style="background-color: ${contact.avatar.bgcolor};" 
+                data-name="${contact.name}"> 
+                ${contact.avatar.initials}
+            </div>`;
+}
+
+
+/**
+ * Creates the "+X" avatar HTML for extra contacts.
+ * @param {number} count - Number of extra contacts.
+ * @returns {string} HTML string for the "+X" avatar.
+ */
+function createExtraAvatarHTML(count) {
+    return `<div class="avatar avatar-board-card" style="background-color: #666;">+${count}</div>`;
 }

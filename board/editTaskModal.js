@@ -5,11 +5,9 @@
  */
 async function handleEditTaskSubmit(event) {
     event.preventDefault();
-
     const form = event.target;
     const taskId = form.getAttribute("data-task-id");
     if (!taskId) return;
-        
     await saveSelectedContactsToBackend(taskId);
     await saveTaskChangesAndUpdateUI(taskId);
     closeContacts("edit-contacts-container", "edit-contacts-list");
@@ -58,14 +56,12 @@ async function updateTaskInDatabase(taskId, updatedTask, showConfirmation = fals
 async function saveTaskChangesAndUpdateUI(taskId) {
     const existingTask = await fetchTaskData(taskId);
     if (!existingTask) return;
-
     const assignedContacts = getEditedAssignedContacts();
     const updatedTask = {
         ...getUpdatedTaskData(),
         assignedTo: assignedContacts.length > 0 ? assignedContacts : existingTask.assignedTo || [],
         subtasks: getEditedSubtasks()
     };
-
     await updateTaskInDatabase(taskId, updatedTask, true);
 }
 
@@ -91,7 +87,6 @@ function getUpdatedTaskData() {
  */
 async function saveEditedTask() {
     if (!taskId) return;
-
     try {
         await saveTaskChangesAndUpdateUI(taskId);
         showEditConfirmation();
@@ -101,3 +96,41 @@ async function saveEditedTask() {
 }
 
 
+/**
+ * Displays the Edit Task modal and initializes all required input components.
+ * Sets up contact selection, subtasks, and resets the contact state.
+ * @param {Object} task - The task object containing assignedTo, subtasks, etc.
+ */
+function showEditTaskModal(task) {
+    const modal = document.getElementById("editTaskModal");
+    modal.classList.remove("hidden");
+    initEditTaskContacts("edit-contacts-list");
+    selectedContacts.clear();
+    if (Array.isArray(task.assignedTo)) {
+        task.assignedTo.forEach(contact => selectedContacts.add(contact));
+    }
+    updateSelectedContactsDisplay("edit-selected-contacts-container");
+    setupAddSubtaskButton();
+    setupEditSubtaskInput();
+    resetSelectedContacts();
+    setupEditContactOutsideClickHandler();
+}
+
+
+/**
+ * Sets up a global click handler to close the contact dropdown
+ * in the edit modal when a user clicks outside the contact area.
+ */
+function setupEditContactOutsideClickHandler() {
+    document.addEventListener("click", function (event) {
+        const container = document.getElementById("edit-contacts-container");
+        const toggleBtn = document.getElementById("toggle-contacts-btn");
+        if (!container || !toggleBtn) return;
+        const clickedInside = container.contains(event.target);
+        const clickedToggle = toggleBtn.contains(event.target);
+        if (!clickedInside && !clickedToggle) {
+            container.classList.add("hidden");
+            container.classList.remove("visible");
+        }
+    });
+}

@@ -214,43 +214,57 @@ function deleteSubtaskInEditModal(index) {
 
 
 /**
- * Updates the assigned contacts display in the edit task modal.
- * @param {Array<Object>} contacts - List of assigned contacts.
- * @param {string} contacts[].name - Full name of the contact.
- * @param {Object} contacts[].avatar - Avatar details of the contact.
- * @param {string} contacts[].avatar.bgcolor - Background color of the avatar.
- * @param {string} contacts[].avatar.initials - Initials of the contact.
+ * Updates the avatar display in the edit task modal with up to 4 contacts and a "+X" avatar if needed.
+ * @param {Array<Object>} contacts - The assigned contacts.
  */
 function setEditAssignedContacts(contacts) {
     const container = document.getElementById("edit-selected-contacts-container");
-    container.innerHTML = '';
-    const content = contacts.map(contact => {
-        return `<div class="avatar avatar-board-card" 
-                style="background-color: ${contact.avatar.bgcolor};" 
-                data-name="${contact.name}"> 
-                    ${contact.avatar.initials}
-                </div>`;
-    }).join("");
-    container.innerHTML = content;
+    container.innerHTML = generateLimitedAvatarHTML(contacts);
 }
 
 
 /**
- * Retrieves the edited assigned contacts from the edit task modal.
- * @returns {Array<Object>} List of assigned contacts with name and avatar details.
+ * Retrieves all selected contacts from the edit modal.
+ * @returns {Array<{name: string, avatar: {initials: string, bgcolor: string}}>}
  */
 function getEditedAssignedContacts() {
-    const container = document.querySelector("#edit-selected-contacts-container");
-    if (!container) {
-        return [];
-    }
-   
-    const contactElements = container.querySelectorAll(".avatar-board-card");
-    if (contactElements.length === 0) {
-        return []; 
-    }
-    const contacts = Array.from(contactElements).map(parseContactElement);
-    return contacts;
+    const checkboxes = document.querySelectorAll("#edit-contacts-list .contact-checkbox:checked");
+    return Array.from(checkboxes)
+        .map(cb => buildContactObject(cb.dataset.contactName))
+        .filter(Boolean);
+}
+
+
+/**
+ * Generates HTML string for up to 4 contact avatars and optional "+X" avatar.
+ * @param {Array<Object>} contacts - The contacts array.
+ * @returns {string} HTML string with avatar elements.
+ */
+function generateLimitedAvatarHTML(contacts) {
+    const maxVisible = 4;
+    const visibleContacts = contacts.slice(0, maxVisible);
+    const extraCount = contacts.length - maxVisible;
+    const avatarHTML = visibleContacts.map(createContactAvatarHTML).join("");
+    const extraAvatar = extraCount > 0 ? createExtraAvatarHTML(extraCount) : "";
+    return avatarHTML + extraAvatar;
+}
+
+
+/**
+ * Builds a contact object with name and avatar data from allContacts.
+ * @param {string} name - The contact's name.
+ * @returns {{name: string, avatar: {initials: string, bgcolor: string}} | null}
+ */
+function buildContactObject(name) {
+    const contact = allContacts.get(name);
+    if (!contact) return null;
+    return {
+        name,
+        avatar: {
+            initials: getInitials(name),
+            bgcolor: contact.bgcolor || "#ccc"
+        }
+    };
 }
 
 
@@ -275,7 +289,7 @@ function parseContactElement(contactElement) {
  * @returns {string} The full name or "Unknown User" if not found.
  */
 function findContactName(initials) {
-    if (!allContacts || allContacts.size === 0) return "Unknown User";  
+    if (!allContacts || allContacts.size === 0) return "Unknown User";
     const contact = [...allContacts.values()].find(c => getInitials(c.name) === initials);
     return contact ? contact.name : "Unknown User";
 }
@@ -288,7 +302,7 @@ function findContactName(initials) {
  */
 function rgbToHex(rgb) {
     const match = rgb.match(/\d+/g);
-    if (!match || match.length < 3) return "#CCCCCC";  
+    if (!match || match.length < 3) return "#CCCCCC";
     return `#${match.slice(0, 3).map(x => Number(x).toString(16).padStart(2, '0')).join('')}`.toUpperCase();
 }
 
@@ -345,7 +359,7 @@ function setupEditDateReset() {
     const calendarIcon = document.getElementById("edit-calendar-icon");
     if (!dateInput || !dateInput._flatpickr) return;
     calendarIcon.addEventListener("click", function () {
-        dateInput._flatpickr.clear();  
+        dateInput._flatpickr.clear();
     });
 }
 
