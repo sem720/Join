@@ -106,7 +106,8 @@ function clearTask() {
     resetDateInput(document.getElementById("due-date"));
     resetPriorityToMedium();
     resetDropdown();
-    resetSelectedContacts();
+    clearContacts();
+    resetAllContactCheckboxes();
     resetErrors();
     clearSubtasks();
     checkFormValidity();
@@ -139,6 +140,38 @@ function resetSelectedContacts() {
 
 
 /**
+ * Clears the selected contacts container and resets the state of all checkboxes.
+ */
+function clearContacts() {
+    const container = document.getElementById("selected-contacts-container");
+
+    if (container) {
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+    }
+}
+
+
+/**
+ * Resets all checkboxes in the modal and clears their associated selections.
+ */
+function resetAllContactCheckboxes() {
+    document.querySelectorAll(".contact-checkbox").forEach((checkbox) => {
+        const contactItem = checkbox.closest(".contact-item");
+        const img = contactItem?.querySelector(".checkbox-image");
+        const name = contactItem?.dataset.name;
+
+        if (checkbox.checked) uncheckCheckbox(checkbox, img, name); 
+        if (contactItem) contactItem.classList.remove("selected");
+        
+    });
+
+    clearContacts();
+}
+
+
+/**
  * Clears all error messages and error classes.
  */
 function resetErrors() {
@@ -151,7 +184,6 @@ function resetErrors() {
  * Clears all subtasks (removes the subtask list items).
  */
 function clearSubtasks() {
-    // Clear any input fields in the subtask items
     document.querySelectorAll(".subtask-item input").forEach(input => input.value = "");
 
     const subtaskList = document.getElementById("subtask-list");
