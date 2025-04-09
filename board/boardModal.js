@@ -51,7 +51,7 @@ function toggleModalVisibility(isVisible) {
 
 
 /**
- * Displays the task modal with overlay and animations.
+ * Displays the task modal with overlay and animations, and prevents event bubbling inside the modal.
  */
 function showTaskModal() {
     const overlay = document.getElementById("task-overlay");
@@ -67,7 +67,7 @@ function showTaskModal() {
 
 
 /**
- * Initializes the task modal by setting up contacts, priorities, event listeners, and clearing errors.
+ * Initializes the task modal by setting up contacts, default priority, dropdowns, and validation.
  * @async
  */
 async function initializeTaskModal() {
@@ -76,22 +76,19 @@ async function initializeTaskModal() {
     await fetchAndRenderContacts(listId); 
     initialDefaultPriority();
     initOutsideClickModal();
-   
     initAddTaskContacts(listId); 
     clearError("#selected-category");
     setupContactButton();
     setupAssignmentButtons();
     updateDropdownIcon();
-    dateInput();
-   
-    document.addEventListener("click", handleOutsideClick);
+  
     selectedContacts.clear(); 
     updateSelectedContactsDisplay("selected-contacts-container"); 
 }
 
 
 /**
- * Closes the task modal with fade-out animation.
+ * Closes the task modal with fade-out animation, resets contact selections, and hides overlay.
  */
 function closeModal() {
     const modal = document.getElementById("addTaskModal");
@@ -110,7 +107,7 @@ function closeModal() {
 
 
 /**
- * Sets up the contact button to render the contacts list.
+ * Sets up the contact button and renders the corresponding contacts list based on data-list-id.
  */
 function setupContactButton() {
     const button = document.querySelector(".assignment-btn");
@@ -122,73 +119,74 @@ function setupContactButton() {
 
 
 /**
- * Initializes outside click detection for the modal and contact dropdown.
+ * Initializes outside click detection for modal and dropdown containers.
  */
 function initOutsideClickModal() {
     const modal = document.getElementById("addTaskModal");
     const contactsContainer = document.getElementById("contacts-container");
     const dropdownOptions = document.querySelector(".dropdown-options");
-
-    if (!modal || !contactsContainer || !dropdownOptions) return  console.warn("[initOutsideClick] missing element:", { modal, contactsContainer, dropdownOptions });
-
     const button = document.querySelector(".assignment-btn");
     const dropdownButton = document.querySelector(".dropdown-btn");
     const dropdownIcon = button?.querySelector("img");
 
+    if (!modal || !contactsContainer || !dropdownContainer || !dropdownOptions || !dropdownBtn || !button) return;
     modal.addEventListener("click", (event) => {
         handleOutsideClickModal(event, contactsContainer, ".assignment-btn", dropdownIcon);
-        handleOutsideClickModal(event, dropdownContainer, ".dropdown-btn", dropdownIcon, true);
+        handleOutsideClickModal(event, dropdownContainer, ".dropdown-btn", dropdownIcon, true, dropdownOptions);
     });
 }
 
 
 /**
- * Handles clicks outside of a given container to close it.
+ * Closes a container (e.g. dropdown) when clicking outside of it.
+ * 
  * @param {Event} event - The click event.
- * @param {HTMLElement} container - The container to close.
+ * @param {HTMLElement} container - The container element to monitor.
  * @param {string} exceptionSelector - Selector for elements that should not trigger closing.
+ * @param {HTMLElement} [dropdownIcon] - (Optional) Icon element, if needed.
+ * @param {boolean} [isDropdown=false] - Whether the target is a dropdown container.
+ * @param {HTMLElement|null} [optionsContainer=null] - Optional container for dropdown options.
  */
-function handleOutsideClickModal(event, container, exceptionSelector, dropdownIcon, isDisplayBlock = false) {
-    console.log('Event target:', event.target);
-    console.log('Container:', container);
-    console.log('Exception selector:', exceptionSelector);
-    console.log('Dropdown icon:', dropdownIcon);
+function handleOutsideClickModal(event, container, exceptionSelector, dropdownIcon, isDropdown = false, optionsContainer = null) {
+    const isOpen = isDropdown
+        ? container.classList.contains("open") && optionsContainer?.style.display === "block"
+        : container?.classList.contains("visible");
 
-    if (isDisplayBlock) {
-        if (!container || container.style.display !== "block") return;
-    } else {
-        if (!container || !container.classList.contains("visible")) return;
-    }
+    if (!isOpen) return;
 
-    if (!container.contains(event.target) && !event.target.closest(exceptionSelector)) {
-        console.log('Closing container');
-        closeDropdownContainer(container, isDisplayBlock);
-        resetDropdownIcon(container, dropdownIcon);
-    }
+    const clickedOutside = !container.contains(event.target) && !event.target.closest(exceptionSelector);
+    if (clickedOutside) closeDropdownContainer(container, isDropdown, optionsContainer);
 }
 
 
 /**
- * Closes a dropdown container by setting display to none or adding hidden class.
- * @param {HTMLElement} container - The dropdown container.
- * @param {boolean} isDisplayBlock - Whether to use display block/none or visible/hidden.
+ * Closes a dropdown container.
+ * @param {HTMLElement} container - The container to close.
+ * @param {boolean} [isDropdown=false] - Whether to use dropdown logic.
+ * @param {HTMLElement|null} [optionsContainer=null] - Dropdown options container if applicable.
  */
-function closeDropdownContainer(container, isDisplayBlock = false) {
-    if (isDisplayBlock) {
-        container.style.display = "none";
+function closeDropdownContainer(container, isDropdown = false, optionsContainer = null) {
+    if (isDropdown) {
+        container.classList.remove("open");
+        if (optionsContainer) optionsContainer.style.display = "none";
+        const dropdownIcon = document.querySelector("#dropdown-icon");
+        updateDropdownHTML("Select task category");
     } else {
+        const dropdownIcon = document.querySelector("#dropdown-icon");
         container.classList.add("hidden");
         container.classList.remove("visible");
+        dropdownIcon.src = `/assets/imgs/dropdown-black.png`;
     }
 }
 
 
 /**
- * Resets the dropdown icon to its default state.
+ * Resets the dropdown icon to its default state based on the container context.
  * @param {HTMLElement} container - The dropdown container.
  */
 function resetDropdownIcon(container) {
     let dropdownIcon;
+    if (dropdownIcon) updateDropdownIcon(false, dropdownIcon);
 
     if (container.id === "edit-contacts-container") {
         dropdownIcon = document.querySelector("#toggle-contacts-btn img");
@@ -196,8 +194,6 @@ function resetDropdownIcon(container) {
         const button = document.querySelector(".assignment-btn");
         dropdownIcon = button?.querySelector("img");
     }
-
-    if (dropdownIcon) updateDropdownIcon(false, dropdownIcon);
 }
 
 
