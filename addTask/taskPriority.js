@@ -53,6 +53,9 @@ function deactivateButton(button) {
     button.classList.remove('active');
     changeButtonStyle(button, 'remove');
     changeImageStyle(button, 'remove');
+
+    setTimeout(checkFormValidity, 1);
+    document.querySelector(".create-btn").setAttribute("disabled", "true");
 }
 
 
