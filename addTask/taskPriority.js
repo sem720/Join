@@ -46,7 +46,7 @@ function activateButton(button) {
 
 /**
  * Deactivates the provided button by removing the 'active' class and applying the appropriate styles.
- * 
+ * Also triggers a form validity check and disables the "create" button afterward.
  * @param {HTMLElement} button - The button element to be deactivated.
  */
 function deactivateButton(button) {
