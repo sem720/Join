@@ -227,11 +227,14 @@ function setEditAssignedContacts(contacts) {
  * Retrieves all selected contacts from the edit modal.
  * @returns {Array<{name: string, avatar: {initials: string, bgcolor: string}}>}
  */
+let lastAssignedContacts = []; // ganz oben im Scope von editTask.js
+
 function getEditedAssignedContacts() {
     const checkboxes = document.querySelectorAll("#edit-contacts-list .contact-checkbox:checked");
-    return Array.from(checkboxes)
+    const contacts = Array.from(checkboxes)
         .map(cb => buildContactObject(cb.dataset.contactName))
         .filter(Boolean);
+    return contacts.length > 0 ? contacts : lastAssignedContacts;
 }
 
 

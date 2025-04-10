@@ -201,6 +201,7 @@ function populateEditTaskFields(taskData) {
         dateField.value = formatDateForInput(taskData.dueDate);
         setEditPriority(taskData.priority);
         setEditAssignedContacts(taskData.assignedTo || []);
+        lastAssignedContacts = taskData.assignedTo || [];
         subtasksArray = taskData.subtasks || [];
         setEditSubtasks(subtasksArray);
         initEditTaskFlatpickr();
