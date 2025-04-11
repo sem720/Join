@@ -270,13 +270,27 @@ function createContactElement(name, isPreselected = false) {
     const contact = allContacts.get(name.trim());
     const avatarData = contact?.avatar || {
         initials: getInitials(name),
-        bgcolor: "#ccc"
+        bgcolor: getRandomColor()
     };
     const avatar = createAvatar(name, avatarData.bgcolor, avatarData.initials);
     const nameSpan = createElement("span", "contact-name", name);
     const checkbox = createCheckbox(name);
     contactDiv.append(avatar, nameSpan, checkbox);
     return contactDiv;
+}
+
+
+/**
+ * Generates a random hexadecimal color code.
+ * @returns {string} A string representing a random color in hexadecimal format (e.g., "#etc").
+ */
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 6; i > 0; --i) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 
 
