@@ -38,7 +38,14 @@
       <main class="main-addTask">
         <form id="add-task-form" novalidate>
           <div class="left-container">
-            <label for="task-name">Title <span class="required">*</span></label>
+            <div class="form-group">
+              <label for="task-name">Title <span class="required">*</span></label>
+              <div
+                class="error-message"
+                data-error-for="task-name"
+                style="display: none"
+              ></div>
+            </div>
             <input
               id="task-name"
               class="input-standard"
@@ -47,12 +54,7 @@
               placeholder="Enter a title"
               required
             />
-            <div
-              class="error-message"
-              data-error-for="task-name"
-              style="display: none"
-            ></div>
-
+        
             <label for="description">Description</label>
             <textarea
               id="description"
@@ -89,9 +91,17 @@
           </div>
 
           <div class="right-container">
-            <label for="due-date">
-              Due Date <span class="required">*</span></label
-            >
+            <div class="form-group">
+              <label for="due-date">
+                Due Date <span class="required">*</span></label
+              >
+              <div
+              class="error-message"
+              data-error-for="due-date"
+              style="display: none"
+            ></div>
+            </div>
+            
             <div class="date-container">
               <input
                 class="input-standard"
@@ -107,12 +117,7 @@
                 alt="Kalender Icon"
               />
             </div>
-            <div
-              class="error-message"
-              data-error-for="due-date"
-              style="display: none"
-            ></div>
-
+            
             <label>Prio</label>
             <div class="button-container">
               <button
@@ -143,10 +148,18 @@
                 Low <img src="/assets/imgs/low.png" alt="low-icon" />
               </button>
             </div>
-
-            <label id="category"
-              >Category <span class="required">*</span></label
-            >
+            
+            <div class="form-group">
+              <label id="category"
+              >Category <span class="required">
+              *</span></label>
+              <div
+                class="error-message"
+                data-error-for="category"
+                style="display: none"
+              ></div>
+            </div>
+            
             <div class="dropdown-container" id="category-container">
               <button
                 class="dropdown-btn"
@@ -185,12 +198,7 @@
               id="selected-category"
               name="selected-category"
             />
-            <div
-              class="error-message"
-              data-error-for="selected-category"
-              style="display: none"
-            ></div>
-
+          
             <label for="subtasks" id="label-subtask">Subtasks</label>
             <div class="subtask-input-wrapper">
               <input
