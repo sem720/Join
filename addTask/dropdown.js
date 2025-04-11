@@ -35,7 +35,6 @@ const defaultText = "Select task category";
  */
 function toggleDropdown(event) {
   event.stopPropagation();
-
   if (!dropdownContainer.classList.contains("open")) resetDropdown(); ; 
   
   const isOpen = toggleDropdownState();
@@ -60,6 +59,7 @@ function selectCategory(option) {
   updateDropdownHTML(option.textContent);
   document.querySelector(".dropdown-container").classList.remove("open");
   document.getElementById("dropdown-list").style.display = "none";
+
   clearError("#selected-category");
   checkFormValidity();
 }
@@ -105,9 +105,4 @@ function toggleDropdownState() {
 }
 
 
-/**
- * Disables the "create" button (for form validation or other checks).
- */
-function disableCreateButton() {
-  document.querySelector(".create-btn").setAttribute("disabled", "true");
-}
+
