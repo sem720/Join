@@ -87,6 +87,7 @@ function handleOutsideClick(event) {
     const dropdownIcon = document.querySelector("#dropdown-btn img");
     if (shouldCloseDropdownMenu(dropdownMenu, event)) {
         closeDropdownMenuAndResetIcon(dropdownMenu, dropdownIcon);
+        toggleDropdownState();
     }
     if (shouldCloseDropdown(contactsMenu, event)) {
         closeContactsMenuAndResetState(contactsMenu);

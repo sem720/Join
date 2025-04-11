@@ -1,39 +1,4 @@
 /**
- * Checks if required form fields are filled and enables/disables the submit button accordingly.
- */
-function checkFormValidity() {
-    const taskName = document.getElementById("task-name");
-    const dueDate = document.getElementById("due-date");
-    const category = document.getElementById("selected-category");
-    const submitBtn = document.querySelector(".create-btn");
-
-    if (taskName.value.trim() !== "" && dueDate.value.trim() !== "" && category.value.trim() !== "") {
-        submitBtn.disabled = false;
-    } else {
-        submitBtn.disabled = true;
-    }
-}
-
-
-/**
- * Initializes event listeners for form validation.
- */
-function initFormValidation() {
-    document.getElementById("task-name")?.addEventListener("input", checkFormValidity);
-    document.getElementById("due-date")?.addEventListener("input", checkFormValidity);
-    document.getElementById("selected-category")?.addEventListener("input", checkFormValidity);
-}
-
-
-/**
- * Disables the "create" button (for form validation or other checks).
- */
-function disableCreateButton() {
-    document.querySelector(".create-btn").setAttribute("disabled", "true");
-}
-
-
-/**
  * Initializes event listeners for the application.
  */
 function initEventListeners() {
