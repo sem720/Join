@@ -36,7 +36,31 @@ function filterTaskCards(searchQuery) {
 
 
 /**
+ * Processes a single task card and determines its visibility based on the search query.
+ *
+ * @param {Element} card - The task card element to process.
+ * @param {string} searchQuery - The search query input by the user.
+ * @returns {boolean} - Returns true if the card matches the query, false otherwise.
+ */
+function filterSingleTaskCard(card, searchQuery) {
+    const title = card.querySelector('.task-title')?.textContent.trim().toLowerCase() || '';
+    const description = card.querySelector('.task-description')?.textContent.trim().toLowerCase() || '';
+
+    if (!title && !description) {
+        card.style.display = 'none';
+        return false;
+    }
+
+    const isMatch = title.includes(searchQuery) || description.includes(searchQuery);
+    card.style.display = isMatch ? 'block' : 'none';
+
+    return isMatch;
+}
+
+
+/**
  * Processes task cards and determines visibility based on the search query.
+ * Matches against task title and description.
  * 
  * @param {NodeListOf<Element>} taskCards - Collection of task cards to filter.
  * @param {string} searchQuery - The search query input by the user.
@@ -46,12 +70,9 @@ function processTaskCards(taskCards, searchQuery) {
     let resultsFound = false;
 
     taskCards.forEach(card => {
-        const taskTitle = card.querySelector('.task-title')?.textContent.trim().toLowerCase(); 
-        if (!taskTitle) return;
-         
-        const isMatch = taskTitle.includes(searchQuery);
-        card.style.display = isMatch ? 'block' : 'none'; 
-        if (isMatch) resultsFound = true;
+        if (filterSingleTaskCard(card, searchQuery)) {
+            resultsFound = true;
+        }
     });
 
     return resultsFound;
@@ -105,9 +126,6 @@ function handleEnterKeyPress(event) {
  * Adds listeners for clicking the search icon and pressing Enter in the search input.
  */
 function setupSearchEventListeners() {
-    const searchIcon = document.getElementById('search-icon');
-    const searchInput = document.getElementById('findTask'); 
-
     if (!searchIcon) return; 
     if (!searchInput) return;
 
@@ -122,7 +140,6 @@ function setupSearchEventListeners() {
  */
 function resetSearch() {
     searchInput.value = '';
-    const taskCards = document.querySelectorAll('.task-card');
     taskCards.forEach(card => card.style.display = 'block');
     noResultsMessage.style.display = 'none';
 }
