@@ -193,10 +193,8 @@ function openContacts(containerId, listId, selectedContainerId) {
     const contactsContainer = document.getElementById(containerId);
     const contactsList = document.getElementById(listId);
 
-    contactsContainer.classList.add("visible");
-    contactsContainer.classList.remove("hidden");
-    contactsList.classList.add("visible");
-    contactsList.classList.remove("hidden");
+    setVisibility(contactsContainer, true);
+    setVisibility(contactsList, true);
 
     updateDropdownIcon(true);
     updateSelectedContactsDisplay(selectedContainerId);
@@ -219,15 +217,15 @@ function closeContacts(containerId, listId, selectedContainerId = null) {
 
     if (!contactsContainer || !contactsList) return;
 
-    contactsContainer.classList.add("hidden");
-    contactsContainer.classList.remove("visible");
-    contactsList.classList.add("hidden");
-    contactsList.classList.remove("visible");
+    setVisibility(contactsContainer, false);
+    setVisibility(contactsList, false);
 
     if (selectedContainerId) updateSelectedContactsDisplay(selectedContainerId);
 
     updateDropdownIcon(false);
 }
+
+
 
 
 /**
@@ -296,27 +294,39 @@ function attachContactClickHandlers() {
 
 
 /**
+ * Splits the contact list into visible and extra contacts.
+ *
+ * @param {Array} contacts - List of selected contacts.
+ * @param {number} maxVisible - Maximum number of contacts to show.
+ * @returns {{ visible: Array, extraCount: number }} - Visible contacts and number of extra ones.
+ */
+function splitVisibleAndExtraContacts(contacts, maxVisible) {
+    const visible = contacts.slice(0, maxVisible);
+    const extraCount = Math.max(contacts.length - maxVisible, 0);
+    return { visible, extraCount };
+}
+
+
+/**
  * Updates the selected contacts container with up to 4 avatars and a "+X" indicator if needed.
- * @param {string} selectedContainerId - The ID of the container where avatars are shown.
+ *
+ * @param {string} selectedContainerId - The ID of the container where avatars should be displayed.
  */
 function updateSelectedContactsDisplay(selectedContainerId) {
     const container = document.getElementById(selectedContainerId);
     if (!container) return;
+
     container.innerHTML = "";
+
     const contacts = Array.from(selectedContacts);
-    const maxVisible = 4;
-    const visible = contacts.slice(0, maxVisible);
-    const extraCount = contacts.length - maxVisible;
-    visible.forEach(contact => {
-        const avatar = createContactAvatar(contact);
-        container.appendChild(avatar);
-    });
+    const { visible, extraCount } = splitVisibleAndExtraContacts(contacts, 4);
+
+    visible.forEach(contact => container.appendChild(createContactAvatar(contact)));
+
     if (extraCount > 0) {
-        const extra = createAdditionalContactsAvatar(extraCount);
-        container.appendChild(extra);
+        container.appendChild(createAdditionalContactsAvatar(extraCount));
     }
 }
-
 
 
 /**
@@ -340,37 +350,6 @@ function renderContactAvatars(container, contacts) {
         container.appendChild(additionalAvatar);
     }
 }
-
-
-/**
- * Creates a single contact avatar element.
- * 
- * @param {Object} contact - The contact object containing name and bgcolor.
- * @returns {HTMLElement} The avatar element.
- */
-function createContactAvatar(contact) {
-    const avatarDiv = document.createElement("div");
-    avatarDiv.classList.add("avatar", "avatar-board-card");
-    avatarDiv.style.backgroundColor = contact.bgcolor;
-    avatarDiv.textContent = getInitials(contact.name);
-    return avatarDiv;
-}
-
-
-/**
- * Creates an avatar element for additional contacts.
- * 
- * @param {number} count - Number of additional contacts.
- * @returns {HTMLElement} The additional contacts avatar element.
- */
-function createAdditionalContactsAvatar(count) {
-    const avatarDiv = document.createElement("div");
-    avatarDiv.classList.add("avatar", "additional-contacts");
-    avatarDiv.style.backgroundColor = "#ccc";
-    avatarDiv.textContent = `+${count}`;
-    return avatarDiv;
-}
-
 
 
 
