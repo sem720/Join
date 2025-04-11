@@ -26,6 +26,14 @@ function initFormValidation() {
 
 
 /**
+ * Disables the "create" button (for form validation or other checks).
+ */
+function disableCreateButton() {
+    document.querySelector(".create-btn").setAttribute("disabled", "true");
+}
+
+
+/**
  * Initializes event listeners for the application.
  */
 function initEventListeners() {
