@@ -6,7 +6,7 @@ function setupEditSubtaskInput() {
     const addSubtaskBtn = document.querySelector("#edit-subtask-wrapper .add-subtask-icon");
 
     if (addSubtaskBtn) addSubtaskBtn.addEventListener("click", handleEditSubtaskClick);
-    
+
     if (inputField) {
         inputField.addEventListener("keydown", handleEditSubtaskKeydown);
         inputField.addEventListener("input", handleEditSubtaskInput);
@@ -90,11 +90,11 @@ function removeEditSubtaskActions() {
 
     if (!inputField) return;
     inputField.value = "";
-    
+
     const parentElement = inputField.parentElement;
     const iconContainer = parentElement.querySelector(".subtask-action");
 
-    if (iconContainer) iconContainer.remove();  
+    if (iconContainer) iconContainer.remove();
     addSubtaskBtn && (addSubtaskBtn.style.display = "flex", addSubtaskBtn.src = "/assets/imgs/add-subtask.png");
 }
 
@@ -201,3 +201,15 @@ function attachEnterHandler(input, li) {
 }
 
 
+/**
+ * Retrieves all subtasks from the task modal.
+ * @returns {Array<Object>} An array of subtasks with their text and checked status.
+ */
+function getSubtasks() {
+    const subtaskElements = document.querySelectorAll("#subtask-list input[type='checkbox']");
+    if (!subtaskElements.length) return console.warn("⚠️ No subtasks found. Returning []"), [];
+    return Array.from(subtaskElements).map(checkbox => ({
+        text: checkbox.nextElementSibling?.innerText.trim() || "Unnamed Subtask",
+        checked: checkbox.checked
+    }));
+}

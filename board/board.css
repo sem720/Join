@@ -204,9 +204,8 @@ body {
   align-items: center;
   justify-content: center;
   color: white;
-  font-weight: bold;
   font-family: inherit;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 12px;
   margin-left: -10px;
 }

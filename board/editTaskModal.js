@@ -107,7 +107,7 @@ function showEditTaskModal(task) {
     initEditTaskContacts("edit-contacts-list");
     selectedContacts.clear();
     if (Array.isArray(task.assignedTo)) {
-        task.assignedTo.forEach(contact => selectedContacts.add(contact));
+        task.assignedTo.forEach(contact => selectedContacts.set(contact.name.trim(), contact));
     }
     updateSelectedContactsDisplay("edit-selected-contacts-container");
     setupAddSubtaskButton();
@@ -192,18 +192,34 @@ function loadEditTaskTemplate(taskId) {
  */
 function populateEditTaskFields(taskData) {
     setTimeout(() => {
-        const titleField = document.getElementById("edit-task-title");
-        const descField = document.getElementById("edit-task-description");
-        const dateField = document.getElementById("edit-due-date");
-        if (!titleField || !descField || !dateField) throw new Error("❌ Edit Task Modal elements missing!");
-        titleField.value = taskData.title || "";
-        descField.value = taskData.description || "";
-        dateField.value = formatDateForInput(taskData.dueDate);
+        document.getElementById("edit-task-title").value = taskData.title || "";
+        document.getElementById("edit-task-description").value = taskData.description || "";
+        document.getElementById("edit-due-date").value = formatDateForInput(taskData.dueDate);
         setEditPriority(taskData.priority);
-        setEditAssignedContacts(taskData.assignedTo || []);
-        lastAssignedContacts = taskData.assignedTo || [];
+        selectedContacts.clear();
+        taskData.assignedTo?.forEach(c => selectedContacts.set(c.name.trim(), c));
+        setEditAssignedContacts(Array.from(selectedContacts.values()));
+        lastAssignedContacts = Array.from(selectedContacts.values());
         subtasksArray = taskData.subtasks || [];
         setEditSubtasks(subtasksArray);
         initEditTaskFlatpickr();
+        waitForContactsToRenderThenSync();
     }, 10);
+}
+
+
+/**
+ * Waits until the contact list in the edit modal is rendered,
+ * then synchronizes preselected checkboxes.
+ */
+function waitForContactsToRenderThenSync() {
+    const container = document.getElementById("edit-contacts-list");
+    if (!container) return;
+    const observer = new MutationObserver((mutations, obs) => {
+        if (container.children.length > 0) {
+            obs.disconnect();
+            checkPreselectedContactsInEditModal();
+        }
+    });
+    observer.observe(container, { childList: true });
 }

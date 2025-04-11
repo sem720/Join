@@ -12,7 +12,6 @@ function initTaskDetailOverlay() {
 /**
  * Formats a date string to ensure it follows the DD/MM/YYYY format.
  * @param {string} dueDate - The due date string to format.
- * @returns {string} The formatted date string or an error message if invalid.
  */
 function formatDate(dueDate) {
     if (!dueDate) return "No date";
@@ -48,7 +47,6 @@ function closeTaskDetailModal() {
 /**
  * Fetches task data from the database.
  * @param {string} taskId - The ID of the task.
- * @returns {Promise<Object>} The fetched task data.
  */
 async function fetchTaskData(taskId) {
     const response = await fetch(`https://join-c8725-default-rtdb.europe-west1.firebasedatabase.app/tasks/${taskId}.json`);
@@ -140,20 +138,6 @@ function showDeleteConfirmation() {
 
 
 /**
- * Retrieves all subtasks from the task modal.
- * @returns {Array<Object>} An array of subtasks with their text and checked status.
- */
-function getSubtasks() {
-    const subtaskElements = document.querySelectorAll("#subtask-list input[type='checkbox']");
-    if (!subtaskElements.length) return console.warn("⚠️ No subtasks found. Returning []"), [];
-    return Array.from(subtaskElements).map(checkbox => ({
-        text: checkbox.nextElementSibling?.innerText.trim() || "Unnamed Subtask",
-        checked: checkbox.checked
-    }));
-}
-
-
-/**
  * Toggles edit buttons in the edit task modal and updates their styles.
  * @param {HTMLElement} clickedButton - The button that was clicked.
  */
@@ -175,8 +159,7 @@ function toggleEditButtons(clickedButton) {
 
 
 /**
- * Handles click events on the task detail overlay.
- * Closes the task edit modal if the overlay itself is clicked.
+ * Handles click events on the task detail overlay. Closes the task edit modal if the overlay itself is clicked.
  */
 function handleTaskDetailOverlayClick() {
     const overlay = document.getElementById("taskDetailOverlay");
@@ -220,8 +203,7 @@ function initEditTaskContacts() {
 
 
 /**
- * Initializes the edit task contact event listeners.
- * Delegates the setup of toggle, outside click and contact selection behaviors.
+ * Initializes the edit task contact event listeners. Delegates the setup of toggle, outside click and contact selection behaviors.
  * @param {HTMLElement} editAssignmentButton - The button used to open the contact selector.
  * @param {HTMLElement} editContactsContainer - The container holding the contact list.
  * @param {HTMLElement} editContactsList - The list of available contact items.
@@ -264,14 +246,34 @@ function setupOutsideContactClose(container) {
 
 
 /**
- * Sets up individual click handlers on each contact item in the list.
- * Handles preselection state and invokes the appropriate selection logic.
- * @param {HTMLElement} contactList - The parent element containing contact items.
+ * Attaches checkbox change listeners to all contact items in the given list.
+ * @param {HTMLElement} contactList - The container element holding contact items.
  */
 function setupContactSelection(contactList) {
     contactList.querySelectorAll(".contact-item").forEach(contactItem => {
-        const isPreselected = contactItem.classList.contains("preselected");
-        contactItem.addEventListener("click", () => handleEditContactClick(contactItem, isPreselected));
+        const checkbox = contactItem.querySelector(".contact-checkbox");
+        if (!checkbox) return;
+        handleContactCheckboxChange(checkbox);
+    });
+}
+
+
+/**
+ * Handles the checkbox change event for a single contact. Adds or removes the contact from selectedContacts and updates the UI.
+ * @param {HTMLInputElement} checkbox - The checkbox element for the contact.
+ */
+function handleContactCheckboxChange(checkbox) {
+    checkbox.addEventListener("change", () => {
+        const name = checkbox.dataset.contactName?.trim();
+        if (!name) return;
+        const contactObj = buildContactObject(name);
+        if (!contactObj) return;
+        if (checkbox.checked) {
+            selectedContacts.set(name, contactObj);
+        } else {
+            selectedContacts.delete(name);
+        }
+        updateSelectedContactsDisplay("edit-selected-contacts-container");
     });
 }
 
@@ -282,6 +284,54 @@ function setupContactSelection(contactList) {
  */
 function initializeEditContacts() {
     fetchAndRenderContacts("edit-contacts-list");
+}
+
+
+/**
+ * Synchronizes the checkboxes in the edit modal with the selected contacts.
+ * Marks already selected contacts as checked and styles them accordingly.
+ */
+function checkPreselectedContactsInEditModal() {
+    const preselectedNames = getPreselectedContactNames();
+    document.querySelectorAll("#edit-contacts-list .contact-checkbox").forEach(cb => {
+        const contactName = cb.dataset.contactName?.trim().toLowerCase();
+        if (!contactName) return;
+        if (preselectedNames.includes(contactName)) {
+            applyPreselectionStyles(cb, contactName);
+        }
+    });
+}
+
+
+/**
+ * Returns a list of lowercased, trimmed contact names from selectedContacts.
+ * @returns {Array<string>} List of normalized contact names.
+ */
+function getPreselectedContactNames() {
+    return Array.from(selectedContacts.keys()).map(n =>
+        n.trim().toLowerCase()
+    );
+}
+
+
+/**
+ * Marks a checkbox as checked and applies all visual styles for a selected contact.
+ * @param {HTMLInputElement} cb - The checkbox element.
+ * @param {string} contactName - The normalized name of the contact.
+ */
+function applyPreselectionStyles(cb, contactName) {
+    cb.checked = true;
+    const contactItem = cb.closest(".contact-item");
+    if (!contactItem) return;
+    contactItem.classList.add("selected");
+    contactItem.querySelector(".avatar")?.classList.add("selected-avatar");
+    contactItem.querySelector(".contact-name")?.classList.add("selected-name");
+    const img = contactItem.querySelector(".checkbox-image");
+    if (img) {
+        img.classList.add("selected-checkbox-image");
+        img.style.display = "block";
+    }
+    cb.style.display = "none";
 }
 
 
@@ -321,7 +371,6 @@ function getPreselectedContacts() {
 
 /**
  * Removes a preselected contact from the edit task modal.
- * 
  * @param {HTMLElement} contactItem - The contact element to be removed.
  */
 function removePreselectedContact(contactItem) {
