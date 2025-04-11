@@ -93,11 +93,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 16px;
 }
 
-.dropdown-container.error {
-    border: 1px solid red !important;
-    border-radius: 8px !important;
-}
-
 .dropdown-btn {
     height: 42px;
     box-sizing: border-box;
