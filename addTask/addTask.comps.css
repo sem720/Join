@@ -83,7 +83,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .error-message {
     color: red;
     font-size: 12px;
-    position: relative;
 }
   
 .dropdown-icon {
@@ -118,14 +117,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .button-container, 
 .dropdown-container {
     margin-bottom: 32px;
-}
-
-#task-name.error, 
-#description.error, 
-#due-date.error, 
-.button-container.error, 
-.dropdown-container.error {
-    margin-bottom: none; 
 }
 
 #due-date {
@@ -205,3 +196,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     align-items: center;
     width: 100%;
 }
+
