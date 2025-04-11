@@ -67,7 +67,20 @@ function showTaskModal() {
 
 
 /**
- * Initializes the task modal by setting up contacts, default priority, dropdowns, and validation.
+ * Initializes the task modal by setting up contacts, priority settings, dropdowns, validation, and event handlers.
+ * This function ensures that the task modal is fully prepared for user interaction.
+ *
+ * Steps performed:
+ * 1. Fetches and renders the contact list.
+ * 2. Initializes the default priority for tasks.
+ * 3. Sets up outside-click behavior for the modal.
+ * 4. Initializes the "Add Task Contacts" functionality.
+ * 5. Clears any pre-existing errors for the category field.
+ * 6. Configures the contact button and assignment buttons.
+ * 7. Updates dropdown icons for visual consistency.
+ * 8. Sets up validation for required fields (e.g., task name, due date, category).
+ * 9. Clears selected contacts and updates their display.
+ *
  * @async
  */
 async function initializeTaskModal() {
@@ -81,7 +94,7 @@ async function initializeTaskModal() {
     setupContactButton();
     setupAssignmentButtons();
     updateDropdownIcon();
-  
+    setupFieldValidation();
     selectedContacts.clear(); 
     updateSelectedContactsDisplay("selected-contacts-container"); 
 }
