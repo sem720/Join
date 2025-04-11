@@ -100,6 +100,7 @@ function handleOutsideClick(event) {
 
     if (shouldCloseDropdownMenu(dropdownMenu, event)) {
         closeDropdownMenuAndResetIcon(dropdownMenu, dropdownIcon);
+        toggleDropdownState();
     }
 
     if (shouldCloseDropdown(contactsMenu, event)) {
