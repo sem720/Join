@@ -39,7 +39,6 @@ function getSafeAssignedContacts() {
  */
 function handleTaskCreation(event) {
     event.preventDefault();
-
     if (validateForm()) {
         alert("Task created!");
     }
@@ -52,7 +51,6 @@ function handleTaskCreation(event) {
  */
 function handleTaskSuccess() {
     showTaskPopup();
-
     setTimeout(() => window.location.href = "/board/board.html", 1500);
 }
 
@@ -144,7 +142,6 @@ function resetSelectedContacts() {
  */
 function clearContacts() {
     const container = document.getElementById("selected-contacts-container");
-
     if (container) {
         while (container.firstChild) {
             container.removeChild(container.firstChild);
@@ -161,12 +158,9 @@ function resetAllContactCheckboxes() {
         const contactItem = checkbox.closest(".contact-item");
         const img = contactItem?.querySelector(".checkbox-image");
         const name = contactItem?.dataset.name;
-
-        if (checkbox.checked) uncheckCheckbox(checkbox, img, name); 
+        if (checkbox.checked) uncheckCheckbox(checkbox, img, name);
         if (contactItem) contactItem.classList.remove("selected");
-        
     });
-
     clearContacts();
 }
 
@@ -185,10 +179,9 @@ function resetErrors() {
  */
 function clearSubtasks() {
     document.querySelectorAll(".subtask-item input").forEach(input => input.value = "");
-
     const subtaskList = document.getElementById("subtask-list");
     if (subtaskList) {
-        subtaskList.innerHTML = "";  
+        subtaskList.innerHTML = "";
     }
 }
 
@@ -198,12 +191,10 @@ function clearSubtasks() {
  */
 function resetPriorityToMedium() {
     if (activeButton) deactivateButton(activeButton);
-    
     const mediumButton = document.getElementById('medium');
     if (mediumButton) {
-        activateButton(mediumButton);  
-        activeButton = mediumButton;  
-        
+        activateButton(mediumButton);
+        activeButton = mediumButton;
     }
 }
 
@@ -219,11 +210,9 @@ function resetPriorityToMedium() {
  */
 function validateTaskData(taskData) {
     let isValid = true;
-
     !taskData.title.trim() ? (showError("#task-name", "Title is required."), isValid = false) : clearError("#task-name");
     !taskData.dueDate.trim() ? (showError("#due-date", "Due Date is required."), isValid = false) : clearError("#due-date");
     !taskData.category.trim() ? (showError("#selected-category", "Category is required."), isValid = false) : clearError("#selected-category");
-
     return isValid;
 }
 
@@ -239,12 +228,10 @@ function validateTaskData(taskData) {
  */
 function getSelectedPriority() {
     if (!activeButton) return { priorityText: "Medium", priorityImage: "/assets/imgs/medium.png" };
-    
     const priority = {
         priorityText: activeButton.innerText.trim(),
         priorityImage: getPriorityImage(activeButton.id)
     };
-
     return priority;
 }
 
@@ -283,7 +270,6 @@ function getSelectedContacts() {
 }
 
 
-
 /**
  * Generates an avatar object for a contact.
  * @param {string} name - The contact's name.
@@ -293,8 +279,22 @@ function getSelectedContacts() {
 function generateAvatar(name, bgcolor) {
     return {
         initials: getInitials(name),
-        bgcolor
+        bgcolor: bgcolor || getRandomColor()
     };
+}
+
+
+/**
+ * Generates a random hexadecimal color code.
+ * @returns {string} A string representing a random color in hexadecimal format (e.g., "#etc").
+ */
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 6; i > 0; --i) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 
 
@@ -310,11 +310,8 @@ function generateAvatar(name, bgcolor) {
 function getSelectedCategory() {
     const selectedInput = document.getElementById("selected-category");
     if (!selectedInput) return "";
-
     let category = selectedInput.value?.trim();
-
     if (!category) return "";
-
     return category.replace("_", " ")
         .split(" ")
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -332,8 +329,8 @@ function getSelectedCategory() {
  */
 function getTaskSubtasks() {
     return Array.from(document.querySelectorAll(".subtask-item")).map(subtask => {
-        let text = subtask.textContent.trim(); 
-        text = text.replace(/^[•●▪▸►☑✔☐-]+/g, "").trim(); 
+        let text = subtask.textContent.trim();
+        text = text.replace(/^[•●▪▸►☑✔☐-]+/g, "").trim();
         return { text, completed: false };
     });
 }
@@ -367,9 +364,5 @@ async function saveTaskToFirebase(taskData) {
 function showTaskPopup() {
     let popup = document.getElementById("task-added-popup");
     popup.classList.add("show");
-
     setTimeout(() => window.location.href = "/board/board.html", 1500);
 }
-
-
-

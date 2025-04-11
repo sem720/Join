@@ -8,7 +8,7 @@ const allContacts = new Map();
 /**
  * Set to store selected contacts.
  */
-const selectedContacts = new Set();
+const selectedContacts = new Map();
 
 
 /**
@@ -22,10 +22,8 @@ async function fetchAndRenderContacts(listId) {
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
         if (!data) throw new Error("Keine Nutzerdaten gefunden.");
-
         processContactsData(data);
         listId ? renderContactsList(listId) : alert("Fehler: Ungültige ListID. Bitte versuchen Sie es später noch einmal.");
-    
     } catch (error) {
         alert("Es gab einen Fehler beim Laden der Kontaktdaten. Bitte versuchen Sie es später noch einmal.");
         throw error;
@@ -35,15 +33,20 @@ async function fetchAndRenderContacts(listId) {
 
 /**
  * Processes the raw contacts data and stores it in the `allContacts` map.
- * 
  * @param {Object} data - The raw contacts data.
  */
 function processContactsData(data) {
     allContacts.clear();
     Object.values(data).forEach(user => {
-        let name = capitalizeName(user.name);
-        let bgcolor = user.bgcolor;
-        allContacts.set(name, { name, bgcolor });
+        const name = capitalizeName(user.name);
+        const bgcolor = user.bgcolor;
+        allContacts.set(name, {
+            name,
+            avatar: {
+                initials: getInitials(name),
+                bgcolor: bgcolor || "#ccc"
+            }
+        });
     });
 }
 
@@ -54,27 +57,23 @@ function processContactsData(data) {
  */
 function getPreselectedInitials() {
     if (typeof getPreselectedContacts !== "function") return [];
-
     return getPreselectedContacts();
 }
 
 
 /**
  * Toggles the selection state of a contact and updates the display of selected contacts.
- * 
  * @param {string} name - The name of the contact.
  */
 function toggleContactSelection(name) {
     const contact = allContacts.get(name);
-
     if (!contact) return;
-
-    if (selectedContacts.has(contact)) {
-        selectedContacts.delete(contact);
+    if (selectedContacts.has(name)) {
+        selectedContacts.delete(name);
     } else {
-        selectedContacts.add(contact);
+        const contact = allContacts.get(name);
+        if (contact) selectedContacts.set(name, contact);
     }
-
     updateSelectedContactsDisplay("selected-contacts-container");
     updateSelectedContactsDisplay("edit-selected-contacts-container");
 }

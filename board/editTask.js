@@ -94,13 +94,9 @@ function getPriorityImage(priorityText, isDefault) {
         Medium: "/assets/imgs/medium.png",
         Urgent: "/assets/imgs/urgent.png"
     };
-
     const formattedPriority = priorityText.charAt(0).toUpperCase() + priorityText.slice(1).toLowerCase();
-
     return images[formattedPriority] || (isDefault ? "/assets/imgs/medium.png" : "");
 }
-
-
 
 
 let subtasksArray = []; // Global variable to store the subtasks
@@ -230,10 +226,7 @@ function setEditAssignedContacts(contacts) {
 let lastAssignedContacts = []; // ganz oben im Scope von editTask.js
 
 function getEditedAssignedContacts() {
-    const checkboxes = document.querySelectorAll("#edit-contacts-list .contact-checkbox:checked");
-    const contacts = Array.from(checkboxes)
-        .map(cb => buildContactObject(cb.dataset.contactName))
-        .filter(Boolean);
+    const contacts = Array.from(selectedContacts.values());
     return contacts.length > 0 ? contacts : lastAssignedContacts;
 }
 
@@ -259,15 +252,7 @@ function generateLimitedAvatarHTML(contacts) {
  * @returns {{name: string, avatar: {initials: string, bgcolor: string}} | null}
  */
 function buildContactObject(name) {
-    const contact = allContacts.get(name);
-    if (!contact) return null;
-    return {
-        name,
-        avatar: {
-            initials: getInitials(name),
-            bgcolor: contact.bgcolor || "#ccc"
-        }
-    };
+    return allContacts.get(name.trim()) || null;
 }
 
 

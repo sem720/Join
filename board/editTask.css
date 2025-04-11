@@ -118,7 +118,7 @@
     overflow-y: auto;
     height: 90vh;
     max-height: 800px;
-    max-width: 600px;
+    max-width: 506px;
 }
 
 #taskDetailOverlay.active #taskDetailModal,
@@ -264,4 +264,14 @@
     width: 1px;
     height: 16px;
     background-color: #ccc;
+}
+
+.extra-avatar {
+    background-color: #777;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 400;
 }
