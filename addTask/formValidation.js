@@ -21,7 +21,6 @@ function checkFormValidity() {
 function initFormValidation() {
     document.getElementById("task-name")?.addEventListener("input", checkFormValidity);
     document.getElementById("due-date")?.addEventListener("input", checkFormValidity);
-    document.getElementById("selected-category")?.addEventListener("input", checkFormValidity);
 }
 
 
@@ -29,9 +28,10 @@ function initFormValidation() {
  * Disables the "create" button (for form validation or other checks).
  */
 function disableCreateButton() {
-    document.querySelector(".create-btn").setAttribute("disabled", "true");
+    const btn = document.querySelector(".create-btn");
+    if (btn) btn.disabled = true;
 }
-
+  
 
 /**
  * Displays an error message next to the input field identified by the selector.
@@ -47,7 +47,7 @@ function showError(selector, message) {
     const errorMsg = document.querySelector(`.error-message[data-error-for="${field.id}"]`);
     errorMsg && (errorMsg.textContent = message, errorMsg.style.display = "block");
 
-    const elementToHighlight = selector === "#category" ? document.querySelector(".dropdown-container") : field;
+    const elementToHighlight = selector === "#selected-category" ? document.querySelector(".dropdown-container") : field;
     elementToHighlight.classList.add("error");
 }
 
@@ -64,7 +64,7 @@ function clearError(selector) {
     const errorMsg = document.querySelector(`.error-message[data-error-for="${field.id}"]`);
     errorMsg?.classList.contains("error-message") && (errorMsg.style.display = "none");
 
-    const elementToHighlight = selector === "#category" ? document.querySelector(".dropdown-container") : field;
+    const elementToHighlight = selector === "#selected-category" ? document.querySelector(".dropdown-container") : field;
     elementToHighlight.classList.remove("error");
 }
 
@@ -86,37 +86,51 @@ function attachErrorOnInteraction(selector, message) {
 
 
 /**
- * Validiert ein Feld anhand seines Werts. Zeigt oder entfernt Fehler.
+ * Validates a form field by checking its value.
+ * Triggers error display logic accordingly.
+ * 
+ * @param {string} selector - The CSS selector of the field to validate.
+ * @param {string} message - The error message to show if validation fails.
+ * @returns {boolean} - True if field is valid, false otherwise.
  */
 function validateField(selector, message) {
     const field = document.querySelector(selector);
-    if (!field) return;
+    if (!field) return false;
   
-    let value = field.value?.trim() ?? "";
-
-    if (selector === "#category") {
-        const dropdownText = document.querySelector(".dropdown-btn")?.textContent.trim();
-        value = dropdownText === "Select task category" ? "" : dropdownText;
-    }
+    const value = getFieldValue(selector);
+    const isValid = value.trim() !== "";
   
-    if (!value) {
-      showError(selector, message);
-      return false;
-    } else {
-      clearError(selector);
-      return true;
-    }
+    isValid ? clearError(selector) : showError(selector, message);
+    return isValid;
 }
 
 
 /**
- * Initialisiert Event Listener für Validierung bei User-Interaktion.
+ * Retrieves the trimmed value of a field.
+ * Handles special case for category dropdown.
+ * 
+ * @param {string} selector - The CSS selector of the field.
+ * @returns {string} - The trimmed value of the field.
  */
+function getFieldValue(selector) {
+    if (selector === "#selected-category") {
+      const dropdownText = document.querySelector(".dropdown-btn")?.textContent.trim();
+      return dropdownText === "Select task category" ? "" : dropdownText;
+    }
+  
+    return document.querySelector(selector)?.value?.trim() ?? "";
+}
+  
+
+/**
+* Sets up validation listeners for form fields.
+* Applies "blur" or "change" events depending on field type.
+*/
 function setupFieldValidation() {
     const fields = [
       { selector: "#task-name", message: "Please choose a title." },
       { selector: "#due-date", message: "Please select a date." },
-      { selector: "#category", message: "Please select a category." },
+      { selector: "#selected-category", message: "Please select a category." },
     ];
   
     fields.forEach(({ selector, message }) => {
@@ -124,9 +138,7 @@ function setupFieldValidation() {
       if (!field) return;
   
       const eventType = selector === "#category" ? "change" : "blur";
-      field.addEventListener(eventType, () => {
-        validateField(selector, message);
-      });
+      field.addEventListener(eventType, () => validateField(selector, message));
     });
 }
-
+  
