@@ -272,29 +272,23 @@ function getSelectedContacts() {
 
 /**
  * Generates an avatar object for a contact.
+ * Prioritizes existing contact data from allContacts; falls back to random color if not available.
  * @param {string} name - The contact's name.
- * @param {string} bgcolor - The background color for the avatar.
+ * @param {string} [bgcolor] - Optional background color.
  * @returns {{initials: string, bgcolor: string}} The avatar object.
  */
 function generateAvatar(name, bgcolor) {
+    const contact = allContacts.get(name?.trim());
+    if (contact && contact.avatar) {
+        return {
+            initials: contact.avatar.initials || getInitials(name),
+            bgcolor: contact.avatar.bgcolor || getRandomColor()
+        };
+    }
     return {
         initials: getInitials(name),
         bgcolor: bgcolor || getRandomColor()
     };
-}
-
-
-/**
- * Generates a random hexadecimal color code.
- * @returns {string} A string representing a random color in hexadecimal format (e.g., "#etc").
- */
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 6; i > 0; --i) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
 }
 
 
