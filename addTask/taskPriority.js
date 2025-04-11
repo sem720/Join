@@ -28,7 +28,7 @@ function toggleButtons(clickedButton) {
     activeButton = clickedButton;
 
     setTimeout(checkFormValidity, 1);
-    document.querySelector(".create-btn").setAttribute("disabled", "true");
+    disableCreateButton();
 }
 
 
@@ -55,7 +55,7 @@ function deactivateButton(button) {
     changeImageStyle(button, 'remove');
 
     setTimeout(checkFormValidity, 1);
-    document.querySelector(".create-btn").setAttribute("disabled", "true");
+    disableCreateButton();
 }
 
 
