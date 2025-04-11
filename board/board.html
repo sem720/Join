@@ -57,10 +57,14 @@
               <form class="form" name="form" onsubmit="createTask(event)">
                 <!-- Left Container -->
                 <div class="left-container">
-                  <label for="task-name"
-                    >Title
-                    <span class="required"> * </span>
-                  </label>
+                  <div class="form-group">
+                    <label for="task-name">Title <span class="required">*</span></label>
+                    <div
+                      class="error-message"
+                      data-error-for="task-name"
+                      style="display: none"
+                    ></div>
+                  </div>
                   <input
                     id="task-name"
                     class="input-standard"
@@ -69,12 +73,7 @@
                     placeholder="Enter a title"
                     required
                   />
-                  <div
-                    class="error-message"
-                    data-error-for="task-name"
-                    style="display: none"
-                  ></div>
-
+                
                   <label for="description">Description</label>
                   <textarea
                     id="description"
@@ -113,9 +112,17 @@
 
                 <!-- Right Container -->
                 <div class="right-container">
-                  <label for="due-date" id="date-label"
-                    >Due Date <span class="required">*</span></label
-                  >
+                  <div class="form-group">
+                    <label for="due-date">
+                      Due Date <span class="required">*</span></label
+                    >
+                    <div
+                    class="error-message"
+                    data-error-for="due-date"
+                    style="display: none"
+                  ></div>
+                  </div>
+            
                   <div class="date-container" id="date-container">
                     <input
                       type="date"
@@ -132,11 +139,6 @@
                       alt="Kalender Icon"
                     />
                   </div>
-                  <div
-                    class="error-message"
-                    data-error-for="due-date"
-                    style="display: none"
-                  ></div>
 
                   <label for="medium">Prio</label>
                   <div class="button-container">
@@ -171,9 +173,16 @@
                     </button>
                   </div>
 
-                  <label id="dropdown-btn"
-                    >Category <span class="required">*</span></label
-                  >
+                  <div class="form-group">
+                    <label id="category"
+                    >Category <span class="required">
+                    *</span></label>
+                    <div
+                      class="error-message"
+                      data-error-for="category"
+                      style="display: none"
+                    ></div>
+                  </div>
                   <div class="dropdown-container">
                     <button
                       type="button"
@@ -213,11 +222,6 @@
                       aria-labelledby="category-label"
                     />
                   </div>
-                  <div
-                    class="error-message"
-                    data-error-for="selected-category"
-                    style="display: none"
-                  ></div>
 
                   <label for="subtasks">Subtasks</label>
                   <div class="subtask-input-wrapper">
