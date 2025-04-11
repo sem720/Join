@@ -22,9 +22,9 @@ const noResultsMessage = document.getElementById('no-results');
  */
 const searchIcon = document.querySelector('.search-icon');
 
+
 /**
  * Filters task cards based on the search query.
- * Uses a timeout to simulate debounce behavior.
  * 
  * @param {string} searchQuery - The search query input by the user.
  */
@@ -32,7 +32,6 @@ function filterTaskCards(searchQuery) {
     const taskCards = document.querySelectorAll('.task-card');  
     const resultsFound = processTaskCards(taskCards, searchQuery);
     updateNoResultsMessage(resultsFound); 
-
 }
 
 

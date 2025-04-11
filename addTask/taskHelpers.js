@@ -151,6 +151,39 @@ function clearError(selector) {
 
 
 /**
+ * Attaches a listener to show an error message when the field is interacted with.
+ * Highlights the field and shows the error message if it is empty.
+ * 
+ * @param {string} selector - The CSS selector identifying the field.
+ * @param {string} message - The error message to display.
+ */
+function attachErrorOnInteraction(selector, message) {
+    const field = document.querySelector(selector);
+    if (!field) return;
+
+    field.addEventListener("focus", () => {
+        if (field.value.trim() === "") {
+            showError(selector, message);
+        }
+    });
+
+    field.addEventListener("blur", () => {
+        clearError(selector); // Clear error when leaving the field
+    });
+}
+
+
+/**
+ * Sets up validation for required input fields.
+ */
+function setupFieldValidation() {
+    attachErrorOnInteraction("#task-name", "Task name is required");
+    attachErrorOnInteraction("#due-date", "Due date is required");
+    attachErrorOnInteraction("#selected-category", "Category selection is required");
+}
+
+
+/**
  * Resets the value of a date input field and removes the 'has-value' class.
  * 
  * @param {HTMLInputElement} input - The date input element to reset.
@@ -271,3 +304,54 @@ function createContactElement(name, bgcolor) {
     
     return contactDiv;
 }
+
+
+/**
+ * Changes visibility depending on class
+ *
+ * @param {HTMLElement} element - Das DOM-Element, dessen Klassen geändert werden sollen.
+ * @param {boolean} visible - Gibt an, ob das Element sichtbar sein soll.
+ */
+function setVisibility(element, visible) {
+    if (!element) return;
+    if (visible) {
+        element.classList.add("visible");
+        element.classList.remove("hidden");
+    } else {
+        element.classList.add("hidden");
+        element.classList.remove("visible");
+    }
+}
+
+
+/**
+ * Creates a single contact avatar element.
+ * 
+ * @param {Object} contact - The contact object containing name and bgcolor.
+ * @returns {HTMLElement} The avatar element.
+ */
+function createContactAvatar(contact) {
+    const avatarDiv = document.createElement("div");
+    avatarDiv.classList.add("avatar", "avatar-board-card");
+    avatarDiv.style.backgroundColor = contact.bgcolor;
+    avatarDiv.textContent = getInitials(contact.name);
+    return avatarDiv;
+}
+
+
+/**
+ * Creates an avatar element for additional contacts.
+ * 
+ * @param {number} count - Number of additional contacts.
+ * @returns {HTMLElement} The additional contacts avatar element.
+ */
+function createAdditionalContactsAvatar(count) {
+    const avatarDiv = document.createElement("div");
+    avatarDiv.classList.add("avatar", "additional-contacts");
+    avatarDiv.style.backgroundColor = "#ccc";
+    avatarDiv.textContent = `+${count}`;
+    return avatarDiv;
+}
+
+
+
