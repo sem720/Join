@@ -151,4 +151,33 @@
   </body>
   <script src="./register.js"></script>
   <script src="/root.js"></script>
+  <script>
+    const inputs = ['idName', 'idEmail', 'idPassword', 'idPasswordCon'];
+  
+    function areAllInputsFilled() {
+      return inputs.every(id => {
+        const value = document.getElementById(id).value.trim();
+        return value !== '';
+      });
+    }
+  
+    function validatePolicyCheckbox() {
+      const checkbox = document.getElementById('idPolicy');
+  
+      if (areAllInputsFilled() && !checkbox.checked) {
+        checkbox.classList.add('invalid');
+      } else {
+        checkbox.classList.remove('invalid');
+      }
+    }
+  
+    // Bei Änderung eines beliebigen Feldes prüfen
+    inputs.forEach(id => {
+      document.getElementById(id).addEventListener('input', validatePolicyCheckbox);
+    });
+  
+    document.getElementById('idPolicy').addEventListener('change', validatePolicyCheckbox);
+  </script>
+  
+  
 </html>

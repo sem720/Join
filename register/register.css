@@ -379,3 +379,7 @@ body {
 #idEmail.valid {
   color: green;
 }
+
+#idPolicy.invalid {
+  border: 2px solid red;
+}
