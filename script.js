@@ -227,3 +227,27 @@ function setupPasswordToggle(inputId) {
 document.querySelectorAll("#Password, #PasswordCon").forEach((el) => {
   setupPasswordToggle(el.id);
 });
+
+/* Email input validation */
+
+const emailInput = document.getElementById('Email');
+
+    const isValidEmail = (email) => {
+      // einfache Regex für grundlegende Validierung
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    };
+
+    emailInput.addEventListener('input', () => {
+      const value = emailInput.value;
+
+      if (value === "") {
+        emailInput.classList.remove('valid', 'invalid');
+      } else if (isValidEmail(value)) {
+        emailInput.classList.add('valid');
+        emailInput.classList.remove('invalid');
+      } else {
+        emailInput.classList.add('invalid');
+        emailInput.classList.remove('valid');
+      }
+    });

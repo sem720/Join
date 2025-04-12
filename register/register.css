@@ -371,3 +371,11 @@ body {
     width: 80%;
   }
 }
+
+#idEmail.invalid {
+  color: red;
+}
+
+#idEmail.valid {
+  color: green;
+}

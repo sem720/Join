@@ -356,3 +356,28 @@ document.getElementById("idPassword").addEventListener("input", checkForm);
 document.getElementById("idPasswordCon").addEventListener("input", checkForm);
 document.getElementById("idName").addEventListener("input", checkForm);
 document.getElementById("idPolicy").addEventListener("change", checkForm);
+
+
+/* Email input validation */
+
+const emailInput = document.getElementById('idEmail');
+
+    const isValidEmail = (email) => {
+      // einfache Regex für grundlegende Validierung
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    };
+
+    emailInput.addEventListener('input', () => {
+      const value = emailInput.value;
+
+      if (value === "") {
+        emailInput.classList.remove('valid', 'invalid');
+      } else if (isValidEmail(value)) {
+        emailInput.classList.add('valid');
+        emailInput.classList.remove('invalid');
+      } else {
+        emailInput.classList.add('invalid');
+        emailInput.classList.remove('valid');
+      }
+    });
